@@ -1,3 +1,5 @@
+module qmlproject
+
 singleton EventBridge 1.0 EventBridge.qml
 singleton Objects 1.0 Objects.qml
 AboutQtWindow 1.0 AboutQtWindow.qml

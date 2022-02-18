@@ -41,8 +41,8 @@ int main(int argc, char* argv[])
     Musec::Model::ModelInitializer::initialize();
     QQmlApplicationEngine theEngine;
     engine = &theEngine;
-    // theEngine.addImportPath("E:\\Project\\Qt\\Musec");
-    // theEngine.addImportPath("E:\\Project\\Qt\\Musec\\qmlproject");
+    theEngine.addImportPath("E:\\Project\\Qt\\Musec");
+    theEngine.addImportPath("E:\\Project\\Qt\\Musec\\qmlproject\\imports");
     // theEngine.addImportPath("qrc:/");
     // theEngine.addImportPath("qrc:/qmlproject/imports");
     // 显示启动屏
