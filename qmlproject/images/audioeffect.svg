@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #333;
+      }
+
+      .cls-2 {
+        fill: #ccc;
+        fill-rule: evenodd;
+      }
+
+      .cls-3 {
+        fill: none;
+        stroke: #ccc;
+        stroke-width: 1px;
+      }
+    </style>
+  </defs>
+  <rect id="矩形_1" data-name="矩形 1" class="cls-1" width="16" height="16"/>
+  <path id="音频_拷贝" data-name="音频 拷贝" class="cls-2" d="M2,8S2,2,5,2,8,8,8,8s0,6,3,6,3-6,3-6H2Z"/>
+  <rect id="矩形_2" data-name="矩形 2" class="cls-3" width="16" height="16"/>
+</svg>

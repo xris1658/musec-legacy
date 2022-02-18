@@ -1,0 +1,23 @@
+module Musec
+
+singleton Constants 1.0 Constants.qml
+Arrangement 1.0 Arrangement.qml
+Assets 1.0 Assets.qml
+Automation 1.0 Automation.qml
+BigClock 0.5 BigClockBackup.qml
+BigClockBackup 1.0 BigClockBackup.qml
+BigClock 1.0 BigClock.qml
+ContentArea 1.0 ContentArea.qml
+FileInfo 1.0 FileInfo.qml
+FunctionArea 1.0 FunctionArea.qml
+Level 1.0 Level.qml
+MainBar 1.0 MainBar.qml
+MidiEditor 1.0 MidiEditor.qml
+Mixer 1.0 Mixer.qml
+MixerChannel 1.0 MixerChannel.qml
+MusecList 1.0 MusecList.qml
+Note 1.0 Note.qml
+PianoKey 1.0 PianoKey.qml
+PianoKeyBackup 1.0 PianoKeyBackup.qml
+Timeline 1.0 Timeline.qml
+TrackHeader 1.0 TrackHeader.qml
