@@ -3,8 +3,6 @@
 #include <ShlObj_core.h>
 
 #include <cstring>
-#include <cwchar>
-#include <memory>
 
 namespace Musec
 {

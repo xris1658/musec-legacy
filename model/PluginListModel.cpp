@@ -44,7 +44,7 @@ int PluginListModel::itemCount() const
     return list_.count();
 }
 
-constexpr int PluginListModel::columnSize() const
+constexpr int PluginListModel::columnSize()
 {
     return std::tuple_size<Item>::value;
 }

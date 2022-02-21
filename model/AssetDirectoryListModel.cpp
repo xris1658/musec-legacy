@@ -40,7 +40,7 @@ int AssetDirectoryListModel::itemCount() const
     return list_.count();
 }
 
-constexpr int AssetDirectoryListModel::columnSize() const
+constexpr int AssetDirectoryListModel::columnSize()
 {
     return std::tuple_size_v<Item>;
 }

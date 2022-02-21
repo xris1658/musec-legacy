@@ -7,8 +7,6 @@
 #include "event/EventBase.hpp"
 #include "ui/UI.hpp"
 
-#include <QQuickWindow>
-
 namespace Musec::Event
 {
 EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(parent)
@@ -29,8 +27,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      this,        SLOT(onScanPluginButtonClicked()));
     QObject::connect(eventBridge, SIGNAL(addAssetDirectory(QString)),
                      this,        SLOT(onAddAssetDirectory(QString)));
-    QObject::connect(eventBridge, SIGNAL(renameAssetDirectory(int, QString)),
-                     this,        SLOT(onRenameAssetDirectory(int, QString)));
+    QObject::connect(eventBridge, SIGNAL(renameAssetDirectory(int,QString)),
+                     this,        SLOT(onRenameAssetDirectory(int,QString)));
     QObject::connect(eventBridge, SIGNAL(removeAssetDirectory(int)),
                      this,        SLOT(onRemoveAssetDirectory(int)));
     QObject::connect(eventBridge, SIGNAL(openASIODriverControlPanel()),
@@ -83,10 +81,7 @@ void EventHandler::scanPluginComplete()
 
 void EventHandler::onMainWindowOpened()
 {
-    using namespace Musec::Event;
-    using namespace Musec::UI;
     using namespace Musec::Controller;
-    using namespace Musec::Audio::Driver;
     loadASIODriver();
 }
 

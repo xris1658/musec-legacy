@@ -33,7 +33,7 @@ public:
     void setList(List&&);
     List getList() const;
     int itemCount() const;
-    constexpr int columnSize() const;
+    static constexpr int columnSize();
 public:
     virtual int rowCount(const QModelIndex&) const override;
     virtual int columnCount(const QModelIndex&) const override;

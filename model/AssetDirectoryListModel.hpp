@@ -32,7 +32,7 @@ public:
     void setList(QList<Item>&&);
     QList<Item> getList() const;
     int itemCount() const;
-    constexpr int columnSize() const;
+    static constexpr int columnSize();
     void append(const Item& item);
 public:
     virtual int rowCount(const QModelIndex&) const override;

@@ -62,7 +62,7 @@ QList<ASIODriverBasicInfo> enumerateDrivers()
                 else
                 {
                     const wchar_t name[] = L"CLSID";
-                    std::array<wchar_t, CLSIDStringLength + 1> clsidBuffer;
+                    std::array<wchar_t, CLSIDStringLength + 1> clsidBuffer = {0};
                     DWORD clsidBufferLength;
                     auto getValueResult = RegGetValueW(subKey, NULL, name,
                         RRF_RT_REG_SZ, NULL, clsidBuffer.data(), &clsidBufferLength);
@@ -91,7 +91,7 @@ ASIODriver::ASIODriver(): driverInfo_(std::tuple<QString, QString>("", "")), dri
 ASIODriver::ASIODriver(const ASIODriverBasicInfo& info): driverInfo_(info), driver_(nullptr)
 {
     CoInitialize(NULL);
-    std::array<wchar_t, CLSIDStringLength + 1> clsidBuffer;
+    std::array<wchar_t, CLSIDStringLength + 1> clsidBuffer = {0};
     std::get<ASIODriverField::CLSIDField>(info).toWCharArray(clsidBuffer.data());
     CLSID clsid;
     auto convertToCLSIDResult = CLSIDFromString(clsidBuffer.data(), &clsid);
@@ -159,10 +159,10 @@ IASIO* ASIODriver::operator->() const
     return driver();
 }
 
-QList<ASIODriverBasicInfo> ASIODriver::enumerateDrivers()
-{
-    return Musec::Audio::Driver::enumerateDrivers();
-}
+// QList<ASIODriverBasicInfo> ASIODriver::enumerateDrivers()
+// {
+//     return Musec::Audio::Driver::enumerateDrivers();
+// }
 
 ASIODriver& AppASIODriver()
 {
@@ -174,7 +174,7 @@ ASIODriverStreamInfo getASIODriverStreamInfo(const ASIODriver& driver)
 {
     std::array<char, 64> name = {0};
     driver->getDriverName(name.data());
-    auto version = driver->getDriverVersion();
+    // auto version = driver->getDriverVersion();
     ASIODriverStreamInfo ret;
     driver->getChannels(&ret.inputChannelCount,
                         &ret.outputChannelCount);

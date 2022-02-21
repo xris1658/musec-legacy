@@ -2,10 +2,6 @@
 
 #include "native/Native.hpp"
 
-#include <yaml-cpp/yaml.h>
-#include <yaml-cpp/emitter.h>
-#include <yaml-cpp/parser.h>
-
 #include <fstream>
 
 namespace Musec::DAO

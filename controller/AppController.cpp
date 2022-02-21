@@ -6,15 +6,12 @@
 #include "audio/driver/ASIODriver.hpp"
 #include "audio/driver/ASIOCallback.hpp"
 #include "dao/DatabaseDAO.hpp"
-#include "dao/AssetDirectoryDAO.hpp"
 #include "dao/ConfigDAO.hpp"
-#include "dao/PluginDAO.hpp"
 #include "dao/PluginDirectoryDAO.hpp"
 #include "event/EventBase.hpp"
 #include "native/Native.hpp"
 
 #include <QDir>
-#include <QString>
 #include <QApplication>
 #include <QQuickView>
 
@@ -39,7 +36,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
         Musec::Controller::initAppData();
         // 在这里添加打开初次设置窗口的操作
     }
-    auto appConfig = Musec::DAO::loadAppConfig(Musec::DAO::ConfigFilePath());
+    auto appConfig = loadAppConfig();
     splashScreen->setBootText("正在寻找音频设备...");
     // 加载 ASIO 驱动列表
     auto driverList = Musec::Audio::Driver::enumerateDrivers();
@@ -52,6 +49,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     if(driverList.empty())
     {
         // 没有找到 ASIO 驱动，程序将以音频引擎关闭的状态运行
+        Musec::Audio::Driver::AppASIODriver();
     }
     else
     {
@@ -78,29 +76,25 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
 
 bool findAppData()
 {
-    auto musecDataDirectory = Musec::Native::DataDirectoryPath();
-    QDir dir(musecDataDirectory);
+    QDir dir(Musec::Native::DataDirectoryPath());
     return dir.exists();
 }
 
 void initAppData()
 {
-    using namespace Musec::DAO;
-    auto roamingDirectory = Musec::Native::RoamingDirectoryPath();
-    QDir roaming(roamingDirectory);
+    QDir roaming(Musec::Native::RoamingDirectoryPath());
     roaming.mkdir("Musec");
-    auto musecDataDirectory = Musec::Native::DataDirectoryPath();
-    QDir dir(musecDataDirectory);
+    QDir dir(Musec::Native::DataDirectoryPath());
     dir.refresh();
     if(!dir.exists())
     {
         // 抛出无法创建文件夹的异常
     }
     // 初始化数据库
-    initDatabase();
+    Musec::DAO::initDatabase();
     // 创建配置文件（未完成）
     // 完成此处内容之前，打开程序会使程序崩溃。
-    saveAppConfig(createAppConfig(), Musec::DAO::ConfigFilePath());
+    saveAppConfig(createAppConfig());
     // 添加一些默认的插件目录（e.g. C:\Program Flies\VstPlugins）
     auto& list = Musec::Base::defaultPluginDirectoryList();
     for(auto& item: list)
@@ -112,9 +106,8 @@ void initAppData()
 
 void loadAppData()
 {
-    using namespace Musec::DAO;
     // 读取设置文件
-    auto appConfig = loadAppConfig(ConfigFilePath());
+    auto appConfig = loadAppConfig();
     // 视情况重新扫描插件
     refreshPluginList(false);
     loadAssetDirectoryList();
@@ -131,12 +124,21 @@ YAML::Node createAppConfig()
     configFileNode["musec"]["options"]["general"]["single-instance"] = true;
     configFileNode["musec"]["options"]["audio-hardware"]["driver-type"] = "ASIO";
     configFileNode["musec"]["options"]["audio-hardware"]["driver-id"] =
-        "{232685C6-6548-49D8-846D-4141A3EF7560}"; // ASIO4ALL
-    configFileNode["musec"]["options"]["audio-hardware"]["buffer-size"] = 512;
+        "{00000000-0000-0000-0000-000000000000}"; // 无音频驱动
     configFileNode["musec"]["options"]["audio-hardware"]["sample-rate"] = 44100;
     configFileNode["musec"]["options"]["plugin"]["enable-shortcuts"] = true;
     configFileNode["musec"]["options"]["plugin"]["enable-32-bit"] = false;
     return configFileNode;
+}
+
+YAML::Node loadAppConfig()
+{
+    return Musec::DAO::loadAppConfig(Musec::DAO::ConfigFilePath());
+}
+
+void saveAppConfig(const YAML::Node& node)
+{
+    Musec::DAO::saveAppConfig(node, Musec::DAO::ConfigFilePath());
 }
 
 Musec::Model::PluginListModel& AppPluginList()
@@ -218,7 +220,7 @@ void refreshPluginList(bool rescan)
             using namespace Musec::Event;
             using namespace Musec::Model;
             Musec::Controller::scanPlugins();
-            auto list = Musec::Controller::getAllPlugins();
+            // auto list = Musec::Controller::getAllPlugins();
             setPluginLists();
             eventHandler->scanPluginComplete();
         };
@@ -242,14 +244,19 @@ void loadAssetDirectoryList()
 void loadASIODriver()
 {
     using namespace Musec::Audio::Driver;
-    using namespace Musec::DAO;
+    // using namespace Musec::DAO;
     using namespace Musec::UI;
     auto& driver = AppASIODriver();
+    if(!driver)
+    {
+        return;
+    }
     auto hWnd = reinterpret_cast<HWND>(mainWindow->winId());
     driver->init(hWnd);
-    auto appConfig = loadAppConfig(Musec::DAO::ConfigFilePath());
+    auto appConfig = loadAppConfig();
     auto sampleRate = appConfig["musec"]["options"]["audio-hardware"]["sample-rate"].as<double>();
-    auto bufferSize = appConfig["musec"]["options"]["audio-hardware"]["buffer-size"].as<int>();
+    // auto bufferSize = 0;
+    // appConfig["musec"]["options"]["audio-hardware"]["buffer-size"].as<int>();
     auto canSampleRate = driver->canSampleRate(sampleRate);
     if(canSampleRate == ASE_OK || canSampleRate == ASE_SUCCESS)
     {
@@ -258,6 +265,8 @@ void loadASIODriver()
     else
     {
         driver->setSampleRate(44100.0);
+        appConfig["musec"]["options"]["audio-hardware"]["sample-rate"] = 44100.0;
+        saveAppConfig(appConfig);
     }
     auto info = getASIODriverStreamInfo(driver);
     constexpr int inputBufferCount = 64;
@@ -285,7 +294,7 @@ void loadASIODriver()
 
 QString getASIODriver()
 {
-    auto appConfig = Musec::DAO::loadAppConfig(Musec::DAO::ConfigFilePath());
+    auto appConfig = loadAppConfig();
     return QString::fromStdString(
         appConfig["musec"]["options"]["audio-hardware"]["driver-id"].as<std::string>()
     );
@@ -301,10 +310,10 @@ void setASIODriver(const QString& clsid)
         if(itemCLSID.compare(clsid, Qt::CaseSensitivity::CaseInsensitive) == 0)
         {
             AppASIODriver() = ASIODriver(item);
-            auto appConfig = Musec::DAO::loadAppConfig(Musec::DAO::ConfigFilePath());
+            auto appConfig = loadAppConfig();
             appConfig["musec"]["options"]["audio-hardware"]["driver-id"] =
                 clsid.toStdString();
-            Musec::DAO::saveAppConfig(appConfig, Musec::DAO::ConfigFilePath());
+            saveAppConfig(appConfig);
             break;
         }
     }

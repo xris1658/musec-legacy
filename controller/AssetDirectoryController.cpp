@@ -1,9 +1,7 @@
 #include "AssetDirectoryController.hpp"
 
 #include "AppController.hpp"
-#include "model/AssetDirectoryListModel.hpp"
 #include "dao/DatabaseDAO.hpp"
-#include "dao/AssetDirectoryDAO.hpp"
 
 #include <QDir>
 
@@ -31,7 +29,6 @@ void addAssetDirectory(const QString& directory)
     int newId = Musec::DAO::getAssetDirectoryLastId();
     auto& assetDirectoryList = AppAssetDirectoryList();
     assetDirectoryList.append(AssetDirectoryListModel::Item(newId, directory, name));
-    return;
 }
 
 void renameAssetDirectory(int id, const QString& name)

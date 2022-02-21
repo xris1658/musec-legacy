@@ -21,8 +21,7 @@ WindowsLibraryRAII::WindowsLibraryRAII(const QString& path)
     module_ = LoadLibraryExW(widePath.c_str(), NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
     if(module_ == NULL)
     {
-        auto error = GetLastError();
-        throw error;
+        throw GetLastError();
     }
     else
     {

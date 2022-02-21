@@ -46,6 +46,7 @@ HEADERS += \
     base/Base.hpp \
     base/Constants.hpp \
     base/PluginBase.hpp \
+    base/Pool.hpp \
     controller/AppController.hpp \
     controller/AssetDirectoryController.hpp \
     controller/PluginController.hpp \
@@ -112,6 +113,7 @@ LIBS += \
     sqlite3.lib \ # SQLite 3
     sndfile.lib \ # libsndfile
     AdvAPI32.lib \ # 注册表
+    Shell32.lib \ # SHGetFolderPathW
     ole32.lib \
     # VST3 SDK
     sdk.lib \

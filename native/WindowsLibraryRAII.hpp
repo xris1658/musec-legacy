@@ -15,7 +15,7 @@ public:
     using ExceptionType = decltype(GetLastError());
 public:
     WindowsLibraryRAII();
-    WindowsLibraryRAII(const QString& path);
+    explicit WindowsLibraryRAII(const QString& path);
     WindowsLibraryRAII(const WindowsLibraryRAII&) = delete;
     WindowsLibraryRAII& operator=(const WindowsLibraryRAII&) = delete;
     WindowsLibraryRAII(WindowsLibraryRAII&&);

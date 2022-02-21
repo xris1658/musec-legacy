@@ -8,6 +8,8 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include <QString>
+
 #include <array>
 
 namespace Musec
@@ -28,6 +30,12 @@ void loadAppData();
 
 // 创建默认配置
 YAML::Node createAppConfig();
+
+// 加载配置
+YAML::Node loadAppConfig();
+
+// 保存当前配置
+void saveAppConfig(const YAML::Node& node);
 
 // 插件列表
 Musec::Model::PluginListModel& AppPluginList();

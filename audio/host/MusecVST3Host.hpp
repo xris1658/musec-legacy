@@ -17,6 +17,7 @@ class MusecVST3Host: public IHostApplication
 {
 private:
     MusecVST3Host();
+public:
     MusecVST3Host(const MusecVST3Host&) = delete;
     virtual ~MusecVST3Host();
 public:

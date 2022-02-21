@@ -378,7 +378,7 @@ Item {
                         item.y = mouseY - mouseY % pianoKey.keyHeight + 1;
                         item.width = contentArea.verLineSpacing - 1;
                         item.height = pianoKey.keyHeight - 1;
-                        item.noteName = (Constants.keyNameWithSharp.get(note % 12).name) + ((note - note % 12) / 12);
+                        item.noteMidiNum = note;
                         item.z = 3;
                     }
                 }
@@ -386,9 +386,3 @@ Item {
         }
     }
 }
-
-/*##^##
-Designer {
-    D{i:0;autoSize:true;formeditorZoom:16;height:480;width:640}
-}
-##^##*/

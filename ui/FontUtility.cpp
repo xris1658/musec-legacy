@@ -35,7 +35,7 @@ namespace Musec::UI
         {
             if(!i.isDir() && suffixIsFont(i.suffix()))
             {
-                QFontDatabase::addApplicationFont(i.absolutePath());
+                QFontDatabase::addApplicationFont(i.absoluteFilePath());
             }
         }
     }

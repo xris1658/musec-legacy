@@ -12,9 +12,6 @@ namespace Musec
 namespace Model
 {
 using RoleNamesType = QHash<int, QByteArray>;
-
-template<typename... Types>
-using ItemType = std::tuple<Types...>;
 }
 }
 

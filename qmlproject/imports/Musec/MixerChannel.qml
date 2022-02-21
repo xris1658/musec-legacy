@@ -311,7 +311,7 @@ Item {
                             orientation: Qt.Vertical
                             width: 20
                             height: parent.height
-                            from: -72
+                            from: -96
                             to: 6
                             value: 20 * Math.log10(gain)
                             onValueChanged: {

@@ -5,7 +5,7 @@ import QtQuick.Shapes 1.15
 Item {
     id: control
 //    property color noteBackgroundColor: noteMouseArea.pressed? Qt.darker(Constants.noteBackgroundColor, 1.1): Constants.noteBackgroundColor
-    property int noteNum
+    property int noteMidiNum: 0
     property string noteName
     property real mouseInitialX: 0
     property real mouseDeltaX: 0
@@ -62,7 +62,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: 3
-        text: qsTr(noteName)
+        text: (Constants.keyNameWithSharp.get(noteMidiNum % 12).name) + ((noteMidiNum - noteMidiNum % 12) / 12)
         font.family: "Noto Sans Mono Condensed"
         font.bold: true
         font.pointSize: 9
@@ -75,36 +75,66 @@ Item {
         property int initialY: 0
         property bool settingVelocity: false
         onPressed: {
-            if(mouse.modifiers & Qt.AltModifier) {
-                settingVelocity = true;
+            settingVelocity = mouse.modifiers & Qt.AltModifier;
+            if(settingVelocity) {
+                initialY = 0;
             }
             else {
                 var contentAreaCoordinate = control.mapToItem(control.parent, mouseX, mouseY);
                 initialX = contentAreaCoordinate.x;
+                initialY = contentAreaCoordinate.y;
             }
         }
         onReleased: {
             settingVelocity = false;
         }
         onMouseXChanged: {
-            if(pressed && (!settingVelocity)) {
-                var contentAreaCoordinate = control.mapToItem(control.parent, mouseX, mouseY);
-                var delta = contentAreaCoordinate.x - initialX;
-                control.x += delta;
-                if(control.x < 0) {
-                    control.x = 0;
+            if(pressed) {
+                if(settingVelocity) {
+                    var delta = mouseY - initialY;
+                    control.velocity -= delta;
+                    if(control.velocity > Constants.maxVelocity) {
+                        control.velocity = Constants.maxVelocity;
+                    }
+                    else if(control.velocity < 0) {
+                        control.velocity = 0;
+                    }
                 }
-                initialX = contentAreaCoordinate.x;
+                else {
+                    var contentAreaCoordinate = control.mapToItem(control.parent, mouseX, mouseY);
+                    var delta = contentAreaCoordinate.x - initialX;
+                    control.x += delta;
+                    if(control.x < 0) {
+                        control.x = 0;
+                    }
+                    initialX = contentAreaCoordinate.x;
+                }
             }
         }
         onMouseYChanged: {
-            if(pressed && settingVelocity) {
-                control.velocity -= mouseY - initialY;
-                if(control.velocity > Constants.maxVelocity) {
-                    control.velocity = Constants.maxVelocity;
+            if(pressed) {
+                if(settingVelocity) {
+                    control.velocity -= mouseY - initialY;
+                    if(control.velocity > Constants.maxVelocity) {
+                        control.velocity = Constants.maxVelocity;
+                    }
+                    else if(control.velocity < 0) {
+                        control.velocity = 0;
+                    }
                 }
-                else if(control.velocity < 0) {
-                    control.velocity = 0;
+                else {
+                    var contentAreaCoordinate = control.mapToItem(control.parent, mouseX, mouseY);
+                    var deltaY = contentAreaCoordinate.y - initialY;
+                    if(deltaY >= control.height && control.noteMidiNum >= 0) {
+                        control.y += control.height + 1;
+                        control.noteMidiNum -= 1;
+                        initialY = contentAreaCoordinate.y;
+                    }
+                    else if(deltaY <= 0 - control.height && control.noteMidiNum < Constants.midiValueRange - 1) {
+                        control.y -= control.height + 1;
+                        control.noteMidiNum += 1;
+                        initialY = contentAreaCoordinate.y;
+                    }
                 }
             }
         }

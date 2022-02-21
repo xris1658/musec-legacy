@@ -409,7 +409,6 @@ Rectangle {
                                             type == 2? "../../images/instrument.svg":
                                             type == 3? "../../images/audioeffect.svg":
                                             /*type == 0?*/ "../../images/plugin.svg"
-
                                 }
                             }
                             Text {

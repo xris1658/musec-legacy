@@ -43,13 +43,13 @@ tresult PLUGIN_API MusecVST3Host::createInstance(TUID cid, TUID _iid, void** obj
 {
     if(cid == IMessage_iid)
     {
-        auto objAsMessage = reinterpret_cast<IMessage*>(&obj);
+        // auto objAsMessage = reinterpret_cast<IMessage*>(&obj);
         // 初始化消息对象
         return kResultOk;
     }
     else if(cid == IAttributeList_iid && _iid == IAttributeList_iid)
     {
-        auto objAsAttributeList = reinterpret_cast<IAttributeList*>(&obj);
+        // auto objAsAttributeList = reinterpret_cast<IAttributeList*>(&obj);
         // 初始化属性列表
         return kResultOk;
     }

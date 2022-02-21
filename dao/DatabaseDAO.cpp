@@ -7,7 +7,6 @@
 
 #include <QString>
 
-#include <sqlite3.h>
 #include <sqlite_modern_cpp.h>
 
 namespace Musec::DAO
@@ -21,7 +20,7 @@ const QString& DatabasePath()
 
 sqlite::database connectDatabase(const QString& path)
 {
-    static sqlite::database database(path.toStdU16String().data());
+    static sqlite::database database(path.toStdU16String());
     return database;
 }
 

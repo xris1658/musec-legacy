@@ -21,7 +21,7 @@ void MainWindow::openMainWindow()
 {
     using namespace Musec::UI;
     using namespace Musec::Event;
-    engine->load(QUrl("qrc:/qmlproject/Musec.qml"));
+    engine->load(QUrl("qrc:///qmlproject/Musec.qml"));
     mainWindow = qobject_cast<QQuickWindow*>(engine->rootObjects()[1]);
     optionsWindow = mainWindow->findChild<QQuickWindow*>("optionsWindow");
     // Musec.qml, Musec.onActiveFocusItemChanged()

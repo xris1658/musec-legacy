@@ -84,6 +84,9 @@ long onASIOMessage(long selector,
         case kAsioSupportsTimeCode:
             ret = 0;
             break;
+        default:
+            ret = 0;
+            break;
     }
     return ret;
 }

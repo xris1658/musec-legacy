@@ -41,7 +41,7 @@ class ASIODriver
 public:
     // TODO: 考虑使用 Active Qt 重写
     ASIODriver();
-    ASIODriver(const ASIODriverBasicInfo& info);
+    explicit ASIODriver(const ASIODriverBasicInfo& info);
     ASIODriver(const ASIODriver&) = delete;
     ASIODriver& operator=(const ASIODriver&) = delete;
     ASIODriver(ASIODriver&&) noexcept;
@@ -54,7 +54,7 @@ public:
     IASIO* operator*() const;
     IASIO* operator->() const;
 public:
-    static QList<ASIODriverBasicInfo> enumerateDrivers();
+    // static QList<ASIODriverBasicInfo> enumerateDrivers();
 private:
     ASIODriverBasicInfo driverInfo_;
     IASIO* driver_; // 有必要上 shared_ptr 吗？

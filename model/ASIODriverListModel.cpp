@@ -37,7 +37,7 @@ int ASIODriverListModel::itemCount() const
     return list_.count();
 }
 
-constexpr int ASIODriverListModel::columnSize() const
+constexpr int ASIODriverListModel::columnSize()
 {
     return std::tuple_size_v<Item>;
 }

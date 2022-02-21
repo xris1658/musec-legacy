@@ -11,7 +11,6 @@
 #include <ShlObj_core.h>
 
 #include <array>
-#include <cwchar>
 #include <cstdint>
 #include <tuple>
 #include <cstring>
@@ -81,7 +80,7 @@ VstIntPtr pluginVST2Callback(AEffect* effect,
         break;
     case audioMasterProcessEvents:
     {
-        auto events = reinterpret_cast<VstEvents*>(ptr);
+        // auto events = reinterpret_cast<VstEvents*>(ptr);
         // TODO
         break;
     }
