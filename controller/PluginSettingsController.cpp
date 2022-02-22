@@ -10,17 +10,19 @@
 #include <queue>
 #include <utility>
 
-QStringList Musec::Controller::getPluginDirectoryList()
+namespace Musec::Controller::PluginSettingsController
+{
+QStringList getPluginDirectoryList()
 {
     return Musec::DAO::selectPluginDirectory();
 }
 
-void Musec::Controller::addPluginDirectory(const QString& path)
+void addPluginDirectory(const QString& path)
 {
     Musec::DAO::addPluginDirectory(path);
 }
 
-void Musec::Controller::removePluginDirectory(const QString& path)
+void removePluginDirectory(const QString& path)
 {
     Musec::DAO::removePluginDirectory(path);
 }
@@ -29,7 +31,7 @@ void Musec::Controller::removePluginDirectory(const QString& path)
 /// 请务必不要这个函数在 UI 线程上跑，否则扫描 SAK
 /// 或 FabFilter 的插件时会有奇怪的错误出现，原因未知。
 /// 就是这个玩意卡了我三天 :(
-void Musec::Controller::scanPlugins()
+void scanPlugins()
 {
     QStringList plugins;
     std::queue<QDir> pluginDirectories;
@@ -52,7 +54,7 @@ void Musec::Controller::scanPlugins()
         {
             auto& dir = pluginDirectories.front();
             auto fileList = dir.entryInfoList(nameFilters,
-                QDir::Filter::Files | QDir::Filter::Hidden);
+                                              QDir::Filter::Files | QDir::Filter::Hidden);
             auto fileListSize = fileList.size();
             if(fileListSize)
             {
@@ -66,9 +68,9 @@ void Musec::Controller::scanPlugins()
                 }
             }
             auto dirList = dir.entryInfoList(
-                QDir::AllDirs
-              | QDir::Filter::Hidden
-              | QDir::Filter::NoDotAndDotDot);
+                    QDir::AllDirs
+                    | QDir::Filter::Hidden
+                    | QDir::Filter::NoDotAndDotDot);
             auto dirListSize = dirList.size();
             for(decltype(dirListSize) i = 0; i < dirListSize; ++i)
             {
@@ -84,14 +86,15 @@ void Musec::Controller::scanPlugins()
         for(auto& [uid, name, format, type]: pluginList)
         {
             Musec::DAO::insertPlugin(
-                Musec::Base::PluginWriteInfo(
-                    path,
-                    uid,
-                    name,
-                    format,
-                    type
-                )
+                    Musec::Base::PluginWriteInfo(
+                            path,
+                            uid,
+                            name,
+                            format,
+                            type
+                    )
             );
         }
     }
+}
 }

@@ -9,6 +9,7 @@ import Musec.Controls 1.0 as MCtrl
 Rectangle {
     property alias pluginPathListModel: pluginPathListView.model
     readonly property EventBridge eventBridge: EventBridge
+    property alias scanShortcut: checkScanShortcut.checked
     id: root
     width: 500
     height: 500
@@ -104,12 +105,6 @@ Rectangle {
                     FolderDialog {
                         id: folderDialog
                         onAccepted: {
-//                            let newPath = String(folder).slice(8);
-//                            // QML 引擎不支持 String.prototype.replaceAll
-//                            // 奶奶滴! 跟我玩阴滴是吧? 直接来吧! (倒地身亡)
-//                            while (newPath.indexOf('/') != -1) {
-//                                newPath = newPath.replace('/', '\\');
-//                            }
                             let newPath = Constants.directoryFromUrl(folder);
                             EventBridge.pluginDirectoryAdded(String(newPath));
                             // 不能直接对 pluginPathListModel 进行修改，否则界面中的数据不会更新。貌似 pluginPathListModel 是全局对象？
@@ -191,21 +186,6 @@ Rectangle {
         }
         Text {
             width: 100
-            text: qsTr("启用32位VST")
-            font.family: Constants.font
-            color: Constants.contentColor1
-            horizontalAlignment: Text.AlignRight
-            verticalAlignment: Text.AlignVCenter
-        }
-        MCtrl.CheckBox {
-            id: checkEnable32BitVST
-            width: 16
-            height: 16
-            tristate: false
-            checked: false
-        }
-        Text {
-            width: 100
             text: qsTr("扫描快捷方式")
             font.family: Constants.font
             color: Constants.contentColor1
@@ -217,7 +197,6 @@ Rectangle {
             width: 16
             height: 16
             tristate: false
-            checked: false
         }
         Text {
             width: 100

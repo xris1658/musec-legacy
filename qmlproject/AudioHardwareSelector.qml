@@ -83,6 +83,10 @@ Rectangle {
                 model: ["44100", "48000", "88200", "96000", "176400", "192000"]
                 currentIndex: 0
                 font.family: Constants.font
+                onCurrentTextChanged: {
+                    root.sampleRate = parseInt(currentText);
+                    EventBridge.sampleRateChanged(root.sampleRate);
+                }
             }
             Text {
                 text: qsTr("Hz")

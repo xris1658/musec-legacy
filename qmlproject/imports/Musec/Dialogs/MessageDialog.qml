@@ -9,32 +9,57 @@ import Musec.Controls 1.0 as MCtrl
 // 讲个笑话: Types in Qt.labs modules are not guaranteed to remain
 // compatible in future versions. - Qt Documentation
 Window {
+    id: root
+    enum Icon {
+        None,
+        Question,
+        Warning,
+        Error,
+        Check,
+        Info
+    }
+    property int icon: MessageDialog.Icon.None
     flags: Qt.Dialog
     modality: Qt.ApplicationModal
     color: Constants.backgroundColor
     height: icon.height + dialogButtonBox.height + row.padding * 2
     minimumHeight: row.height + dialogButtonBox.height
-    width: dialogButtonBox.contentWidth + dialogButtonBox.padding * 2
+    width: Math.max(dialogButtonBox.contentWidth + dialogButtonBox.padding * 2, row.width)
     minimumWidth: row.width
+    x: (screen.width - width) / 2
+    y: (screen.height - height) / 2
     property string message: qsTr("对话框消息文字")
     property alias standardButtons: dialogButtonBox.standardButtons
+    signal accepted()
     title: qsTr("对话框示例")
-    onVisibleChanged: {
-        if(visible) {
-//            width = minimumWidth;
-        }
+//    Component.onCompleted: {
+//        console.log("width: " + width);
+//        console.log("minimumWidth: " + minimumWidth);
+//    }
+    signal clicked(button: AbstractButton)
+    onClicked: {
+        //
     }
-
     Row {
         id: row
-        padding: dialogButtonBox.padding
+        padding: 10
         spacing: 10
         Rectangle {
-            id: icon
-            width: 64
-            height: 64
+            id: iconRect
+            width: icon == MessageDialog.Icon.None? 0: 64
+            height: width
             color: "transparent"
-            border.color: Constants.borderColor
+            Image {
+                anchors.fill: parent
+                source: root.icon == MessageDialog.Icon.Question? "../../../images/question.png":
+                        root.icon == MessageDialog.Icon.Warning?  "../../../images/warning.png":
+                        root.icon == MessageDialog.Icon.Error?    "../../../images/error.png":
+                        root.icon == MessageDialog.Icon.Check?    "../../../images/check.png":
+                        root.icon == MessageDialog.Icon.Info?     "../../../images/info.png":
+                                                                  ""
+                fillMode: Image.PreserveAspectFit
+                mipmap: true
+            }
         }
         Text {
             anchors.verticalCenter: parent.verticalCenter
@@ -52,8 +77,13 @@ Window {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         width: parent.width
-        spacing: 10
-//        width: parent.width
-        delegate: MCtrl.Button {}
+        spacing: 5
+        padding: 5
+        onClicked: {
+//            console.log(button.DialogButtonBox.buttonRole);
+            root.close();
+        }
+        delegate: MCtrl.Button {
+        }
     }
 }

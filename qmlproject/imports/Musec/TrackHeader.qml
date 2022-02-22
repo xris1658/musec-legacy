@@ -207,6 +207,7 @@ Item {
     }
     MouseArea {
         id: resizeArea
+        property bool hovered: false
         z: 2
         anchors.bottom: parent.bottom
         anchors.left: parent.left
@@ -231,10 +232,12 @@ Item {
         }
         hoverEnabled: true
         onEntered: {
+            hovered = true;
             cursorShape = Qt.SizeVerCursor;
             resizeAreaRect.opacity = 1;
         }
         onExited: {
+            hovered = false;
             cursorShape = Qt.ArrowCursor;
             resizeAreaRect.opacity = 0;
         }
@@ -243,16 +246,20 @@ Item {
         }
         onMouseYChanged: {
             if(pressed) {
-                root.height += mouseY - initialY;
-                initialY = mouseY;
-                if(root.height < lineHeight) {
-                    root.height = lineHeight;
+                var rootY = mapToItem(root, mouseX, mouseY).y;
+                if(rootY >= lineHeight + 1) {
+                    var newHeight = root.height + mouseY - initialY;
+                    if(newHeight < lineHeight + 1) {
+                        newHeight = lineHeight + 1;
+                    }
+                    root.height = newHeight;
+                }
+                else {
+                    root.height = lineHeight + 1;
                 }
                 tracks.get(trackIndex - 1).trackHeight = root.height;
+                initialY = mouseY;
             }
-        }
-        onReleased: {
-            initialY = 0;
         }
     }
 }

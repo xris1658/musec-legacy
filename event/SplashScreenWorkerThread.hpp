@@ -2,8 +2,7 @@
 #define MUSEC_UI_SPLASHSCREENWORKERTHREAD
 
 // 类声明中需要 SplashScreen 的类型声明，因此在此处添加前向声明。
-// 或许把这些东西放到一个类中更好，但是连接信号和槽函数时
-// Qt 会闹脾气，只好作罢。日后再研究。
+// 或许把这些东西放到一个类中更好，但是 Qt 的元对象系统不支持嵌套类。
 #include "SplashScreenForward.hpp"
 
 #include <QObject>

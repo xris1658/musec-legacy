@@ -1,8 +1,9 @@
 #include "ASIOCallback.hpp"
 
-#include "controller/AppController.hpp"
+#include "controller/ASIODriverController.hpp"
 #include "audio/driver/ASIODriver.hpp"
 #include "base/Base.hpp"
+#include "controller/ASIODriverController.hpp"
 
 namespace Musec::Audio::Driver
 {
@@ -59,8 +60,7 @@ long onASIOMessage(long selector,
             auto driverInfo = AppASIODriver().driverInfo();
             AppASIODriver() = ASIODriver();
             AppASIODriver() = ASIODriver(driverInfo);
-            Musec::Controller::loadASIODriver();
-            Musec::Controller::updateCurrentASIODriverInfo();
+            Controller::ASIODriverController::loadASIODriver();
             //
             ret = 1L;
             break;

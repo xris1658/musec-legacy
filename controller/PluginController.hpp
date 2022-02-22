@@ -11,7 +11,10 @@ namespace Musec
 {
 namespace Controller
 {
+namespace PluginController
+{
 QList<Musec::Base::PluginReadInfo> getAllPlugins();
+}
 }
 }
 

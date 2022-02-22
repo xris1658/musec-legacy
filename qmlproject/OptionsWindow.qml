@@ -6,8 +6,8 @@ import Musec 1.0
 import Musec.Controls 1.0 as MCtrl
 
 Window {
-    flags: Qt.Tool
     id: root
+    flags: Qt.Tool
     title: qsTr("选项")
     width: 600
     height: 600
@@ -18,7 +18,9 @@ Window {
     onScanPluginComplete: {
         pluginSettings.scanning = false;
     }
-
+    // 常规
+    property alias systemRender: generalSettings.systemRender
+    // 音频硬件
     property alias driverList: audioHardwareSelector.driverListModel
     property alias pluginDirectoryList: pluginSettings.pluginPathListModel
     property alias currentDriver: audioHardwareSelector.currentDriver
@@ -26,6 +28,7 @@ Window {
     property alias inputLatencyInSamples: audioHardwareSelector.inputLatencyInSamples
     property alias outputLatencyInSamples: audioHardwareSelector.outputLatencyInSamples
     property alias sampleRate: audioHardwareSelector.sampleRate
+    // 插件
     MCtrl.SplitView {
         orientation: Qt.Horizontal
         anchors.fill: parent
@@ -48,18 +51,7 @@ Window {
                     interactive: false
                     highlightMoveDuration: 0
                     highlightResizeDuration: 0
-                    model: ListModel {
-                        id: assetsList
-                        ListElement {
-                            name: qsTr("常规")
-                        }
-                        ListElement {
-                            name: qsTr("音频硬件")
-                        }
-                        ListElement {
-                            name: qsTr("插件")
-                        }
-                    }
+                    model: ["常规", "音频硬件", "插件"]
                     delegate: Item {
                         id: itemDelegate
                         width: parent.width
@@ -77,7 +69,7 @@ Window {
                                 height: itemDelegate.height
                             }
                             Text {
-                                text: name
+                                text: modelData
                                 font.family: Constants.font
                                 color: categoryList.currentIndex == index? Constants.listHighlightContentColor : Constants.contentColor1
                             }
@@ -101,6 +93,7 @@ Window {
                     anchors.fill: parent
                     currentIndex: categoryList.currentIndex
                     GeneralSettings {
+                        id: generalSettings
                     }
                     AudioHardwareSelector {
                         id: audioHardwareSelector

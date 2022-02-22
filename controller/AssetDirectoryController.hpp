@@ -4,12 +4,15 @@
 #include "base/AssetDirectoryBase.hpp"
 #include "model/AssetDirectoryListModel.hpp"
 #include "dao/AssetDirectoryDAO.hpp"
+#include "AppController.hpp"
 
 #include <QString>
 
 namespace Musec
 {
 namespace Controller
+{
+namespace AssetDirectoryController
 {
 QList<Musec::Base::AssetDirectoryInfo> getAssetDirectory();
 
@@ -18,6 +21,7 @@ void addAssetDirectory(const QString& directory);
 void renameAssetDirectory(int id, const QString& name);
 
 void removeAssetDirectory(int id);
+}
 }
 }
 

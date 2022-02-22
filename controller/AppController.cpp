@@ -1,24 +1,22 @@
 #include "AppController.hpp"
 
+#include "controller/ConfigController.hpp"
 #include "controller/PluginSettingsController.hpp"
 #include "controller/AssetDirectoryController.hpp"
 #include "controller/PluginController.hpp"
-#include "audio/driver/ASIODriver.hpp"
-#include "audio/driver/ASIOCallback.hpp"
-#include "dao/DatabaseDAO.hpp"
-#include "dao/ConfigDAO.hpp"
 #include "dao/PluginDirectoryDAO.hpp"
 #include "event/EventBase.hpp"
 #include "native/Native.hpp"
+#include "ui/UI.hpp"
+#include "controller/AssetDirectoryController.hpp"
+#include "controller/PluginController.hpp"
 
 #include <QDir>
 #include <QApplication>
-#include <QQuickView>
 
 #include <string>
 #include <tuple>
 #include <array>
-#include <ui/UI.hpp>
 
 namespace Musec::Controller
 {
@@ -36,12 +34,22 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
         Musec::Controller::initAppData();
         // 在这里添加打开初次设置窗口的操作
     }
-    auto appConfig = loadAppConfig();
+    auto systemRender =
+        Musec::Controller::ConfigController::appConfig()
+        ["musec"]["options"]["general"]["system-render"]
+        .as<bool>();
+    if(systemRender)
+    {
+        QQuickWindow::setTextRenderType(QQuickWindow::TextRenderType::NativeTextRendering);
+    }
+    auto& appConfig = Musec::Controller::ConfigController::appConfig();
     splashScreen->setBootText("正在寻找音频设备...");
     // 加载 ASIO 驱动列表
     auto driverList = Musec::Audio::Driver::enumerateDrivers();
     AppASIODriverList().setList(driverList);
     // 加载 ASIO 驱动
+    splashScreen->setBootText("正在加载 ASIO 驱动程序...");
+    Musec::Audio::Driver::AppASIODriver();
     auto driverCLSID = QString::fromStdString(
         appConfig["musec"]["options"]["audio-hardware"]["driver-id"]
             .as<std::string>()
@@ -58,17 +66,9 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
         {
             if(std::get<ASIODriverField::CLSIDField>(item) == driverCLSID)
             {
-                splashScreen->setBootText("正在加载 ASIO 驱动程序...");
                 AppASIODriver() = ASIODriver(item);
                 break;
             }
-        }
-        if(!AppASIODriver())
-        {
-            splashScreen->setBootText("正在加载 ASIO 驱动程序...");
-            // 没有找到设置中的 ASIO 驱动，直接用表中的第一个
-            // （可能会导致一些潜在问题的出现，不过暂时不管）
-            AppASIODriver() = ASIODriver(driverList[0]);
         }
     }
     splashScreen->setBootText("正在打开主界面...");
@@ -94,7 +94,8 @@ void initAppData()
     Musec::DAO::initDatabase();
     // 创建配置文件（未完成）
     // 完成此处内容之前，打开程序会使程序崩溃。
-    saveAppConfig(createAppConfig());
+    Musec::Controller::ConfigController::createAppConfig();
+    Musec::Controller::ConfigController::saveAppConfig();
     // 添加一些默认的插件目录（e.g. C:\Program Flies\VstPlugins）
     auto& list = Musec::Base::defaultPluginDirectoryList();
     for(auto& item: list)
@@ -107,38 +108,11 @@ void initAppData()
 void loadAppData()
 {
     // 读取设置文件
-    auto appConfig = loadAppConfig();
+    auto& appConfig = Musec::Controller::ConfigController::appConfig();
     // 视情况重新扫描插件
     refreshPluginList(false);
     loadAssetDirectoryList();
     // 视情况重新扫描素材
-}
-
-YAML::Node createAppConfig()
-{
-    YAML::Node configFileNode;
-    configFileNode["musec"]["options"]["general"]["language"] = "zh-cn";
-    configFileNode["musec"]["options"]["general"]["theme"] = "dark";
-    configFileNode["musec"]["options"]["general"]["scale"] = 100;
-    configFileNode["musec"]["options"]["general"]["touch"] = true;
-    configFileNode["musec"]["options"]["general"]["single-instance"] = true;
-    configFileNode["musec"]["options"]["audio-hardware"]["driver-type"] = "ASIO";
-    configFileNode["musec"]["options"]["audio-hardware"]["driver-id"] =
-        "{00000000-0000-0000-0000-000000000000}"; // 无音频驱动
-    configFileNode["musec"]["options"]["audio-hardware"]["sample-rate"] = 44100;
-    configFileNode["musec"]["options"]["plugin"]["enable-shortcuts"] = true;
-    configFileNode["musec"]["options"]["plugin"]["enable-32-bit"] = false;
-    return configFileNode;
-}
-
-YAML::Node loadAppConfig()
-{
-    return Musec::DAO::loadAppConfig(Musec::DAO::ConfigFilePath());
-}
-
-void saveAppConfig(const YAML::Node& node)
-{
-    Musec::DAO::saveAppConfig(node, Musec::DAO::ConfigFilePath());
 }
 
 Musec::Model::PluginListModel& AppPluginList()
@@ -187,7 +161,7 @@ void refreshPluginList(bool rescan)
     auto setPluginLists = []()
     {
         using namespace Musec::Model;
-        auto list = Musec::Controller::getAllPlugins();
+        auto list = PluginController::getAllPlugins();
         auto pluginTypeList = [](int pluginType) -> PluginListModel&
         {
             return pluginType == 1? AppMidiEffectList():
@@ -219,7 +193,7 @@ void refreshPluginList(bool rescan)
         {
             using namespace Musec::Event;
             using namespace Musec::Model;
-            Musec::Controller::scanPlugins();
+            Musec::Controller::PluginSettingsController::scanPlugins();
             // auto list = Musec::Controller::getAllPlugins();
             setPluginLists();
             eventHandler->scanPluginComplete();
@@ -238,116 +212,6 @@ void refreshPluginList(bool rescan)
 
 void loadAssetDirectoryList()
 {
-    AppAssetDirectoryList().setList(getAssetDirectory());
+    AppAssetDirectoryList().setList(AssetDirectoryController::getAssetDirectory());
 }
-
-void loadASIODriver()
-{
-    using namespace Musec::Audio::Driver;
-    // using namespace Musec::DAO;
-    using namespace Musec::UI;
-    auto& driver = AppASIODriver();
-    if(!driver)
-    {
-        return;
-    }
-    auto hWnd = reinterpret_cast<HWND>(mainWindow->winId());
-    driver->init(hWnd);
-    auto appConfig = loadAppConfig();
-    auto sampleRate = appConfig["musec"]["options"]["audio-hardware"]["sample-rate"].as<double>();
-    // auto bufferSize = 0;
-    // appConfig["musec"]["options"]["audio-hardware"]["buffer-size"].as<int>();
-    auto canSampleRate = driver->canSampleRate(sampleRate);
-    if(canSampleRate == ASE_OK || canSampleRate == ASE_SUCCESS)
-    {
-        driver->setSampleRate(sampleRate);
-    }
-    else
-    {
-        driver->setSampleRate(44100.0);
-        appConfig["musec"]["options"]["audio-hardware"]["sample-rate"] = 44100.0;
-        saveAppConfig(appConfig);
-    }
-    auto info = getASIODriverStreamInfo(driver);
-    constexpr int inputBufferCount = 64;
-    constexpr int outputBufferCount = 64;
-    auto& bufferInfo = getASIOBufferInfoList();
-    for(int i = 0; i < info.inputChannelCount; ++i)
-    {
-        bufferInfo[i].isInput = ASIOTrue;
-        bufferInfo[i].channelNum = i;
-        bufferInfo[i].buffers[0] = bufferInfo[i].buffers[1] = nullptr;
-    }
-    for(int i = info.inputChannelCount; i < info.inputChannelCount + info.outputChannelCount; ++i)
-    {
-        bufferInfo[i].isInput = ASIOFalse;
-        bufferInfo[i].channelNum = i - info.inputChannelCount;
-        bufferInfo[i].buffers[0] = bufferInfo[i].buffers[1] = nullptr;
-    }
-    //
-    auto createBuffersResult = driver->createBuffers(bufferInfo.data(),
-                          inputBufferCount + outputBufferCount,
-                          info.preferredBufferSize,
-                          &getCallbacks());
-    driver->start();
-}
-
-QString getASIODriver()
-{
-    auto appConfig = loadAppConfig();
-    return QString::fromStdString(
-        appConfig["musec"]["options"]["audio-hardware"]["driver-id"].as<std::string>()
-    );
-}
-
-void setASIODriver(const QString& clsid)
-{
-    using namespace Musec::Audio::Driver;
-    auto driverList = AppASIODriverList().getList();
-    for(auto& item: driverList)
-    {
-        auto& itemCLSID = std::get<ASIODriverField::CLSIDField>(item);
-        if(itemCLSID.compare(clsid, Qt::CaseSensitivity::CaseInsensitive) == 0)
-        {
-            AppASIODriver() = ASIODriver(item);
-            auto appConfig = loadAppConfig();
-            appConfig["musec"]["options"]["audio-hardware"]["driver-id"] =
-                clsid.toStdString();
-            saveAppConfig(appConfig);
-            break;
-        }
-    }
-}
-
-void openASIODriverControlPanel()
-{
-    using namespace Musec::Audio::Driver;
-    AppASIODriver()->controlPanel();
-}
-
-void unloadASIODriver()
-{
-    using namespace Musec::Audio::Driver;
-    AppASIODriver() = ASIODriver();
-}
-
-void updateCurrentASIODriverInfo()
-{
-    using namespace Musec::Audio::Driver;
-    using namespace Musec::UI;
-    if(optionsWindow)
-    {
-        // 获取驱动信息
-        auto driverStreamInfo = getASIODriverStreamInfo(AppASIODriver());
-        optionsWindow->setProperty("bufferSize",
-            QVariant::fromValue<int>(driverStreamInfo.preferredBufferSize));
-        optionsWindow->setProperty("inputLatencyInSamples",
-            QVariant::fromValue<int>(driverStreamInfo.inputLatencyInSamples));
-        optionsWindow->setProperty("outputLatencyInSamples",
-            QVariant::fromValue<int>(driverStreamInfo.outputLatencyInSamples));
-        optionsWindow->setProperty("sampleRate",
-            QVariant::fromValue<double>(driverStreamInfo.sampleRate));
-    }
-}
-
 }

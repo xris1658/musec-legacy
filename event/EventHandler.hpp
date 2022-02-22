@@ -19,6 +19,7 @@ public:
     void scanPluginComplete();
 signals:
     void signalScanPluginComplete();
+    void setSystemTextRenderingComplete();
     void updatePluginList();
     void updateASIODriverList();
     void exitASIOThreadFinished();
@@ -35,8 +36,10 @@ public slots:
     void onOpenASIODriverControlPanel();
     void onDriverASIOSelectionChanged(const QString& clsid);
     void onExitASIOThread();
+    void onSampleRateChanged(int sampleRate);
+    void onSystemTextRenderingChanged(bool newValue);
 private:
-    QMetaObject::Connection optionsWindowConnection;
+    std::vector<QMetaObject::Connection> optionsWindowConnection;
 };
 }
 }

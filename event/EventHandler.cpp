@@ -2,10 +2,14 @@
 
 #include "audio/driver/ASIODriver.hpp"
 #include "controller/AppController.hpp"
+#include "controller/ASIODriverController.hpp"
 #include "controller/AssetDirectoryController.hpp"
 #include "controller/PluginSettingsController.hpp"
 #include "event/EventBase.hpp"
 #include "ui/UI.hpp"
+#include "controller/ASIODriverController.hpp"
+#include "controller/AssetDirectoryController.hpp"
+#include "controller/GeneralSettingsController.hpp"
 
 namespace Musec::Event
 {
@@ -47,6 +51,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      optionsWindow, SIGNAL(scanPluginComplete()));
     QObject::connect(this,          SIGNAL(exitASIOThreadFinished()),
                      mainWindow,    SIGNAL(exitASIOThreadFinished()));
+    QObject::connect(this,          SIGNAL(setSystemTextRenderingComplete()),
+                     eventBridge,   SIGNAL(setSystemTextRenderingComplete()));
 }
 
 EventHandler::~EventHandler()
@@ -81,8 +87,7 @@ void EventHandler::scanPluginComplete()
 
 void EventHandler::onMainWindowOpened()
 {
-    using namespace Musec::Controller;
-    loadASIODriver();
+    Controller::ASIODriverController::loadASIODriver();
 }
 
 void EventHandler::onOptionsWindowOpened()
@@ -90,8 +95,14 @@ void EventHandler::onOptionsWindowOpened()
     using namespace Musec::Audio::Driver;
     using namespace Musec::UI;
     using namespace Musec::Event;
+    // 常规设置
+    auto systemRender = Musec::Controller::ConfigController::appConfig()["musec"]["options"]["general"]["system-render"].as<bool>();
+    optionsWindow->setProperty(
+        "systemRender",
+        QVariant::fromValue(systemRender)
+    );
     // 加载插件目录
-    auto pluginDirectoryList = Musec::Controller::getPluginDirectoryList();
+    auto pluginDirectoryList = Musec::Controller::PluginSettingsController::getPluginDirectoryList();
     mainWindow->setProperty(
         "pluginDirectoryList",
         QVariant::fromValue<QStringList>(pluginDirectoryList)
@@ -103,7 +114,7 @@ void EventHandler::onOptionsWindowOpened()
     mainWindow->setProperty("driverList",
         QVariant::fromValue<QObject*>(&driverList));
     // 查找当前使用的 ASIO 驱动
-    QString driverCLSID = Musec::Controller::getASIODriver();
+    QString driverCLSID = Controller::ASIODriverController::getASIODriver();
     auto driverListCount = driverList.itemCount();
     auto driverListBase = driverList.getList();
     int driverCurrentIndex = 0;
@@ -119,27 +130,42 @@ void EventHandler::onOptionsWindowOpened()
     mainWindow->setProperty("currentDriver",
         QVariant::fromValue<int>(driverCurrentIndex)
     );
-    // 将选项窗口和 EventHandler 连接起来
-    if(!optionsWindowConnection)
+    // 将选项窗口的事件和 EventHandler 连接起来
+    if(optionsWindowConnection.empty())
     {
-        optionsWindowConnection =
-            QObject::connect(eventBridge, SIGNAL(driverASIOSelectionChanged(QString)),
-                             this,        SLOT(onDriverASIOSelectionChanged(QString)));
+        optionsWindowConnection.emplace_back(
+            QObject::connect(
+                eventBridge, SIGNAL(driverASIOSelectionChanged(QString)),
+                this,        SLOT(onDriverASIOSelectionChanged(QString))
+            )
+        );
+        optionsWindowConnection.emplace_back(
+            QObject::connect(
+                eventBridge, SIGNAL(sampleRateChanged(int)),
+                this,        SLOT(onSampleRateChanged(int))
+            )
+        );
+        optionsWindowConnection.emplace_back(
+            QObject::connect(
+                eventBridge, SIGNAL(systemTextRenderingChanged(bool)),
+                this,        SLOT(onSystemTextRenderingChanged(bool))
+            )
+        );
     }
 }
 
 void EventHandler::onOptionsWindowClosed()
 {
-    if(optionsWindowConnection)
+    for(auto& connection: optionsWindowConnection)
     {
-        QObject::disconnect(optionsWindowConnection);
-        optionsWindowConnection = QMetaObject::Connection();
+        QObject::disconnect(connection);
     }
+    optionsWindowConnection.clear();
 }
 
 void EventHandler::onPluginDirectoryAdded(const QString& directory)
 {
-    Musec::Controller::addPluginDirectory(directory);
+    Musec::Controller::PluginSettingsController::addPluginDirectory(directory);
 }
 
 void EventHandler::onScanPluginButtonClicked()
@@ -163,45 +189,56 @@ void EventHandler::onScanPluginButtonClicked()
 
 void EventHandler::onPluginDirectoryRemoved(const QString& directory)
 {
-    Musec::Controller::removePluginDirectory(directory);
+    Musec::Controller::PluginSettingsController::removePluginDirectory(directory);
 }
 
 void EventHandler::onAddAssetDirectory(const QString& directory)
 {
-    Musec::Controller::addAssetDirectory(directory);
+    Controller::AssetDirectoryController::addAssetDirectory(directory);
     Musec::Event::mainWindowEvents->updateAssetDirectoryList();
 }
 
 void EventHandler::onRenameAssetDirectory(int id, const QString& name)
 {
-    Musec::Controller::renameAssetDirectory(id, name);
+    Controller::AssetDirectoryController::renameAssetDirectory(id, name);
     Musec::Event::mainWindowEvents->updateAssetDirectoryList();
 }
 
 void EventHandler::onRemoveAssetDirectory(int id)
 {
-    Musec::Controller::removeAssetDirectory(id);
+    Controller::AssetDirectoryController::removeAssetDirectory(id);
     Musec::Event::mainWindowEvents->updateAssetDirectoryList();
 }
 
 void EventHandler::onOpenASIODriverControlPanel()
 {
-    Musec::Controller::openASIODriverControlPanel();
+    Controller::ASIODriverController::openASIODriverControlPanel();
 }
 
 void EventHandler::onDriverASIOSelectionChanged(const QString& clsid)
 {
     if(clsid.length())
     {
-        Musec::Controller::setASIODriver(clsid);
-        Musec::Controller::loadASIODriver();
-        Musec::Controller::updateCurrentASIODriverInfo();
+        Controller::ASIODriverController::setASIODriver(clsid);
+        Controller::ASIODriverController::loadASIODriver();
     }
 }
 
 void EventHandler::onExitASIOThread()
 {
-    Musec::Controller::unloadASIODriver();
+    Controller::ASIODriverController::unloadASIODriver();
     exitASIOThreadFinished();
+}
+
+void EventHandler::onSampleRateChanged(int sampleRate)
+{
+    using namespace Musec::Audio::Driver;
+    AppASIODriver()->setSampleRate(static_cast<ASIOSampleRate>(sampleRate));
+}
+
+void EventHandler::onSystemTextRenderingChanged(bool newValue)
+{
+    Musec::Controller::GeneralSettingsController::setSystemTextRendering(newValue);
+    setSystemTextRenderingComplete();
 }
 }

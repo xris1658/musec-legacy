@@ -1,13 +1,10 @@
 #include "PluginController.hpp"
 
-namespace Musec
+namespace Musec::Controller::PluginController
 {
-namespace Controller
+QList<Base::PluginReadInfo> getAllPlugins()
 {
-QList<Musec::Base::PluginReadInfo> getAllPlugins()
-{
-    QList<Musec::Base::PluginReadInfo> ret = Musec::DAO::selectAllPlugin(true);
+    QList<Base::PluginReadInfo> ret = DAO::selectAllPlugin(true);
     return ret;
-}
 }
 }

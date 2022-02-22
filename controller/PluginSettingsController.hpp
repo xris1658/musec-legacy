@@ -7,6 +7,8 @@ namespace Musec
 {
 namespace Controller
 {
+namespace PluginSettingsController
+{
 // 获取插件目录
 QStringList getPluginDirectoryList();
 
@@ -18,6 +20,7 @@ void removePluginDirectory(const QString&);
 
 // 扫描所有目录的插件
 void scanPlugins();
+}
 }
 }
 

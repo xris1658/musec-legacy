@@ -28,15 +28,6 @@ void initAppData();
 // 加载应用数据（读取数据库内容等）
 void loadAppData();
 
-// 创建默认配置
-YAML::Node createAppConfig();
-
-// 加载配置
-YAML::Node loadAppConfig();
-
-// 保存当前配置
-void saveAppConfig(const YAML::Node& node);
-
 // 插件列表
 Musec::Model::PluginListModel& AppPluginList();
 
@@ -60,24 +51,6 @@ void refreshPluginList(bool rescan);
 
 // 加载素材目录列表
 void loadAssetDirectoryList();
-
-// 加载 ASIO 驱动
-void loadASIODriver();
-
-// 获取当前 ASIO 驱动的 CLSID
-QString getASIODriver();
-
-// 切换 ASIO 驱动
-void setASIODriver(const QString& clsid);
-
-// 打开 ASIO 驱动的控制面板
-void openASIODriverControlPanel();
-
-// 卸载 ASIO 驱动
-void unloadASIODriver();
-
-// 更新 ASIO 驱动的信息
-void updateCurrentASIODriverInfo();
 }
 }
 

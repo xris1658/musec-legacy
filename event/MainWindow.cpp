@@ -3,6 +3,7 @@
 #include "ui/UI.hpp"
 #include "event/EventBase.hpp"
 #include "controller/AppController.hpp"
+#include "controller/ASIODriverController.hpp"
 
 #include <QString>
 #include <QQuickWindow>
@@ -59,7 +60,7 @@ void MainWindow::updateASIODriverList()
     auto& driverList = Musec::Controller::AppASIODriverList();
     mainWindow->setProperty("driverList",
         QVariant::fromValue<QObject*>(&driverList));
-    QString driverCLSID = Musec::Controller::getASIODriver();
+    QString driverCLSID = Controller::ASIODriverController::getASIODriver();
     auto driverListCount = driverList.itemCount();
     auto driverListBase = driverList.getList();
     int driverCurrentIndex = 0;

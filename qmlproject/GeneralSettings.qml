@@ -3,9 +3,11 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import Musec 1.0
 import Musec.Controls 1.0 as MCtrl
+import Musec.Dialogs 1.0 as MDlg
 
 Rectangle {
     id: root
+    property alias systemRender: checkBoxSystemTextRendering.checked
     width: 500
     height: 500
     clip: true
@@ -116,6 +118,51 @@ Rectangle {
             height: 16
             tristate: false
             checked: true
+        }
+        Text {
+            width: 100
+            text: qsTr("使用系统文字渲染")
+            font.family: Constants.font
+            color: Constants.contentColor1
+            horizontalAlignment: Text.AlignRight
+            verticalAlignment: Text.AlignVCenter
+        }
+        Row {
+            spacing: checkBoxSystemTextRendering.width / 2
+            MCtrl.CheckBox {
+                id: checkBoxSystemTextRendering
+                width: 16
+                height: 16
+                tristate: false
+                onCheckedChanged: {
+                    EventBridge.systemTextRenderingChanged(checked);
+                }
+            }
+            Rectangle {
+                id: systemTextRenderingInfo
+                width: checkBoxSystemTextRendering.height
+                height: width
+                radius: height / 2
+                color: Constants.backgroundColor2
+                border.color: Constants.borderColor
+                MouseArea {
+                    id: systemTextRenderingInfoMouseArea
+                    property bool hovered: false
+                    anchors.fill: parent
+                    hoverEnabled: true
+                }
+                Text {
+                    anchors.centerIn: parent
+                    font.family: "Noto Sans Mono Condensed"
+                    font.bold: true
+                    text: "?"
+                    color: Constants.borderColor
+                    MCtrl.ToolTip {
+                        text: qsTr("如果您的计算机上安装了 MacType 等改善系统文字渲染的程序，\n请勾选此项。否则通常不建议勾选。")
+                        visible: systemTextRenderingInfoMouseArea.containsMouse
+                }
+            }
+        }
         }
     }
 }

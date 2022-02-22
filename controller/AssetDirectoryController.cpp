@@ -1,4 +1,4 @@
-#include "AssetDirectoryController.hpp"
+#include "controller/AssetDirectoryController.hpp"
 
 #include "AppController.hpp"
 #include "dao/DatabaseDAO.hpp"
@@ -7,26 +7,26 @@
 
 #include <tuple>
 
-namespace Musec::Controller
+namespace Musec::Controller::AssetDirectoryController
 {
-QList<Musec::Base::AssetDirectoryInfo> getAssetDirectory()
+QList<Base::AssetDirectoryInfo> getAssetDirectory()
 {
-    QList<Musec::Base::AssetDirectoryInfo> ret =
-        Musec::DAO::selectAllAssetDirectory(true);
+    QList<Base::AssetDirectoryInfo> ret =
+            DAO::selectAllAssetDirectory(true);
     return ret;
 }
 
 void addAssetDirectory(const QString& directory)
 {
-    using namespace Musec::Model;
+    using namespace Model;
     // 根据目录位置得知目录名
     auto directory16 = directory.toStdU16String();
     auto name = directory.section('\\', -1);
     auto name16 = name.toStdU16String();
     // 添加素材目录
-    Musec::DAO::addAssetDirectory(directory, name);
+    DAO::addAssetDirectory(directory, name);
     // 视情况重新扫描此目录的素材文件
-    int newId = Musec::DAO::getAssetDirectoryLastId();
+    int newId = DAO::getAssetDirectoryLastId();
     auto& assetDirectoryList = AppAssetDirectoryList();
     assetDirectoryList.append(AssetDirectoryListModel::Item(newId, directory, name));
 }
@@ -35,17 +35,17 @@ void renameAssetDirectory(int id, const QString& name)
 {
     if(name.length() == 0)
     {
-        using namespace Musec::Model;
+        using namespace Model;
         QString directory =
-        std::get<Musec::Base::AssetDirectoryInfoField::FieldDirectory>(
-            Musec::DAO::selectAssetDirectoryById(id)
-        );
+                std::get<Base::FieldDirectory>(
+                        DAO::selectAssetDirectoryById(id)
+                );
         auto newName = directory.section('\\', -1);
-        Musec::DAO::updateAssetDirectoryNameById(id, newName);
+        DAO::updateAssetDirectoryNameById(id, newName);
     }
     else
     {
-        Musec::DAO::updateAssetDirectoryNameById(id, name);
+        DAO::updateAssetDirectoryNameById(id, name);
     }
     auto& assetDirectoryList = AppAssetDirectoryList();
     assetDirectoryList.setList(decltype(assetDirectoryList.getList())());
@@ -54,7 +54,7 @@ void renameAssetDirectory(int id, const QString& name)
 
 void removeAssetDirectory(int id)
 {
-    Musec::DAO::removeAssetDirectoryById(id);
+    DAO::removeAssetDirectoryById(id);
     auto& assetDirectoryList = AppAssetDirectoryList();
     assetDirectoryList.setList(decltype(assetDirectoryList.getList())());
     assetDirectoryList.setList(getAssetDirectory());

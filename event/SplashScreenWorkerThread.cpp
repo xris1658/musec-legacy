@@ -1,7 +1,5 @@
 #include "SplashScreenWorkerThread.hpp"
 #include "controller/AppController.hpp"
-// 此处需要 SplashScreen 的细节
-#include "SplashScreen.hpp"
 
 namespace Musec
 {

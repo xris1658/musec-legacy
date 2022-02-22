@@ -48,7 +48,10 @@ HEADERS += \
     base/PluginBase.hpp \
     base/Pool.hpp \
     controller/AppController.hpp \
+    controller/ASIODriverController.hpp \
     controller/AssetDirectoryController.hpp \
+    controller/ConfigController.hpp \
+    controller/GeneralSettingsController.hpp \
     controller/PluginController.hpp \
     controller/PluginSettingsController.hpp \
     dao/AssetDAO.hpp \
@@ -81,7 +84,10 @@ SOURCES += \
     audio/host/MusecVST3Host.cpp \
     base/PluginBase.cpp \
     controller/AppController.cpp \
+    controller/ASIODriverController.cpp \
     controller/AssetDirectoryController.cpp \
+    controller/ConfigController.cpp \
+    controller/GeneralSettingsController.cpp \
     controller/PluginController.cpp \
     controller/PluginSettingsController.cpp \
     dao/AssetDAO.cpp \

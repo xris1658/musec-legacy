@@ -61,5 +61,10 @@
         <file>qmlproject/images/plugin.svg</file>
         <file>qmlproject/images/qtlogo-64.png</file>
         <file>qmlproject/images/Splashscreen.png</file>
+        <file>qmlproject/images/check.png</file>
+        <file>qmlproject/images/error.png</file>
+        <file>qmlproject/images/info.png</file>
+        <file>qmlproject/images/question.png</file>
+        <file>qmlproject/images/warning.png</file>
     </qresource>
 </RCC>

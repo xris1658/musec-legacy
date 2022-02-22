@@ -1,7 +1,5 @@
 #include "ASIODriver.hpp"
 
-#include <QDebug>
-
 #include <Windows.h>
 #include <winreg.h>
 #include <winerror.h>

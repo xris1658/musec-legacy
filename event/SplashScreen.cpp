@@ -7,7 +7,6 @@
 
 namespace Musec::Event
 {
-
 SplashScreen::SplashScreen(QObject* parent): QObject(parent), workerThread(this)
 {
     using namespace Musec::UI;
