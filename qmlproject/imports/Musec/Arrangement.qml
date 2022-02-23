@@ -297,6 +297,7 @@ Item {
                 }
                 ListView {
                     id: trackHeaderList
+                    property int footerHeight: 50
                     orientation: Qt.Vertical
 //                    anchors.fill: parent
                     anchors.left: parent.left
@@ -324,6 +325,11 @@ Item {
                             color: Constants.mouseOverElementColor
                             opacity: trackHeaderList.height < trackHeaderList.contentHeight? 1: 0
                         }
+                    }
+                    footer: Item {
+                        id: trackHeaderListFooter
+                        width: headers.width
+                        height: trackHeaderList.footerHeight
                     }
                     delegate: TrackHeader {
                         id: trackHeader
@@ -470,6 +476,7 @@ Item {
                     height: root.height - timelineAndHbar.height
                     clip: true
                     MouseArea {
+                        id: contentAreaMouseArea
                         anchors.fill: parent
                         scrollGestureEnabled: true
                         onWheel: {
@@ -519,12 +526,12 @@ Item {
                     }
                     Rectangle {
                         id: contentAreaMaster
+                        z: 2
                         width: timeline.width
                         x: timeline.x
                         y: showMasterTrackButton.currentIndex == 1?
                             0:
                             masterTrackFooter.y
-                        z: 2
                         height: masterTrack.height
                         color: Constants.backgroundColor2
                         Item {
@@ -558,14 +565,15 @@ Item {
                     }
                     Rectangle {
                         id: contentArea
+                        z: 1
                         width: timeline.width
                         height: contentAreaRect.height > trackHeaderList.contentHeight? contentAreaRect.height: trackHeaderList.contentHeight
                         x: timeline.x
                         y: -(trackHeaderList.contentY) + masterTrackHeader.height
-                        z: 1
                         color: Constants.backgroundColor2
                         clip: true
                         ListView {
+                            z: 2
                             model: tracks
                             orientation: Qt.Vertical
                             interactive: false
@@ -581,8 +589,26 @@ Item {
                                     color: Constants.gridColor
                                 }
                             }
+                            footer: Item {
+                                width: contentArea.width
+                                height: trackHeaderList.height > trackHeaderList.contentHeight?
+                                        trackHeaderList.height - trackHeaderList.contentHeight + trackHeaderList.footerHeight:
+                                        trackHeaderList.footerHeight
+                                Item {
+                                    x: contentArea.x * -1
+                                    width: contentAreaRect.width
+                                    height: parent.height
+                                    Text {
+                                        text: qsTr("将插件或片段拖动到这里")
+                                        anchors.centerIn: parent
+                                        font: Constants.font
+                                        color: Constants.contentColor2
+                                    }
+                                }
+                            }
                         }
                         ListView {
+                            z: 1
                             model: timeline.barCount * timeline.numerator
                             orientation: Qt.Horizontal
                             height: contentAreaRect.height
@@ -606,3 +632,12 @@ Item {
         }
     }
 }
+
+/*##^##
+Designer {
+    D{i:0;autoSize:true;height:480;width:640}D{i:2}D{i:6}D{i:21}D{i:23}D{i:22}D{i:27}
+D{i:28}D{i:30}D{i:29}D{i:26}D{i:32}D{i:24}D{i:34}D{i:33}D{i:20}D{i:36}D{i:38}D{i:37}
+D{i:39}D{i:40}D{i:48}D{i:35}D{i:19}D{i:51}D{i:52}D{i:50}D{i:55}D{i:59}D{i:60}D{i:58}
+D{i:54}D{i:62}D{i:64}D{i:66}D{i:63}D{i:70}D{i:76}D{i:69}D{i:61}D{i:53}D{i:49}D{i:16}
+}
+##^##*/
