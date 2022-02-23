@@ -71,6 +71,10 @@ Rectangle {
                     opacity: trackChannelList.width < trackChannelList.contentWidth? 1: 0
                 }
             }
+            footer: Item {
+                width: 50
+                height: root.height - scroll.height
+            }
             delegate: Row {
                 MixerChannel {
                     channelName: name

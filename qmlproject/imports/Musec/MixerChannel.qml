@@ -44,6 +44,7 @@ Item {
             id: channelEffects
             width: parent.width
             height: (root.height - channelControl.height - channelStereo.height - channelInfo.height) / 2
+            clip: true
             Column {
                 Repeater {
                     model: effects
@@ -132,6 +133,7 @@ Item {
             id: channelControl
             width: parent.width
             height: 30
+            clip: true
             Row {
                 Item {
                     width: root.width / 4
@@ -239,6 +241,7 @@ Item {
             id: channelStereo
             width: parent.width
             height: 20
+            clip: true
             Row {
                 Item {
                     width: root.width / 2
@@ -296,6 +299,7 @@ Item {
             id: channelGainAndPeak
             width: parent.width
             height: (root.height - channelControl.height - channelStereo.height - channelInfo.height) / 2
+            clip: true
             Row {
                 Column {
                     Item {

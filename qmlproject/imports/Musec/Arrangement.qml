@@ -297,6 +297,7 @@ Item {
                 }
                 ListView {
                     id: trackHeaderList
+                    property int footerHeight: 50
                     orientation: Qt.Vertical
 //                    anchors.fill: parent
                     anchors.left: parent.left
@@ -324,6 +325,11 @@ Item {
                             color: Constants.mouseOverElementColor
                             opacity: trackHeaderList.height < trackHeaderList.contentHeight? 1: 0
                         }
+                    }
+                    footer: Item {
+                        id: trackHeaderListFooter
+                        width: headers.width
+                        height: trackHeaderList.footerHeight
                     }
                     delegate: TrackHeader {
                         id: trackHeader
@@ -470,6 +476,7 @@ Item {
                     height: root.height - timelineAndHbar.height
                     clip: true
                     MouseArea {
+                        id: contentAreaMouseArea
                         anchors.fill: parent
                         scrollGestureEnabled: true
                         onWheel: {
@@ -519,12 +526,12 @@ Item {
                     }
                     Rectangle {
                         id: contentAreaMaster
+                        z: 2
                         width: timeline.width
                         x: timeline.x
                         y: showMasterTrackButton.currentIndex == 1?
                             0:
                             masterTrackFooter.y
-                        z: 2
                         height: masterTrack.height
                         color: Constants.backgroundColor2
                         Item {
@@ -558,14 +565,15 @@ Item {
                     }
                     Rectangle {
                         id: contentArea
+                        z: 1
                         width: timeline.width
                         height: contentAreaRect.height > trackHeaderList.contentHeight? contentAreaRect.height: trackHeaderList.contentHeight
                         x: timeline.x
                         y: -(trackHeaderList.contentY) + masterTrackHeader.height
-                        z: 1
                         color: Constants.backgroundColor2
                         clip: true
                         ListView {
+                            z: 2
                             model: tracks
                             orientation: Qt.Vertical
                             interactive: false
@@ -581,8 +589,26 @@ Item {
                                     color: Constants.gridColor
                                 }
                             }
+                            footer: Item {
+                                width: contentArea.width
+                                height: trackHeaderList.height > trackHeaderList.contentHeight?
+                                        trackHeaderList.height - trackHeaderList.contentHeight + trackHeaderList.footerHeight:
+                                        trackHeaderList.footerHeight
+                                Item {
+                                    x: contentArea.x * -1
+                                    width: contentAreaRect.width
+                                    height: parent.height
+                                    Text {
+                                        text: qsTr("将插件或片段拖动到这里")
+                                        anchors.centerIn: parent
+                                        font: Constants.font
+                                        color: Constants.contentColor2
+                                    }
+                                }
+                            }
                         }
                         ListView {
+                            z: 1
                             model: timeline.barCount * timeline.numerator
                             orientation: Qt.Horizontal
                             height: contentAreaRect.height
