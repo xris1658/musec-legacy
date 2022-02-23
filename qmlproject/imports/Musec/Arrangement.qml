@@ -632,12 +632,3 @@ Item {
         }
     }
 }
-
-/*##^##
-Designer {
-    D{i:0;autoSize:true;height:480;width:640}D{i:2}D{i:6}D{i:21}D{i:23}D{i:22}D{i:27}
-D{i:28}D{i:30}D{i:29}D{i:26}D{i:32}D{i:24}D{i:34}D{i:33}D{i:20}D{i:36}D{i:38}D{i:37}
-D{i:39}D{i:40}D{i:48}D{i:35}D{i:19}D{i:51}D{i:52}D{i:50}D{i:55}D{i:59}D{i:60}D{i:58}
-D{i:54}D{i:62}D{i:64}D{i:66}D{i:63}D{i:70}D{i:76}D{i:69}D{i:61}D{i:53}D{i:49}D{i:16}
-}
-##^##*/
