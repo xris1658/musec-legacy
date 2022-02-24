@@ -3,7 +3,6 @@
 
 #include <QString>
 
-// SQLite
 #include <sqlite_modern_cpp.h>
 
 namespace Musec

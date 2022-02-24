@@ -2,7 +2,6 @@
 #define MUSEC_EVENT_EVENTBASE
 
 #include "event/EventHandler.hpp"
-
 #include "event/MainWindow.hpp"
 
 #include <QObject>

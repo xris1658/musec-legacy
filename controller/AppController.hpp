@@ -1,10 +1,10 @@
 #ifndef MUSEC_CONTROLLER_APPCONTROLLER
 #define MUSEC_CONTROLLER_APPCONTROLLER
 
-#include "model/PluginListModel.hpp"
-#include "model/AssetDirectoryListModel.hpp"
-#include "model/ASIODriverListModel.hpp"
 #include "event/SplashScreen.hpp"
+#include "model/ASIODriverListModel.hpp"
+#include "model/AssetDirectoryListModel.hpp"
+#include "model/PluginListModel.hpp"
 
 #include <yaml-cpp/yaml.h>
 

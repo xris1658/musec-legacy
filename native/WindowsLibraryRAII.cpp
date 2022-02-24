@@ -1,7 +1,5 @@
 #include "WindowsLibraryRAII.hpp"
 
-#include <QDebug>
-
 #include <Windows.h>
 #include <libloaderapi.h>
 

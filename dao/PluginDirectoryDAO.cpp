@@ -1,4 +1,5 @@
 #include "PluginDirectoryDAO.hpp"
+
 #include "dao/DatabaseDAO.hpp"
 
 namespace Musec::DAO

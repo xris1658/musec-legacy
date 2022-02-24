@@ -1,15 +1,13 @@
 #include "AppController.hpp"
 
-#include "controller/ConfigController.hpp"
-#include "controller/PluginSettingsController.hpp"
 #include "controller/AssetDirectoryController.hpp"
+#include "controller/ConfigController.hpp"
 #include "controller/PluginController.hpp"
+#include "controller/PluginSettingsController.hpp"
 #include "dao/PluginDirectoryDAO.hpp"
 #include "event/EventBase.hpp"
 #include "native/Native.hpp"
 #include "ui/UI.hpp"
-#include "controller/AssetDirectoryController.hpp"
-#include "controller/PluginController.hpp"
 
 #include <QDir>
 #include <QApplication>
@@ -31,6 +29,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     }
     else
     {
+        splashScreen->setBootText("正在初始化应用设置...");
         Musec::Controller::initAppData();
         // 在这里添加打开初次设置窗口的操作
     }

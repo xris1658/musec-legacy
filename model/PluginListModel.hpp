@@ -1,12 +1,11 @@
 #ifndef MUSEC_MODEL_PLUGINLISTMODEL
 #define MUSEC_MODEL_PLUGINLISTMODEL
 
+#include "base/PluginBase.hpp"
+#include "model/ModelBase.hpp"
+
 #include <QAbstractListModel>
 #include <QList>
-
-#include "base/PluginBase.hpp"
-
-#include "ModelBase.hpp"
 
 namespace Musec
 {

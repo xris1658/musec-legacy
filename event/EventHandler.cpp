@@ -1,15 +1,13 @@
 #include "EventHandler.hpp"
 
 #include "audio/driver/ASIODriver.hpp"
-#include "controller/AppController.hpp"
 #include "controller/ASIODriverController.hpp"
+#include "controller/AppController.hpp"
 #include "controller/AssetDirectoryController.hpp"
+#include "controller/GeneralSettingsController.hpp"
 #include "controller/PluginSettingsController.hpp"
 #include "event/EventBase.hpp"
 #include "ui/UI.hpp"
-#include "controller/ASIODriverController.hpp"
-#include "controller/AssetDirectoryController.hpp"
-#include "controller/GeneralSettingsController.hpp"
 
 namespace Musec::Event
 {
@@ -80,7 +78,7 @@ void EventHandler::scanPluginComplete()
         "audioEffectList",
         QVariant::fromValue<QObject*>(&Musec::Controller::AppAudioEffectList())
     );
-    eventHandler->updatePluginList();
+    updatePluginList();
     signalScanPluginComplete();
 }
 

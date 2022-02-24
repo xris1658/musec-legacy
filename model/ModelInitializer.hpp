@@ -1,9 +1,9 @@
 #ifndef MUSEC_MODEL_MODELINITIALIZER
 #define MUSEC_MODEL_MODELINITIALIZER
 
-#include "ASIODriverListModel.hpp"
-#include "AssetDirectoryListModel.hpp"
-#include "PluginListModel.hpp"
+#include "model/ASIODriverListModel.hpp"
+#include "model/AssetDirectoryListModel.hpp"
+#include "model/PluginListModel.hpp"
 
 namespace Musec
 {

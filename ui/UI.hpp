@@ -2,7 +2,6 @@
 #define MUSEC_UI_UI
 
 #include "event/EventHandler.hpp"
-
 #include "event/MainWindow.hpp"
 
 #include <QQuickWindow>

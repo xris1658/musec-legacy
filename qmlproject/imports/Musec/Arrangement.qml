@@ -68,12 +68,12 @@ Item {
                 var newTrack = {
                     'name': '音频',
                     'color': Qt.rgba(Math.random(), Math.random(), Math.random()),
-                    'mute': 'false',
-                    'solo': 'false',
-                    'armRecord': 'false',
-                    'selected': 'false',
-                    'trackHeight': '60',
-                    'selected': 'false'
+                    'mute': false,
+                    'solo': false,
+                    'armRecord': false,
+                    'selected': false,
+                    'trackHeight': 60,
+                    'selected': false
                 };
                 tracks.append(newTrack);
             }
@@ -99,6 +99,10 @@ Item {
         MCtrl.Action {
             text: qsTr("创建副本(&L)")
             shortcut: "Ctrl+D"
+            onTriggered: {
+                var replica = tracks.get(trackOptions.trackIndex - 1);
+                tracks.insert(trackOptions.trackIndex - 1, replica);
+            }
         }
         MCtrl.Action {
             text: qsTr("粘贴(&P)")

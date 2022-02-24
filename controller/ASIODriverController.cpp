@@ -1,8 +1,8 @@
 #include "ASIODriverController.hpp"
 
+#include "audio/driver/ASIOCallback.hpp"
 #include "controller/AppController.hpp"
 #include "controller/ConfigController.hpp"
-#include "audio/driver/ASIOCallback.hpp"
 #include "dao/DatabaseDAO.hpp"
 #include "event/EventBase.hpp"
 #include "ui/UI.hpp"

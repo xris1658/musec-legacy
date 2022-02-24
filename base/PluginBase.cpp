@@ -1,8 +1,8 @@
 #include "PluginBase.hpp"
 
+#include "audio/host/MusecVST3Host.hpp"
 #include "base/Constants.hpp"
 #include "native/WindowsLibraryRAII.hpp"
-#include "audio/host/MusecVST3Host.hpp"
 
 #include <pluginterfaces/vst/ivstaudioprocessor.h>
 

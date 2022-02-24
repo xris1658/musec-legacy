@@ -1,6 +1,7 @@
 #include "PluginDAO.hpp"
-#include "dao/DatabaseDAO.hpp"
+
 #include "base/Base.hpp"
+#include "dao/DatabaseDAO.hpp"
 
 #include <string>
 

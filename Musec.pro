@@ -20,9 +20,6 @@ INCLUDEPATH += D:/apps/vcpkg/installed/x64-windows/include \
                D:/apps/vst3sdk/public.sdk/source \
                C:/asiosdk_2.3.3_2019-06-14
 
-QMAKE_LIBDIR += \
-                D:/apps/vcpkg/installed/x64-windows/lib
-
 CONFIG(debug, debug | release) {
     QMAKE_LIBDIR += \
         D:/apps/vcpkg/installed/x64-windows/debug/lib \

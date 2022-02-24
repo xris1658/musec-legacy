@@ -1,4 +1,5 @@
 #include "DatabaseDAO.hpp"
+
 #include "dao/AssetDAO.hpp"
 #include "dao/AssetDirectoryDAO.hpp"
 #include "dao/PluginDAO.hpp"

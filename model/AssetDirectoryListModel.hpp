@@ -1,12 +1,11 @@
 #ifndef MUSEC_MODEL_ASSETDIRECTORYLISTMODEL
 #define MUSEC_MODEL_ASSETDIRECTORYLISTMODEL
 
+#include "base/AssetDirectoryBase.hpp"
+#include "model/ModelBase.hpp"
+
 #include <QAbstractListModel>
 #include <QList>
-
-#include "base/AssetDirectoryBase.hpp"
-
-#include "ModelBase.hpp"
 
 namespace Musec
 {

@@ -1,7 +1,8 @@
 #include "SplashScreen.hpp"
-#include "ui/UI.hpp"
-#include "event/EventBase.hpp"
+
 #include "controller/AppController.hpp"
+#include "event/EventBase.hpp"
+#include "ui/UI.hpp"
 
 #include <QCoreApplication>
 

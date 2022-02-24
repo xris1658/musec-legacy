@@ -1,13 +1,14 @@
 #ifndef MUSEC_CONTROLLER_ASIODRIVERCONTROLLER
 #define MUSEC_CONTROLLER_ASIODRIVERCONTROLLER
 
-#include <QString>
 #include "controller/AppController.hpp"
 #include "controller/ConfigController.hpp"
 #include "audio/driver/ASIOCallback.hpp"
 #include "dao/DatabaseDAO.hpp"
 #include "event/EventBase.hpp"
 #include "ui/UI.hpp"
+
+#include <QString>
 
 namespace Musec
 {

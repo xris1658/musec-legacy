@@ -1,4 +1,5 @@
 #include "SplashScreenWorkerThread.hpp"
+
 #include "controller/AppController.hpp"
 
 namespace Musec

@@ -1,9 +1,10 @@
 #include "MainWindow.hpp"
+
 #include "audio/driver/ASIODriver.hpp"
-#include "ui/UI.hpp"
-#include "event/EventBase.hpp"
-#include "controller/AppController.hpp"
 #include "controller/ASIODriverController.hpp"
+#include "controller/AppController.hpp"
+#include "event/EventBase.hpp"
+#include "ui/UI.hpp"
 
 #include <QString>
 #include <QQuickWindow>
@@ -13,8 +14,8 @@ namespace Musec::Event
 MainWindow::MainWindow(const Musec::Event::SplashScreen& splash): QObject(nullptr)
 {
     QObject::connect(&splash, &Musec::Event::SplashScreen::openMainWindow,
-                     this, &MainWindow::openMainWindow);
-    QObject::connect(this, &MainWindow::openMainWindowComplete,
+                     this,    &MainWindow::openMainWindow);
+    QObject::connect(this,    &MainWindow::openMainWindowComplete,
                      &splash, &Musec::Event::SplashScreen::closeDialog);
 }
 

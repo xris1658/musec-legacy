@@ -2,11 +2,10 @@
 #define MUSEC_MODEL_ASIODRIVERLISTMODEL
 
 #include "audio/driver/ASIODriver.hpp"
+#include "model/ModelBase.hpp"
 
 #include <QAbstractListModel>
 #include <QList>
-
-#include "ModelBase.hpp"
 
 namespace Musec
 {

@@ -1,9 +1,9 @@
 #ifndef MUSEC_AUDIO_DRIVER_ASIODRIVERSTREAMINFO
 #define MUSEC_AUDIO_DRIVER_ASIODRIVERSTREAMINFO
 
-#include <cstdint>
-
 #include <common/asio.h>
+
+#include <cstdint>
 
 namespace Musec
 {

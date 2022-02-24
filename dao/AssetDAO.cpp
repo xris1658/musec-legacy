@@ -1,4 +1,5 @@
 #include "AssetDAO.hpp"
+
 #include "dao/DatabaseDAO.hpp"
 
 namespace Musec::DAO

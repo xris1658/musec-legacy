@@ -1,6 +1,5 @@
-#include "controller/AssetDirectoryController.hpp"
+#include "AssetDirectoryController.hpp"
 
-#include "AppController.hpp"
 #include "dao/DatabaseDAO.hpp"
 
 #include <QDir>

@@ -1,17 +1,17 @@
 // 项目头文件
-#include "ui/FontUtility.hpp"
-#include "ui/UI.hpp"
 #include "event/EventBase.hpp"
 #include "event/MainWindow.hpp"
 #include "event/SplashScreen.hpp"
 #include "model/ModelInitializer.hpp"
+#include "ui/FontUtility.hpp"
+#include "ui/UI.hpp"
 
 // Qt
-#include <QCoreApplication>
 #include <QApplication>
-#include <QQmlApplicationEngine>
+#include <QCoreApplication>
 #include <QFontDatabase>
 #include <QIcon>
+#include <QQmlApplicationEngine>
 #if QT_VERSION_MAJOR < 6
 #include <QTextCodec>
 #endif
