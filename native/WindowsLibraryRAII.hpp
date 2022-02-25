@@ -23,15 +23,15 @@ public:
     ~WindowsLibraryRAII() noexcept;
 public:
     HMODULE module() const;
-    template<typename ReturnType>
-    ReturnType getExport(const char* name) const
-    {
-        return reinterpret_cast<ReturnType>(GetProcAddress(module_, name));
-    }
-    operator bool() const;
 private:
     HMODULE module_;
 };
+
+template<typename ReturnType>
+ReturnType getExport(const WindowsLibraryRAII& library, const char* name)
+{
+    return reinterpret_cast<ReturnType>(GetProcAddress(library.module(), name));
+}
 }
 }
 

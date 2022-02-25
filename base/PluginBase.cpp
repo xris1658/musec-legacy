@@ -229,10 +229,10 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
         WindowsLibraryRAII library(path);
         if(format == PluginFormat::FormatVST2)
         {
-            auto pluginEntryProc = library.getExport<VST2PluginEntryProc>("VSTPluginMain");
+            auto pluginEntryProc = getExport<VST2PluginEntryProc>(library, "VSTPluginMain");
             if(!pluginEntryProc)
             {
-                pluginEntryProc = library.getExport<VST2PluginEntryProc>("main");
+                pluginEntryProc = getExport<VST2PluginEntryProc>(library, "main");
             }
             if(!pluginEntryProc)
             {
@@ -325,9 +325,9 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
         }
         else if(format == PluginFormat::FormatVST3)
         {
-            auto pluginInitProc = library.getExport<VST3PluginInitProc>("InitDll");
-            auto pluginFactoryProc = library.getExport<VST3PluginFactoryProc>("GetPluginFactory");
-            auto pluginExitProc = library.getExport<VST3PluginExitProc>("ExitDll");
+            auto pluginInitProc = getExport<VST3PluginInitProc>(library, "InitDll");
+            auto pluginFactoryProc = getExport<VST3PluginFactoryProc>(library, "GetPluginFactory");
+            auto pluginExitProc = getExport<VST3PluginExitProc>(library, "ExitDll");
             if(!pluginFactoryProc)
             {
                 auto error = GetLastError();

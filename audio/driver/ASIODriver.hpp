@@ -23,8 +23,8 @@ constexpr auto CLSIDStringLength = 38;
 
 constexpr int inputChannelCount = 64;
 constexpr int outputChannelCount = 64;
-
-using ASIOBufferInfoList = std::array<ASIOBufferInfo, inputChannelCount + outputChannelCount>;
+constexpr int channelCount = inputChannelCount + outputChannelCount;
+using ASIOBufferInfoList = std::array<ASIOBufferInfo, channelCount>;
 
 ASIOBufferInfoList& getASIOBufferInfoList();
 

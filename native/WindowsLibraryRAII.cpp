@@ -52,9 +52,4 @@ HMODULE WindowsLibraryRAII::module() const
 {
     return module_;
 }
-
-WindowsLibraryRAII::operator bool() const
-{
-    return module_ != NULL;
-}
 }

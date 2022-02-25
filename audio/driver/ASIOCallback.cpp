@@ -11,14 +11,19 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
     ASIOTime timeInfo;
     Musec::Base::memoryReset(&timeInfo);
     auto& driver = AppASIODriver();
-    if(driver->getSamplePosition(&(timeInfo.timeInfo.samplePosition),
-                                 &(timeInfo.timeInfo.systemTime))
-       == ASE_OK)
+    // 以下代码可能在 ASIO 驱动被卸载后执行，因此需要额外的检验。
+    // 加锁表面上更好，但此函数可能在中断时刻调用，因此上锁可能会影响效率。
+    if(driver)
     {
-        timeInfo.timeInfo.flags = AsioTimeInfoFlags::kSystemTimeValid
-                                | AsioTimeInfoFlags::kSamplePositionValid;
+        if(driver->getSamplePosition(&(timeInfo.timeInfo.samplePosition),
+                                     &(timeInfo.timeInfo.systemTime))
+           == ASE_OK)
+        {
+            timeInfo.timeInfo.flags = AsioTimeInfoFlags::kSystemTimeValid
+                                    | AsioTimeInfoFlags::kSamplePositionValid;
+        }
+        onASIOBufferSwitchTimeInfo(&timeInfo, doubleBufferIndex, directProcess);
     }
-    onASIOBufferSwitchTimeInfo(&timeInfo, doubleBufferIndex, directProcess);
 }
 
 ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
