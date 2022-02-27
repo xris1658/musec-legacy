@@ -4,7 +4,6 @@
         <file>qmlproject/AboutWindow.qml</file>
         <file>qmlproject/AudioHardwareSelector.qml</file>
         <file>qmlproject/EventBridge.qml</file>
-        <file>qmlproject/EventBridge.qml</file>
         <file>qmlproject/GeneralSettings.qml</file>
         <file>qmlproject/MixdownWindow.qml</file>
         <file>qmlproject/Musec.qml</file>

@@ -251,15 +251,18 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                 AEffect* effect = pluginEntryProc(pluginVST2Callback);
                 if((*reinterpret_cast<std::uint32_t*>(effect)) == kEffectMagic)
                 {
-                    std::array<char, kVstMaxEffectNameLen> nameBuffer = {0};
+                     // effShellGetNextPlugin 和 effGetEffectName 均使用此缓冲区
+                    std::array<char, kVstMaxProductStrLen> nameBuffer = {0};
                     // 加载 AEffect
                     effect->dispatcher(effect, effOpen, 0, 0, nullptr, 0);
                     auto category = effect->dispatcher(effect, effGetPlugCategory,
                         0, 0, nullptr, 0);
                     if(category == kPlugCategUnknown)
                     {
+                        effect->dispatcher(effect, effClose, 0, 0, nullptr, 0);
                         shellPluginIdShouldBeZero = true;
                         effect = pluginEntryProc(pluginVST2Callback);
+                        effect->dispatcher(effect, effOpen, 0, 0, nullptr, 0);
                         category = effect->dispatcher(effect, effGetPlugCategory,
                             0, 0, nullptr, 0);
                     }

@@ -55,6 +55,7 @@ HEADERS += \
     dao/AssetDirectoryDAO.hpp \
     dao/ConfigDAO.hpp \
     dao/DatabaseDAO.hpp \
+    dao/LoggingDAO.hpp \
     dao/PluginDAO.hpp \
     dao/PluginDirectoryDAO.hpp \
     event/EventBase.hpp \
@@ -91,6 +92,7 @@ SOURCES += \
     dao/AssetDirectoryDAO.cpp \
     dao/ConfigDAO.cpp \
     dao/DatabaseDAO.cpp \
+    dao/LoggingDAO.cpp \
     dao/PluginDAO.cpp \
     dao/PluginDirectoryDAO.cpp \
     event/EventBase.cpp \
@@ -126,10 +128,14 @@ LIBS += \
     sdk_hosting.lib
 
 CONFIG(debug, debug | release) {
-    LIBS += yaml-cppd.lib
+    LIBS += yaml-cppd.lib \
+    fmtd.lib \
+    spdlogd.lib
 }
 CONFIG(release, debug | release) {
-    LIBS += yaml-cpp.lib
+    LIBS += yaml-cpp.lib \
+    fmt.lib \
+    spdlog.lib
 }
 
 RC_ICONS = qmlproject/images/Musec-image-2.ico

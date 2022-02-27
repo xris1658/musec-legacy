@@ -86,13 +86,13 @@ void scanPlugins()
         for(auto& [uid, name, format, type]: pluginList)
         {
             Musec::DAO::insertPlugin(
-                    Musec::Base::PluginWriteInfo(
-                            path,
-                            uid,
-                            name,
-                            format,
-                            type
-                    )
+                Musec::Base::PluginWriteInfo(
+                    path,
+                    uid,
+                    name,
+                    format,
+                    type
+                )
             );
         }
     }

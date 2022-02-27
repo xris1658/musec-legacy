@@ -18,6 +18,11 @@
 
 namespace Musec::Controller
 {
+Musec::DAO::LoggingDAO::LoggerType& createLogger()
+{
+    return Musec::DAO::LoggingDAO::createLogger();
+}
+
 void initApplication(Musec::Event::SplashScreen* splashScreen)
 {
     using namespace Musec::Event;
@@ -72,6 +77,8 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     }
     splashScreen->setBootText("正在打开主界面...");
 }
+
+
 
 bool findAppData()
 {

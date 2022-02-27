@@ -18,6 +18,7 @@ public:
 public:
     void scanPluginComplete();
 signals:
+    void setStatusText(const QString& newText);
     void signalScanPluginComplete();
     void setSystemTextRenderingComplete();
     void updatePluginList();

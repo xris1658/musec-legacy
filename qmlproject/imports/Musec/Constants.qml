@@ -12,19 +12,10 @@ QtObject {
     property alias fontDirectory: directoryFontLoader.fontDirectory
     property alias relativeFontDirectory: directoryFontLoader.relativeFontDirectory
 
-    /* Edit this comment to add your custom font */
     readonly property font font: Qt.font({
                                              family: myFont.name,
                                              pixelSize: Qt.application.font.pixelSize
                                          })
-    readonly property font monoFont: Qt.font({
-                                                 family: myMonoFont.name,
-                                                 pixelSize: Qt.application.font.pixelSize
-                                             })
-    readonly property font largeFont: Qt.font({
-                                                  family: myFont.name,
-                                                  pixelSize: Qt.application.font.pixelSize * 1.6
-                                              })
     // 通用颜色
     readonly property color backgroundColor:       "#333333"
     readonly property color borderColor:           "#666666"
@@ -100,35 +91,6 @@ QtObject {
 
     readonly property color listHighlightBackColor:        Constants.currentElementColor
     readonly property color listHighlightContentColor:     "#000000"
-
-    readonly property ListModel keyNameWithSharp: ListModel { //\u266f: 升调标记
-        ListElement {name: "C"}
-        ListElement {name: "C\u266f"}
-        ListElement {name: "D"}
-        ListElement {name: "D\u266f"}
-        ListElement {name: "E"}
-        ListElement {name: "F"}
-        ListElement {name: "F\u266f"}
-        ListElement {name: "G"}
-        ListElement {name: "G\u266f"}
-        ListElement {name: "A"}
-        ListElement {name: "A\u266f"}
-        ListElement {name: "B"}
-    }
-    readonly property ListModel keyNameWithFlat: ListModel { //\u266d: 降调标记
-        ListElement {name: "C"}
-        ListElement {name: "D\u266d"}
-        ListElement {name: "D"}
-        ListElement {name: "E\u266d"}
-        ListElement {name: "E"}
-        ListElement {name: "F"}
-        ListElement {name: "G\u266d"}
-        ListElement {name: "G"}
-        ListElement {name: "A\u266d"}
-        ListElement {name: "A"}
-        ListElement {name: "B\u266d"}
-        ListElement {name: "B"}
-    }
 
     readonly property ListModel dynamicKeyName: ListModel {
         ListElement {
@@ -251,8 +213,7 @@ QtObject {
 
     function directoryFromUrl(directory: string) {
         let ret = String(directory).slice(8); // file:///
-        // QML 引擎不支持 String.prototype.replaceAll
-        // 奶奶滴! 跟我玩阴滴是吧? 直接来吧! (倒地身亡)
+        // QML JS 引擎不支持 String.prototype.replaceAll
         while (ret.indexOf('/') != -1) {
             ret = ret.replace('/', '\\');
         }

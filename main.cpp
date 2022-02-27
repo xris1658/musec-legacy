@@ -1,4 +1,5 @@
 // 项目头文件
+#include "controller/AppController.hpp"
 #include "event/EventBase.hpp"
 #include "event/MainWindow.hpp"
 #include "event/SplashScreen.hpp"
@@ -32,6 +33,7 @@ int main(int argc, char* argv[])
     // 支持, 并将 QGuiApplicaiton 改为其派生类 QApplication.
     // (不需要添加 <QColorDialog> 头文件.)
     QApplication app(argc, argv);
+    Musec::Controller::createLogger();
 #if QT_VERSION_MAJOR < 6
     QTextCodec* codec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForLocale(codec);

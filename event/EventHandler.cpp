@@ -49,6 +49,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      optionsWindow, SIGNAL(scanPluginComplete()));
     QObject::connect(this,          SIGNAL(exitASIOThreadFinished()),
                      mainWindow,    SIGNAL(exitASIOThreadFinished()));
+    QObject::connect(this,          SIGNAL(setStatusText(QString)),
+                     mainWindow,    SIGNAL(setStatusText(QString)));
     QObject::connect(this,          SIGNAL(setSystemTextRenderingComplete()),
                      eventBridge,   SIGNAL(setSystemTextRenderingComplete()));
 }
@@ -115,7 +117,7 @@ void EventHandler::onOptionsWindowOpened()
     QString driverCLSID = Controller::ASIODriverController::getASIODriver();
     auto driverListCount = driverList.itemCount();
     auto driverListBase = driverList.getList();
-    int driverCurrentIndex = 0;
+    int driverCurrentIndex = -1;
     for(int i = 0; i < driverListCount; ++i)
     {
         using namespace Musec::Audio::Driver;

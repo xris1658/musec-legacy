@@ -63,6 +63,9 @@ Rectangle {
             font.family: Constants.font
             textRole: "name"
             valueRole: "clsid"
+            displayText: count == 0? qsTr("无 ASIO 驱动"):
+                         currentIndex == -1? qsTr("未选择 ASIO 驱动"):
+                         currentText
             onCurrentValueChanged: {
                 EventBridge.driverASIOSelectionChanged(currentValue);
             }
@@ -104,6 +107,7 @@ Rectangle {
             text: qsTr("打开驱动设置")
             width: 100
             height: 20
+            enabled: comboBoxDriver.count != 0 && comboBoxDriver.currentIndex != -1
             onClicked: {
                 EventBridge.openASIODriverControlPanel();
             }

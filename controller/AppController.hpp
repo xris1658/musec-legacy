@@ -1,6 +1,7 @@
 #ifndef MUSEC_CONTROLLER_APPCONTROLLER
 #define MUSEC_CONTROLLER_APPCONTROLLER
 
+#include "dao/LoggingDAO.hpp"
 #include "event/SplashScreen.hpp"
 #include "model/ASIODriverListModel.hpp"
 #include "model/AssetDirectoryListModel.hpp"
@@ -16,6 +17,9 @@ namespace Musec
 {
 namespace Controller
 {
+// 创建日志文件
+Musec::DAO::LoggingDAO::LoggerType& createLogger();
+
 // 初始化应用程序（打开启动屏后 -> 打开主界面前）
 void initApplication(Musec::Event::SplashScreen* splashScreen);
 

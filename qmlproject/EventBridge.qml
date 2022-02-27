@@ -30,6 +30,11 @@ QtObject {
     onSetBootText: {
         Objects.splashScreen.bootText = newBootText;
     }
+    signal setStatusText(newText: string)
+    onSetStatusText: {
+        Objects.mainWindow.setStatusText(newText);
+    }
+
     signal setSystemTextRenderingComplete()
     onSetSystemTextRenderingComplete: {
         // 弹出需要重启的对话框

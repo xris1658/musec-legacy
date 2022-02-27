@@ -5,7 +5,6 @@ import QtQuick.Shapes 1.15
 import QtQuick.Window 2.15
 import Qt.labs.platform 1.1 as Labs
 
-import qmlproject 1.0
 import Musec 1.0
 import Musec.Controls 1.0 as MCtrl
 
@@ -22,6 +21,11 @@ ApplicationWindow {
     property alias currentDriver: optionsWindow.currentDriver
     readonly property EventBridge eventBridge: EventBridge
     property bool canClose: false
+
+    signal setStatusText(newText: string)
+    onSetStatusText: {
+        status.text = newText;
+    }
 
     OptionsWindow {
         id: optionsWindow
