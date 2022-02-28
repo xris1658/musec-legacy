@@ -10,6 +10,6 @@ MixdownWindow 1.0 MixdownWindow.qml
 OptionsWindow 1.0 OptionsWindow.qml
 PluginSettings 1.0 PluginSettings.qml
 ProjectPropertiesWindow 1.0 ProjectPropertiesWindow.qml
-SpeedDetectionWindow 1.0 SpeedDetectionWindow.qml
+TapTempoWindow 1.0 TapTempoWindow.qml
 SplashScreen 1.0 SplashScreen.qml
 WelcomeWindow 1.0 WelcomeWindow.qml

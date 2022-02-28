@@ -11,8 +11,8 @@
         <file>qmlproject/OptionsWindow.qml</file>
         <file>qmlproject/PluginSettings.qml</file>
         <file>qmlproject/ProjectPropertiesWindow.qml</file>
-        <file>qmlproject/SpeedDetectionWindow.qml</file>
         <file>qmlproject/SplashScreen.qml</file>
+        <file>qmlproject/TapTempoWindow.qml</file>
         <file>qmlproject/TechnicalSupportWindow.qml</file>
         <file>qmlproject/WelcomeWindow.qml</file>
         <file>qmlproject/images/Musec-image-2.ico</file>

@@ -11,7 +11,22 @@ Item {
     property int cpu: 20
     property int currentKey: 10
     property int currentNoteName: Constants.NoteName.Sharp
-    property int bpm: 128
+    property double bpm: 128
+
+    function getFloorWithWidth(bpm_: double) {
+        var ret = Math.floor(bpm).toString();
+        var length = ret.length;
+        for(var i = length; i < 3; ++i) {
+            ret = "0" + ret;
+        }
+        return ret;
+    }
+
+    onBpmChanged: {
+        tempoIndicatorBeforePoint.text = getFloorWithWidth(bpm);
+        tempoIndicatorAfterPoint.text = bpm.toFixed(3).toString().slice(-3);
+    }
+
     Rectangle {
         id: bigClock
         anchors.fill: parent

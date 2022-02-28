@@ -6,6 +6,7 @@ import Musec.Controls 1.0 as MCtrl
 Rectangle {
     property alias numerator: bigClock.numerator
     property alias demoninator: bigClock.demoninator
+    property alias bpm: bigClock.bpm
     width: parent.width
     height: 70
     gradient: Gradient {

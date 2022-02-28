@@ -14,6 +14,13 @@ Window {
     color: Constants.backgroundColor
     modality: Qt.WindowModal
     visible: true
+    QtObject {
+        id: variables
+        property double start
+        property double now
+        property int clickedInterval: 0
+    }
+
     Grid {
         id: grid
         anchors.fill: parent
@@ -24,6 +31,17 @@ Window {
             text: qsTr("TAP")
             width: root.width - 10 * 2
             height: width
+            onClicked: {
+                var now_ = Date.now();
+                if(variables.clickedInterval) {
+                    variables.now = now_;
+                    root.bpm = 60000.0 * variables.clickedInterval / (variables.now - variables.start);
+                }
+                else {
+                    variables.start = now_;
+                }
+                ++variables.clickedInterval;
+            }
         }
         Item {
             width: root.width - 10 * 2
@@ -31,7 +49,7 @@ Window {
             Text {
                 id: bpmText
                 anchors.centerIn: parent
-                text: bpm
+                text: bpm.toFixed(3);
                 font.family: "Noto Sans Mono"
                 font.styleName: "Condensed"
                 font.bold: true
@@ -50,12 +68,14 @@ Window {
                 text: qsTr("取整(&R)")
                 onClicked: {
                     bpm = Math.round(bpm);
+                    variables.clickedInterval = 0;
                 }
             }
             MCtrl.Button {
                 text: qsTr("应用速度并关闭(&A)")
                 onClicked: {
-                    bpm = Math.round(bpm);
+                    Objects.mainWindow.bpm = root.bpm;
+                    root.close();
                 }
             }
         }

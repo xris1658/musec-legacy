@@ -22,7 +22,7 @@ QQC2.Button {
         id: _background
         anchors.fill: parent
         opacity: enabled? 1 : 0.5
-        border.width: 1
+        border.width: control.activeFocus? 3: 1
         border.color: Constants.mouseOverElementColor
         color: control.down? Qt.darker(Constants.backgroundColor, 1.25): control.hovered? Constants.mouseOverElementColor: Constants.backgroundColor
     }

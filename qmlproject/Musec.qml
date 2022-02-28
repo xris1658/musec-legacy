@@ -22,6 +22,8 @@ ApplicationWindow {
     readonly property EventBridge eventBridge: EventBridge
     property bool canClose: false
 
+    property alias bpm: mainBar.bpm
+
     signal setStatusText(newText: string)
     onSetStatusText: {
         status.text = newText;
@@ -533,10 +535,11 @@ ApplicationWindow {
             MCtrl.Action {
                 text: qsTr("测速...")
                 onTriggered: {
-                    var component = Qt.createComponent("SpeedDetectionWindow.qml");
+                    var component = Qt.createComponent("TapTempoWindow.qml");
                     if(component.status == Component.Ready) {
-                        var speedDetectionWindow = component.createObject(mainWindow);
-                        speedDetectionWindow.showNormal();
+                        var tapTempoWindow = component.createObject(mainWindow);
+                        tapTempoWindow.bpm = mainWindow.bpm;
+                        tapTempoWindow.showNormal();
                     }
                     else {
                         console.log(component.errorString());
