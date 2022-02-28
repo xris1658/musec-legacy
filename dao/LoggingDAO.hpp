@@ -3,7 +3,7 @@
 
 #include <QString>
 
-//#include <spdlog/details/synchronous_factory.h>
+#include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
 
 #include <memory>

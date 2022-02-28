@@ -450,6 +450,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                         pluginType = PluginType::TypeUnknown;
                     }
                     component->terminate();
+                    component->release();
                     audioProcessor->release();
                     ret.append(std::make_tuple(
                            i,
@@ -460,9 +461,14 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                     );
                 }
             }
+            factory->release();
             if(pluginExitProc)
             {
-                pluginExitProc();
+                auto result = pluginExitProc();
+                if (!result)
+                {
+                    //
+                }
             }
         }
     }

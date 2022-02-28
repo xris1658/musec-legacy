@@ -9,6 +9,7 @@
 
 #include <queue>
 #include <utility>
+#include <vector>
 
 namespace Musec::Controller::PluginSettingsController
 {
@@ -33,7 +34,7 @@ void removePluginDirectory(const QString& path)
 /// 就是这个玩意卡了我三天 :(
 void scanPlugins()
 {
-    QStringList plugins;
+    std::vector<QString> plugins;
     std::queue<QDir> pluginDirectories;
     QStringList nameFilters;
     nameFilters << "*.dll" << "*.vst3";
@@ -58,13 +59,11 @@ void scanPlugins()
             auto fileListSize = fileList.size();
             if(fileListSize)
             {
-                // 减少内存重新分配次数
-                plugins.reserve(plugins.size() + fileListSize);
                 for(decltype(fileListSize) i = 0; i < fileListSize; ++i)
                 {
                     auto path = fileList[i].absoluteFilePath();
                     path.replace(QChar('/'), QChar('\\'));
-                    plugins.append(path);
+                    plugins.emplace_back(path);
                 }
             }
             auto dirList = dir.entryInfoList(
