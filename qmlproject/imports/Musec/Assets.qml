@@ -132,6 +132,9 @@ Rectangle {
         }
         TextInput {
             id: assetsSearchBox
+            property int selectStart
+            property int selectEnd
+            property int curPos
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.leftMargin: 5
@@ -144,6 +147,80 @@ Rectangle {
             selectionColor: Constants.currentElementColor
             selectedTextColor: Constants.backgroundColor
             clip: true
+            function openMenu(x, y) {
+                contextMenu.x = x;
+                contextMenu.y = y;
+                contextMenu.open();
+            }
+            Keys.onMenuPressed: {
+                assetsSearchBox.selectStart = assetsSearchBox.selectionStart;
+                assetsSearchBox.selectEnd = assetsSearchBox.selectionEnd;
+                assetsSearchBox.curPos = assetsSearchBox.cursorPosition;
+                openMenu(assetsSearchBox.cursorRectangle.x, assetsSearchBox.height / 2);
+                assetsSearchBox.cursorPosition = assetsSearchBox.curPos;
+                assetsSearchBox.select(assetsSearchBox.selectStart, assetsSearchBox.selectEnd);
+            }
+            MouseArea {
+                id: assetSearchBoxMouseArea
+                anchors.fill: parent
+                acceptedButtons: Qt.RightButton
+                hoverEnabled: true
+                onClicked: {
+                    assetsSearchBox.selectStart = assetsSearchBox.selectionStart;
+                    assetsSearchBox.selectEnd = assetsSearchBox.selectionEnd;
+                    assetsSearchBox.curPos = assetsSearchBox.cursorPosition;
+                    assetsSearchBox.openMenu(mouse.x, mouse.y);
+                    assetsSearchBox.cursorPosition = assetsSearchBox.curPos;
+                    assetsSearchBox.select(assetsSearchBox.selectStart, assetsSearchBox.selectEnd);
+                }
+                onPressAndHold: {
+                    if (mouse.source === Qt.MouseEventNotSynthesized) {
+                        assetsSearchBox.selectStart = assetsSearchBox.selectionStart;
+                        assetsSearchBox.selectEnd = assetsSearchBox.selectionEnd;
+                        assetsSearchBox.curPos = assetsSearchBox.cursorPosition;
+                        assetsSearchBox.openMenu(mouse.x, mouse.y);
+                        assetsSearchBox.cursorPosition = assetsSearchBox.curPos;
+                        assetsSearchBox.select(assetsSearchBox.selectStart, assetsSearchBox.selectEnd);
+                    }
+                }
+            }
+            MCtrl.Menu {
+                id: contextMenu
+                title: qsTr("素材搜索框选项")
+                MCtrl.Action {
+                    text: qsTr("撤销(&U)")
+                    shortcut: "Ctrl+Z"
+                }
+                MCtrl.MenuSeparator {}
+                MCtrl.Action {
+                    text: qsTr("剪切(&T)")
+                    shortcut: "Ctrl+X"
+                }
+                MCtrl.Action {
+                    text: qsTr("复制(&C)")
+                    shortcut: "Ctrl+C"
+                }
+                MCtrl.Action {
+                    text: qsTr("粘贴(&P)")
+                    shortcut: "Ctrl+V"
+                }
+                MCtrl.Action {
+                    text: qsTr("删除(&D)")
+                    shortcut: "Delete"
+                }
+                MCtrl.MenuSeparator {}
+                MCtrl.Action {
+                    text: qsTr("全选(&A)")
+                    shortcut: "Ctrl+A"
+                }
+                MCtrl.MenuSeparator {}
+                MCtrl.Action {
+                    text: qsTr("字符映射表(&M)...")
+                    onTriggered: {
+                        Qt.openUrlExternally("file:///C:/Windows/system32/charmap.exe");
+                    }
+                }
+            }
             MCtrl.Button {
                 anchors.right: parent.right
                 width: height

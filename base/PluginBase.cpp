@@ -54,7 +54,7 @@ VstIntPtr pluginVST2Callback(AEffect* effect,
         break;
     // 宿主程序使用的 VST 版本
     case audioMasterVersion:
-        ret = 2400; // VST2.4
+        ret = kVstVersion; // VST2.4
         break;
     // 加载 VST2 Shell 插件时，用于指定子插件
     case audioMasterCurrentId:
