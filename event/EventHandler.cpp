@@ -60,6 +60,12 @@ EventHandler::~EventHandler()
     //
 }
 
+EventHandler& EventHandler::instance(QObject* eventBridge)
+{
+    static EventHandler ret(eventBridge);
+    return ret;
+}
+
 void EventHandler::scanPluginComplete()
 {
     using namespace Musec::UI;

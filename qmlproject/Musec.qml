@@ -541,9 +541,6 @@ ApplicationWindow {
                         tapTempoWindow.bpm = mainWindow.bpm;
                         tapTempoWindow.showNormal();
                     }
-                    else {
-                        console.log(component.errorString());
-                    }
                 }
             }
         }

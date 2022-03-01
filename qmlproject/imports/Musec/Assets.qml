@@ -102,11 +102,6 @@ Rectangle {
        id: folderDialog
        onAccepted: {
            var currentFolder = Constants.directoryFromUrl(folderDialog.currentFolder);
-//           var newItem = {
-//               'path': currentFolder.toString(),
-//               'folderName': currentFolder.slice(currentFolder.lastIndexOf('\\') + 1).toString()
-//           };
-//           assetDirectoryListModel.append(newItem);
            addAssetDirectory(currentFolder.toString());
        }
     }
@@ -116,6 +111,7 @@ Rectangle {
         width: parent.width
         height: 20
         color: Constants.backgroundColor
+        clip: true
         Rectangle {
             anchors.bottom: parent.bottom
             width: parent.width
@@ -124,7 +120,6 @@ Rectangle {
             border.width: 1
             border.color: color
         }
-
         Text {
             id: assetsAreaSearchBoxTextHint
             anchors.left: parent.left
@@ -133,16 +128,38 @@ Rectangle {
             font.family: Constants.font
             font.italic: true
             color: Constants.currentElementColor
-            opacity: assetsSearchBox.focus && assetsSearchBox.text.length > 0? 0: 1
+            opacity: assetsSearchBox.text.length? 0: 1
         }
         TextInput {
             id: assetsSearchBox
             anchors.top: parent.top
-            width: parent.width - 10
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: 5
+            anchors.right: parent.right
+            anchors.rightMargin: 0
             color: Constants.contentColor1
             height: 20
             font.family: Constants.font
+            selectByMouse: true
+            selectionColor: Constants.currentElementColor
+            selectedTextColor: Constants.backgroundColor
+            clip: true
+            MCtrl.Button {
+                anchors.right: parent.right
+                width: height
+                height: parent.height
+                text: qsTr("\u00d7")
+                border.width: 0
+                opacity: assetsSearchBox.text.length? 1: 0
+                onClicked: {
+                    if(opacity) {
+                        assetsSearchBox.clear();
+                    }
+                    else {
+                        assetsSearchBox.forceActiveFocus();
+                    }
+                }
+            }
         }
     }
     SplitView {

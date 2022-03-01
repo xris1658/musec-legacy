@@ -72,6 +72,7 @@ HEADERS += \
     native/Native.hpp \
     native/WindowsLibraryRAII.hpp \
     ui/FontUtility.hpp \
+    ui/Render.hpp \
     ui/UI.hpp \
     util/FunctorInitializer.hpp
 
@@ -107,6 +108,7 @@ SOURCES += \
     native/Native.cpp \
     native/WindowsLibraryRAII.cpp \
     ui/FontUtility.cpp \
+    ui/Render.cpp \
     ui/UI.cpp
 
 RESOURCES += \

@@ -33,7 +33,7 @@ void MainWindow::openMainWindow()
 
     auto eventBridge = qvariant_cast<QObject*>(splashWindow->property("eventBridge"));
     Musec::Event::eventBridge = eventBridge;
-    Musec::Event::eventHandler = &Musec::Event::singletonEventHandler(eventBridge);
+    Musec::Event::eventHandler = &Musec::Event::EventHandler::instance(eventBridge);
     QObject::connect(eventHandler, &Musec::Event::EventHandler::updatePluginList,
                      this, &Musec::Event::MainWindow::updatePluginList);
     QObject::connect(this, &Musec::Event::MainWindow::openMainWindowComplete,

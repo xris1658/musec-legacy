@@ -44,7 +44,6 @@ Item {
         title: qsTr("编排视图操作")
         delegate: MCtrl.MenuItem {}
         width: 200
-        implicitHeight: 20
         height: contentHeight
         MCtrl.Action {
             text: qsTr("添加 MIDI / 乐器轨道(&M)")

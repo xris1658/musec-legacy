@@ -16,8 +16,6 @@ extern Musec::Event::EventHandler* eventHandler;
 
 // 主窗口的事件收发
 extern MainWindow* mainWindowEvents;
-
-Musec::Event::EventHandler& singletonEventHandler(QObject* eventBridge);
 }
 }
 

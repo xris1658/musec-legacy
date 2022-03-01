@@ -141,9 +141,10 @@ Window {
                             border.color: Constants.borderColor
                             clip: true
                         }
-                        font {
-                            family: Constants.font
-                        }
+                        font.family: Constants.font
+                        selectByMouse: true
+                        selectionColor: Constants.currentElementColor
+                        selectedTextColor: Constants.backgroundColor
                     }
                     Text {
                         width: 100
@@ -168,9 +169,10 @@ Window {
                             border.color: Constants.borderColor
                             clip: true
                         }
-                        font {
-                            family: Constants.font
-                        }
+                        font.family: Constants.font
+                        selectByMouse: true
+                        selectionColor: Constants.currentElementColor
+                        selectedTextColor: Constants.backgroundColor
                     }
                     Text {
                         width: 100
@@ -195,9 +197,10 @@ Window {
                             border.color: Constants.borderColor
                             clip: true
                         }
-                        font {
-                            family: Constants.font
-                        }
+                        font.family: Constants.font
+                        selectByMouse: true
+                        selectionColor: Constants.currentElementColor
+                        selectedTextColor: Constants.backgroundColor
                     }
                     Text {
                         width: 100
@@ -226,9 +229,10 @@ Window {
                                 border.color: Constants.borderColor
                                 clip: true
                             }
-                            font {
-                                family: Constants.font
-                            }
+                            font.family: Constants.font
+                            selectByMouse: true
+                            selectionColor: Constants.currentElementColor
+                            selectedTextColor: Constants.backgroundColor
                             z: 2
                         }
                         MCtrl.ComboBox {

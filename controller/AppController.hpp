@@ -7,8 +7,6 @@
 #include "model/AssetDirectoryListModel.hpp"
 #include "model/PluginListModel.hpp"
 
-#include <yaml-cpp/yaml.h>
-
 #include <QString>
 
 #include <array>

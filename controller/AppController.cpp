@@ -7,9 +7,10 @@
 #include "dao/PluginDirectoryDAO.hpp"
 #include "event/EventBase.hpp"
 #include "native/Native.hpp"
-#include "ui/UI.hpp"
+#include "ui/Render.hpp"
 
 #include <QDir>
+#include <QFile>
 #include <QApplication>
 
 #include <string>
@@ -44,7 +45,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
         .as<bool>();
     if(systemRender)
     {
-        QQuickWindow::setTextRenderType(QQuickWindow::TextRenderType::NativeTextRendering);
+        Musec::UI::Render::setSystemRender();
     }
     auto& appConfig = Musec::Controller::ConfigController::appConfig();
     splashScreen->setBootText("正在寻找音频设备...");
@@ -82,8 +83,8 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
 
 bool findAppData()
 {
-    QDir dir(Musec::Native::DataDirectoryPath());
-    return dir.exists();
+    QFile file(Musec::DAO::DatabasePath());
+    return file.exists();
 }
 
 void initAppData()

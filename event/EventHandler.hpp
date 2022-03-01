@@ -12,9 +12,11 @@ namespace Event
 class EventHandler: public QObject
 {
     Q_OBJECT
-public:
+private:
     EventHandler(QObject* eventBridge, QObject* parent = nullptr);
+public:
     virtual ~EventHandler();
+    static EventHandler& instance(QObject* eventBridge);
 public:
     void scanPluginComplete();
 signals:
