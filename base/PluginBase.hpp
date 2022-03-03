@@ -79,12 +79,6 @@ enum PluginType
     TypeAudioFX
 };
 
-// VST2 Shell 中需要使用的插件 UID
-extern VstInt32 shellPluginId;
-
-// 加载 VST2 Shell 时插件 UID 是否应该置零
-extern bool shellPluginIdShouldBeZero;
-
 // 获取插件的格式
 PluginFormat pluginFormat(const QString& path);
 

@@ -1,8 +1,10 @@
 #include "PluginBase.hpp"
 
+#include "audio/driver/ASIODriver.hpp"
 #include "audio/host/MusecVST3Host.hpp"
 #include "base/Constants.hpp"
-#include "native/WindowsLibraryRAII.hpp"
+#include "controller/ASIODriverController.hpp"
+#include "native/VST2Plugin.hpp"
 
 #include <pluginterfaces/vst/ivstaudioprocessor.h>
 
@@ -17,9 +19,6 @@
 
 namespace Musec::Base
 {
-VstInt32 shellPluginId = 0;
-bool shellPluginIdShouldBeZero = false;
-
 PluginFormat pluginFormat(const QString& path)
 {
     static QString vst2("dll");
@@ -37,297 +36,84 @@ PluginFormat pluginFormat(const QString& path)
     return PluginFormat::FormatNotAPlugin;
 }
 
-VstIntPtr pluginVST2Callback(AEffect* effect,
-                             VstInt32 opcode,
-            [[maybe_unused]] VstInt32 index,
-            [[maybe_unused]] VstIntPtr value,
-            [[maybe_unused]] void* ptr,
-            [[maybe_unused]] float opt)
-{
-    VstIntPtr ret = 0;
-    switch (opcode)
-    {
-    // AudioMasterOpcodes (aeffect.h)
-
-    // 插件的参数通过 MIDI 和 GUI 发生了更改
-    case audioMasterAutomate:
-        break;
-    // 宿主程序使用的 VST 版本
-    case audioMasterVersion:
-        ret = kVstVersion; // VST2.4
-        break;
-    // 加载 VST2 Shell 插件时，用于指定子插件
-    case audioMasterCurrentId:
-        ret =
-            (shellPluginId == 0) && (!shellPluginIdShouldBeZero)?
-                effect->uniqueID:
-                shellPluginId;
-        break;
-    case audioMasterIdle:
-        break;
-#if kVstVersion < 2400
-    case audioMasterPinConnected:
-        break;
-#endif
-    // AudioMasterOpcodesX
-#if kVstVersion < 2400
-    case audioMasterWantMidi:
-        break;
-#endif
-    case audioMasterGetTime:
-        // TODO
-        ret = NULL;
-        break;
-    case audioMasterProcessEvents:
-    {
-        // auto events = reinterpret_cast<VstEvents*>(ptr);
-        // TODO
-        break;
-    }
-#if kVstVersion < 2400
-    case audioMasterSetTime:
-        break;
-    case audioMasterTempoAt:
-        break;
-    case audioMasterGetNumAutomatableParameters:
-        break;
-    case audioMasterGetParameterQuantization:
-        break;
-#endif
-    case audioMasterIOChanged:
-        ret = 1;
-        break;
-#if kVstVersion < 2400
-    case audioMasterNeedIdle:
-        break;
-#endif
-    case audioMasterSizeWindow:
-        ret = 1;
-        break;
-    case audioMasterGetSampleRate:
-        // TODO
-        ret = 44100;
-        break;
-    case audioMasterGetBlockSize:
-        // TODO
-        ret = 512;
-        break;
-    case audioMasterGetInputLatency:
-        // TODO
-        ret = 0;
-        break;
-    case audioMasterGetOutputLatency:
-        // TODO
-        ret = 0;
-        break;
-#if kVstVersion < 2400
-    case audioMasterGetPreviousPlug:
-        break;
-    case audioMasterGetNextPlug:
-        break;
-    case audioMasterWillReplaceOrAccumulate:
-        break;
-#endif
-    case audioMasterGetCurrentProcessLevel:
-        // TODO
-        ret = VstProcessLevels::kVstProcessLevelUnknown;
-        break;
-    case audioMasterGetAutomationState:
-        // TODO
-        ret = VstAutomationStates::kVstAutomationUnsupported;
-        break;
-    case audioMasterOfflineStart:
-        break;
-    case audioMasterOfflineRead:
-        break;
-    case audioMasterOfflineWrite:
-        break;
-    case audioMasterOfflineGetCurrentPass:
-        break;
-    case audioMasterOfflineGetCurrentMetaPass:
-        break;
-#if kVstVersion < 2400
-    case audioMasterSetOutputSampleRate:
-        break;
-    case audioMasterGetOutputSpeakerArrangement:
-        break;
-#endif
-    case audioMasterGetVendorString:
-    {
-        constexpr int vendorNameLength = sizeof(Musec::Base::CompanyName) + 1;
-        std::strncpy(reinterpret_cast<char*>(ptr), Musec::Base::CompanyName, vendorNameLength);
-        break;
-    }
-    case audioMasterGetProductString:
-    {
-        constexpr int productNameLength = sizeof(Musec::Base::ProductName) + 1;
-        std::strncpy(reinterpret_cast<char*>(ptr), Musec::Base::ProductName, productNameLength);
-        break;
-    }
-    case audioMasterGetVendorVersion:
-        ret = 1;
-        break;
-    case audioMasterVendorSpecific:
-        break;
-#if kVstVersion < 2400
-    case audioMasterSetIcon:
-        break;
-#endif
-    case audioMasterCanDo:
-        // TODO
-        ret = 1;
-        break;
-    case audioMasterGetLanguage:
-        ret = VstHostLanguage::kVstLangEnglish;
-        break;
-#if kVstVersion < 2400
-    case audioMasterOpenWindow:
-        break;
-    case audioMasterCloseWindow:
-        break;
-#endif
-    case audioMasterGetDirectory:
-        break;
-    case audioMasterUpdateDisplay:
-        break;
-    case audioMasterBeginEdit:
-        break;
-    case audioMasterEndEdit:
-        break;
-    case audioMasterOpenFileSelector:
-        break;
-    case audioMasterCloseFileSelector:
-        break;
-#if kVstVersion < 2400
-    case audioMasterEditFile:
-        break;
-    case audioMasterGetChunkFile:
-        break;
-    case audioMasterGetInputSpeakArrangement:
-        break;
-#endif
-    default:
-        break;
-    }
-    return ret;
-}
-
 QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
 {
     using namespace Musec::Base;
     using namespace Musec::Native;
-    shellPluginId = 0;
-    shellPluginIdShouldBeZero = false;
     QList<PluginBasicInfo> ret;
     auto format = pluginFormat(path);
-    if(format == PluginFormat::FormatNotAPlugin)
+    if(format == PluginFormat::FormatVST2)
     {
-        return ret;
-    }
-    try
-    {
-        WindowsLibraryRAII library(path);
-        if(format == PluginFormat::FormatVST2)
+        try
         {
-            auto pluginEntryProc = getExport<VST2PluginEntryProc>(library, "VSTPluginMain");
-            if(!pluginEntryProc)
+            Musec::Native::VST2Plugin plugin(path, true);
+            auto effect = plugin.effect();
+            std::array<char, kVstMaxProductStrLen> nameBuffer = {0};
+            auto category = effect->dispatcher(effect, effGetPlugCategory, 0, 0, nullptr, 0);
+            if(category == kPlugCategShell)
             {
-                pluginEntryProc = getExport<VST2PluginEntryProc>(library, "main");
-            }
-            if(!pluginEntryProc)
-            {
-                auto error = GetLastError();
-                switch (error)
+                while (true)
                 {
-                case ERROR_PROC_NOT_FOUND:
-                    // 未找到入口函数，可能不是 VST 插件
-                    break;
-                default:
-                    break;
+                    auto shellPluginId = effect->dispatcher(
+                        effect,
+                        effShellGetNextPlugin,
+                        0,
+                        0,
+                        nameBuffer.data(),
+                        nameBuffer.size());
+                    if(shellPluginId == 0 || nameBuffer[0] == 0)
+                    {
+                        break;
+                    }
+                    // 加载插件，获取插件的信息
+    //                AEffect* subPlugin = pluginEntryProc(pluginVST2Callback);
+                    auto plugin = Musec::Native::VST2Plugin(path, false, shellPluginId);
+                    auto subPlugin = plugin.effect();
+                    int pluginType = subPlugin->flags & effFlagsIsSynth?
+                        PluginType::TypeInstrument:
+                        PluginType::TypeAudioFX;
+                    ret.append(std::make_tuple(
+                            shellPluginId,
+                            QString(nameBuffer.data()),
+                            PluginFormat::FormatVST2,
+                            pluginType
+                        )
+                    );
                 }
             }
-            else
+            // 只有插件是否为 Shell 有必要用 effGetPlugCategory。
+            // 有些非 Shell 插件本身能够正常使用，但是 category
+            // 为 kPlugCategUnknown（e.g. Glitch2），因此
+            // 仍然需要通过 flags 确定类型。
+            else/* if(category != kPlugCategUnknown)*/
             {
-                AEffect* effect = pluginEntryProc(pluginVST2Callback);
-                if((*reinterpret_cast<std::uint32_t*>(effect)) == kEffectMagic)
-                {
-                     // effShellGetNextPlugin 和 effGetEffectName 均使用此缓冲区
-                    std::array<char, kVstMaxProductStrLen> nameBuffer = {0};
-                    // 加载 AEffect
-                    effect->dispatcher(effect, effOpen, 0, 0, nullptr, 0);
-                    auto category = effect->dispatcher(effect, effGetPlugCategory,
-                        0, 0, nullptr, 0);
-                    if(category == kPlugCategUnknown)
-                    {
-                        effect->dispatcher(effect, effClose, 0, 0, nullptr, 0);
-                        shellPluginIdShouldBeZero = true;
-                        effect = pluginEntryProc(pluginVST2Callback);
-                        effect->dispatcher(effect, effOpen, 0, 0, nullptr, 0);
-                        category = effect->dispatcher(effect, effGetPlugCategory,
-                            0, 0, nullptr, 0);
-                    }
-                    if(category == kPlugCategShell)
-                    {
-                        while (true)
-                        {
-                            shellPluginId = effect->dispatcher(
-                                effect,
-                                effShellGetNextPlugin,
-                                0,
-                                0,
-                                nameBuffer.data(),
-                                nameBuffer.size());
-                            if(shellPluginId == 0 || nameBuffer[0] == 0)
-                            {
-                                break;
-                            }
-                            // 加载插件，获取插件的信息
-                            AEffect* subPlugin = pluginEntryProc(pluginVST2Callback);
-                            // 加载 AEffect
-                            subPlugin->dispatcher(subPlugin, effOpen, 0, 0, nullptr, 0);
-                            int pluginType = subPlugin->flags & effFlagsIsSynth?
-                                PluginType::TypeInstrument:
-                                PluginType::TypeAudioFX;
-                            ret.append(std::make_tuple(
-                                    shellPluginId,
-                                    QString(nameBuffer.data()),
-                                    PluginFormat::FormatVST2,
-                                    pluginType
-                                )
-                            );
-                            // 卸载 AEffect，缺少此步骤会导致内存泄漏
-                            subPlugin->dispatcher(subPlugin, effClose, 0, 0, nullptr, 0);
-                        }
-                    }
-                    // 只有插件是否为 Shell 需要用 effGetPlugCategory。
-                    // 有些非 Shell 插件本身能够正常使用，但是 category
-                    // 为 kPlugCategUnknown（e.g. Glitch2），因此
-                    // 仍然需要通过 flags 确定类型。
-                    else/* if(category != kPlugCategUnknown)*/
-                    {
-                        effect->dispatcher(
-                            effect,
-                            effGetEffectName,
-                            0,
-                            0,
-                            nameBuffer.data(),
-                            nameBuffer.size());
-                        int pluginType = effect->flags & effFlagsIsSynth?
-                            PluginType::TypeInstrument:
-                            PluginType::TypeAudioFX;
-                        ret.append(std::make_tuple(
-                                effect->uniqueID,
-                                QString(nameBuffer.data()),
-                                PluginFormat::FormatVST2,
-                                pluginType));
-                    }
-                    // 卸载 AEffect，缺少此步骤会导致内存泄漏
-                    effect->dispatcher(effect, effClose, 0, 0, nullptr, 0);
-                }
+                effect->dispatcher(
+                    effect,
+                    effGetEffectName,
+                    0,
+                    0,
+                    nameBuffer.data(),
+                    nameBuffer.size());
+                int pluginType = effect->flags & effFlagsIsSynth?
+                    PluginType::TypeInstrument:
+                    PluginType::TypeAudioFX;
+                ret.append(std::make_tuple(
+                        effect->uniqueID,
+                        QString(nameBuffer.data()),
+                        PluginFormat::FormatVST2,
+                        pluginType));
             }
         }
-        else if(format == PluginFormat::FormatVST3)
+        catch (WindowsLibraryRAII::ExceptionType exception)
         {
+            //
+        }
+    }
+    else if(format == PluginFormat::FormatVST3)
+    {
+        try
+        {
+            WindowsLibraryRAII library(path);
             auto pluginInitProc = getExport<VST3PluginInitProc>(library, "InitDll");
             auto pluginFactoryProc = getExport<VST3PluginFactoryProc>(library, "GetPluginFactory");
             auto pluginExitProc = getExport<VST3PluginExitProc>(library, "ExitDll");
@@ -396,7 +182,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                         Vst::BusDirections::kInput,
                         Vst::BusDirections::kOutput
                     };
-//                    constexpr wchar_t names[][5] = { L"音频输入", L"音频输出", L"事件输入", L"事件输出" };
+    //                    constexpr wchar_t names[][5] = { L"音频输入", L"音频输出", L"事件输入", L"事件输出" };
                     int32 busCounts[] = { 0, 0, 0, 0 };
                     Vst::BusInfo busInfo;
                     for(int i = 0; i < 4; ++i)
@@ -471,21 +257,10 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                 }
             }
         }
-    }
-    catch (WindowsLibraryRAII::ExceptionType error)
-    {
-        switch (error)
+        catch (WindowsLibraryRAII::ExceptionType exception)
         {
-        case ERROR_BAD_EXE_FORMAT:
-            // 损坏 / 32 位
-            break;
-        case ERROR_DLL_INIT_FAILED:
-            // 损坏
-            break;
-        default:
-            break;
+//
         }
-        return ret;
     }
     return ret;
 }

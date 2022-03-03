@@ -62,7 +62,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: 3
-        text: (Constants.keyNameWithSharp.get(noteMidiNum % 12).name) + ((noteMidiNum - noteMidiNum % 12) / 12)
+        text: (Constants.dynamicKeyName.get(noteMidiNum % 12).sharp) + ((noteMidiNum - noteMidiNum % 12) / 12)
         font.family: "Noto Sans Mono Condensed"
         font.bold: true
         font.pointSize: 9

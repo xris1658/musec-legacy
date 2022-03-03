@@ -51,7 +51,6 @@ HEADERS += \
     controller/GeneralSettingsController.hpp \
     controller/PluginController.hpp \
     controller/PluginSettingsController.hpp \
-    dao/AssetDAO.hpp \
     dao/AssetDirectoryDAO.hpp \
     dao/ConfigDAO.hpp \
     dao/DatabaseDAO.hpp \
@@ -70,6 +69,7 @@ HEADERS += \
     model/ModelInitializer.hpp \
     model/PluginListModel.hpp \
     native/Native.hpp \
+    native/VST2Plugin.hpp \
     native/WindowsLibraryRAII.hpp \
     ui/FontUtility.hpp \
     ui/Render.hpp \
@@ -89,7 +89,6 @@ SOURCES += \
     controller/GeneralSettingsController.cpp \
     controller/PluginController.cpp \
     controller/PluginSettingsController.cpp \
-    dao/AssetDAO.cpp \
     dao/AssetDirectoryDAO.cpp \
     dao/ConfigDAO.cpp \
     dao/DatabaseDAO.cpp \
@@ -106,6 +105,7 @@ SOURCES += \
     model/ModelInitializer.cpp \
     model/PluginListModel.cpp \
     native/Native.cpp \
+    native/VST2Plugin.cpp \
     native/WindowsLibraryRAII.cpp \
     ui/FontUtility.cpp \
     ui/Render.cpp \

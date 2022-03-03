@@ -20,7 +20,7 @@ public:
     WindowsLibraryRAII& operator=(const WindowsLibraryRAII&) = delete;
     WindowsLibraryRAII(WindowsLibraryRAII&&);
     WindowsLibraryRAII& operator=(WindowsLibraryRAII&&);
-    ~WindowsLibraryRAII() noexcept;
+    virtual ~WindowsLibraryRAII() noexcept;
 public:
     HMODULE module() const;
 private:
