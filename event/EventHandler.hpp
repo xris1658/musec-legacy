@@ -41,6 +41,7 @@ public slots:
     void onExitASIOThread();
     void onSampleRateChanged(int sampleRate);
     void onSystemTextRenderingChanged(bool newValue);
+    void onOpenSpecialCharacterInput();
 private:
     std::vector<QMetaObject::Connection> optionsWindowConnection;
 };

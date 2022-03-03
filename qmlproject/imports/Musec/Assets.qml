@@ -17,6 +17,8 @@ Rectangle {
     property alias instrumentListModel: instrumentPluginList.model
     property alias audioEffectListModel: audioEffectPluginList.model
 
+    signal openSpecialCharacterInput()
+
     signal addAssetDirectory(directory: string)
     signal renameAssetDirectory(id: int, name: string)
     signal removeAssetDirectory(id: int)
@@ -215,9 +217,9 @@ Rectangle {
                 }
                 MCtrl.MenuSeparator {}
                 MCtrl.Action {
-                    text: qsTr("字符映射表(&M)...")
+                    text: qsTr("输入特殊字符(&M)...")
                     onTriggered: {
-                        Qt.openUrlExternally("file:///C:/Windows/system32/charmap.exe");
+                        openSpecialCharacterInput();
                     }
                 }
             }

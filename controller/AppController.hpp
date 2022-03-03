@@ -53,6 +53,8 @@ void refreshPluginList(bool rescan);
 
 // 加载素材目录列表
 void loadAssetDirectoryList();
+
+void openSpecialCharacterInput();
 }
 }
 

@@ -598,6 +598,10 @@ ApplicationWindow {
                         midiEffectListModel: musecList.midiEffectList
                         instrumentListModel: musecList.instrumentlist
                         audioEffectListModel: musecList.audioEffectList
+                        onOpenSpecialCharacterInput: {
+                            EventBridge.openSpecialCharacterInput();
+                        }
+
                         onAddAssetDirectory: {
                             EventBridge.addAssetDirectory(directory);
                         }

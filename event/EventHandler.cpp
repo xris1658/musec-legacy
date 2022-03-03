@@ -37,6 +37,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      this,        SLOT(onOpenASIODriverControlPanel()));
     QObject::connect(eventBridge, SIGNAL(exitASIOThread()),
                      this,        SLOT(onExitASIOThread()));
+    QObject::connect(eventBridge, SIGNAL(openSpecialCharacterInput()),
+                     this,        SLOT(onOpenSpecialCharacterInput()));
     // C++ -> C++
     QObject::connect(this,             &EventHandler::updatePluginList,
                      mainWindowEvents, &MainWindow::updatePluginList);
@@ -246,5 +248,10 @@ void EventHandler::onSystemTextRenderingChanged(bool newValue)
 {
     Musec::Controller::GeneralSettingsController::setSystemTextRendering(newValue);
     setSystemTextRenderingComplete();
+}
+
+void EventHandler::onOpenSpecialCharacterInput()
+{
+    Musec::Controller::openSpecialCharacterInput();
 }
 }

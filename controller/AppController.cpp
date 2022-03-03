@@ -221,4 +221,10 @@ void loadAssetDirectoryList()
 {
     AppAssetDirectoryList().setList(AssetDirectoryController::getAssetDirectory());
 }
+
+void openSpecialCharacterInput()
+{
+    Musec::Native::openSpecialCharacterInput();
+}
+
 }

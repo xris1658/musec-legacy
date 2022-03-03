@@ -26,6 +26,8 @@ SystemTimeType getLaunchTime();
 
 // 获取系统时间类型，并转换为YYYYMMDDHHMMSS 格式的字符串
 SystemTimeStringType formatTime(const SystemTimeType& time);
+
+void openSpecialCharacterInput();
 }
 }
 

@@ -20,6 +20,7 @@ QtObject {
     signal driverASIOSelectionChanged(clsid: string)
     signal sampleRateChanged(sampleRate: int)
     signal systemTextRenderingChanged(newValue: bool)
+    signal openSpecialCharacterInput()
 
     signal addAssetDirectory(directory: string)
     signal renameAssetDirectory(id: int, name: string)

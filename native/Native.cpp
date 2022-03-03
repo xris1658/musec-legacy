@@ -3,6 +3,7 @@
 #include "base/Constants.hpp"
 
 #include <ShlObj_core.h>
+#include <shellapi.h>
 #include <processthreadsapi.h>
 #include <timezoneapi.h>
 
@@ -104,5 +105,11 @@ SystemTimeStringType formatTime(const SystemTimeType& time)
     }
     return ret;
 }
+
+void openSpecialCharacterInput()
+{
+    ShellExecuteA(nullptr, "open", "charmap.exe", nullptr, nullptr, SW_NORMAL);
+}
+
 }
 }
