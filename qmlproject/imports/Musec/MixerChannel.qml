@@ -8,6 +8,7 @@ Item {
     id: root
     width: 80
     height: 320
+    clip: true
     Rectangle {
         anchors.fill: parent
         color: Constants.backgroundColor

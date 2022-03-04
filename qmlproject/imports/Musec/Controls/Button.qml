@@ -26,4 +26,9 @@ QQC2.Button {
         border.color: Constants.mouseOverElementColor
         color: control.down? Qt.darker(Constants.backgroundColor, 1.25): control.hovered? Constants.mouseOverElementColor: Constants.backgroundColor
     }
+    Keys.onEnterPressed: {
+        if(control.activeFocus) {
+            control.clicked();
+        }
+    }
 }

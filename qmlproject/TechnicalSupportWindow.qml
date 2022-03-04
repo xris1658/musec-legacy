@@ -14,6 +14,9 @@ Window {
     visible: true
     width: 500
     height: 500
+    Component.onCompleted: {
+        buttonOK.forceActiveFocus();
+    }
     Item {
         width: root.width
         anchors.top: parent.top

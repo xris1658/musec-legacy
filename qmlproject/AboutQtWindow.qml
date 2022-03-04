@@ -13,6 +13,9 @@ Window {
     visible: true
     width: 600
     height: mainRow.height + buttons.height
+    Component.onCompleted: {
+        buttonOK.forceActiveFocus();
+    }
     Column {
         Row {
             id: mainRow

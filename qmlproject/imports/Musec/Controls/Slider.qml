@@ -50,5 +50,6 @@ QQC2.Slider {
         radius: (handleImplicitThickness - implicitThickness) / 2
         color: control.pressed? Qt.darker(Constants.contentColor1): control.hovered? Constants.currentElementColor: Constants.contentColor1
         border.color: Constants.borderColor
+        border.width: control.activeFocus? 2: 1
     }
 }

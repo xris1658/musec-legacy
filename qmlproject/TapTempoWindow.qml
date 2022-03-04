@@ -14,13 +14,16 @@ Window {
     color: Constants.backgroundColor
     modality: Qt.WindowModal
     visible: true
+    Component.onCompleted: {
+        tapButton.forceActiveFocus();
+    }
+
     QtObject {
         id: variables
         property double start
         property double now
         property int clickedInterval: 0
     }
-
     Grid {
         id: grid
         anchors.fill: parent
@@ -28,6 +31,7 @@ Window {
         columns: 1
         columnSpacing: 10
         MCtrl.Button {
+            id: tapButton
             text: qsTr("TAP")
             width: root.width - 10 * 2
             height: width

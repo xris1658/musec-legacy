@@ -14,6 +14,7 @@ QQC2.CheckBox {
         implicitHeight: control.height
         color: Constants.backgroundColor
         border.color: Constants.borderColor
+        border.width: control.activeFocus? 3: 1
         Shape {
             width: 80
             height: 80

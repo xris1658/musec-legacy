@@ -138,31 +138,35 @@ Rectangle {
                     EventBridge.systemTextRenderingChanged(checked);
                 }
             }
-            Rectangle {
-                id: systemTextRenderingInfo
+            MCtrl.Button {
+                id: systemTextRenderingInfoButton
                 width: checkBoxSystemTextRendering.height
                 height: width
-                radius: height / 2
-                color: Constants.backgroundColor2
-                border.color: Constants.borderColor
-                MouseArea {
-                    id: systemTextRenderingInfoMouseArea
-                    property bool hovered: false
-                    anchors.fill: parent
-                    hoverEnabled: true
+                background: Rectangle {
+                    color: Constants.backgroundColor
                 }
-                Text {
-                    anchors.centerIn: parent
-                    font.family: "Noto Sans Mono Condensed"
-                    font.bold: true
-                    text: "?"
-                    color: Constants.borderColor
-                    MCtrl.ToolTip {
-                        text: qsTr("如果您的计算机上安装了 MacType 等改善系统文字渲染的程序，\n请勾选此项。否则通常不建议勾选。")
-                        visible: systemTextRenderingInfoMouseArea.containsMouse
+                Rectangle {
+                    id: systemTextRenderingInfo
+                    anchors.fill: parent
+                    radius: height / 2
+                    color: Constants.backgroundColor2
+                    border.color: Constants.borderColor
+                    border.width: systemTextRenderingInfoToolTip.visible? 3: 1
+                    Text {
+                        anchors.centerIn: parent
+                        font.family: "Noto Sans Mono Condensed"
+                        font.bold: true
+                        text: "?"
+                        color: Constants.borderColor
+                    }
+                }
+                MCtrl.ToolTip {
+                    id: systemTextRenderingInfoToolTip
+                    text: qsTr("如果您的计算机上安装了 MacType 等改善系统文字渲染的程序，\n请勾选此项。否则通常不建议勾选。")
+//                    visible: systemTextRenderingInfoMouseArea.containsMouse
+                    visible: systemTextRenderingInfoButton.hovered | systemTextRenderingInfoButton.activeFocus
                 }
             }
-        }
         }
     }
 }
