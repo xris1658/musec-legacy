@@ -8,7 +8,9 @@
 // 为了防止违反 ODR，将相关文件放到另一个命名空间下
 namespace VST2AudioEffectX
 {
+#include <public.sdk/source/vst2.x/audioeffect.h>
 #include <public.sdk/source/vst2.x/audioeffectx.h>
+#include <public.sdk/source/vst2.x/audioeffect.cpp>
 #include <public.sdk/source/vst2.x/audioeffectx.cpp>
 }
 
