@@ -139,112 +139,177 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                 }
             }
             auto factory = pluginFactoryProc();
-            Steinberg::PFactoryInfo factoryInfo;
-            factory->getFactoryInfo(&factoryInfo);
-            auto classCount = factory->countClasses();
-            for(decltype(classCount) i = 0; i < classCount; ++i)
+            Steinberg::IPluginFactory2* factory2 = nullptr;
+            auto factory2Result = factory->queryInterface(Steinberg::IPluginFactory2::iid, reinterpret_cast<void**>(&factory2));
+            if(factory2Result == Steinberg::kResultOk)
             {
-                Steinberg::PClassInfo classInfo;
-                factory->getClassInfo(i, &classInfo);
-                auto* category = classInfo.category;
-                if(std::strcmp(category, kVstAudioEffectClass) == 0)
+                auto classCount = factory2->countClasses();
+                for(decltype(classCount) i = 0; i < classCount; ++i)
                 {
-                    using namespace Steinberg;
-                    using namespace Steinberg::Vst;
-                    using namespace Musec::Audio::Host;
-                    auto pluginType = PluginType::TypeUnknown;
-                    IAudioProcessor* audioProcessor = nullptr;
-                    /*auto result = */factory->createInstance(classInfo.cid,
-                        IAudioProcessor::iid,
-                        reinterpret_cast<void**>(&audioProcessor));
-                    IComponent* component = nullptr;
-                    /*result = */audioProcessor->queryInterface(IComponent::iid,
-                        reinterpret_cast<void**>(&component));
-                    auto& host = MusecVST3Host::instance();
-                    component->initialize(&host);
-                    ProcessSetup setup;
-                    setup.processMode = Vst::ProcessModes::kRealtime;
-                    setup.sampleRate = 44100.0;
-                    setup.maxSamplesPerBlock = 1024;
-                    setup.symbolicSampleSize = Vst::SymbolicSampleSizes::kSample64;
-                    audioProcessor->setupProcessing(setup);
-                    constexpr Vst::MediaTypes mediaTypes[] =
+                    Steinberg::PClassInfo2 classInfo2;
+                    factory2->getClassInfo2(i, &classInfo2);
+                    auto* category = classInfo2.category;
+                    if(std::strcmp(category, kVstAudioEffectClass) == 0)
                     {
-                        Vst::MediaTypes::kAudio,
-                        Vst::MediaTypes::kAudio,
-                        Vst::MediaTypes::kEvent,
-                        Vst::MediaTypes::kEvent
-                    };
-                    constexpr Vst::BusDirections busDirections[] =
-                    {
-                        Vst::BusDirections::kInput,
-                        Vst::BusDirections::kOutput,
-                        Vst::BusDirections::kInput,
-                        Vst::BusDirections::kOutput
-                    };
-    //                    constexpr wchar_t names[][5] = { L"音频输入", L"音频输出", L"事件输入", L"事件输出" };
-                    int32 busCounts[] = { 0, 0, 0, 0 };
-                    Vst::BusInfo busInfo;
-                    for(int i = 0; i < 4; ++i)
-                    {
-                        busCounts[i] = component->getBusCount(mediaTypes[i], busDirections[i]);
-                        auto busCount = busCounts[i];
-                        for(decltype(busCount) j = 0; j < busCount; ++j)
+                        std::array<char, Steinberg::PClassInfo2::kSubCategoriesSize> subCateg = {0};
+                        std::strncpy(subCateg.data(), classInfo2.subCategories, subCateg.size());
+                        std::array<char*, Steinberg::PClassInfo2::kSubCategoriesSize> strings = {nullptr};
+                        strings[0] = subCateg.data();
+                        int wordCount = 0;
+                        for(auto j = 0; j < subCateg.size(); ++j)
                         {
-                            component->getBusInfo(mediaTypes[i], busDirections[i], j, busInfo);
-                            if(busInfo.busType == Vst::BusTypes::kMain)
+                            if(subCateg[j] == '|')
                             {
+                                subCateg[j] = 0;
+                                strings[++wordCount] = subCateg.data() + j + 1;
                             }
-                            else
+                            else if(subCateg[j] == 0)
                             {
+                                break;
                             }
                         }
+                        auto pluginType = PluginType::TypeUnknown;
+                        for(auto i = 0; i <= wordCount; ++i)
+                        {
+                            if(std::strcmp(strings[i], Steinberg::Vst::PlugType::kFx) == 0)
+                            {
+                                pluginType = PluginType::TypeAudioFX;
+                                ret.append(std::make_tuple(
+                                        i,
+                                        QString(classInfo2.name),
+                                        PluginFormat::FormatVST3,
+                                        pluginType
+                                        ));
+                            }
+                            else if(std::strcmp(strings[i], Steinberg::Vst::PlugType::kInstrument) == 0)
+                            {
+                                pluginType = PluginType::TypeInstrument;
+                                ret.append(std::make_tuple(
+                                        i, QString(classInfo2.name),
+                                        PluginFormat::FormatVST3,
+                                        pluginType
+                                        ));
+                            }
+                        }
+                        if(pluginType == PluginType::TypeUnknown)
+                        {
+                            ret.append(std::make_tuple(
+                                    i, QString(classInfo2.name),
+                                    PluginFormat::FormatVST3,
+                                    pluginType
+                            ));
+                        }
                     }
-                    // 没有考虑只有输出，只有输入的插件和只有音频输入和事件输出的插件。可能需要修改。
-                    if(busCounts[0] && busCounts[1] && busCounts[2])
+                }
+                factory2->release();
+            }
+            else
+            {
+                auto classCount = factory->countClasses();
+                for(decltype(classCount) i = 0; i < classCount; ++i)
+                {
+                    Steinberg::PClassInfo classInfo;
+                    factory->getClassInfo(i, &classInfo);
+                    auto* category = classInfo.category;
+                    if(std::strcmp(category, kVstAudioEffectClass) == 0)
                     {
-                        // 此类有事件输入，音频输入和音频输出。
-                        // 可能也有事件输出。
-                        // 程序认为这是带事件输入的音频效果器。
-                        pluginType = PluginType::TypeAudioFX;
+                        using namespace Steinberg;
+                        using namespace Steinberg::Vst;
+                        using namespace Musec::Audio::Host;
+                        auto pluginType = PluginType::TypeUnknown;
+                        IAudioProcessor* audioProcessor = nullptr;
+                        /*auto result = */factory->createInstance(classInfo.cid,
+                                                                  IAudioProcessor::iid,
+                                                                  reinterpret_cast<void**>(&audioProcessor));
+                        IComponent* component = nullptr;
+                        /*result = */audioProcessor->queryInterface(IComponent::iid,
+                                                                    reinterpret_cast<void**>(&component));
+                        auto& host = MusecVST3Host::instance();
+                        component->initialize(&host);
+                        ProcessSetup setup;
+                        setup.processMode = Vst::ProcessModes::kRealtime;
+                        setup.sampleRate = 44100.0;
+                        setup.maxSamplesPerBlock = 1024;
+                        setup.symbolicSampleSize = Vst::SymbolicSampleSizes::kSample64;
+                        audioProcessor->setupProcessing(setup);
+                        constexpr Vst::MediaTypes mediaTypes[] =
+                                {
+                                        Vst::MediaTypes::kAudio,
+                                        Vst::MediaTypes::kAudio,
+                                        Vst::MediaTypes::kEvent,
+                                        Vst::MediaTypes::kEvent
+                                };
+                        constexpr Vst::BusDirections busDirections[] =
+                                {
+                                        Vst::BusDirections::kInput,
+                                        Vst::BusDirections::kOutput,
+                                        Vst::BusDirections::kInput,
+                                        Vst::BusDirections::kOutput
+                                };
+                        //                    constexpr wchar_t names[][5] = { L"音频输入", L"音频输出", L"事件输入", L"事件输出" };
+                        int32 busCounts[] = { 0, 0, 0, 0 };
+                        Vst::BusInfo busInfo;
+                        for(int i = 0; i < 4; ++i)
+                        {
+                            busCounts[i] = component->getBusCount(mediaTypes[i], busDirections[i]);
+                            auto busCount = busCounts[i];
+                            for(decltype(busCount) j = 0; j < busCount; ++j)
+                            {
+                                component->getBusInfo(mediaTypes[i], busDirections[i], j, busInfo);
+                                if(busInfo.busType == Vst::BusTypes::kMain)
+                                {
+                                }
+                                else
+                                {
+                                }
+                            }
+                        }
+                        // 没有考虑只有输出，只有输入的插件和只有音频输入和事件输出的插件。可能需要修改。
+                        if(busCounts[0] && busCounts[1] && busCounts[2])
+                        {
+                            // 此类有事件输入，音频输入和音频输出。
+                            // 可能也有事件输出。
+                            // 程序认为这是带事件输入的音频效果器。
+                            pluginType = PluginType::TypeAudioFX;
+                        }
+                        else if(busCounts[1] && busCounts[2])
+                        {
+                            // 此类有事件输入和音频输出，但没有音频输入。
+                            // 可能也有事件输出。
+                            // 程序认为这是乐器。
+                            pluginType = PluginType::TypeInstrument;
+                        }
+                        else if(busCounts[0] && busCounts[1])
+                        {
+                            // 此类有音频输入和音频输出，但没有事件输入。
+                            // 可能也有事件输出。
+                            // 程序认为这是普通的音频效果器。
+                            pluginType = PluginType::TypeAudioFX;
+                        }
+                        else if(busCounts[2] && busCounts[3])
+                        {
+                            // 此类有事件输入和事件输出，但没有音频输入和输出。
+                            // 程序认为这是事件处理器，如 MIDI 效果器。
+                            pluginType = PluginType::TypeMidiFX;
+                        }
+                        else if(busCounts[0] == 0 && busCounts[1] == 0
+                                && busCounts[2] == 0 && busCounts[3] == 0)
+                        {
+                            // 此类没有输入和输出。
+                            // 程序认为是加载插件的过程出现了问题。
+                            pluginType = PluginType::TypeUnknown;
+                        }
+                        component->terminate();
+                        component->release();
+                        audioProcessor->release();
+                        ret.append(std::make_tuple(
+                                           i,
+                                           QString(classInfo.name),
+                                           PluginFormat::FormatVST3,
+                                           pluginType
+                                   )
+                        );
                     }
-                    else if(busCounts[1] && busCounts[2])
-                    {
-                        // 此类有事件输入和音频输出，但没有音频输入。
-                        // 可能也有事件输出。
-                        // 程序认为这是乐器。
-                        pluginType = PluginType::TypeInstrument;
-                    }
-                    else if(busCounts[0] && busCounts[1])
-                    {
-                        // 此类有音频输入和音频输出，但没有事件输入。
-                        // 可能也有事件输出。
-                        // 程序认为这是普通的音频效果器。
-                        pluginType = PluginType::TypeAudioFX;
-                    }
-                    else if(busCounts[2] && busCounts[3])
-                    {
-                        // 此类有事件输入和事件输出，但没有音频输入和输出。
-                        // 程序认为这是事件处理器，如 MIDI 效果器。
-                        pluginType = PluginType::TypeMidiFX;
-                    }
-                    else if(busCounts[0] == 0 && busCounts[1] == 0
-                         && busCounts[2] == 0 && busCounts[3] == 0)
-                    {
-                        // 此类没有输入和输出。
-                        // 程序认为是加载插件的过程出现了问题。
-                        pluginType = PluginType::TypeUnknown;
-                    }
-                    component->terminate();
-                    component->release();
-                    audioProcessor->release();
-                    ret.append(std::make_tuple(
-                           i,
-                           QString(classInfo.name),
-                           PluginFormat::FormatVST3,
-                           pluginType
-                        )
-                    );
                 }
             }
             factory->release();
