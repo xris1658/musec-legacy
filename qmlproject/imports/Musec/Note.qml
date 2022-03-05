@@ -20,7 +20,7 @@ Item {
     clip: true
     Rectangle {
         id: rightResizeIndicator
-        visible: rightResizeArea.hovered | rightResizeArea.pressed
+        visible: rightResizeArea.containsMouse | rightResizeArea.pressed
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         width: 10
@@ -40,7 +40,7 @@ Item {
     }
     Rectangle {
         id: leftResizeIndicator
-        visible: leftResizeArea.hovered | leftResizeArea.pressed
+        visible: leftResizeArea.containsMouse | leftResizeArea.pressed
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
         width: 10
@@ -145,18 +145,11 @@ Item {
     }
     MouseArea {
         id: leftResizeArea
-        property bool hovered: false
         anchors.left: parent.left
         width: 5
         height: parent.height
         hoverEnabled: true
-        cursorShape: hovered || pressed? Qt.SizeHorCursor: Qt.ArrowCursor
-        onEntered: {
-            hovered = true;
-        }
-        onExited: {
-            hovered = false;
-        }
+        cursorShape: containsMouse || pressed? Qt.SizeHorCursor: Qt.ArrowCursor
         onPressed: {
             mouseInitialX = mouse.x;
         }
@@ -183,20 +176,12 @@ Item {
     }
     MouseArea {
         id: rightResizeArea
-        property bool hovered: false
         anchors.right: parent.right
         width: 5
         hoverEnabled: true
         height: parent.height
-        // 鼠标离开 MouseArea 后，即使当前是 pressed，光标也会变回箭头。原因未知。
-        cursorShape: hovered || pressed? Qt.SizeHorCursor: Qt.ArrowCursor
-
-        onEntered: {
-            hovered = true;
-        }
-        onExited: {
-            hovered = false;
-        }
+        // 鼠标离开 MouseArea 后，即使当前是 pressed，光标也会变回箭头。
+        cursorShape: containsMouse || pressed? Qt.SizeHorCursor: Qt.ArrowCursor
         onPressed: {
             mouseInitialX = mouse.x;
         }

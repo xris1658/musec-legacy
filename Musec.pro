@@ -39,6 +39,7 @@ HEADERS += \
     audio/driver/ASIODriverStreamInfo.hpp \
     audio/driver/IASIODriver.hpp \
     audio/host/MusecVST3Host.hpp \
+    autio/util/Util.hpp \
     base/AssetDirectoryBase.hpp \
     base/Base.hpp \
     base/Constants.hpp \
@@ -57,6 +58,7 @@ HEADERS += \
     dao/LoggingDAO.hpp \
     dao/PluginDAO.hpp \
     dao/PluginDirectoryDAO.hpp \
+    dkwtp/Automation.hpp \
     event/EventBase.hpp \
     event/EventHandler.hpp \
     event/MainWindow.hpp \
@@ -81,6 +83,7 @@ SOURCES += \
     audio/driver/ASIOCallback.cpp \
     audio/driver/ASIODriver.cpp \
     audio/host/MusecVST3Host.cpp \
+    audio/util/Util.cpp \
     base/PluginBase.cpp \
     controller/AppController.cpp \
     controller/ASIODriverController.cpp \

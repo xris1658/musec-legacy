@@ -91,6 +91,7 @@ Item {
                         color: "transparent"
                         Text {
                             anchors.centerIn: parent
+                            anchors.verticalCenterOffset: 0.5
                             font.family: "Noto Sans Mono"
                             font.styleName: "Condensed SemiBold"
                             color: trackSelected? "#000000": "#FFFFFF"
@@ -207,7 +208,6 @@ Item {
     }
     MouseArea {
         id: resizeArea
-        property bool hovered: false
         z: 2
         anchors.bottom: parent.bottom
         anchors.left: parent.left
@@ -232,12 +232,10 @@ Item {
         }
         hoverEnabled: true
         onEntered: {
-            hovered = true;
             cursorShape = Qt.SizeVerCursor;
             resizeAreaRect.opacity = 1;
         }
         onExited: {
-            hovered = false;
             cursorShape = Qt.ArrowCursor;
             resizeAreaRect.opacity = 0;
         }

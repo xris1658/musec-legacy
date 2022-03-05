@@ -38,46 +38,6 @@ Item {
             tracks.get(colorDest1.trackIndex - 1).color = color;
         }
     }
-
-    MCtrl.Menu {
-        id: arrangementOptions
-        title: qsTr("编排视图操作")
-        delegate: MCtrl.MenuItem {}
-        width: 200
-        height: contentHeight
-        MCtrl.Action {
-            text: qsTr("添加 MIDI / 乐器轨道(&M)")
-            onTriggered: {
-                var newTrack = {
-                    'name': 'MIDI',
-                    'color': Qt.rgba(Math.random(), Math.random(), Math.random()),
-                    'mute': false,
-                    'solo': false,
-                    'armRecord': false,
-                    'selected': false,
-                    'trackHeight': 60,
-                    'selected': false
-                };
-                tracks.append(newTrack);
-            }
-        }
-        MCtrl.Action {
-            text: qsTr("添加音频轨道(&A)")
-            onTriggered: {
-                var newTrack = {
-                    'name': '音频',
-                    'color': Qt.rgba(Math.random(), Math.random(), Math.random()),
-                    'mute': false,
-                    'solo': false,
-                    'armRecord': false,
-                    'selected': false,
-                    'trackHeight': 60,
-                    'selected': false
-                };
-                tracks.append(newTrack);
-            }
-        }
-    }
     MCtrl.Menu {
         id: trackOptions
         property int trackIndex
@@ -129,7 +89,6 @@ Item {
             }
         }
     }
-
     MCtrl.SplitView {
         id: headerContentSplitView
         anchors.fill: parent
@@ -183,79 +142,79 @@ Item {
                         text: qsTr("对齐单位")
                     }
                 }
-                    MCtrl.Button {
-                        id: automationButton
-                        property bool automationEnabled: false
-                        anchors.bottom: parent.bottom
-                        anchors.left: parent.left
-                        width: height
-                        height: editorSnapUnit.height
-                        background: Rectangle {
-                            anchors.fill: parent
-                            color: automationButton.automationEnabled? Constants.currentElementColor: Constants.backgroundColor
+                MCtrl.Button {
+                    id: automationButton
+                    property bool automationEnabled: false
+                    anchors.bottom: parent.bottom
+                    anchors.left: parent.left
+                    width: height
+                    height: editorSnapUnit.height
+                    background: Rectangle {
+                        anchors.fill: parent
+                        color: automationButton.automationEnabled? Constants.currentElementColor: Constants.backgroundColor
+                    }
+                    Item {
+                        anchors.centerIn: parent
+                        width: 12
+                        height: 12
+                        Rectangle {
+                            anchors.left: parent.left
+                            anchors.bottom: parent.bottom
+                            width: 5
+                            height: width
+                            radius: width / 2
+                            color: automationButton.automationEnabled? Constants.contentColor1: Constants.contentColor2
+                            border.color: color
                         }
-                        Item {
-                            anchors.centerIn: parent
-                            width: 12
-                            height: 12
-                            Rectangle {
-                                anchors.left: parent.left
-                                anchors.bottom: parent.bottom
-                                width: 5
-                                height: width
-                                radius: width / 2
-                                color: automationButton.automationEnabled? Constants.contentColor1: Constants.contentColor2
-                                border.color: color
-                            }
-                            Rectangle {
-                                anchors.right: parent.right
-                                anchors.top: parent.top
-                                width: 5
-                                height: width
-                                radius: width / 2
-                                color: automationButton.automationEnabled? Constants.contentColor1: Constants.contentColor2
-                                border.color: color
-                            }
-                            Shape {
-                                width: parent.width
-                                height: parent.height
-                                antialiasing: true
-                                smooth: true
-                                ShapePath {
-                                    startX: 3
-                                    startY: 9
-                                    PathLine {
-                                        x: 9
-                                        y: 3
-                                    }
-                                    strokeWidth: 1.5
-                                    strokeColor: automationButton.automationEnabled? Constants.contentColor1: Constants.contentColor2
+                        Rectangle {
+                            anchors.right: parent.right
+                            anchors.top: parent.top
+                            width: 5
+                            height: width
+                            radius: width / 2
+                            color: automationButton.automationEnabled? Constants.contentColor1: Constants.contentColor2
+                            border.color: color
+                        }
+                        Shape {
+                            width: parent.width
+                            height: parent.height
+                            antialiasing: true
+                            smooth: true
+                            ShapePath {
+                                startX: 3
+                                startY: 9
+                                PathLine {
+                                    x: 9
+                                    y: 3
                                 }
+                                strokeWidth: 1.5
+                                strokeColor: automationButton.automationEnabled? Constants.contentColor1: Constants.contentColor2
                             }
                         }
-                        border.width: 0
-                        z: 1
-                        MCtrl.ToolTip {
-                            visible: parent.hovered
-                            text: qsTr("自动化包络")
-                        }
-                        onClicked:  {
-                            automationEnabled = !automationEnabled;
-                        }
                     }
-                    MCtrl.ComboBox {
-                        id: showMasterTrackButton
-                        width: height * 3
-                        height: editorSnapUnit.height
-                        anchors.left: automationButton.right
-                        anchors.top: automationButton.top
-                        model: ["不显示", "上方", "下方"]
-                        currentIndex: showMasterTrack
-                        MCtrl.ToolTip {
-                            visible: parent.hovered
-                            text: qsTr("显示主轨道")
-                        }
+                    border.width: 0
+                    z: 1
+                    MCtrl.ToolTip {
+                        visible: parent.hovered
+                        text: qsTr("自动化包络")
                     }
+                    onClicked:  {
+                        automationEnabled = !automationEnabled;
+                    }
+                }
+                MCtrl.ComboBox {
+                    id: showMasterTrackButton
+                    width: height * 3
+                    height: editorSnapUnit.height
+                    anchors.left: automationButton.right
+                    anchors.top: automationButton.top
+                    model: ["不显示", "上方", "下方"]
+                    currentIndex: showMasterTrack
+                    MCtrl.ToolTip {
+                        visible: parent.hovered
+                        text: qsTr("显示主轨道")
+                    }
+                }
             }
             Rectangle {
                 id: headers
@@ -265,17 +224,58 @@ Item {
                 width: parent.width + 4
                 color: Constants.backgroundColor
                 clip: true
+                MCtrl.Menu {
+                    id: arrangementOptions
+                    title: qsTr("编排视图操作")
+                    delegate: MCtrl.MenuItem {}
+                    width: 200
+                    height: contentHeight
+                    MCtrl.Action {
+                        text: qsTr("添加 MIDI / 乐器轨道(&M)")
+                        onTriggered: {
+                            var newTrack = {
+                                'name': 'MIDI',
+                                'color': Qt.rgba(Math.random(), Math.random(), Math.random()),
+                                'mute': false,
+                                'solo': false,
+                                'armRecord': false,
+                                'selected': false,
+                                'trackHeight': 60,
+                                'selected': false
+                            };
+                            tracks.append(newTrack);
+                        }
+                    }
+                    MCtrl.Action {
+                        text: qsTr("添加音频轨道(&A)")
+                        onTriggered: {
+                            var newTrack = {
+                                'name': '音频',
+                                'color': Qt.rgba(Math.random(), Math.random(), Math.random()),
+                                'mute': false,
+                                'solo': false,
+                                'armRecord': false,
+                                'selected': false,
+                                'trackHeight': 60,
+                                'selected': false
+                            };
+                            tracks.append(newTrack);
+                        }
+                    }
+                    MCtrl.MenuSeparator {}
+                    MCtrl.Action {
+                        text: qsTr("粘贴(&P)")
+                    }
+                }
                 MouseArea {
                     acceptedButtons: Qt.RightButton
                     anchors.fill: parent
                     anchors.margins: 0
                     anchors.rightMargin: 6
-                    onPressed: {
-                        if(mouse.buttons == Qt.RightButton) {
-                            arrangementOptions.x = mouseX;
-                            arrangementOptions.y = mouseY + arrangementOptions.height;
-                            arrangementOptions.open();
-                        }
+                    onClicked: {
+                        arrangementOptions.x = mouseX;
+                        arrangementOptions.y = mouseY;
+                        arrangementOptions.open();
                     }
                 }
                 TrackHeader {

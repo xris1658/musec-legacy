@@ -1,9 +1,9 @@
 import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick.Controls 2.15 as QQC2
 
 import Musec 1.0
 
-MenuSeparator {
+QQC2.MenuSeparator {
     height: 5
     background: Rectangle {
         color: Constants.menuBackgroundColor

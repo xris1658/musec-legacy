@@ -121,7 +121,5 @@ QQC2.MenuItem {
         opacity: 1
         color: menuItemDelegate.highlighted? Constants.menuHighlightBackgroundColor:
                                              Constants.menuBackgroundColor
-        border.width: 1
-        border.color: menuItemDelegate.highlighted? Constants.menuHighlightBorderColor: Constants.menuBackgroundColor
     }
 }

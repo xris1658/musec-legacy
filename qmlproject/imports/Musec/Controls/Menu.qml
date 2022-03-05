@@ -6,8 +6,6 @@ import Musec.Controls 1.0 as MCtrl
 QQC2.Menu {
     delegate: MCtrl.MenuItem {}
     background: Rectangle {
-        implicitWidth: 200
-        implicitHeight: 20
         color: Constants.menuBackgroundColor
         border.color: Constants.borderColor
     }

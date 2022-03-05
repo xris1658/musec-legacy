@@ -133,27 +133,26 @@ Item {
         Item {
             id: channelControl
             width: parent.width
-            height: 30
+            height: 20
             clip: true
             Row {
                 Item {
                     width: root.width / 4
-                    height: 30
+                    height: channelControl.height
                     MCtrl.Button {
                         anchors.centerIn: parent
                         width: parent.width - 2
-                        height: parent.height - 6
+                        height: parent.height - 2
                         border.width: 2
                         border.color: Constants.muteIndicatorColor
                         color: muted? Qt.darker(border.color, 1.5) : Constants.backgroundColor
                         Text {
                             anchors.centerIn: parent
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
+                            anchors.verticalCenterOffset: -1.2
                             text: "M"
                             font.family: "Noto Sans Mono"
                             font.styleName: "Condensed SemiBold"
-                            font.pixelSize: 18
+                            font.pixelSize: 15
                             color: Constants.contentColor1
                         }
                         onClicked: {
@@ -163,22 +162,21 @@ Item {
                 }
                 Item {
                     width: root.width / 4
-                    height: 30
+                    height: channelControl.height
                     MCtrl.Button {
                         anchors.centerIn: parent
                         width: parent.width - 2
-                        height: parent.height - 6
+                        height: parent.height - 2
                         border.width: 2
                         border.color: Constants.soloIndicatorColor
                         color: solo? Qt.darker(border.color, 1.5) : Constants.backgroundColor
                         Text {
                             anchors.centerIn: parent
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
+                            anchors.verticalCenterOffset: -1.2
                             text: "S"
                             font.family: "Noto Sans Mono"
                             font.styleName: "Condensed SemiBold"
-                            font.pixelSize: 18
+                            font.pixelSize: 15
                             color: Constants.contentColor1
                         }
                         onClicked: {
@@ -188,22 +186,21 @@ Item {
                 }
                 Item {
                     width: root.width / 4
-                    height: 30
+                    height: channelControl.height
                     MCtrl.Button {
                         anchors.centerIn: parent
                         width: parent.width - 2
-                        height: parent.height - 6
+                        height: parent.height - 2
                         border.width: 2
                         border.color: Constants.invertIndicatorColor
                         color: inverted? border.color : Constants.backgroundColor
                         Text {
                             anchors.centerIn: parent
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
+                            anchors.verticalCenterOffset: -1.2
                             text: "I"
                             font.family: "Noto Sans Mono"
                             font.styleName: "Condensed SemiBold"
-                            font.pixelSize: 18
+                            font.pixelSize: 15
                             color: Constants.contentColor1
                         }
                         onClicked: {
@@ -213,22 +210,21 @@ Item {
                 }
                 Item {
                     width: root.width / 4
-                    height: 30
+                    height: channelControl.height
                     MCtrl.Button {
                         anchors.centerIn: parent
                         width: parent.width - 2
-                        height: parent.height - 6
+                        height: parent.height - 2
                         border.width: 2
                         border.color: Constants.recordIndicatorColor
                         color: armRecording? border.color : Constants.backgroundColor
                         Text {
                             anchors.centerIn: parent
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
+                            anchors.verticalCenterOffset: -1.2
                             text: "R"
                             font.family: "Noto Sans Mono"
                             font.styleName: "Condensed SemiBold"
-                            font.pixelSize: 18
+                            font.pixelSize: 15
                             color: Constants.contentColor1
                         }
                         onClicked: {
@@ -373,9 +369,11 @@ Item {
                             color: Constants.contentColor1
                         }
                         MouseArea {
+                            id: gainMouseArea
                             anchors.fill: parent
                             onClicked: {
                                 gainTextInputPopup.visible = true;
+                                gainTextInput.text = mixerChannelGainText.text;
                                 gainTextInput.selectAll();
                                 gainTextInput.forceActiveFocus();
                             }
@@ -427,17 +425,18 @@ Item {
         Rectangle {
             id: channelInfo
             width: parent.width
-            height: 25
+            height: 20
             color: channelColor
             Row {
                 Item {
                     id: mixerChannelIndex
                     width: channelNumber? 30: 0
-                    height: 25
+                    height: 20
                     clip: true
                     Text {
                         id: textInfoIndex
                         anchors.centerIn: parent
+                        anchors.verticalCenterOffset: 1
                         text: channelNumber
                         font.family: "Noto Sans Mono"
                         font.styleName: "Condensed SemiBold"
@@ -447,7 +446,7 @@ Item {
                 }
                 Item {
                     width: root.width - mixerChannelIndex.width
-                    height: 25
+                    height: 20
                     Text {
 //                        anchors.left: parent.left
 //                        anchors.verticalCenter: parent.verticalCenter
