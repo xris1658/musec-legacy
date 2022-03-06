@@ -50,6 +50,11 @@ public:
         }
     }
     ~Automation() noexcept {}
+protected:
+    auto lowerBound(const T time) const
+    {
+        return std::lower_bound(points_.begin(), points_.end(), time, timeFromPointIsLessThanTime<T, V>);
+    }
 public:
     std::size_t pointCount() const noexcept
     {
@@ -69,9 +74,9 @@ public:
                 static_cast<const Point&>(*this)[index]
         );
     }
-    std::size_t pointCount(const T time) const
+    std::size_t pointCountAtTime(const T time) const
     {
-        auto lower = std::lower_bound(points_.begin(), points_.end(), time, timeFromPointIsLessThanTime<T, V>);
+        auto lower = lowerBound(time);
         if (lower == points_.end() || lower->time_ != time)
         {
             return 0;
@@ -83,9 +88,21 @@ public:
         }
         return ret;
     }
+    std::size_t firstPointIndexAtTime(const T time) const
+    {
+        auto lower = lowerBound(time);
+        if(lower == points_.end())
+        {
+            return points_.size();
+        }
+        else
+        {
+            return lower - points_.begin();
+        }
+    }
     V operator()(const T time, std::size_t index = 0) const
     {
-        auto lower = std::lower_bound(points_.begin(), points_.end(), time, timeFromPointIsLessThanTime<T, V>);
+        auto lower = lowerBound(time);
         if (lower == points_.end())
         {
             return points_.rbegin()->value_;
@@ -127,7 +144,7 @@ public:
     }
     void insertPoint(const Point& point, std::size_t indexInEqualTimePoint = 0)
     {
-        auto lower = std::lower_bound(points_.begin(), points_.end(), point.time_, timeFromPointIsLessThanTime<T, V>);
+        auto lower = lowerBound(point.time_);
         if (lower == points_.end())
         {
             points_.emplace_back(point);
