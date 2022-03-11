@@ -1,6 +1,7 @@
 #ifndef MUSEC_DKWTP_CHRONO
 #define MUSEC_DKWTP_CHRONO
 
+#include <cstddef>
 #include <cstdint>
 
 namespace Musec

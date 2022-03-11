@@ -11,6 +11,9 @@ namespace Musec
 namespace DKWTP
 {
 template<std::size_t PPQ>
+using TempoAutomationPoint = AutomationPoint<TimePoint<PPQ>, double>;
+
+template<std::size_t PPQ>
 class TempoAutomation: public Automation<TimePoint<PPQ>, double>
 {
     using Base = Automation<TimePoint<PPQ>, double>;
@@ -36,7 +39,7 @@ public:
     {
         return PPQ;
     }
-    double secondElapsed(const TimePoint<PPQ> from, const typename TimePoint<PPQ> to)
+    double secondElapsed(const TimePoint<PPQ>& from, const TimePoint<PPQ>& to) const
     {
         // from 在 to 的前面，返回 secondElapsed(to, from) * -1
         if(from > to)
@@ -52,8 +55,8 @@ public:
         auto notBeforeEnd = Base::lowerBound(to);
         // --from--to--point (notBeforeStart, notBeforeEnd)--point--
         // from 和 to 之间没有点（from 和 to 可能均在最后一个点之后出现）
-        typename Base::Point pointFrom {from, Base::operator()(from)};
-        typename Base::Point pointTo {to, Base::operator()(to)};
+        TempoAutomationPoint<PPQ> pointFrom {from, Base::operator()(from)};
+        TempoAutomationPoint<PPQ> pointTo {to, Base::operator()(to)};
         if(notBeforeEnd == notBeforeStart)
         {
             return secondElapsed(pointFrom, pointTo);
@@ -67,11 +70,13 @@ public:
             ret += secondElapsed(*it, *(it + 1));
         }
         ret += secondElapsed(*beforeEnd, pointTo);
+        return ret;
+    }
+    double secondElapsedFromZero(const TimePoint<PPQ>& to) const
+    {
+        return secondElapsed(TimePoint<PPQ>(0), to);
     }
 };
-
-template<std::size_t PPQ>
-using TempoAutomationPoint = typename TempoAutomation<PPQ>::Point;
 
 }
 }

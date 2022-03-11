@@ -18,7 +18,7 @@ struct AutomationPoint
 };
 
 template<typename T, typename V>
-bool timeFromPointIsLessThanTime(const AutomationPoint<T, V>& point, const T time)
+bool timeFromPointIsLessThanTime(const AutomationPoint<T, V>& point, const T& time)
 {
     return point.time_ < time;
 }
@@ -51,7 +51,7 @@ public:
     }
     ~Automation() noexcept {}
 protected:
-    auto lowerBound(const T time) const
+    auto lowerBound(const T& time) const
     {
         return std::lower_bound(points_.begin(), points_.end(), time, timeFromPointIsLessThanTime<T, V>);
     }
@@ -74,7 +74,7 @@ public:
                 static_cast<const Point&>(*this)[index]
         );
     }
-    std::size_t pointCountAtTime(const T time) const
+    std::size_t pointCountAtTime(const T& time) const
     {
         auto lower = lowerBound(time);
         if (lower == points_.end() || lower->time_ != time)
@@ -88,7 +88,7 @@ public:
         }
         return ret;
     }
-    std::size_t firstPointIndexAtTime(const T time) const
+    std::size_t firstPointIndexAtTime(const T& time) const
     {
         auto lower = lowerBound(time);
         if(lower == points_.end())
@@ -100,7 +100,7 @@ public:
             return lower - points_.begin();
         }
     }
-    V operator()(const T time, std::size_t index = 0) const
+    V operator()(const T& time, std::size_t index = 0) const
     {
         auto lower = lowerBound(time);
         if (lower == points_.end())

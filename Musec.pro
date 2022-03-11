@@ -39,7 +39,7 @@ HEADERS += \
     audio/driver/ASIODriverStreamInfo.hpp \
     audio/driver/IASIODriver.hpp \
     audio/host/MusecVST3Host.hpp \
-    autio/util/Util.hpp \
+    audio/util/Util.hpp \
     base/AssetDirectoryBase.hpp \
     base/Base.hpp \
     base/Constants.hpp \
@@ -59,6 +59,10 @@ HEADERS += \
     dao/PluginDAO.hpp \
     dao/PluginDirectoryDAO.hpp \
     dkwtp/Automation.hpp \
+    dkwtp/Chrono.hpp \
+    dkwtp/TempoAutomation.hpp \
+    dkwtp/TimeSignature.hpp \
+    dkwtp/TimeSignatureSequence.hpp \
     event/EventBase.hpp \
     event/EventHandler.hpp \
     event/MainWindow.hpp \
@@ -98,6 +102,7 @@ SOURCES += \
     dao/LoggingDAO.cpp \
     dao/PluginDAO.cpp \
     dao/PluginDirectoryDAO.cpp \
+    dkwtp/TimeSignature.cpp \
     event/EventBase.cpp \
     event/EventHandler.cpp \
     event/MainWindow.cpp \
