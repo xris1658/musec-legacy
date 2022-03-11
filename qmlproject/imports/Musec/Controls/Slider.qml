@@ -6,6 +6,7 @@ import Musec 1.0
 QQC2.Slider {
     id: control
     value: 0.5
+    clip: true
 //    orientation: Qt.Vertical
     property alias implicitThickness: background.implicitThickness
     property alias implicitLength: background.implicitLength
