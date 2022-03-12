@@ -30,6 +30,12 @@ struct TimePointLiteral
 template<std::size_t PPQ>
 class TimeSignatureSequence
 {
+private:
+    using TimeSignatureChangeVector = std::vector<TimeSignatureChange<PPQ>>;
+    using TimeSignatureChangeVectorIterator = typename TimeSignatureChangeVector::iterator;
+    using TimeSignatureChangeVectorConstIterator = typename TimeSignatureChangeVector::const_iterator;
+    using TimeSignatureChangeVectorReverseIterator = typename TimeSignatureChangeVector::reverse_iterator;
+    using TimeSignatureChangeVectorConstReverseIterator = typename TimeSignatureChangeVector::const_reverse_iterator;
 public:
     explicit TimeSignatureSequence(TimeSignature initialTimeSignature):
         timeSignatureChange_()
@@ -55,6 +61,21 @@ public:
     {
         return timeSignatureChange_.size();
     }
+private:
+    TimeSignatureChangeVectorIterator lowerBound(const TimePoint<PPQ>& timePoint)
+    {
+        return std::lower_bound(timeSignatureChange_.begin(),
+                                timeSignatureChange_.end(),
+                                timePoint,
+                                timeSignatureChangeTimeLess);
+    }
+    TimeSignatureChangeVectorConstIterator lowerBound(const TimePoint<PPQ>& timePoint) const
+    {
+        return std::lower_bound(timeSignatureChange_.cbegin(),
+                                timeSignatureChange_.cend(),
+                                timePoint,
+                                timeSignatureChangeTimeLess);
+    }
 public:
     const TimeSignatureChange<PPQ>& operator[](std::size_t index) const
     {
@@ -62,7 +83,7 @@ public:
     }
     TimeSignatureChange<PPQ>& operator[](std::size_t index)
     {
-        return const_cast<TimeSignatureChange<PPQ>>(
+        return const_cast<TimeSignatureChange<PPQ>&>(
             static_cast<const TimeSignatureSequence<PPQ>&>(*this)[index]
         );
     }
@@ -73,10 +94,7 @@ public:
         {
             return timeSignatureChange_.begin()->timeSignature_;
         }
-        auto notBeforeTimePoint = std::lower_bound(timeSignatureChange_.begin(),
-                                                   timeSignatureChange_.end(),
-                                                   timePoint,
-                                                   timeSignatureChangeTimeLess);
+        auto notBeforeTimePoint = lowerBound(timePoint);
         if(notBeforeTimePoint == timeSignatureChange_.end())
         {
             return timeSignatureChange_.rbegin()->timeSignature_;
@@ -88,9 +106,8 @@ public:
         auto beforeTimePoint = notBeforeTimePoint - 1;
         return beforeTimePoint->timeSignature_;
     }
-    //
 private:
-    std::vector<TimeSignatureChange<PPQ>> timeSignatureChange_;
+    TimeSignatureChangeVector timeSignatureChange_;
 };
 }
 }

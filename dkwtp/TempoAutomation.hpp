@@ -76,6 +76,10 @@ public:
     {
         return secondElapsed(TimePoint<PPQ>(0), to);
     }
+    double secondElapsedInPulse(const TimePoint<PPQ>& pulse) const
+    {
+        return secondElapsed(pulse, TimePoint<PPQ>(pulse.pulse() + 1));
+    }
 };
 
 }
