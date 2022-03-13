@@ -26,12 +26,12 @@ private:
         }
         auto bpmFrom = from.value_;
         auto bpmTo = to.value_;
-        auto beatElapsed = (to.time_ - from.time_).duration() / PPQ;
+        double beatElapsed = (to.time_ - from.time_).duration() / static_cast<double>(PPQ);
         if (bpmTo == bpmFrom)
         {
             return beatElapsed / bpmFrom * 60.0;
         }
-        auto invertK = beatElapsed  / (bpmTo - bpmFrom);
+        auto invertK = beatElapsed / (bpmTo - bpmFrom);
         return (std::log(bpmTo) - std::log(bpmFrom)) * invertK * 60.0;
    }
 public:
