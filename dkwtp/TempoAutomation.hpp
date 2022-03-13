@@ -18,7 +18,7 @@ class TempoAutomation: public Automation<TimePoint<PPQ>, double>
 {
     using Base = Automation<TimePoint<PPQ>, double>;
 private:
-    static double secondElapsed(const typename Base::Point& from, const typename Base::Point& to)
+    static double secondElapsed(const TempoAutomationPoint<PPQ>& from, const TempoAutomationPoint<PPQ>& to)
     {
         if(from.time_ >= to.time_)
         {
