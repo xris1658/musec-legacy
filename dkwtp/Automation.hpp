@@ -41,6 +41,7 @@ public:
         {
             points_ = rhs.points_;
         }
+        return *this;
     }
     Automation& operator=(Self&& rhs) noexcept
     {
@@ -48,6 +49,7 @@ public:
         {
             points_ = std::move(rhs.points_);
         }
+        return *this;
     }
     ~Automation() noexcept {}
 protected:
@@ -71,7 +73,7 @@ public:
     Point& operator[](const std::size_t index)
     {
         return const_cast<Point&>(
-                static_cast<const Point&>(*this)[index]
+                static_cast<const Self&>(*this).operator[](index)
         );
     }
     std::size_t pointCountAtTime(const T& time) const
