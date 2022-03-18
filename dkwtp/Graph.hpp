@@ -161,10 +161,12 @@ bool containsPath(const Graph<T>& graph, T* const from, T* const to)
     ||
     (
         std::any_of
-        (fromNext.begin(), fromNext.end(), [&](const auto& item)
-        {
-            return std::find(stack.begin(), stack.end(), item) == stack.end() && containsPath(graph, item, to);
-        }
+        (
+            fromNext.begin(), fromNext.end(), [&](const auto& item)
+            {
+                return std::find(stack.begin(), stack.end(), item) == stack.end()
+                    && containsPath(graph, item, to);
+            }
         )
     );
     stack.pop_back();

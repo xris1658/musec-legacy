@@ -208,16 +208,21 @@ public:
             }
         }
     }
-    void insertPoint(const Point& point, std::size_t indexInEqualTimePoint = 0)
+    // 插入点。
+    // 如果所在时间点没有其他点存在，则直接插入，忽略第二个参数。
+    // 如果所在时间点有其他点存在，则按照给定的索引值将点插入到合适的位置。
+    virtual std::size_t insertPoint(const Point& point, std::size_t indexInEqualTimePoint = 0)
     {
         auto lower = lowerBound(point.time_);
         if (lower == points_.end())
         {
             points_.emplace_back(point);
+            return points_.size() - 1;
         }
         else if (lower->time_ != point.time_)
         {
-            points_.emplace(lower + 1, point);
+            auto it = points_.emplace(lower + 1, point);
+            return it - points_.begin();
         }
         else
         {
@@ -229,15 +234,17 @@ public:
                 {
                     throw std::invalid_argument("");
                 }
-                points_.emplace(insertBefore, point);
+                auto it = points_.emplace(insertBefore, point);
+                return it - points_.begin();
             }
             else
             {
-                points_.emplace(lower, point);
+                auto it = points_.emplace(lower, point);
+                return it - points_.begin();
             }
         }
     }
-    void deletePoint(std::size_t index)
+    virtual void deletePoint(std::size_t index)
     {
         points_.erase(points_.begin() + index);
     }

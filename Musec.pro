@@ -59,8 +59,10 @@ HEADERS += \
     dao/PluginDAO.hpp \
     dao/PluginDirectoryDAO.hpp \
     dkwtp/Automation.hpp \
+    dkwtp/AutomationWithCurve.hpp \
     dkwtp/Chrono.hpp \
     dkwtp/TempoAutomation.hpp \
+    dkwtp/TempoAutomationWithCurve.hpp \
     dkwtp/TimeSignature.hpp \
     dkwtp/TimeSignatureSequence.hpp \
     event/EventBase.hpp \
@@ -69,6 +71,8 @@ HEADERS += \
     event/SplashScreen.hpp \
     event/SplashScreenForward.hpp \
     event/SplashScreenWorkerThread.hpp \
+    math/Integration.hpp \
+    math/QuadraticFunction.hpp \
     model/ASIODriverListModel.hpp \
     model/AssetDirectoryListModel.hpp \
     model/ModelBase.hpp \
@@ -108,6 +112,8 @@ SOURCES += \
     event/MainWindow.cpp \
     event/SplashScreen.cpp \
     event/SplashScreenWorkerThread.cpp \
+    math/Integration.cpp \
+    math/QuadraticFunction.cpp \
     model/ASIODriverListModel.cpp \
     model/AssetDirectoryListModel.cpp \
     model/ModelInitializer.cpp \

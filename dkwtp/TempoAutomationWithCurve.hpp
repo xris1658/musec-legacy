@@ -21,9 +21,73 @@ class TempoAutomationWithCurve: public AutomationWithCurve<TimePoint<PPQ>, doubl
 {
     using Base = AutomationWithCurve<TimePoint<PPQ>, double>;
 private:
+    bool validatePoint(typename Base::PointVectorConstIterator left)
+    {
+        auto right = left + 1;
+        auto controlX = (left->time_ + right->time_) * 0.5;
+        auto up = right->curve_ * 0.5 + 0.5;
+        auto controlY = left->value_ < right->value_?
+                        left->value_ + up * (right->value_ - left->value_):
+                        right->value_ + up * (left->value_ - right->value_);
+        auto dLeft = (controlY - left->value_) / (controlX - left->time_);
+        auto dRight = (right->value_ - controlY) / (right->time_ - controlX);
+        auto a = (dRight - dLeft) * 0.5 / (right->time_ - left->time_);
+        auto b = dLeft - 2 * a * left->value_;
+        auto c = left->value_ - a * left->time_ * left->time_ - b * left->time_;
+        return b * b - 4 * a * c != 0;
+    }
     double secondElapsed(double bpm, const Duration<PPQ>& duration) const
     {
         return duration / (bpm * PPQ) * 60.0;
+    }
+public:
+    std::size_t insertPoint(const typename Base::Point& point, std::size_t indexInEqualTimePoint = 0) override
+    {
+        auto ret = Base::insertPoint(point, indexInEqualTimePoint);
+        // 插入点之后判断二次函数的 delta 是否为零
+
+        // 首先找点
+        auto pointIterator = Base::lowerBound(point.time_);
+        if(Base::pointCountAtTime(point.time_) > 1)
+        {
+            pointIterator += indexInEqualTimePoint;
+        }
+        // 如果插入的点不是自动化包络中的第一个点...
+        if(pointIterator != Base::begin())
+        {
+            auto& right = pointIterator;
+            auto left = pointIterator - 1;
+            // 且插入的点前的点的时间与这个插入的点的时间不相等
+            if(left->time_ != right->time_ && right->curve_ < 0 && right->curve_ != -1)
+            {
+                constexpr auto tweak = 1 / 64.0;
+                while(!validatePoint(left))
+                {
+                    right->curve_ += tweak;
+                }
+            }
+        }
+        // 如果插入的点不是自动化包络中的最后一个点...
+        if(ret != Base::pointCount() - 1)
+        {
+            auto& left = pointIterator;
+            auto right = pointIterator + 1;
+            if(left->time_ != right->time_ && right->curve_ < 0 && right->curve_ != -1)
+            {
+                constexpr auto tweak = 1 / 64.0;
+                while(!validatePoint(left))
+                {
+                    right->curve_ += tweak;
+                }
+            }
+        }
+        return ret;
+    }
+    void deletePoint(std::size_t index) override
+    {
+        Base::deletePoint(index);
+        auto right = Base::begin() + index;
+        right->curve_ = 0;
     }
 public:
     std::size_t ppq() const
