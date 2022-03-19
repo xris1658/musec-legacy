@@ -179,9 +179,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     $$files(qmlproject/*) \
-    $$files(qmlproject/imports/Musec) \
-    model/README.md \
-    qmlproject/Objects.qml
+    $$files(qmlproject/imports/Musec)
 
 #msvc:QMAKE_CXXFLAGS += -execution-charset:utf-8
 #msvc:QMAKE_CXXFLAGS += -source-charset:utf-8

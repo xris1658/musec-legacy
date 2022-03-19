@@ -24,6 +24,7 @@ Item {
                     text: (num % 12 == 0) ? "C" + (num - (num % 12)) / 12 : ""
                     font.family: "Noto Sans Mono Condensed"
                     font.bold: true
+                    font.pixelSize: keyHeight - 2
                     color: "#808080"
                 }
             }

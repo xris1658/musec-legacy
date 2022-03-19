@@ -72,6 +72,7 @@ public:
         {
             auto& left = pointIterator;
             auto right = pointIterator + 1;
+            // 且插入的点后的点的时间与这个插入的点的时间不相等
             if(left->time_ != right->time_ && right->curve_ < 0 && right->curve_ != -1)
             {
                 constexpr auto tweak = 1 / 64.0;

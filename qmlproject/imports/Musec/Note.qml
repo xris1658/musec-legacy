@@ -11,7 +11,6 @@ Item {
     property real mouseDeltaX: 0
     property int velocity: 100
     width: 100
-    height: 20
     Rectangle {
         anchors.fill: parent
         color: Constants.noteBackgroundColor
@@ -65,7 +64,7 @@ Item {
         text: (Constants.dynamicKeyName.get(noteMidiNum % 12).sharp) + ((noteMidiNum - noteMidiNum % 12) / 12)
         font.family: "Noto Sans Mono Condensed"
         font.bold: true
-        font.pointSize: 9
+        font.pixelSize: control.height - 2
         color: "#000000"
     }
     MouseArea {

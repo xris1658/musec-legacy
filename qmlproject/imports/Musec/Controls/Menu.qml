@@ -4,6 +4,7 @@ import Musec 1.0
 import Musec.Controls 1.0 as MCtrl
 
 QQC2.Menu {
+    implicitWidth: 200
     delegate: MCtrl.MenuItem {}
     background: Rectangle {
         color: Constants.menuBackgroundColor

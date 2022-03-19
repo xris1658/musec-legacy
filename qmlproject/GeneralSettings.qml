@@ -151,7 +151,7 @@ Rectangle {
                     radius: height / 2
                     color: Constants.backgroundColor2
                     border.color: Constants.borderColor
-                    border.width: systemTextRenderingInfoToolTip.visible? 3: 1
+                    border.width: systemTextRenderingInfoToolTip.visible? 2: 1
                     Text {
                         anchors.centerIn: parent
                         font.family: "Noto Sans Mono Condensed"

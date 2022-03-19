@@ -104,7 +104,7 @@ QQC2.ComboBox {
         anchors.fill: parent
         color: Constants.backgroundColor
         border.color: Constants.borderColor
-        border.width: comboBox.activeFocus? 3: 1
+        border.width: comboBox.activeFocus? 2: 1
     }
     popup: Menu {
         width: popupWidth == comboBox.width? comboBox.width: popupWidth + parent.height

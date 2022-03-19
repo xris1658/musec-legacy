@@ -64,7 +64,7 @@ Rectangle {
             textRole: "name"
             valueRole: "clsid"
             displayText: count == 0? qsTr("无 ASIO 驱动"):
-                         currentIndex == -1? qsTr("未选择 ASIO 驱动"):
+                         currentIndex == -1? qsTr("未加载驱动"):
                          currentText
             onCurrentValueChanged: {
                 EventBridge.driverASIOSelectionChanged(currentValue);

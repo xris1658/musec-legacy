@@ -10,9 +10,10 @@ Item {
     property alias midiEditorSnapUnit: editorSnapUnit
     property alias triplets: tripletsButton.triplets
     property alias showKeyScale: showKeyScaleButton.showKeyScale
+    property int verticalLineSpacing: 20
+    property int horizontalLineSpacing: 15
     id: root
     clip: true
-
     Item {
         id: _left
         anchors.left: parent.left
@@ -141,6 +142,7 @@ Item {
                 width: parent.width
                 anchors.left: parent.left
                 y: -vbar.position * height
+                keyHeight: horizontalLineSpacing
                 MouseArea {
                     anchors.fill: parent
                     onWheel: {
@@ -245,6 +247,7 @@ Item {
             }
             Timeline {
                 id: timeline
+                barWidth: numerator * verticalLineSpacing
                 barCount: 10
                 anchors.bottom: parent.bottom
                 height: parent.height - hbar.height
@@ -285,7 +288,7 @@ Item {
                 height: parent.height
                 x: timeline.x
                 verLineCount: timeline.barCount * timeline.numerator
-                verLineSpacing: timeline.barWidth / timeline.numerator
+                verLineSpacing: verticalLineSpacing
                 horLineCount: 1
                 horLineSpacing: height
             }
@@ -302,9 +305,9 @@ Item {
                 x: timeline.x
                 y: pianoKey.y + timelineAndHbar.height
                 verLineCount: timeline.barCount * timeline.numerator
-                verLineSpacing: timeline.barWidth / timeline.numerator
+                verLineSpacing: verticalLineSpacing
                 horLineCount: Constants.midiValueRange
-                horLineSpacing: pianoKey.keyHeight
+                horLineSpacing: horizontalLineSpacing
                 Column { // 用于区分钢琴键黑白的背景
                     anchors.fill: parent
                     z: 1
@@ -374,9 +377,9 @@ Item {
                             contentArea, null
                         );
                         var _x = mouseX - contentArea.x + contentAreaRect.x;
-                        item.x = _x - _x % contentArea.verLineSpacing + 1;
+                        item.x = _x - _x % verticalLineSpacing + 1;
                         item.y = mouseY - mouseY % pianoKey.keyHeight + 1;
-                        item.width = contentArea.verLineSpacing - 1;
+                        item.width = verticalLineSpacing - 1;
                         item.height = pianoKey.keyHeight - 1;
                         item.noteMidiNum = note;
                         item.z = 3;

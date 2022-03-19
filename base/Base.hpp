@@ -23,6 +23,14 @@ void memoryReset(T* const address)
 {
     std::memset(address, 0, sizeof(T));
 }
+
+// 将限域枚举转换为其底层类型
+template<typename T>
+auto underlyingValue(T enumerate)
+{
+    static_assert(std::is_enum_v<T>);
+    return static_cast<std::underlying_type_t<T>>(enumerate);
+}
 }
 }
 
