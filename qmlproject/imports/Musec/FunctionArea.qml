@@ -5,10 +5,11 @@ import QtQuick.Layouts 1.15
 Item {
     id: root
     property string title
-    property alias contentArea: contentArea
+    readonly property alias contentArea: contentArea
+    property alias titleMouseArea: titleMouseArea
+    property int titleHeight: titleArea.height
     anchors.fill: parent
-    Rectangle
-    {
+    Rectangle {
         id: titleArea
         anchors.top: parent.top
         anchors.left: parent.left
@@ -25,6 +26,10 @@ Item {
             font.family: Constants.font
             font.pointSize: Constants.titleTextPointSize
             color: Constants.contentColor1
+        }
+        MouseArea {
+            id: titleMouseArea
+            anchors.fill: parent
         }
     }
     Rectangle {

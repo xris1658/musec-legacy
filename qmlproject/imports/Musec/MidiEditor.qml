@@ -12,6 +12,7 @@ Item {
     property alias showKeyScale: showKeyScaleButton.showKeyScale
     property int verticalLineSpacing: 20
     property int horizontalLineSpacing: 15
+    property int barCount: 20
     id: root
     clip: true
     Item {
@@ -248,7 +249,7 @@ Item {
             Timeline {
                 id: timeline
                 barWidth: numerator * verticalLineSpacing
-                barCount: 10
+                barCount: root.barCount
                 anchors.bottom: parent.bottom
                 height: parent.height - hbar.height
                 x: -hbar.position * width

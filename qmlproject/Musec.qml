@@ -22,6 +22,10 @@ ApplicationWindow {
     readonly property EventBridge eventBridge: EventBridge
     property bool canClose: false
 
+    property alias assetVisible: actionAssetVisible.checked
+    property alias midiEditorVisible: actionMidiEditorVisible.checked
+    property alias mixerVisible: actionMixerVisible.checked
+
     property alias bpm: mainBar.bpm
 
     signal setStatusText(newText: string)
@@ -388,22 +392,23 @@ ApplicationWindow {
             }
             MCtrl.MenuSeparator {}
             MCtrl.Action {
+                id: actionAssetVisible
                 text: qsTr("素材(&A)")
+                shortcut: "F8"
                 checkable: true
                 checked: true
             }
             MCtrl.Action {
-                text: qsTr("信息(&I)")
-                checkable: true
-                checked: true
-            }
-            MCtrl.Action {
+                id: actionMidiEditorVisible
                 text: qsTr("片段编辑器(&C)")
+                shortcut: "F7"
                 checkable: true
                 checked: true
             }
             MCtrl.Action {
+                id: actionMixerVisible
                 text: qsTr("混音器(&M)")
+                shortcut: "F9"
                 checkable: true
                 checked: true
             }
@@ -411,6 +416,7 @@ ApplicationWindow {
             MCtrl.Action {
                 id: actionFollow
                 text: qsTr("跟随(&F)")
+                shortcut: "Ctrl+Shift+F"
                 checkable: true
                 checked: false
             }
@@ -581,6 +587,7 @@ ApplicationWindow {
             anchors.fill: parent
                 // // 素材
             Item {
+                visible: assetVisible
                 SplitView.preferredWidth: parent.width / 5
 //                SplitView.preferredHeight: parent.height / 2
                 SplitView.minimumHeight: 20
@@ -647,6 +654,7 @@ ApplicationWindow {
                     }
                     // 片段编辑器
                     Item {
+                        visible: midiEditorVisible
                         FunctionArea {
                             id: editorFunctionArea
                             property string clipName: ""
@@ -664,6 +672,7 @@ ApplicationWindow {
                 // // 混音器
                 Item {
                     SplitView.minimumHeight: 20
+                    visible: mixerVisible
                     FunctionArea {
                         id: mixerFunctionArea
                         title: qsTr("混音器")

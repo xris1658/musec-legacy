@@ -122,17 +122,21 @@ Item {
                     }
                 }
                 else {
-                    var contentAreaCoordinate = control.mapToItem(control.parent, mouseX, mouseY);
-                    var deltaY = contentAreaCoordinate.y - initialY;
-                    if(deltaY >= control.height && control.noteMidiNum >= 0) {
-                        control.y += control.height + 1;
-                        control.noteMidiNum -= 1;
-                        initialY = contentAreaCoordinate.y;
+                    if(mouseY > control.height) {
+                        var down = Math.floor(mouseY / (control.height + 1));
+                        if(control.noteMidiNum - down < 0) {
+                            down = control.noteMidiNum;
+                        }
+                        control.y += (down * (control.height + 1));
+                        control.noteMidiNum -= down;
                     }
-                    else if(deltaY <= 0 - control.height && control.noteMidiNum < Constants.midiValueRange - 1) {
-                        control.y -= control.height + 1;
-                        control.noteMidiNum += 1;
-                        initialY = contentAreaCoordinate.y;
+                    if(mouseY < 0) {
+                        var up = Math.floor((1 - mouseY + control.height) / (control.height + 1));
+                        if(control.noteMidiNum + up > Constants.midiValueRange - 1) {
+                            up = Constants.midiValueRange - 1 - control.noteMidiNum;
+                        }
+                        control.y -= (up * (control.height + 1));
+                        control.noteMidiNum += up;
                     }
                 }
             }
