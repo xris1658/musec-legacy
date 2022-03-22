@@ -1,6 +1,7 @@
-#ifndef MUSEC_NATIVE_VST2PLUGIN
-#define MUSEC_NATIVE_VST2PLUGIN
+#ifndef MUSEC_AUDIO_PLUGIN_VST2PLUGIN
+#define MUSEC_AUDIO_PLUGIN_VST2PLUGIN
 
+#include "audio/plugin/IPlugin.hpp"
 #include "base/PluginBase.hpp"
 #include "native/WindowsLibraryRAII.hpp"
 
@@ -12,7 +13,9 @@
 
 namespace Musec
 {
-namespace Native
+namespace Audio
+{
+namespace Plugin
 {
 VstIntPtr pluginVST2Callback(AEffect* effect, VstInt32 opcode, VstInt32 index, VstIntPtr value, void* ptr, float opt);
 class ShellPluginId
@@ -38,7 +41,10 @@ private:
     Steinberg::Base::Thread::FLock mutex_ = "shlPlgn";
 };
 
-class VST2Plugin: public Musec::Native::WindowsLibraryRAII
+template<typename SampleType>
+class VST2Plugin:
+    public Musec::Native::WindowsLibraryRAII,
+    public Musec::Audio::Plugin::IPlugin<SampleType>
 {
     using Base = Musec::Native::WindowsLibraryRAII;
 public:
@@ -47,10 +53,21 @@ public:
     ~VST2Plugin() noexcept override;
 public:
     AEffect* effect() const;
+public:
+    bool initialize(double sampleRate, std::int32_t maxSampleCount) override;
+    bool uninitialize() override;
+    bool startProcessing() override;
+    bool stopProcessing() override;
+    void process(std::array<SampleType*, 2> input, std::array<SampleType*, 2> output) override;
 private:
     AEffect* effect_ = nullptr;
 };
+
+extern template class VST2Plugin<float>;
+extern template class VST2Plugin<double>;
 }
 }
 
-#endif //MUSEC_NATIVE_VST2PLUGIN
+}
+
+#endif //MUSEC_AUDIO_PLUGIN_VST2PLUGIN

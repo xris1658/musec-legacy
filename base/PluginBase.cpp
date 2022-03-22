@@ -4,7 +4,7 @@
 #include "audio/host/MusecVST3Host.hpp"
 #include "base/Constants.hpp"
 #include "controller/ASIODriverController.hpp"
-#include "native/VST2Plugin.hpp"
+#include "audio/plugin/VST2Plugin.hpp"
 
 #include <pluginterfaces/vst/ivstaudioprocessor.h>
 
@@ -46,7 +46,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
     {
         try
         {
-            Musec::Native::VST2Plugin plugin(path, true);
+            Musec::Audio::Plugin::VST2Plugin<float> plugin(path, true);
             auto effect = plugin.effect();
             std::array<char, kVstMaxProductStrLen> nameBuffer = {0};
             auto category = effect->dispatcher(effect, effGetPlugCategory, 0, 0, nullptr, 0);
@@ -67,7 +67,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                     }
                     // 加载插件，获取插件的信息
     //                AEffect* subPlugin = pluginEntryProc(pluginVST2Callback);
-                    auto plugin = Musec::Native::VST2Plugin(path, false, shellPluginId);
+                    auto plugin = Musec::Audio::Plugin::VST2Plugin<float>(path, false, shellPluginId);
                     auto subPlugin = plugin.effect();
                     int pluginType = subPlugin->flags & effFlagsIsSynth?
                         PluginType::TypeInstrument:
@@ -248,21 +248,21 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                                 };
                         //                    constexpr wchar_t names[][5] = { L"音频输入", L"音频输出", L"事件输入", L"事件输出" };
                         int32 busCounts[] = { 0, 0, 0, 0 };
-                        Vst::BusInfo busInfo;
+                        // Vst::BusInfo busInfo;
                         for(int i = 0; i < 4; ++i)
                         {
                             busCounts[i] = component->getBusCount(mediaTypes[i], busDirections[i]);
-                            auto busCount = busCounts[i];
-                            for(decltype(busCount) j = 0; j < busCount; ++j)
-                            {
-                                component->getBusInfo(mediaTypes[i], busDirections[i], j, busInfo);
-                                if(busInfo.busType == Vst::BusTypes::kMain)
-                                {
-                                }
-                                else
-                                {
-                                }
-                            }
+                            // auto busCount = busCounts[i];
+                            // for(decltype(busCount) j = 0; j < busCount; ++j)
+                            // {
+                            //     component->getBusInfo(mediaTypes[i], busDirections[i], j, busInfo);
+                            //     if(busInfo.busType == Vst::BusTypes::kMain)
+                            //     {
+                            //     }
+                            //     else
+                            //     {
+                            //     }
+                            // }
                         }
                         // 没有考虑只有输出，只有输入的插件和只有音频输入和事件输出的插件。可能需要修改。
                         if(busCounts[0] && busCounts[1] && busCounts[2])
@@ -303,11 +303,11 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                         component->release();
                         audioProcessor->release();
                         ret.append(std::make_tuple(
-                                           i,
-                                           QString(classInfo.name),
-                                           PluginFormat::FormatVST3,
-                                           pluginType
-                                   )
+                               i,
+                               QString(classInfo.name),
+                               PluginFormat::FormatVST3,
+                               pluginType
+                           )
                         );
                     }
                 }

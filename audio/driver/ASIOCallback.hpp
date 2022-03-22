@@ -1,7 +1,7 @@
 #ifndef MUSEC_AUDIO_DRIVER_ASIOCALLBACK
 #define MUSEC_AUDIO_DRIVER_ASIOCALLBACK
 
-#include "IASIODriver.hpp"
+#include "ASIODriverForward.hpp"
 
 namespace Musec
 {

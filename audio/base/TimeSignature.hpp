@@ -7,7 +7,9 @@
 
 namespace Musec
 {
-namespace DKWTP
+namespace Audio
+{
+namespace Base
 {
 class TimeSignature
 {
@@ -34,6 +36,7 @@ private:
     std::uint8_t numerator_;
     std::uint8_t denominator_;
 };
+}
 }
 }
 

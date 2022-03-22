@@ -34,11 +34,21 @@ CONFIG(release, debug | release) {
 DEFINES += _CRT_SECURE_NO_WARNINGS
 
 HEADERS += \
+    audio/base/Automation.hpp \
+    audio/base/AutomationWithCurve.hpp \
+    audio/base/Chrono.hpp \
+    audio/base/TempoAutomation.hpp \
+    audio/base/TempoAutomationWithCurve.hpp \
+    audio/base/TimeSignature.hpp \
+    audio/base/TimeSignatureSequence.hpp \
+    audio/driver/ASIODriverForward.hpp \
     audio/driver/ASIOCallback.hpp \
     audio/driver/ASIODriver.hpp \
     audio/driver/ASIODriverStreamInfo.hpp \
-    audio/driver/IASIODriver.hpp \
     audio/host/MusecVST3Host.hpp \
+    audio/plugin/IPlugin.hpp \
+    audio/plugin/VST2Plugin.hpp \
+    audio/plugin/VST3Plugin.hpp \
     audio/util/Util.hpp \
     base/AssetDirectoryBase.hpp \
     base/Base.hpp \
@@ -58,13 +68,7 @@ HEADERS += \
     dao/LoggingDAO.hpp \
     dao/PluginDAO.hpp \
     dao/PluginDirectoryDAO.hpp \
-    dkwtp/Automation.hpp \
-    dkwtp/AutomationWithCurve.hpp \
-    dkwtp/Chrono.hpp \
-    dkwtp/TempoAutomation.hpp \
-    dkwtp/TempoAutomationWithCurve.hpp \
-    dkwtp/TimeSignature.hpp \
-    dkwtp/TimeSignatureSequence.hpp \
+    dkwtp/Graph.hpp \
     event/EventBase.hpp \
     event/EventHandler.hpp \
     event/MainWindow.hpp \
@@ -79,18 +83,21 @@ HEADERS += \
     model/ModelInitializer.hpp \
     model/PluginListModel.hpp \
     native/Native.hpp \
-    native/VST2Plugin.hpp \
     native/WindowsLibraryRAII.hpp \
     ui/FontUtility.hpp \
     ui/Render.hpp \
     ui/UI.hpp \
-    util/FunctorInitializer.hpp
+    util/FunctorInitializer.hpp \
+    util/Literal.hpp
 
 SOURCES += \
     main.cpp \
+    audio/base/TimeSignature.cpp \
     audio/driver/ASIOCallback.cpp \
     audio/driver/ASIODriver.cpp \
     audio/host/MusecVST3Host.cpp \
+    audio/plugin/VST2Plugin.cpp \
+    audio/plugin/VST3Plugin.cpp \
     audio/util/Util.cpp \
     base/PluginBase.cpp \
     controller/AppController.cpp \
@@ -106,7 +113,6 @@ SOURCES += \
     dao/LoggingDAO.cpp \
     dao/PluginDAO.cpp \
     dao/PluginDirectoryDAO.cpp \
-    dkwtp/TimeSignature.cpp \
     event/EventBase.cpp \
     event/EventHandler.cpp \
     event/MainWindow.cpp \
@@ -119,11 +125,11 @@ SOURCES += \
     model/ModelInitializer.cpp \
     model/PluginListModel.cpp \
     native/Native.cpp \
-    native/VST2Plugin.cpp \
     native/WindowsLibraryRAII.cpp \
     ui/FontUtility.cpp \
     ui/Render.cpp \
-    ui/UI.cpp
+    ui/UI.cpp \
+    util/Literal.cpp
 
 RESOURCES += \
     $$files(qmlproject/*) \
@@ -133,8 +139,9 @@ RESOURCES += \
 LIBS += \
     sqlite3.lib \ # SQLite 3
     sndfile.lib \ # libsndfile
-    AdvAPI32.lib \ # 注册表
+    AdvAPI32.lib \ # 注册表相关 API
     Shell32.lib \ # SHGetFolderPathW
+    Mincore.lib \ # QueryInterruptTimePrecise
     ole32.lib \
     # VST3 SDK
     sdk.lib \

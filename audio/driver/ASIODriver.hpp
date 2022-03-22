@@ -1,7 +1,7 @@
 #ifndef MUSEC_AUDIO_DRIVER_ASIODRIVER
 #define MUSEC_AUDIO_DRIVER_ASIODRIVER
 
-#include "audio/driver/IASIODriver.hpp"
+#include "audio/driver/ASIODriverForward.hpp"
 #include "audio/driver/ASIODriverStreamInfo.hpp"
 
 #include <QString>
@@ -39,7 +39,6 @@ QList<ASIODriverBasicInfo> enumerateDrivers();
 class ASIODriver
 {
 public:
-    // TODO: 考虑使用 Active Qt 重写
     ASIODriver();
     explicit ASIODriver(const ASIODriverBasicInfo& info);
     ASIODriver(const ASIODriver&) = delete;

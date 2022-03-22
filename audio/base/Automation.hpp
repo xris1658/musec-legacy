@@ -8,7 +8,9 @@
 
 namespace Musec
 {
-namespace DKWTP
+namespace Audio
+{
+namespace Base
 {
 template<typename T, typename V>
 struct AutomationPoint
@@ -73,7 +75,7 @@ public:
     Point& operator[](const std::size_t index)
     {
         return const_cast<Point&>(
-                static_cast<const Self&>(*this).operator[](index)
+            static_cast<const Self&>(*this).operator[](index)
         );
     }
     std::size_t pointCountAtTime(const T& time) const
@@ -136,7 +138,6 @@ public:
                 }
                 else
                 {
-                    // TODO: 计算值。由于曲线类型还没有决定，此处只按线性插值计算
                     auto left = lower - 1;
                     auto& right = lower;
                     return (right->value_ - left->value_) / (right->time_ - left->time_) * (time - left->time_) + left->value_;
@@ -184,6 +185,8 @@ public:
 private:
     std::vector<Point> points_;
 };
+}
+
 }
 }
 

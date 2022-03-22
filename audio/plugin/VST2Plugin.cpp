@@ -19,7 +19,7 @@ namespace VST2AudioEffectX
 
 #include <cstring>
 
-namespace Musec::Native
+namespace Musec::Audio::Plugin
 {
 namespace Impl
 {
@@ -337,18 +337,20 @@ AEffect* ShellPluginId::getShellPlugin(VstInt32 id, bool idShouldBeZero,
 // VST2Plugin
 // ------------------------------------------------------------------------------------------
 
-VST2Plugin::VST2Plugin(): VST2Plugin::Base()
+template<typename SampleType>
+VST2Plugin<SampleType>::VST2Plugin(): VST2Plugin::Base()
 {
     //
 }
 
-VST2Plugin::VST2Plugin(const QString& path, bool scanPlugin, VstInt32 shellPluginId):
+template<typename SampleType>
+VST2Plugin<SampleType>::VST2Plugin(const QString& path, bool scanPlugin, VstInt32 shellPluginId):
     VST2Plugin::Base(path)
 {
-    auto pluginEntryProc = getExport<Musec::Base::VST2PluginEntryProc>(*this, "VSTPluginMain");
+    auto pluginEntryProc = Musec::Native::getExport<Musec::Base::VST2PluginEntryProc>(*this, "VSTPluginMain");
     if(!pluginEntryProc)
     {
-        pluginEntryProc = getExport<Musec::Base::VST2PluginEntryProc>(*this, "main");
+        pluginEntryProc = Musec::Native::getExport<Musec::Base::VST2PluginEntryProc>(*this, "main");
         if(!pluginEntryProc)
         {
             // 抛出异常
@@ -377,17 +379,70 @@ VST2Plugin::VST2Plugin(const QString& path, bool scanPlugin, VstInt32 shellPlugi
     effect_->dispatcher(effect_, effOpen, 0, 0, nullptr, 0);
 }
 
-VST2Plugin::~VST2Plugin() noexcept
+template<typename SampleType>
+VST2Plugin<SampleType>::~VST2Plugin() noexcept
 {
     if(effect_)
     {
+        stopProcessing();
+        uninitialize();
         effect_->dispatcher(effect_, effClose, 0, 0, nullptr, 0);
     }
 }
 
-AEffect* VST2Plugin::effect() const
+template<typename SampleType>
+AEffect* VST2Plugin<SampleType>::effect() const
 {
     return effect_;
 }
+
+template<typename SampleType>
+bool VST2Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampleCount)
+{
+    effect_->dispatcher(effect_, AEffectOpcodes::effSetSampleRate, 0, 0, nullptr, sampleRate);
+    effect_->dispatcher(effect_, AEffectOpcodes::effSetBlockSize, 0, maxSampleCount, nullptr, 0);
+    return true;
+}
+
+template<typename SampleType>
+bool VST2Plugin<SampleType>::uninitialize()
+{
+    stopProcessing();
+    return true;
+}
+
+template<typename SampleType>
+void VST2Plugin<SampleType>::process(std::array<SampleType*, 2> input, std::array<SampleType*, 2> output)
+{
+    // FIXME: 从外部获取要处理的采样数
+    std::int32_t sampleCount = 0;
+    if constexpr(std::is_same_v<SampleType, float>)
+    {
+        effect_->processReplacing(effect_, input.data(), output.data(), sampleCount);
+    }
+    else if constexpr(std::is_same_v<SampleType, float>)
+    {
+        effect_->processDoubleReplacing(effect_, input.data(), output.data(), sampleCount);
+    }
+}
+
+template<typename SampleType>
+bool VST2Plugin<SampleType>::startProcessing()
+{
+    effect_->dispatcher(effect_, AEffectOpcodes::effMainsChanged, 0, 1, nullptr, 0);
+    effect_->dispatcher(effect_, AEffectXOpcodes::effStartProcess, 0, 0, nullptr, 0);
+    return true;
+}
+
+template<typename SampleType>
+bool VST2Plugin<SampleType>::stopProcessing()
+{
+    effect_->dispatcher(effect_, AEffectXOpcodes::effStopProcess, 0, 0, nullptr, 0);
+    effect_->dispatcher(effect_, AEffectOpcodes::effMainsChanged, 0, 0, nullptr, 0);
+    return true;
+}
+
+template class VST2Plugin<float>;
+template class VST2Plugin<double>;
 // ------------------------------------------------------------------------------------------
 }

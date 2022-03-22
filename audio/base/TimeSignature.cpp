@@ -2,7 +2,7 @@
 
 #include <charconv>
 
-namespace Musec::DKWTP
+namespace Musec::Audio::Base
 {
 TimeSignature::TimeSignature(uint8_t numerator, uint8_t denominator)
 {

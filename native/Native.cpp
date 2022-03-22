@@ -6,15 +6,32 @@
 #include <shellapi.h>
 #include <processthreadsapi.h>
 #include <timezoneapi.h>
+#include <realtimeapiset.h>
 
 #include <array>
+#include <bitset>
 #include <charconv>
+#include <chrono>
 #include <cstring>
+#include <stdexcept>
 
 namespace Musec
 {
 namespace Native
 {
+namespace Impl
+{
+std::uint64_t procMask()
+{
+    std::uint64_t procMask = 0;
+    std::uint64_t sysMask = 0;
+    if(GetProcessAffinityMask(GetCurrentProcess(), &procMask, &sysMask))
+    {
+        return procMask;
+    }
+    return 0;
+}
+}
 const QString& RoamingDirectoryPath()
 {
     static wchar_t path[MAX_PATH] = {0};
@@ -109,6 +126,56 @@ SystemTimeStringType formatTime(const SystemTimeType& time)
 void openSpecialCharacterInput()
 {
     ShellExecuteA(nullptr, "open", "charmap.exe", nullptr, nullptr, SW_NORMAL);
+}
+
+int getProcessCPUCoreCount()
+{
+    auto procMask = Impl::procMask();
+    auto bitset = reinterpret_cast<std::bitset<sizeof(procMask) * CHAR_BIT>*>(&procMask);
+    return bitset->count();
+}
+
+ThreadMaskType getMIDIClockThreadAffinity()
+{
+    static auto procMask = Impl::procMask();
+    if(procMask == 0)
+    {
+        return 1;
+    }
+    static std::uint64_t ret = 1;
+    while((ret & procMask) == 0)
+    {
+        ret <<= 1;
+    }
+    return ret;
+}
+
+ThreadMaskType setThreadMask(ThreadMaskType mask)
+{
+    auto ret = SetThreadAffinityMask(GetCurrentThread(), mask);
+    if(ret == 0)
+    {
+        throw std::runtime_error("");
+    }
+    return ret;
+}
+
+std::int64_t currentTimeInNanosecond()
+{
+    //// Ver 1
+    //// std::chrono::steady_clock 在 Windows 平台使用 QPC 实现。
+    //// 用户需要保证此函数所在的线程只会在一个 CPU 核心上运行。
+    //return std::chrono::steady_clock::now().time_since_epoch().count();
+
+     // Ver 2
+     std::uint64_t ret;
+     QueryInterruptTimePrecise(&ret);
+     return ret * 100;
+}
+
+void setThreadPriorityToTimeCritical()
+{
+    SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
 }
 
 }

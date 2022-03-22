@@ -10,7 +10,9 @@
 
 namespace Musec
 {
-namespace DKWTP
+namespace Audio
+{
+namespace Base
 {
 template<typename T, typename V>
 struct AutomationPointWithCurve
@@ -19,6 +21,8 @@ struct AutomationPointWithCurve
     V value_;
     double curve_;
 };
+
+constexpr int AutomationPointWithCurveColumnCount = 3;
 
 template<typename T, typename V>
 bool timeFromPointWithCurveIsLessThanTime(const AutomationPointWithCurve<T, V>& point, const T& time)
@@ -62,7 +66,29 @@ public:
 protected:
     auto lowerBound(const T& time) const
     {
+        return std::lower_bound(points_.cbegin(), points_.cend(), time, timeFromPointWithCurveIsLessThanTime<T, V>);
+    }
+    auto upperBound(const T& time) const
+    {
+        auto ret = lowerBound(time);
+        if (ret != points_.cend() && ret->time_ == time)
+        {
+            ++ret;
+        }
+        return ret;
+    }
+    auto lowerBound(const T& time)
+    {
         return std::lower_bound(points_.begin(), points_.end(), time, timeFromPointWithCurveIsLessThanTime<T, V>);
+    }
+    auto upperBound(const T& time)
+    {
+        auto ret = lowerBound(time);
+        if (ret != points_.cend() && ret->time_ == time)
+        {
+            ++ret;
+        }
+        return ret;
     }
     auto begin() noexcept
     {
@@ -255,6 +281,7 @@ public:
 private:
     PointVector points_;
 };
+}
 }
 }
 

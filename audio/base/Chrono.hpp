@@ -6,7 +6,9 @@
 
 namespace Musec
 {
-namespace DKWTP
+namespace Audio
+{
+namespace Base
 {
 template<std::size_t PPQ>
 class TimePoint
@@ -32,6 +34,30 @@ public:
     {
         return PPQ;
     }
+public:
+    TimePoint<PPQ>& operator++()
+    {
+        ++pulse_;
+        return *this;
+    }
+    TimePoint<PPQ>& operator--()
+    {
+        --pulse_;
+        return *this;
+    }
+    TimePoint<PPQ> operator--(int)
+    {
+        TimePoint<PPQ> ret = *this;
+        operator--();
+        return ret;
+    }
+    TimePoint<PPQ> operator++(int)
+    {
+        TimePoint<PPQ> ret = *this;
+        operator++();
+        return ret;
+    }
+public:
     template<std::size_t PPQ2>
     operator TimePoint<PPQ2>()
     {
@@ -181,6 +207,7 @@ template<std::size_t PPQ>
 Duration<PPQ> operator-(const Duration<PPQ>& lhs, const Duration<PPQ>& rhs)
 {
     return Duration<PPQ>(lhs.duration() - rhs.duration());
+}
 }
 }
 }

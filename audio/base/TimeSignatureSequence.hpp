@@ -3,7 +3,7 @@
 
 #include "TimeSignature.hpp"
 
-#include "dkwtp/Chrono.hpp"
+#include "Chrono.hpp"
 
 #include <algorithm>
 #include <string>
@@ -11,12 +11,14 @@
 
 namespace Musec
 {
-namespace DKWTP
+namespace Audio
+{
+namespace Base
 {
 template<std::size_t PPQ>
 struct TimeSignatureChange
 {
-    Musec::DKWTP::TimePoint<PPQ> timePoint_;
+    Musec::Audio::Base::TimePoint<PPQ> timePoint_;
     TimeSignature timeSignature_;
 };
 
@@ -109,6 +111,7 @@ public:
 private:
     TimeSignatureChangeVector timeSignatureChange_;
 };
+}
 }
 }
 

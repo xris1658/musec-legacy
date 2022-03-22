@@ -13,6 +13,8 @@ namespace Native
 {
 using SystemTimeType = SYSTEMTIME;
 
+using ThreadMaskType = std::uint64_t;
+
 using SystemTimeStringType = std::array<char, 18>;
 // 漫游用户数据路径（用户文件夹\AppData\Roaming）
 const QString& RoamingDirectoryPath();
@@ -28,6 +30,17 @@ SystemTimeType getLaunchTime();
 SystemTimeStringType formatTime(const SystemTimeType& time);
 
 void openSpecialCharacterInput();
+
+int getProcessCPUCoreCount();
+
+ThreadMaskType getMIDIClockThreadAffinity();
+
+ThreadMaskType setThreadMask(ThreadMaskType mask);
+
+// 获取高精度时间
+std::int64_t currentTimeInNanosecond();
+
+void setThreadPriorityToTimeCritical();
 }
 }
 
