@@ -95,6 +95,7 @@ SOURCES += \
     audio/base/TimeSignature.cpp \
     audio/driver/ASIOCallback.cpp \
     audio/driver/ASIODriver.cpp \
+    audio/engine/MIDIClock.cpp \
     audio/host/MusecVST3Host.cpp \
     audio/plugin/VST2Plugin.cpp \
     audio/plugin/VST3Plugin.cpp \
