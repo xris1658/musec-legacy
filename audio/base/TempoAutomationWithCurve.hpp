@@ -112,11 +112,24 @@ double secondElapsed(const TimePoint<PPQ>& from, const TimePoint<PPQ>& to) const
     double ret = 0;
     auto notBeforeStart = Base::lowerBound(from);
     auto notBeforeEnd = Base::lowerBound(to);
+    // --from--to--point--
     if (notBeforeStart == notBeforeEnd)
     {
         if (notBeforeStart == Base::cbegin())
         {
             ret = secondElapsed(notBeforeStart->value_, to - from);
+            return ret;
+        }
+        else
+        {
+            auto beforeStart = notBeforeStart - 1;
+            auto function = Base::getFunction(beforeStart);
+            function.a *= PPQ;
+            function.b *= PPQ;
+            function.c *= PPQ;
+            ret = Musec::Math::quadraticFunctionInvertIntegration(
+                function, from, to
+            ) * 60.0;
             return ret;
         }
     }
@@ -141,7 +154,7 @@ double secondElapsed(const TimePoint<PPQ>& from, const TimePoint<PPQ>& to) const
         function.c *= PPQ;
         ret += Musec::Math::quadraticFunctionInvertIntegration(
             function, from, notBeforeStart->time_
-        );
+        ) * 60.0;
     }
     auto beforeEnd = notBeforeEnd - 1;
     // Step 2 of 3: --point--point--
@@ -153,7 +166,7 @@ double secondElapsed(const TimePoint<PPQ>& from, const TimePoint<PPQ>& to) const
         function.c *= PPQ;
         ret += Musec::Math::quadraticFunctionInvertIntegration(
             function, it->time_, (it + 1)->time_
-        );
+        ) * 60.0;
     }
     // Step 3 of 3: --to
     if(notBeforeEnd == Base::cend())
@@ -168,9 +181,9 @@ double secondElapsed(const TimePoint<PPQ>& from, const TimePoint<PPQ>& to) const
         function.c *= PPQ;
         ret += Musec::Math::quadraticFunctionInvertIntegration(
             function, beforeEnd->time_, to
-        );
+        ) * 60.0;
     }
-    return ret * 60.0;
+    return ret;
 }
 double secondElapsedFromZero(const TimePoint<PPQ>& to) const
 {

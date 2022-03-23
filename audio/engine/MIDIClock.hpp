@@ -17,12 +17,24 @@ namespace Engine
 {
 namespace Impl
 {
+std::int64_t getCurrentTimeInNanosecond()
+{
+    auto clockMask = Musec::Native::getMIDIClockThreadAffinity();
+    auto oldMask = Musec::Native::setThreadMask(clockMask);
+    auto ret = Musec::Native::currentTimeInNanosecond();
+    Musec::Native::setThreadMask(oldMask);
+    return ret;
+    //return Musec::Native::currentTimeInNanosecond();
 }
+}
+template<std::size_t PPQ>
+using MIDIClockNotifyFunc = void(*)(Musec::Audio::Base::TimePoint<PPQ>);
+
 template<std::size_t PPQ>
 class MIDIClock
 {
 public:
-    MIDIClock(std::function<void()> notify):
+    MIDIClock(MIDIClockNotifyFunc<PPQ> notify):
         tempoAutomation_(),
         position_(0),
         playing_(false),
@@ -63,17 +75,18 @@ public:
 public:
     void clockFunc()
     {
+        Musec::Native::setThreadPriorityToTimeCritical();
         while(!aboutToDie_)
         {
             while(!playing_) {}
-            auto fence = Musec::Native::currentTimeInNanosecond();
+            auto fence = Impl::getCurrentTimeInNanosecond();
             while(playing_)
             {
-                // notify_ 可能相对费时，因此异步调用
-                std::async(std::launch::async, notify_);
+                 // notify_ 可能相对费时，因此异步调用
+                 std::async(std::launch::async, notify_, position_);
                 auto delta = tempoAutomation_.secondElapsedInPulse(position_) * 1e9;
                 fence += delta;
-                while(Musec::Native::currentTimeInNanosecond() < fence) {}
+                while(Impl::getCurrentTimeInNanosecond() < fence) {}
                 ++position_;
             }
         }
@@ -88,7 +101,7 @@ private:
     // 运行播放函数时所在位置（PPQ）
     std::int64_t timePlayStarted_;
     bool aboutToDie_;
-    std::function<void()> notify_;
+    MIDIClockNotifyFunc<PPQ> notify_;
 };
 }
 }

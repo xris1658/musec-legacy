@@ -31,6 +31,19 @@ std::uint64_t procMask()
     }
     return 0;
 }
+
+std::int64_t getQPF()
+{
+    LARGE_INTEGER ret;
+    QueryPerformanceFrequency(&ret);
+    return ret.QuadPart;
+}
+
+std::int64_t qpf()
+{
+    static auto ret = getQPF();
+    return ret;
+}
 }
 const QString& RoamingDirectoryPath()
 {
@@ -162,15 +175,21 @@ ThreadMaskType setThreadMask(ThreadMaskType mask)
 
 std::int64_t currentTimeInNanosecond()
 {
-    //// Ver 1
-    //// std::chrono::steady_clock 在 Windows 平台使用 QPC 实现。
-    //// 用户需要保证此函数所在的线程只会在一个 CPU 核心上运行。
-    //return std::chrono::steady_clock::now().time_since_epoch().count();
+    // // Ver 1（Windows API）
+    // auto qpf = Impl::qpf();
+    // LARGE_INTEGER qpc;
+    // QueryPerformanceCounter(&qpc);
+    // return qpc.QuadPart * 1e9 / static_cast<double>(qpf);
+    // Ver 1（现代 C++ API）
+    // std::chrono::steady_clock 在 Windows，MSVC 平台使用 QPC 实现。
+    // https://github.com/microsoft/STL/blob/main/stl/inc/__msvc_chrono.hpp#L668
+    // 用户需要保证此函数所在的线程只会在一个 CPU 核心上运行。
+    return std::chrono::steady_clock::now().time_since_epoch().count();
 
-     // Ver 2
-     std::uint64_t ret;
-     QueryInterruptTimePrecise(&ret);
-     return ret * 100;
+     // // Ver 2
+     // std::uint64_t ret;
+     // QueryInterruptTimePrecise(&ret);
+     // return ret * 100;
 }
 
 void setThreadPriorityToTimeCritical()
