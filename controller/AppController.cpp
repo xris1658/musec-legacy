@@ -53,7 +53,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     auto driverList = Musec::Audio::Driver::enumerateDrivers();
     AppASIODriverList().setList(driverList);
     // 加载 ASIO 驱动
-    splashScreen->setBootText("正在加载 ASIO 驱动程序...");
+    splashScreen->setBootText("正在寻找 ASIO 驱动程序...");
     Musec::Audio::Driver::AppASIODriver();
     auto driverCLSID = QString::fromStdString(
         appConfig["musec"]["options"]["audio-hardware"]["driver-id"]
@@ -71,6 +71,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
         {
             if(std::get<ASIODriverField::CLSIDField>(item) == driverCLSID)
             {
+                splashScreen->setBootText("正在加载 ASIO 驱动程序...");
                 AppASIODriver() = ASIODriver(item);
                 break;
             }

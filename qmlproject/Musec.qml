@@ -314,14 +314,17 @@ ApplicationWindow {
             MCtrl.Action {
                 text: qsTr("撤销(&U)")
                 shortcut: "Ctrl+Z"
+                enabled: false
             }
             MCtrl.Action {
                 text: qsTr("重做(&R)")
                 shortcut: "Ctrl+Y"
+                enabled: false
             }
             MCtrl.Action {
                 text: qsTr("历史记录(&H)...")
                 shortcut: "Ctrl+H"
+                enabled: false
             }
 
             MCtrl.MenuSeparator {}

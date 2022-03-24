@@ -293,7 +293,7 @@ Window {
                     MCtrl.ComboBox {
                         width: 100
                         height: 20
-                        model: ["不保留", "保留（置于末尾）", "保留（置于开头）"]
+                        model: ["不保留", "置于末尾", "置于开头"]
                         currentIndex: 0
                         font.family: Constants.font
                     }

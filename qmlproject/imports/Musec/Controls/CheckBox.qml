@@ -22,9 +22,8 @@ QQC2.CheckBox {
             anchors.centerIn: parent
             visible: control.checked
             layer.enabled: true
-            layer.samples: 4
-            antialiasing: true
-            smooth: true
+            layer.smooth: true
+            layer.samples: 2
             ShapePath {
                 strokeWidth: 1
                 strokeColor: Constants.contentColor1
