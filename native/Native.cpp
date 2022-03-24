@@ -155,7 +155,7 @@ ThreadMaskType getMIDIClockThreadAffinity()
     {
         return 1;
     }
-    static std::uint64_t ret = 1;
+    std::uint64_t ret = 1;
     while((ret & procMask) == 0)
     {
         ret <<= 1;

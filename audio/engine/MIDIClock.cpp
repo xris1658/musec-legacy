@@ -6,8 +6,7 @@ namespace Impl
 {
 std::int64_t getCurrentTimeInNanosecond()
 {
-auto clockMask = Musec::Native::getMIDIClockThreadAffinity();
-auto oldMask = Musec::Native::setThreadMask(clockMask);
+auto oldMask = Musec::Native::setThreadMask(Musec::Native::getMIDIClockThreadAffinity());
 auto ret = Musec::Native::currentTimeInNanosecond();
 Musec::Native::setThreadMask(oldMask);
 return ret;

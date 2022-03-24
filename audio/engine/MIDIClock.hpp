@@ -1,7 +1,7 @@
 #ifndef MUSEC_AUDIO_ENGINE_MIDICLOCK
 #define MUSEC_AUDIO_ENGINE_MIDICLOCK
 
-#include "audio/base/TempoAutomation.hpp"
+#include "audio/base/TempoAutomationWithCurve.hpp"
 #include "audio/base/Chrono.hpp"
 #include "native/Native.hpp"
 
@@ -34,8 +34,6 @@ public:
         aboutToDie_(false),
         notify_(notify)
     {
-        std::thread clockThread(std::mem_fn(&MIDIClock<PPQ>::clockFunc), this);
-        clockThread.detach();
     }
     ~MIDIClock()
     {

@@ -45,6 +45,7 @@ HEADERS += \
     audio/driver/ASIOCallback.hpp \
     audio/driver/ASIODriver.hpp \
     audio/driver/ASIODriverStreamInfo.hpp \
+    audio/engine/MIDIClock.hpp \
     audio/host/MusecVST3Host.hpp \
     audio/plugin/IPlugin.hpp \
     audio/plugin/VST2Plugin.hpp \
