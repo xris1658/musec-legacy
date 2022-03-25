@@ -5,6 +5,7 @@
 #include "controller/AppController.hpp"
 #include "controller/AssetDirectoryController.hpp"
 #include "controller/GeneralSettingsController.hpp"
+#include "controller/MIDIClockController.hpp"
 #include "controller/PluginSettingsController.hpp"
 #include "event/EventBase.hpp"
 #include "ui/UI.hpp"
@@ -39,6 +40,12 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      this,        SLOT(onExitASIOThread()));
     QObject::connect(eventBridge, SIGNAL(openSpecialCharacterInput()),
                      this,        SLOT(onOpenSpecialCharacterInput()));
+    QObject::connect(eventBridge, SIGNAL(getArrangementPosition()),
+                     this,        SLOT(onGetArrangementPosition()));
+    QObject::connect(eventBridge, SIGNAL(playStart()),
+                     this,        SLOT(onPlayStart()));
+    QObject::connect(eventBridge, SIGNAL(playStop()),
+                     this,        SLOT(onPlayStop()));
     // C++ -> C++
     QObject::connect(this,             &EventHandler::updatePluginList,
                      mainWindowEvents, &MainWindow::updatePluginList);
@@ -55,6 +62,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      mainWindow,    SIGNAL(setStatusText(QString)));
     QObject::connect(this,          SIGNAL(setSystemTextRenderingComplete()),
                      eventBridge,   SIGNAL(setSystemTextRenderingComplete()));
+    QObject::connect(this,          SIGNAL(updateArrangementPosition(int)),
+                     eventBridge,   SIGNAL(updateArrangementPosition(int)));
 }
 
 EventHandler::~EventHandler()
@@ -253,5 +262,20 @@ void EventHandler::onSystemTextRenderingChanged(bool newValue)
 void EventHandler::onOpenSpecialCharacterInput()
 {
     Musec::Controller::openSpecialCharacterInput();
+}
+
+void EventHandler::onGetArrangementPosition()
+{
+    //
+}
+
+void EventHandler::onPlayStart()
+{
+    Musec::Controller::MIDIClockController::AppMIDIClock().play();
+}
+
+void EventHandler::onPlayStop()
+{
+    Musec::Controller::MIDIClockController::AppMIDIClock().stop();
 }
 }

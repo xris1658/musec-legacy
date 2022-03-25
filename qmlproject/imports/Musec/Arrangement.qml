@@ -24,6 +24,7 @@ Item {
     property ListModel tracks
     property alias arrangementSnapUnit: editorSnapUnit
     property int barCount: 20
+    property int position
     // Qt 6 中移除了 QtQuick.Dialogs 中的 ColorDialog 和 MessageDialog,
     // 此处使用 Qt.labs.platform 中的 ColorDialog 以保证向后兼容.
     // 讲个笑话: Types in Qt.labs modules are not guaranteed to remain
@@ -478,6 +479,14 @@ Item {
                     y: headers.y
                     height: root.height - timelineAndHbar.height
                     clip: true
+                    Rectangle {
+                        id: timeIndicator
+                        width: 1
+                        height: parent.height
+                        x: root.position / 96.0 * (timeline.barWidth / timeline.numerator)
+                        y: 0
+                        z: 3
+                    }
                     MouseArea {
                         id: contentAreaMouseArea
                         anchors.fill: parent

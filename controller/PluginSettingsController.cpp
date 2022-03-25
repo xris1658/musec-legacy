@@ -55,7 +55,7 @@ void scanPlugins()
         {
             auto& dir = pluginDirectories.front();
             auto fileList = dir.entryInfoList(nameFilters,
-                                              QDir::Filter::Files | QDir::Filter::Hidden);
+                QDir::Filter::Files | QDir::Filter::Hidden);
             auto fileListSize = fileList.size();
             if(fileListSize)
             {

@@ -54,6 +54,7 @@ void refreshPluginList(bool rescan);
 // 加载素材目录列表
 void loadAssetDirectoryList();
 
+// 打开用于输入特殊字符的程序
 void openSpecialCharacterInput();
 }
 }

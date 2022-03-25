@@ -3,6 +3,7 @@
 #include "audio/driver/ASIODriver.hpp"
 #include "controller/ASIODriverController.hpp"
 #include "controller/AppController.hpp"
+#include "controller/MIDIClockController.hpp"
 #include "event/EventBase.hpp"
 #include "ui/UI.hpp"
 
@@ -40,6 +41,7 @@ void MainWindow::openMainWindow()
                      eventHandler, &Musec::Event::EventHandler::onMainWindowOpened);
     updateAssetDirectoryList();
     updatePluginList();
+    auto& clock = Musec::Controller::MIDIClockController::AppMIDIClock();
     openMainWindowComplete();
 }
 

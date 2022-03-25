@@ -7,6 +7,8 @@ Rectangle {
     property alias numerator: bigClock.numerator
     property alias demoninator: bigClock.demoninator
     property alias bpm: bigClock.bpm
+    signal playStart();
+    signal playStop();
     width: parent.width
     height: 70
     gradient: Gradient {
@@ -80,14 +82,17 @@ Rectangle {
             }
             onClicked: {
                 playing = !playing;
+                playStart();
             }
         }
-        Rectangle {
+        MCtrl.Button {
             id: stopButton
-            gradient: transportButtonsGradient
+            background: Rectangle {
+                gradient: transportButtonsGradient
+                radius: 5
+            }
             width: 36
             height: 36
-            radius: 5
             z: 1
             Rectangle {
                 id: stopButtonIcon
@@ -95,6 +100,10 @@ Rectangle {
                 width: 14
                 height: 14
                 color: "#FFFFFF"
+            }
+            onClicked: {
+                playing = false;
+                playStop();
             }
         }
         Rectangle {

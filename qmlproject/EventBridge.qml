@@ -21,10 +21,14 @@ QtObject {
     signal sampleRateChanged(sampleRate: int)
     signal systemTextRenderingChanged(newValue: bool)
     signal openSpecialCharacterInput()
+    signal getArrangementPosition()
 
     signal addAssetDirectory(directory: string)
     signal renameAssetDirectory(id: int, name: string)
     signal removeAssetDirectory(id: int)
+
+    signal playStart();
+    signal playStop();
 
     // 收到 C++ 后端的信号
     signal setBootText(newBootText: string)
@@ -35,6 +39,11 @@ QtObject {
     onSetStatusText: {
         Objects.mainWindow.setStatusText(newText);
     }
+    signal updateArrangementPosition(position: int)
+    onUpdateArrangementPosition: {
+        Objects.mainWindow.arrangementPosition = position;
+    }
+
 
     signal setSystemTextRenderingComplete()
     onSetSystemTextRenderingComplete: {

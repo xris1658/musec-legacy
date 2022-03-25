@@ -23,11 +23,11 @@ public:
     Self& operator=(Self&&) noexcept = default;
     ~AudioBufferView() noexcept = default;
 public:
-    SampleType* getSamples() const
+    SampleType* getSamples() const noexcept
     {
         return samples_;
     }
-    size_t size() const
+    size_t size() const noexcept
     {
         return size_;
     }

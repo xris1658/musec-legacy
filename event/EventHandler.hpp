@@ -26,6 +26,7 @@ signals:
     void updatePluginList();
     void updateASIODriverList();
     void exitASIOThreadFinished();
+    void updateArrangementPosition(int position);
 public slots:
     void onMainWindowOpened();
     void onOptionsWindowOpened();
@@ -42,6 +43,9 @@ public slots:
     void onSampleRateChanged(int sampleRate);
     void onSystemTextRenderingChanged(bool newValue);
     void onOpenSpecialCharacterInput();
+    void onGetArrangementPosition();
+    void onPlayStart();
+    void onPlayStop();
 private:
     std::vector<QMetaObject::Connection> optionsWindowConnection;
 };

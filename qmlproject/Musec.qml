@@ -28,9 +28,15 @@ ApplicationWindow {
 
     property alias bpm: mainBar.bpm
 
+    property alias arrangementPosition: arrangement.position
+
     signal setStatusText(newText: string)
     onSetStatusText: {
         status.text = newText;
+    }
+
+    onFrameSwapped: {
+        EventBridge.getArrangementPosition();
     }
 
     OptionsWindow {
@@ -576,6 +582,12 @@ ApplicationWindow {
     //顶部的工具栏
     MainBar {
         id: mainBar
+        onPlayStart: {
+            EventBridge.playStart();
+        }
+        onPlayStop: {
+            EventBridge.playStop();
+        }
     }
 
     //功能区
@@ -652,6 +664,7 @@ ApplicationWindow {
                                 anchors.margins: 1
                                 y: parent.y
                                 loop: actionLoop.checked
+                                position: 0
                             }
                         }
                     }

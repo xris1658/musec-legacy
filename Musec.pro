@@ -61,6 +61,7 @@ HEADERS += \
     controller/AssetDirectoryController.hpp \
     controller/ConfigController.hpp \
     controller/GeneralSettingsController.hpp \
+    controller/MIDIClockController.hpp \
     controller/PluginController.hpp \
     controller/PluginSettingsController.hpp \
     dao/AssetDirectoryDAO.hpp \
@@ -107,6 +108,7 @@ SOURCES += \
     controller/AssetDirectoryController.cpp \
     controller/ConfigController.cpp \
     controller/GeneralSettingsController.cpp \
+    controller/MIDIClockController.cpp \
     controller/PluginController.cpp \
     controller/PluginSettingsController.cpp \
     dao/AssetDirectoryDAO.cpp \

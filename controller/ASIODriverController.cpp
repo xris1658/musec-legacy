@@ -5,6 +5,7 @@
 #include "controller/ConfigController.hpp"
 #include "dao/DatabaseDAO.hpp"
 #include "event/EventBase.hpp"
+#include "event/EventHandler.hpp"
 #include "ui/UI.hpp"
 
 namespace Musec::Controller::ASIODriverController
