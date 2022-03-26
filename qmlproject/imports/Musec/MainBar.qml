@@ -82,7 +82,12 @@ Rectangle {
             }
             onClicked: {
                 playing = !playing;
-                playStart();
+                if(playing) {
+                    playStart();
+                }
+                else {
+                    playStop();
+                }
             }
         }
         MCtrl.Button {
@@ -102,8 +107,13 @@ Rectangle {
                 color: "#FFFFFF"
             }
             onClicked: {
-                playing = false;
-                playStop();
+                if(playing) {
+                    playing = false;
+                    playStop();
+                }
+                else {
+                    eventBridge.setArrangementPosition(0);
+                }
             }
         }
         Rectangle {

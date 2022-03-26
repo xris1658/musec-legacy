@@ -16,6 +16,12 @@ ASIOBufferInfoList& getASIOBufferInfoList()
     return ret;
 }
 
+ASIOChannelInfoList& getASIOChannelInfoList()
+{
+    static ASIOChannelInfoList ret;
+    return ret;
+}
+
 QList<ASIODriverBasicInfo> enumerateDrivers()
 {
     QList<ASIODriverBasicInfo> ret;

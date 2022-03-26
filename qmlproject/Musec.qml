@@ -35,10 +35,6 @@ ApplicationWindow {
         status.text = newText;
     }
 
-    onFrameSwapped: {
-        EventBridge.getArrangementPosition();
-    }
-
     OptionsWindow {
         id: optionsWindow
         objectName: "optionsWindow"

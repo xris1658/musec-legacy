@@ -58,6 +58,23 @@ void loadASIODriver()
                                                      inputBufferCount + outputBufferCount,
                                                      info.preferredBufferSize,
                                                      &getCallbacks());
+    if(createBuffersResult != ASE_OK)
+    {
+        char errorMessageBuffer[124];
+        driver->getErrorMessage(errorMessageBuffer);
+        // 输出错误字符串
+    }
+    auto& channelInfoList = getASIOChannelInfoList();
+    for(int i = 0; i < info.inputChannelCount + info.outputChannelCount; ++i)
+    {
+        channelInfoList[i].channel = bufferInfo[i].channelNum;
+        channelInfoList[i].isInput = bufferInfo[i].isInput;
+        auto result = driver->getChannelInfo(&(channelInfoList[i]));
+        if(result != ASE_OK)
+        {
+            //
+        }
+    }
     driver->start();
     updateCurrentASIODriverInfo();
 }

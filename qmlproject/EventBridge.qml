@@ -21,7 +21,7 @@ QtObject {
     signal sampleRateChanged(sampleRate: int)
     signal systemTextRenderingChanged(newValue: bool)
     signal openSpecialCharacterInput()
-    signal getArrangementPosition()
+    signal setArrangementPosition(position: int)
 
     signal addAssetDirectory(directory: string)
     signal renameAssetDirectory(id: int, name: string)

@@ -25,8 +25,11 @@ constexpr int inputChannelCount = 64;
 constexpr int outputChannelCount = 64;
 constexpr int channelCount = inputChannelCount + outputChannelCount;
 using ASIOBufferInfoList = std::array<ASIOBufferInfo, channelCount>;
+using ASIOChannelInfoList = std::array<ASIOChannelInfo, channelCount>;
 
 ASIOBufferInfoList& getASIOBufferInfoList();
+
+ASIOChannelInfoList& getASIOChannelInfoList();
 
 enum ASIODriverField
 {

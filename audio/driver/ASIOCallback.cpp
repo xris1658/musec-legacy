@@ -30,7 +30,115 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
                                      long doubleBufferIndex,
                                      ASIOBool directProcess)
 {
-    // TODO
+    auto& bufferInfoList = getASIOBufferInfoList();
+    auto& channelInfoList = getASIOChannelInfoList();
+    for(int i = 0; i < bufferInfoList.size(); ++i)
+    {
+        if(bufferInfoList[i].isInput)
+        {
+            switch(channelInfoList[i].type)
+            {
+                case ASIOSTInt16MSB:
+                    break;
+                case ASIOSTInt24MSB:
+                    break;
+                case ASIOSTInt32MSB:
+                    break;
+                case ASIOSTFloat32MSB:
+                    break;
+                case ASIOSTFloat64MSB:
+                    break;
+                case ASIOSTInt32MSB16:
+                    break;
+                case ASIOSTInt32MSB18:
+                    break;
+                case ASIOSTInt32MSB20:
+                    break;
+                case ASIOSTInt32MSB24:
+                    break;
+                case ASIOSTInt16LSB:
+                    break;
+                case ASIOSTInt24LSB:
+                    break;
+                case ASIOSTInt32LSB:
+                    break;
+                case ASIOSTFloat32LSB:
+                    break;
+                case ASIOSTFloat64LSB:
+                    break;
+                case ASIOSTInt32LSB16:
+                    break;
+                case ASIOSTInt32LSB18:
+                    break;
+                case ASIOSTInt32LSB20:
+                    break;
+                case ASIOSTInt32LSB24:
+                    break;
+                case ASIOSTDSDInt8LSB1:
+                    break;
+                case ASIOSTDSDInt8MSB1:
+                    break;
+                case ASIOSTDSDInt8NER8:
+                    break;
+                case ASIOSTLastEntry:
+                    break;
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            switch(channelInfoList[i].type)
+            {
+                case ASIOSTInt16MSB:
+                    break;
+                case ASIOSTInt24MSB:
+                    break;
+                case ASIOSTInt32MSB:
+                    break;
+                case ASIOSTFloat32MSB:
+                    break;
+                case ASIOSTFloat64MSB:
+                    break;
+                case ASIOSTInt32MSB16:
+                    break;
+                case ASIOSTInt32MSB18:
+                    break;
+                case ASIOSTInt32MSB20:
+                    break;
+                case ASIOSTInt32MSB24:
+                    break;
+                case ASIOSTInt16LSB:
+                    break;
+                case ASIOSTInt24LSB:
+                    break;
+                case ASIOSTInt32LSB:
+                    break;
+                case ASIOSTFloat32LSB:
+                    break;
+                case ASIOSTFloat64LSB:
+                    break;
+                case ASIOSTInt32LSB16:
+                    break;
+                case ASIOSTInt32LSB18:
+                    break;
+                case ASIOSTInt32LSB20:
+                    break;
+                case ASIOSTInt32LSB24:
+                    break;
+                case ASIOSTDSDInt8LSB1:
+                    break;
+                case ASIOSTDSDInt8MSB1:
+                    break;
+                case ASIOSTDSDInt8NER8:
+                    break;
+                case ASIOSTLastEntry:
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
     return nullptr;
 }
 

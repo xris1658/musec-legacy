@@ -53,6 +53,10 @@ public:
         return position_;
     }
 public:
+    bool playing() const noexcept
+    {
+        return playing_;
+    }
     void play()
     {
         timePlayStarted_ = position_;
@@ -80,6 +84,12 @@ public:
                 ++position_;
             }
         }
+    }
+public:
+    std::thread& clockThread()
+    {
+        static std::thread ret(std::mem_fn(&MIDIClock<PPQ>::clockFunc), this);
+        return ret;
     }
 private:
     // 速度自动化

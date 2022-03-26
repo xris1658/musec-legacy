@@ -43,7 +43,7 @@ public slots:
     void onSampleRateChanged(int sampleRate);
     void onSystemTextRenderingChanged(bool newValue);
     void onOpenSpecialCharacterInput();
-    void onGetArrangementPosition();
+    void onSetArrangementPosition(int position);
     void onPlayStart();
     void onPlayStop();
 private:

@@ -40,8 +40,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      this,        SLOT(onExitASIOThread()));
     QObject::connect(eventBridge, SIGNAL(openSpecialCharacterInput()),
                      this,        SLOT(onOpenSpecialCharacterInput()));
-    QObject::connect(eventBridge, SIGNAL(getArrangementPosition()),
-                     this,        SLOT(onGetArrangementPosition()));
+    QObject::connect(eventBridge, SIGNAL(setArrangementPosition(int)),
+                     this,        SLOT(onSetArrangementPosition(int)));
     QObject::connect(eventBridge, SIGNAL(playStart()),
                      this,        SLOT(onPlayStart()));
     QObject::connect(eventBridge, SIGNAL(playStop()),
@@ -264,9 +264,11 @@ void EventHandler::onOpenSpecialCharacterInput()
     Musec::Controller::openSpecialCharacterInput();
 }
 
-void EventHandler::onGetArrangementPosition()
+void EventHandler::onSetArrangementPosition(int position)
 {
-    //
+    auto timePoint = Musec::Audio::Base::TimePoint<Musec::Controller::MIDIClockController::AppPPQ>(position);
+    Musec::Controller::MIDIClockController::AppMIDIClock().setPosition(timePoint);
+    Musec::Controller::MIDIClockController::updateArrangementPositionInUI(timePoint);
 }
 
 void EventHandler::onPlayStart()
