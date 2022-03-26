@@ -166,14 +166,8 @@ long onASIOMessage(long selector,
             || value == kAsioSupportsInputMonitor)
                 ret = 1L;
             break;
-        // 重置 ASIO 驱动
         case kAsioResetRequest:
         {
-            auto driverInfo = AppASIODriver().driverInfo();
-            AppASIODriver() = ASIODriver();
-            AppASIODriver() = ASIODriver(driverInfo);
-            Controller::ASIODriverController::loadASIODriver();
-            //
             ret = 1L;
             break;
         }
