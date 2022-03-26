@@ -64,6 +64,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      eventBridge,   SIGNAL(setSystemTextRenderingComplete()));
     QObject::connect(this,          SIGNAL(updateArrangementPosition(int)),
                      eventBridge,   SIGNAL(updateArrangementPosition(int)));
+    QObject::connect(this,          SIGNAL(messageDialog(QString, QString, int)),
+                     eventBridge,   SIGNAL(messageDialog(QString, QString, int)));
 }
 
 EventHandler::~EventHandler()

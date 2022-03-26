@@ -5,6 +5,7 @@
 #include <winerror.h>
 
 #include <array>
+#include <stdexcept>
 #include <tuple>
 #include <utility>
 
@@ -109,7 +110,7 @@ ASIODriver::ASIODriver(const ASIODriverBasicInfo& info): driverInfo_(info), driv
     );
     if(loadDriverResult != S_OK)
     {
-        // 异常处理
+        throw std::runtime_error("");
     }
 }
 

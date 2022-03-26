@@ -44,6 +44,18 @@ QtObject {
         Objects.mainWindow.arrangementPosition = position;
     }
 
+    signal messageDialog(message: string, title: string, icon: int);
+    onMessageDialog: {
+        var component = Qt.createComponent("./imports/Musec/Dialogs/MessageDialog.qml");
+        if(component.status == Component.Ready) {
+            var rebootPrompt = component.createObject(eventBridge);
+            rebootPrompt.message = message;
+            rebootPrompt.title = title;
+            rebootPrompt.standardButtons = DialogButtonBox.Ok;
+            rebootPrompt.icon = icon;
+            rebootPrompt.showNormal();
+        }
+    }
 
     signal setSystemTextRenderingComplete()
     onSetSystemTextRenderingComplete: {

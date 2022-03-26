@@ -27,6 +27,7 @@ signals:
     void updateASIODriverList();
     void exitASIOThreadFinished();
     void updateArrangementPosition(int position);
+    void messageDialog(const QString& message, const QString& title, int icon);
 public slots:
     void onMainWindowOpened();
     void onOptionsWindowOpened();

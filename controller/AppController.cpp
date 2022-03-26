@@ -7,6 +7,7 @@
 #include "dao/PluginDirectoryDAO.hpp"
 #include "event/EventBase.hpp"
 #include "native/Native.hpp"
+#include "ui/MessageDialog.hpp"
 #include "ui/Render.hpp"
 
 #include <QDir>
@@ -72,7 +73,17 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
             if(std::get<ASIODriverField::CLSIDField>(item) == driverCLSID)
             {
                 splashScreen->setBootText("正在加载 ASIO 驱动程序...");
-                AppASIODriver() = ASIODriver(item);
+                try
+                {
+                    AppASIODriver() = ASIODriver(item);
+                }
+                catch(std::runtime_error& exception)
+                {
+                    Musec::UI::MessageDialog::messageDialog("无法加载 ASIO 驱动程序。程序将以未加载音频驱动的方式运行。",
+                                                         "Musec",
+                                                         Musec::UI::MessageDialog::IconType::Error);
+                    AppASIODriver() = ASIODriver();
+                }
                 break;
             }
         }

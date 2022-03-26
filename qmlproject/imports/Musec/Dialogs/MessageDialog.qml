@@ -10,6 +10,7 @@ import Musec.Controls 1.0 as MCtrl
 // compatible in future versions. - Qt Documentation
 Window {
     id: root
+    // ui/MessageDialog.hpp
     enum Icon {
         None,
         Question,
@@ -32,10 +33,6 @@ Window {
     property alias standardButtons: dialogButtonBox.standardButtons
     signal accepted()
     title: qsTr("对话框示例")
-//    Component.onCompleted: {
-//        console.log("width: " + width);
-//        console.log("minimumWidth: " + minimumWidth);
-//    }
     signal clicked(button: AbstractButton)
     onClicked: {
         //

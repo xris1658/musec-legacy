@@ -87,6 +87,7 @@ HEADERS += \
     native/Native.hpp \
     native/WindowsLibraryRAII.hpp \
     ui/FontUtility.hpp \
+    ui/MessageDialog.hpp \
     ui/Render.hpp \
     ui/UI.hpp \
     util/FunctorInitializer.hpp \
@@ -131,6 +132,7 @@ SOURCES += \
     native/Native.cpp \
     native/WindowsLibraryRAII.cpp \
     ui/FontUtility.cpp \
+    ui/MessageDialog.cpp \
     ui/Render.cpp \
     ui/UI.cpp \
     util/Literal.cpp
@@ -145,7 +147,6 @@ LIBS += \
     sndfile.lib \ # libsndfile
     AdvAPI32.lib \ # 注册表相关 API
     Shell32.lib \ # SHGetFolderPathW
-    Mincore.lib \ # QueryInterruptTimePrecise
     ole32.lib \
     # VST3 SDK
     sdk.lib \
@@ -194,3 +195,12 @@ DISTFILES += \
 
 #msvc:QMAKE_CXXFLAGS += -execution-charset:utf-8
 #msvc:QMAKE_CXXFLAGS += -source-charset:utf-8
+
+# 修改 Release 时使用的异常处理模式
+# 参考链接：
+# http://www.databaseforum.info/2/9/f69800e14add61dd.html
+# https://docs.microsoft.com/en-us/cpp/build/reference/eh-exception-handling-model?view=msvc-160
+QMAKE_CXXFLAGS_RELEASE -= -EHsc
+QMAKE_CXXFLAGS_RELEASE += -EHs
+QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO -= -EHsc
+QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO += -EHs
