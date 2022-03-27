@@ -50,6 +50,11 @@ HEADERS += \
     audio/plugin/IPlugin.hpp \
     audio/plugin/VST2Plugin.hpp \
     audio/plugin/VST3Plugin.hpp \
+    audio/track/AudioTrack.hpp \
+    audio/track/ITrack.hpp \
+    audio/track/MasterTrack.hpp \
+    audio/track/PluginSequence.hpp \
+    audio/track/TrackInformation.hpp \
     audio/util/Util.hpp \
     base/AssetDirectoryBase.hpp \
     base/Base.hpp \
@@ -59,6 +64,7 @@ HEADERS += \
     controller/AppController.hpp \
     controller/ASIODriverController.hpp \
     controller/AssetDirectoryController.hpp \
+    controller/AudioEngineController.hpp \
     controller/ConfigController.hpp \
     controller/GeneralSettingsController.hpp \
     controller/MIDIClockController.hpp \
@@ -102,11 +108,14 @@ SOURCES += \
     audio/host/MusecVST3Host.cpp \
     audio/plugin/VST2Plugin.cpp \
     audio/plugin/VST3Plugin.cpp \
+    audio/track/AudioTrack.cpp \
+    audio/track/PluginSequence.cpp \
     audio/util/Util.cpp \
     base/PluginBase.cpp \
     controller/AppController.cpp \
     controller/ASIODriverController.cpp \
     controller/AssetDirectoryController.cpp \
+    controller/AudioEngineController.cpp \
     controller/ConfigController.cpp \
     controller/GeneralSettingsController.cpp \
     controller/MIDIClockController.cpp \

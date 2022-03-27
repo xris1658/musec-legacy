@@ -3,6 +3,7 @@
 #include "audio/driver/ASIODriver.hpp"
 #include "base/Base.hpp"
 #include "controller/ASIODriverController.hpp"
+#include "controller/AudioEngineController.hpp"
 
 namespace Musec::Audio::Driver
 {
@@ -30,13 +31,18 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
                                      long doubleBufferIndex,
                                      ASIOBool directProcess)
 {
+    auto bufferSize = getASIODriverStreamInfo(AppASIODriver()).preferredBufferSize;
     auto& bufferInfoList = getASIOBufferInfoList();
     auto& channelInfoList = getASIOChannelInfoList();
+    auto& buffer = Musec::Controller::AudioEngineController::AppMasterTrack().buffer_;
     for(int i = 0; i < bufferInfoList.size(); ++i)
     {
+        auto buffer = bufferInfoList[i].buffers;
         if(bufferInfoList[i].isInput)
         {
-            switch(channelInfoList[i].type)
+            // MSB -> BE; LSB -> LE;
+            auto type = channelInfoList[i].type;
+            switch(type)
             {
                 case ASIOSTInt16MSB:
                     break;
@@ -86,9 +92,10 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
                     break;
             }
         }
-        else
+        else /*if(!bufferInfoList[i].isInput)*/
         {
-            switch(channelInfoList[i].type)
+            auto type = channelInfoList[i].type;
+            switch(type)
             {
                 case ASIOSTInt16MSB:
                     break;
@@ -113,6 +120,11 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
                 case ASIOSTInt24LSB:
                     break;
                 case ASIOSTInt32LSB:
+                    for(long i = 0; i < bufferSize; ++i)
+                    {
+                        // reinterpret_cast<std::int32_t*>(buffer[0])[i] = 0x04000000 * (std::rand() % 2? 1: -1);
+                        // reinterpret_cast<std::int32_t*>(buffer[1])[i] = 0x04000000 * (std::rand() % 2? 1: -1);
+                    }
                     break;
                 case ASIOSTFloat32LSB:
                     break;

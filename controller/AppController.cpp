@@ -64,6 +64,9 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     {
         // 没有找到 ASIO 驱动，程序将以音频引擎关闭的状态运行
         Musec::Audio::Driver::AppASIODriver();
+        Musec::UI::MessageDialog::messageDialog("在此电脑上找不到 ASIO 驱动程序。程序将以未加载音频驱动的方式运行。",
+                                                "Musec",
+                                                Musec::UI::MessageDialog::IconType::Warning);
     }
     else
     {
@@ -81,7 +84,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
                 {
                     Musec::UI::MessageDialog::messageDialog("无法加载 ASIO 驱动程序。程序将以未加载音频驱动的方式运行。",
                                                          "Musec",
-                                                         Musec::UI::MessageDialog::IconType::Error);
+                                                         Musec::UI::MessageDialog::IconType::Warning);
                     AppASIODriver() = ASIODriver();
                 }
                 break;
