@@ -173,8 +173,8 @@ QtObject {
             description: qsTr("跨平台应用开发工具")
         }
         ListElement {
-            name: "SoX"
-            homepage: "http://sox.sourceforge.net/Main/HomePage"
+            name: "The SoX Resampler library"
+            homepage: "https://sourceforge.net/p/soxr/wiki/Home/"
             description: qsTr("音频重采样工具")
         }
         ListElement {
