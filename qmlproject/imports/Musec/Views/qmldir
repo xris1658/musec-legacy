@@ -1,0 +1,5 @@
+module Musec.Views
+
+ExplorerView 1.0 ExplorerView.qml
+
+designersupported

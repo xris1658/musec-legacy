@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQml.Models 2.15
 
 import Musec 1.0
 import Musec.Controls 1.0 as MCtrl
@@ -18,11 +19,6 @@ Item {
     property ListModel nonExpandableItemList: ListModel {
         dynamicRoles: true
     }
-    property ItemDelegate collapsedIndicator
-    property ItemDelegate expandedIndicator
-    property ItemDelegate expandableItemIndicator
-    property ItemDelegate nonExpandableItemIndicator
-    property ItemDelegate itemDelegate
     Component.onCompleted: {
         expandableItemList.append({'name': 'Directory 1'});
         expandableItemList.append({'name': 'Directory 2'});
@@ -50,12 +46,13 @@ Item {
                     height: root.itemHeight
                     border.width: 0
                     Text {
-                        x: root.indentPerLevel * root.level + (parent.height - height) / 2
+                        x: root.indentPerLevel * root.level + (parent.height - contentHeight) / 2
                         width: root.width - x
-                        text: qsTr("目录") + index + ": " + name + " (" + level + ")"
+                        text: qsTr("目录") + index + ": " + name
                         anchors.verticalCenter: parent.verticalCenter
                         color: "#FFFFFF"
                         font: Constants.font
+                        elide: Text.ElideRight
                     }
                     function notifyChildren() {
                         if(explorerViewLoader.item != null) {
@@ -98,13 +95,13 @@ Item {
                     height: root.itemHeight
                     border.width: 0
                     Text {
-                        x: root.indentPerLevel * root.level + (parent.height - height) / 2
+                        x: root.indentPerLevel * root.level + (parent.height - contentHeight) / 2
                         width: root.width - x
-                        height: parent.height
-                        text: qsTr("文件") + index + ": " + name + " (" + level + ")"
+                        text: qsTr("文件") + index + ": " + name
                         anchors.verticalCenter: parent.verticalCenter
                         color: "#FFFFFF"
                         font: Constants.font
+                        elide: Text.ElideRight
                     }
                 }
             }

@@ -50,6 +50,8 @@
         <file>qmlproject/imports/Musec/Controls/SplitView.qml</file>
         <file>qmlproject/imports/Musec/Controls/Tab.qml</file>
         <file>qmlproject/imports/Musec/Controls/ToolTip.qml</file>
+        <file>qmlproject/imports/Musec/Dialogs/MessageDialog.qml</file>
+        <file>qmlproject/imports/Musec/Views/ExplorerView.qml</file>
         <file>qmlproject/imports/Musec/DirectoryFontLoader.qml</file>
         <file>qmlproject/imports/Musec/EventListModel.qml</file>
         <file>qmlproject/imports/Musec/EventListSimulator.qml</file>
