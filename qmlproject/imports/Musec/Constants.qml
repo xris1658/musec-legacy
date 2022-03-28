@@ -58,6 +58,9 @@ QtObject {
     readonly property color invertIndicatorColor:  "#336633"
     readonly property color recordIndicatorColor:  "#FF0000"
 
+    // 编排视图
+    readonly property color automationColor:       "#EC6941"
+
     //轨道峰值电平 > 0
     readonly property color peakAboveZeroColor:    "#F39700"
 
