@@ -21,6 +21,11 @@ void addAssetDirectory(const QString& directory)
     // 根据目录位置得知目录名
     auto directory16 = directory.toStdU16String();
     auto name = directory.section('\\', -1);
+    // 针对 Windows 磁盘根目录的特殊情况
+    if(name.length() == 0)
+    {
+        name = directory.section('\\', -2);
+    }
     auto name16 = name.toStdU16String();
     // 添加素材目录
     DAO::addAssetDirectory(directory, name);
