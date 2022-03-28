@@ -1,9 +1,9 @@
 import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick.Controls 2.15 as QQC2
 import QtQuick.Shapes 1.15
 import Musec 1.0
 
-ProgressBar {
+QQC2.ProgressBar {
     property bool showPercentage: true
     property bool showAnimation: true
     width: 200
