@@ -8,9 +8,6 @@ Item {
     id: root
     width: 200
     height: contentColumn.height
-    function resetHeight() {
-        height = contentColumn.height;
-    }
     property int itemHeight: 20
     property int level: 0
     property int indentPerLevel: itemHeight
@@ -49,13 +46,13 @@ Item {
             Column {
                 MCtrl.Button {
                     property bool expanded: false
-                    x: root.indentPerLevel * root.level
-                    width: root.width - x
+                    width: root.width
                     height: root.itemHeight
+                    border.width: 0
                     Text {
+                        x: root.indentPerLevel * root.level + (parent.height - height) / 2
+                        width: root.width - x
                         text: qsTr("目录") + index + ": " + name + " (" + level + ")"
-                        anchors.left: parent.left
-                        anchors.leftMargin: (parent.height - height) / 2
                         anchors.verticalCenter: parent.verticalCenter
                         color: "#FFFFFF"
                         font: Constants.font
@@ -64,7 +61,6 @@ Item {
                         if(explorerViewLoader.item != null) {
                             explorerViewLoader.item.width = root.width - explorerViewLoader.item.x;
                         }
-
                     }
                     onClicked: {
                         expanded = !expanded;
@@ -73,12 +69,12 @@ Item {
                                 explorerViewLoader.source = "ExplorerView.qml";
                                 while(explorerViewLoader.status != Loader.Ready) {}
                             }
-                            explorerViewLoader.item.resetHeight();
+                            explorerViewLoader.visible = true;
                             explorerViewLoader.item.level = root.level + 1;
                             notifyChildren();
                         }
                         else {
-                            explorerViewLoader.item.height = 0;
+                            explorerViewLoader.visible = false;
                         }
                     }
                     onWidthChanged: {
@@ -87,6 +83,7 @@ Item {
                 }
                 Loader {
                     clip: true
+                    visible: false
                     id: explorerViewLoader
                     height: item? item.height: 0
                 }
@@ -97,13 +94,14 @@ Item {
             model: nonExpandableItemList
             Column {
                 MCtrl.Button {
-                    x: root.indentPerLevel * root.level
-                    width: root.width - x
+                    width: root.width
                     height: root.itemHeight
+                    border.width: 0
                     Text {
+                        x: root.indentPerLevel * root.level + (parent.height - height) / 2
+                        width: root.width - x
+                        height: parent.height
                         text: qsTr("文件") + index + ": " + name + " (" + level + ")"
-                        anchors.left: parent.left
-                        anchors.leftMargin: (parent.height - height) / 2
                         anchors.verticalCenter: parent.verticalCenter
                         color: "#FFFFFF"
                         font: Constants.font
