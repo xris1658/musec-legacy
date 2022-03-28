@@ -59,6 +59,8 @@ HEADERS += \
     base/AssetDirectoryBase.hpp \
     base/Base.hpp \
     base/Constants.hpp \
+    base/FileBase.hpp \
+    base/FolderBase.hpp \
     base/PluginBase.hpp \
     base/Pool.hpp \
     controller/AppController.hpp \
@@ -87,6 +89,8 @@ HEADERS += \
     math/QuadraticFunction.hpp \
     model/ASIODriverListModel.hpp \
     model/AssetDirectoryListModel.hpp \
+    model/FileListModel.hpp \
+    model/FolderListModel.hpp \
     model/ModelBase.hpp \
     model/ModelInitializer.hpp \
     model/PluginListModel.hpp \
@@ -136,6 +140,8 @@ SOURCES += \
     math/QuadraticFunction.cpp \
     model/ASIODriverListModel.cpp \
     model/AssetDirectoryListModel.cpp \
+    model/FileListModel.cpp \
+    model/FolderListModel.cpp \
     model/ModelInitializer.cpp \
     model/PluginListModel.cpp \
     native/Native.cpp \
