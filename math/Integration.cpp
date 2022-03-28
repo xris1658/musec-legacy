@@ -77,12 +77,12 @@ double quadraticFunctionInvertIntegration(const QuadraticFunction& function, dou
     }
     else
     {
+        const auto& [a, b, c] = function;
         double delta = function.delta();
         if(delta == 0)
         {
-            throw std::invalid_argument("");
+            return (2 / (b + 2 * a * from)) - (2 / (b + 2 * a * to));
         }
-        const auto& [a, b, c] = function;
         if(delta < 0)
         {
             auto sqrtNegDelta = std::sqrt(delta * -1);
