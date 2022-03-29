@@ -77,7 +77,6 @@ Window {
         spacing: 5
         padding: 5
         onClicked: {
-//            console.log(button.DialogButtonBox.buttonRole);
             root.close();
         }
         delegate: MCtrl.Button {

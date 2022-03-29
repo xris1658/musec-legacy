@@ -4,9 +4,11 @@ import QtQuick.Layouts 1.15
 import QtQuick.Shapes 1.15
 import QtQuick.Window 2.15
 import Qt.labs.platform 1.1 as Labs
+import QtQml.Models 2.15
 
 import Musec 1.0
 import Musec.Controls 1.0 as MCtrl
+import Musec.Views 1.0 as MView
 
 ApplicationWindow {
     id: mainWindow
@@ -21,6 +23,8 @@ ApplicationWindow {
     property alias currentDriver: optionsWindow.currentDriver
     readonly property EventBridge eventBridge: EventBridge
     property bool canClose: false
+
+    property MView.ExplorerView explorerViewOnRequest
 
     property alias assetVisible: actionAssetVisible.checked
     property alias midiEditorVisible: actionMidiEditorVisible.checked
@@ -600,17 +604,16 @@ ApplicationWindow {
             Item {
                 visible: assetVisible
                 SplitView.preferredWidth: parent.width / 5
-//                SplitView.preferredHeight: parent.height / 2
                 SplitView.minimumHeight: 20
                 FunctionArea {
                     id: assetsFunctionArea
                     title: qsTr("素材")
                     Assets {
+                        id: assets
                         parent: assetsFunctionArea.contentArea
                         anchors.fill: parent
                         anchors.margins: 1
                         y: parent.y
-//                            assetListModel: musecList.assetList
                         assetDirectoryListModel: musecList.assetDirectoryList
                         pluginListModel: musecList.pluginList
                         midiEffectListModel: musecList.midiEffectList
@@ -619,7 +622,9 @@ ApplicationWindow {
                         onOpenSpecialCharacterInput: {
                             EventBridge.openSpecialCharacterInput();
                         }
-
+                        onRequestExplorerView: {
+                            Objects.currentExplorerViewOnRequest = explorerView;
+                        }
                         onAddAssetDirectory: {
                             EventBridge.addAssetDirectory(directory);
                         }

@@ -8,6 +8,10 @@ CONFIG += c++17
 CONFIG += resources_big
 CONFIG += qtquickcompiler
 
+CONFIG(debug, debug | release) {
+    CONFIG += qml_debug
+}
+
 QMAKE_CXXFLAGS += /Zc:wchar_t
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -65,6 +69,7 @@ HEADERS += \
     base/Pool.hpp \
     controller/AppController.hpp \
     controller/ASIODriverController.hpp \
+    controller/AssetController.hpp \
     controller/AssetDirectoryController.hpp \
     controller/AudioEngineController.hpp \
     controller/ConfigController.hpp \
@@ -104,6 +109,7 @@ HEADERS += \
     util/Literal.hpp
 
 SOURCES += \
+    controller/AssetController.cpp \
     main.cpp \
     audio/base/TimeSignature.cpp \
     audio/driver/ASIOCallback.cpp \

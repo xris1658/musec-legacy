@@ -3,12 +3,15 @@
 #include "audio/driver/ASIODriver.hpp"
 #include "controller/ASIODriverController.hpp"
 #include "controller/AppController.hpp"
+#include "controller/AssetController.hpp"
 #include "controller/AssetDirectoryController.hpp"
 #include "controller/GeneralSettingsController.hpp"
 #include "controller/MIDIClockController.hpp"
 #include "controller/PluginSettingsController.hpp"
 #include "event/EventBase.hpp"
 #include "ui/UI.hpp"
+
+#include <QDebug>
 
 namespace Musec::Event
 {
@@ -46,6 +49,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      this,        SLOT(onPlayStart()));
     QObject::connect(eventBridge, SIGNAL(playStop()),
                      this,        SLOT(onPlayStop()));
+    QObject::connect(eventBridge, SIGNAL(requestExplorerView()),
+                     this,        SLOT(onRequestExplorerView()));
     // C++ -> C++
     QObject::connect(this,             &EventHandler::updatePluginList,
                      mainWindowEvents, &MainWindow::updatePluginList);
@@ -66,6 +71,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      eventBridge,   SIGNAL(updateArrangementPosition(int)));
     QObject::connect(this,          SIGNAL(messageDialog(QString, QString, int)),
                      eventBridge,   SIGNAL(messageDialog(QString, QString, int)));
+    QObject::connect(this,          SIGNAL(requestExplorerViewComplete()),
+                     eventBridge,   SIGNAL(requestExplorerViewComplete()));
 }
 
 EventHandler::~EventHandler()
@@ -281,5 +288,30 @@ void EventHandler::onPlayStart()
 void EventHandler::onPlayStop()
 {
     Musec::Controller::MIDIClockController::AppMIDIClock().stop();
+}
+
+void EventHandler::onRequestExplorerView()
+{
+    using namespace Musec::UI;
+    auto explorerView = mainWindow->property("explorerViewOnRequest").value<QObject*>();
+    if(!explorerView)
+    {
+        return;
+    }
+    auto setList = [&explorerView]()
+    {
+        using namespace Musec::UI;
+        auto path = explorerView->property("path").value<QString>();
+        auto folderList = Musec::Controller::AssetController::getFolderInDirectory(path);
+        auto fileList = Musec::Controller::AssetController::getFileInDirectory(path);
+        auto folderListModel = explorerView->property("expandableItemList")
+            .value<Musec::Model::FolderListModel*>();
+        auto fileListModel = explorerView->property("nonExpandableItemList")
+            .value<Musec::Model::FileListModel*>();
+        folderListModel->setList(folderList);
+        fileListModel->setList(fileList);
+    };
+    std::async(std::launch::async, setList).get();
+    requestExplorerViewComplete();
 }
 }

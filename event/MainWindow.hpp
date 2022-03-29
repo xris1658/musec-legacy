@@ -2,6 +2,8 @@
 #define MUSEC_UI_MAINWINDOW
 
 #include "event/SplashScreen.hpp"
+#include "model/FileListModel.hpp"
+#include "model/FolderListModel.hpp"
 
 #include <QObject>
 

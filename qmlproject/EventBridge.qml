@@ -5,6 +5,7 @@ import QtQuick.Controls 2.15
 
 import Musec 1.0
 import Musec.Dialogs 1.0 as MDlg
+import Musec.Views 1.0 as MView
 
 QtObject {
     id: eventBridge
@@ -22,6 +23,7 @@ QtObject {
     signal systemTextRenderingChanged(newValue: bool)
     signal openSpecialCharacterInput()
     signal setArrangementPosition(position: int)
+    signal requestExplorerView()
 
     signal addAssetDirectory(directory: string)
     signal renameAssetDirectory(id: int, name: string)
@@ -43,7 +45,10 @@ QtObject {
     onUpdateArrangementPosition: {
         Objects.mainWindow.arrangementPosition = position;
     }
-
+    signal requestExplorerViewComplete();
+    onRequestExplorerViewComplete: {
+        Objects.currentExplorerViewOnRequest.requestExplorerViewComplete();
+    }
     signal messageDialog(message: string, title: string, icon: int);
     onMessageDialog: {
         var component = Qt.createComponent("./imports/Musec/Dialogs/MessageDialog.qml");

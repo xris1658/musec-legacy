@@ -8,7 +8,5 @@ QtObject {
     property PluginListModel midiEffectList: PluginListModel {}
     property PluginListModel instrumentlist: PluginListModel {}
     property PluginListModel audioEffectList: PluginListModel {}
-//    property PluginDirectoryListModel pluginDirectoryList: PluginDirectoryListModel {}
-//    property AssetListModel assetList: AssetListModel {}
     property AssetDirectoryListModel assetDirectoryList: AssetDirectoryListModel {}
 }

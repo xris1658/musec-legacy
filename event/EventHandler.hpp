@@ -2,6 +2,7 @@
 #define MUSEC_EVENT_EVENTHANDLER
 
 #include <QObject>
+#include <QQuickItem>
 
 #include <vector>
 
@@ -28,6 +29,7 @@ signals:
     void exitASIOThreadFinished();
     void updateArrangementPosition(int position);
     void messageDialog(const QString& message, const QString& title, int icon);
+    void requestExplorerViewComplete();
 public slots:
     void onMainWindowOpened();
     void onOptionsWindowOpened();
@@ -47,6 +49,7 @@ public slots:
     void onSetArrangementPosition(int position);
     void onPlayStart();
     void onPlayStop();
+    void onRequestExplorerView();
 private:
     std::vector<QMetaObject::Connection> optionsWindowConnection;
 };

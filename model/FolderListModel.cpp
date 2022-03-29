@@ -71,6 +71,11 @@ QVariant FolderListModel::data(const QModelIndex& index, int role) const
     }
 }
 
+QString FolderListModel::getPathOfIndex(int index)
+{
+    return std::get<RoleNames::PathRole - Qt::UserRole>(list_[index]);
+}
+
 RoleNamesType FolderListModel::roleNames() const
 {
     return roleNames_;

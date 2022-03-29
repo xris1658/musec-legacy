@@ -11,12 +11,16 @@ import Musec.Views 1.0 as MView
 Rectangle {
     id: root
     color: Constants.backgroundColor
+    property MView.ExplorerView currentExplorerViewOnRequest: null
     property alias assetDirectoryListModel: assetDirectoryList.model
-//    property alias assetListModel: assetFileList.model
     property alias pluginListModel: pluginFileList.model
     property alias midiEffectListModel: midiEffectPluginList.model
     property alias instrumentListModel: instrumentPluginList.model
     property alias audioEffectListModel: audioEffectPluginList.model
+
+    signal requestExplorerView(explorerView: MView.ExplorerView)
+
+    signal requestPath(path: string);
 
     signal openSpecialCharacterInput()
 
@@ -352,6 +356,8 @@ Rectangle {
                                         if(mouse.button == Qt.LeftButton) {
                                             rightColumn.currentIndex = 0;
                                             directoryContent.currentIndex = index;
+                                            currentExplorerViewOnRequest = assetDirectoryRepeater.itemAt(index);
+                                            root.requestExplorerView(currentExplorerViewOnRequest);
                                         }
                                         else if(mouse.button == Qt.RightButton) {
                                             assetDirectoryOptions.parent = parent;
@@ -491,12 +497,17 @@ Rectangle {
                     clip: true
                     currentIndex: 0
                     Repeater {
+                        id: assetDirectoryRepeater
                         model: assetDirectoryListModel
                         delegate: MView.ExplorerView {
+                            path: directory
                             parent: directoryContent
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             visible: directoryContent.currentIndex == index
+                            onRequestExplorerView: {
+                                root.requestExplorerView(explorerView);
+                            }
                         }
                     }
                 }

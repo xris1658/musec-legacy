@@ -11,7 +11,7 @@ namespace Musec::Controller::AssetDirectoryController
 QList<Base::AssetDirectoryInfo> getAssetDirectory()
 {
     QList<Base::AssetDirectoryInfo> ret =
-            DAO::selectAllAssetDirectory(true);
+        Musec::DAO::selectAllAssetDirectory(true);
     return ret;
 }
 

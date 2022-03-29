@@ -53,8 +53,6 @@
         <file>qmlproject/imports/Musec/Dialogs/MessageDialog.qml</file>
         <file>qmlproject/imports/Musec/Views/ExplorerView.qml</file>
         <file>qmlproject/imports/Musec/DirectoryFontLoader.qml</file>
-        <file>qmlproject/imports/Musec/EventListModel.qml</file>
-        <file>qmlproject/imports/Musec/EventListSimulator.qml</file>
         <file>qmlproject/imports/Musec/FileInfo.qml</file>
         <file>qmlproject/imports/Musec/FunctionArea.qml</file>
         <file>qmlproject/imports/Musec/Level.qml</file>
@@ -67,5 +65,6 @@
         <file>qmlproject/imports/Musec/PianoKeyBackup.qml</file>
         <file>qmlproject/imports/Musec/Timeline.qml</file>
         <file>qmlproject/imports/Musec/TrackHeader.qml</file>
+        <file>qmlproject/images/file.svg</file>
     </qresource>
 </RCC>
