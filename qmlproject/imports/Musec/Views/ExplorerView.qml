@@ -23,6 +23,7 @@ Item {
         nonExpandableItemListView.model = null;
         expandableItemListView.model = expandableItemList;
         nonExpandableItemListView.model = nonExpandableItemList;
+        console.log(root.height);
     }
 
     signal requestExplorerView(explorerView: ExplorerView)
@@ -95,15 +96,13 @@ Item {
                             item.visible = visible;
                         }
                     }
-                    onStatusChanged: {
-                        if(status == Loader.Ready) {
-                            explorerViewLoader.item.path = expandableItemList.getPathOfIndex(index);
-                            console.log(explorerViewLoader.item.path);
-                            explorerViewLoader.item.level = root.level + 1;
-                            requestExplorerView(explorerViewLoader.item);
-                            explorerViewLoader.item.parent = expandableItemAndChild;
-                            expandableItemButton.notifyChildren();
-                        }
+                    onLoaded: {
+                        explorerViewLoader.item.path = expandableItemList.getPathOfIndex(index);
+                        console.log(explorerViewLoader.item.path);
+                        explorerViewLoader.item.level = root.level + 1;
+                        requestExplorerView(explorerViewLoader.item);
+                        explorerViewLoader.item.parent = expandableItemAndChild;
+                        expandableItemButton.notifyChildren();
                     }
                 }
             }
