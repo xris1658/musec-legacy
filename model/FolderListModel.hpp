@@ -30,7 +30,7 @@ public:
     void setList(const List&);
     void setList(List&&);
     List getList() const;
-    int itemCount() const;
+    Q_INVOKABLE int itemCount() const;
     static constexpr int columnSize();
 public:
     virtual int rowCount(const QModelIndex&) const override;

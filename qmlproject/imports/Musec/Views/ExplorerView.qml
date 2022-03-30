@@ -15,8 +15,8 @@ Item {
     property int itemHeight: 20
     property int level: 0
     property int indentPerLevel: itemHeight
-    property MModel.FolderListModel expandableItemList: MModel.FolderListModel {}
-    property MModel.FileListModel nonExpandableItemList: MModel.FileListModel {}
+    property MModel.FolderListModel expandableItemList: null
+    property MModel.FileListModel nonExpandableItemList: null
 
     function requestExplorerViewComplete() {
         expandableItemListView.model = null;
@@ -78,14 +78,7 @@ Item {
                         if(expanded) {
                             if(explorerViewLoader.source == "") {
                                 explorerViewLoader.source = "ExplorerView.qml";
-                                // TODO: 改成异步加载
-                                while(explorerViewLoader.status != Loader.Ready) {}
                             }
-                            explorerViewLoader.item.path = expandableItemList.getPathOfIndex(index);
-                            explorerViewLoader.item.level = root.level + 1;
-                            explorerViewLoader.item.requestExplorerView(explorerViewLoader.item);
-                            requestExplorerView(explorerViewLoader.item);
-                            notifyChildren();
                         }
                     }
                     onWidthChanged: {
@@ -96,7 +89,22 @@ Item {
                     id: explorerViewLoader
                     clip: true
                     visible: expandableItemButton.expanded && item
-                    height: item? item.height: 0
+                    height: 0
+                    onVisibleChanged: {
+                        if(item) {
+                            item.visible = visible;
+                        }
+                    }
+                    onStatusChanged: {
+                        if(status == Loader.Ready) {
+                            explorerViewLoader.item.path = expandableItemList.getPathOfIndex(index);
+                            console.log(explorerViewLoader.item.path);
+                            explorerViewLoader.item.level = root.level + 1;
+                            requestExplorerView(explorerViewLoader.item);
+                            explorerViewLoader.item.parent = expandableItemAndChild;
+                            expandableItemButton.notifyChildren();
+                        }
+                    }
                 }
             }
 

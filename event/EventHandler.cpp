@@ -11,8 +11,6 @@
 #include "event/EventBase.hpp"
 #include "ui/UI.hpp"
 
-#include <QDebug>
-
 namespace Musec::Event
 {
 EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(parent)
@@ -298,18 +296,18 @@ void EventHandler::onRequestExplorerView()
     {
         return;
     }
-    auto setList = [&explorerView]()
+    auto newFolderListModel = new Musec::Model::FolderListModel(explorerView);
+    auto newFileListModel = new Musec::Model::FileListModel(explorerView);
+    auto setList = [&explorerView, &newFileListModel, &newFolderListModel]()
     {
         using namespace Musec::UI;
         auto path = explorerView->property("path").value<QString>();
         auto folderList = Musec::Controller::AssetController::getFolderInDirectory(path);
         auto fileList = Musec::Controller::AssetController::getFileInDirectory(path);
-        auto folderListModel = explorerView->property("expandableItemList")
-            .value<Musec::Model::FolderListModel*>();
-        auto fileListModel = explorerView->property("nonExpandableItemList")
-            .value<Musec::Model::FileListModel*>();
-        folderListModel->setList(folderList);
-        fileListModel->setList(fileList);
+        newFolderListModel->setList(folderList);
+        newFileListModel->setList(fileList);
+        explorerView->setProperty("expandableItemList", QVariant::fromValue(newFolderListModel));
+        explorerView->setProperty("nonExpandableItemList", QVariant::fromValue(newFileListModel));
     };
     std::async(std::launch::async, setList).get();
     requestExplorerViewComplete();

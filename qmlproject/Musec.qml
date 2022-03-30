@@ -623,7 +623,10 @@ ApplicationWindow {
                             EventBridge.openSpecialCharacterInput();
                         }
                         onRequestExplorerView: {
-                            Objects.currentExplorerViewOnRequest = explorerView;
+                            mainWindow.explorerViewOnRequest = explorerView;
+                            if(explorerView.expandableItemList == null) {
+                                EventBridge.requestExplorerView(explorerView);
+                            }
                         }
                         onAddAssetDirectory: {
                             EventBridge.addAssetDirectory(directory);

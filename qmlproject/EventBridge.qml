@@ -47,7 +47,7 @@ QtObject {
     }
     signal requestExplorerViewComplete();
     onRequestExplorerViewComplete: {
-        Objects.currentExplorerViewOnRequest.requestExplorerViewComplete();
+        Objects.mainWindow.explorerViewOnRequest.requestExplorerViewComplete();
     }
     signal messageDialog(message: string, title: string, icon: int);
     onMessageDialog: {
