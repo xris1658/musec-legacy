@@ -37,10 +37,10 @@ template<> inline const char8_t* const _noteNameArray<char8_t, AudioEngine::KeyS
 }
 
 template<typename CharType>
-NoteName<CharType> getNoteName(std::int8_t note, MIDINoteNameKeyShift keyShit, MIDINoteOffset offset)
+NoteName<CharType> getNoteName(std::int8_t note, MIDINoteNameKeyShift keyShift, MIDINoteOffset offset)
 {
     NoteName<CharType> ret = {0};
-    const CharType* noteName1 = keyShift == MIDINoteNameKeyShift::Sharp?
+    const CharType* noteName1 = (keyShift == MIDINoteNameKeyShift::Sharp)?
         Impl::noteNameArray<CharType, MIDINoteNameKeyShift::Sharp>():
         Impl::noteNameArray<CharType, MIDINoteNameKeyShift::Flat>();
     noteName1 += (note % 12) * 3;

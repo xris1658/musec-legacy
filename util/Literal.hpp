@@ -24,7 +24,7 @@ template<typename CharType>
 using NoteName = std::array<CharType, 5>;
 
 template<typename CharType>
-NoteName<CharType> getNoteName(std::int8_t note, MIDINoteNameKeyShift keyShit, MIDINoteOffset offset = Yamaha);
+NoteName<CharType> getNoteName(std::int8_t note, MIDINoteNameKeyShift keyShift, MIDINoteOffset offset = MIDINoteOffset::Yamaha);
 
 extern template NoteName<char> getNoteName(std::int8_t, MIDINoteNameKeyShift, MIDINoteOffset);
 extern template NoteName<wchar_t> getNoteName(std::int8_t, MIDINoteNameKeyShift, MIDINoteOffset);
