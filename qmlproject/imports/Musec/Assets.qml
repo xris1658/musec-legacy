@@ -517,6 +517,11 @@ Rectangle {
                                 size: height / rightExplorerView.height
                                 position: 0
                                 visible: size < 1
+                                onVisibleChanged: {
+                                    if(!visible) {
+                                        position = 0;
+                                    }
+                                }
                                 width: 15
                                 anchors.top: parent.top
                                 anchors.bottom: parent.bottom
