@@ -109,7 +109,6 @@ HEADERS += \
     util/Literal.hpp
 
 SOURCES += \
-    controller/AssetController.cpp \
     main.cpp \
     audio/base/TimeSignature.cpp \
     audio/driver/ASIOCallback.cpp \
@@ -124,6 +123,7 @@ SOURCES += \
     base/PluginBase.cpp \
     controller/AppController.cpp \
     controller/ASIODriverController.cpp \
+    controller/AssetController.cpp \
     controller/AssetDirectoryController.cpp \
     controller/AudioEngineController.cpp \
     controller/ConfigController.cpp \

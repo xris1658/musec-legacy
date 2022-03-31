@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQml 2.15
 import QtQml.Models 2.15
 
 import qmlproject 1.0
@@ -73,7 +74,7 @@ Item {
                     }
                     function notifyChildren() {
                         if(explorerViewLoader.item != null) {
-                            explorerViewLoader.item.width = root.width - explorerViewLoader.item.x;
+                            explorerViewLoader.item.width = root.width;
                         }
                     }
                     onClicked: {
@@ -92,7 +93,7 @@ Item {
                     id: explorerViewLoader
                     clip: true
                     visible: expandableItemButton.expanded && item
-                    height: 0
+                    height: item? item.height: 0
                     onVisibleChanged: {
                         if(item) {
                             item.visible = visible;
@@ -102,7 +103,6 @@ Item {
                         explorerViewLoader.item.path = expandableItemList.getPathOfIndex(index);
                         explorerViewLoader.item.level = root.level + 1;
                         requestExplorerView(explorerViewLoader.item);
-                        explorerViewLoader.item.parent = expandableItemAndChild;
                         expandableItemButton.notifyChildren();
                     }
                 }

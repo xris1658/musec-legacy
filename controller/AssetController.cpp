@@ -1,5 +1,8 @@
 #include "AssetController.hpp"
 
+#include <QDir>
+#include <QFileInfo>
+
 namespace Musec::Controller::AssetController
 {
 

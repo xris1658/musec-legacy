@@ -4,9 +4,6 @@
 #include "model/FileListModel.hpp"
 #include "model/FolderListModel.hpp"
 
-#include <QDir>
-#include <QFileInfo>
-
 namespace Musec
 {
 namespace Controller

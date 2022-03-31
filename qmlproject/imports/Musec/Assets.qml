@@ -354,7 +354,7 @@ Rectangle {
                                         if(mouse.button == Qt.LeftButton) {
                                             rightColumn.currentIndex = 0;
                                             directoryContent.currentIndex = index;
-                                            Objects.currentExplorerViewOnRequest = assetDirectoryRepeater.itemAt(index);
+                                            Objects.currentExplorerViewOnRequest = assetDirectoryRepeater.itemAt(index).getExplorerView();
                                         }
                                         else if(mouse.button == Qt.RightButton) {
                                             assetDirectoryOptions.parent = parent;
@@ -492,16 +492,42 @@ Rectangle {
                     Layout.fillHeight: true
                     height: parent.height
                     clip: true
-                    currentIndex: 0
+                    currentIndex: count
                     Repeater {
                         id: assetDirectoryRepeater
                         model: assetDirectoryListModel
-                        delegate: MView.ExplorerView {
-                            path: directory
-                            parent: directoryContent
+                        delegate: Flickable {
+                            id: rightFlickable
                             Layout.fillWidth: true
                             Layout.fillHeight: true
-                            visible: directoryContent.currentIndex == index
+                            function getExplorerView() {
+                                return rightExplorerView;
+                            }
+                            MView.ExplorerView {
+                                id: rightExplorerView
+                                path: directory
+                                parent: directoryContent
+                                y: -rightVBar.position * height
+                                width: parent.width - rightVBar.width
+                                visible: directoryContent.currentIndex == index
+                            }
+                            ScrollBar {
+                                id: rightVBar
+                                anchors.right: parent.right
+                                size: height / rightExplorerView.height
+                                position: 0
+                                visible: size < 1
+                                width: 15
+                                anchors.top: parent.top
+                                anchors.bottom: parent.bottom
+                                background: Rectangle {
+                                    color: Constants.backgroundColor
+                                }
+                                contentItem: Rectangle {
+                                    radius: 2
+                                    color: Constants.mouseOverElementColor
+                                }
+                            }
                         }
                     }
                 }
