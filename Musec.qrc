@@ -22,6 +22,8 @@
         <file>qmlproject/images/audioeffect.svg</file>
         <file>qmlproject/images/check.png</file>
         <file>qmlproject/images/error.png</file>
+        <file>qmlproject/images/expanded-folder.svg</file>
+        <file>qmlproject/images/file.svg</file>
         <file>qmlproject/images/folder.svg</file>
         <file>qmlproject/images/info.png</file>
         <file>qmlproject/images/instrument.svg</file>
@@ -51,7 +53,6 @@
         <file>qmlproject/imports/Musec/Controls/Tab.qml</file>
         <file>qmlproject/imports/Musec/Controls/ToolTip.qml</file>
         <file>qmlproject/imports/Musec/Dialogs/MessageDialog.qml</file>
-        <file>qmlproject/imports/Musec/Views/ExplorerView.qml</file>
         <file>qmlproject/imports/Musec/DirectoryFontLoader.qml</file>
         <file>qmlproject/imports/Musec/FileInfo.qml</file>
         <file>qmlproject/imports/Musec/FunctionArea.qml</file>
@@ -65,6 +66,6 @@
         <file>qmlproject/imports/Musec/PianoKeyBackup.qml</file>
         <file>qmlproject/imports/Musec/Timeline.qml</file>
         <file>qmlproject/imports/Musec/TrackHeader.qml</file>
-        <file>qmlproject/images/file.svg</file>
+        <file>qmlproject/imports/Musec/Views/ExplorerView.qml</file>
     </qresource>
 </RCC>

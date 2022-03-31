@@ -622,12 +622,6 @@ ApplicationWindow {
                         onOpenSpecialCharacterInput: {
                             EventBridge.openSpecialCharacterInput();
                         }
-                        onRequestExplorerView: {
-                            mainWindow.explorerViewOnRequest = explorerView;
-                            if(explorerView.expandableItemList == null) {
-                                EventBridge.requestExplorerView(explorerView);
-                            }
-                        }
                         onAddAssetDirectory: {
                             EventBridge.addAssetDirectory(directory);
                         }

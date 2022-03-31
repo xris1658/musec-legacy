@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQml.Models 2.15
 
+import qmlproject 1.0
 import Musec 1.0
 import Musec.Controls 1.0 as MCtrl
 import Musec.Models 1.0 as MModel
@@ -23,10 +24,11 @@ Item {
         nonExpandableItemListView.model = null;
         expandableItemListView.model = expandableItemList;
         nonExpandableItemListView.model = nonExpandableItemList;
-        console.log(root.height);
     }
 
-    signal requestExplorerView(explorerView: ExplorerView)
+    function requestExplorerView(explorerView: ExplorerView) {
+        Objects.currentExplorerViewOnRequest = explorerView;
+    }
 
     Column {
         id: contentColumn
@@ -54,7 +56,7 @@ Item {
                                 height: width
                                 Image {
                                     anchors.centerIn: parent
-                                    source: "../../../images/folder.svg"
+                                    source: expandableItemButton.expanded? "../../../images/expanded-folder.svg": "../../../images/folder.svg"
                                     width: sourceSize.width
                                     height: sourceSize.height
                                 }
@@ -98,7 +100,6 @@ Item {
                     }
                     onLoaded: {
                         explorerViewLoader.item.path = expandableItemList.getPathOfIndex(index);
-                        console.log(explorerViewLoader.item.path);
                         explorerViewLoader.item.level = root.level + 1;
                         requestExplorerView(explorerViewLoader.item);
                         explorerViewLoader.item.parent = expandableItemAndChild;

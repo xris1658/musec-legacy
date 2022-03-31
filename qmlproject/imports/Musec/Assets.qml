@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.15
 import QtQml 2.15
 import Qt.labs.platform 1.1 as Labs
 
+import qmlproject 1.0
 import Musec 1.0
 import Musec.Controls 1.0 as MCtrl
 import Musec.Views 1.0 as MView
@@ -11,14 +12,11 @@ import Musec.Views 1.0 as MView
 Rectangle {
     id: root
     color: Constants.backgroundColor
-    property MView.ExplorerView currentExplorerViewOnRequest: null
     property alias assetDirectoryListModel: assetDirectoryList.model
     property alias pluginListModel: pluginFileList.model
     property alias midiEffectListModel: midiEffectPluginList.model
     property alias instrumentListModel: instrumentPluginList.model
     property alias audioEffectListModel: audioEffectPluginList.model
-
-    signal requestExplorerView(explorerView: MView.ExplorerView)
 
     signal requestPath(path: string);
 
@@ -356,8 +354,7 @@ Rectangle {
                                         if(mouse.button == Qt.LeftButton) {
                                             rightColumn.currentIndex = 0;
                                             directoryContent.currentIndex = index;
-                                            currentExplorerViewOnRequest = assetDirectoryRepeater.itemAt(index);
-                                            root.requestExplorerView(currentExplorerViewOnRequest);
+                                            Objects.currentExplorerViewOnRequest = assetDirectoryRepeater.itemAt(index);
                                         }
                                         else if(mouse.button == Qt.RightButton) {
                                             assetDirectoryOptions.parent = parent;
@@ -505,9 +502,6 @@ Rectangle {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
                             visible: directoryContent.currentIndex == index
-                            onRequestExplorerView: {
-                                root.requestExplorerView(explorerView);
-                            }
                         }
                     }
                 }
