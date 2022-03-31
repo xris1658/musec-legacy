@@ -37,7 +37,7 @@ public:
     virtual int columnCount(const QModelIndex&) const override;
     virtual QVariant data(const QModelIndex&, int) const override;
 public:
-    Q_INVOKABLE QString getPathOfIndex(int index);
+    Q_INVOKABLE QString getPathOfIndex(int index) const;
 protected:
     virtual RoleNamesType roleNames() const override;
 private:
