@@ -31,6 +31,40 @@ Item {
         Objects.currentExplorerViewOnRequest = explorerView;
     }
 
+    MCtrl.Menu {
+        id: folderOptions
+        title: qsTr("文件夹操作")
+        property string path
+        delegate: MCtrl.MenuItem {}
+        width: 300
+        implicitHeight: 20
+        height: contentHeight
+        MCtrl.Action {
+            text: qsTr("在文件资源管理器中打开(&O)")
+            shortcut: "Alt+Shift+R"
+            onTriggered: {
+                Qt.openUrlExternally(Constants.urlFromDirectory(folderOptions.path));
+            }
+        }
+    }
+
+    MCtrl.Menu {
+        id: fileOptions
+        title: qsTr("文件操作")
+        property string path
+        delegate: MCtrl.MenuItem {}
+        width: 300
+        implicitHeight: 20
+        height: contentHeight
+        MCtrl.Action {
+            text: qsTr("在文件资源管理器中显示(&O)")
+            shortcut: "Alt+Shift+R"
+            onTriggered: {
+                console.log("Show file in a explorer is yet to be implemented.");
+            }
+        }
+    }
+
     Column {
         id: contentColumn
         Repeater {
@@ -38,12 +72,31 @@ Item {
             model: expandableItemList
             Column {
                 id: expandableItemAndChild
-                MCtrl.Button {
+                MCtrl.Button { // 改成 MouseArea 会直接导致 Component is not ready. 原因未知.
                     id: expandableItemButton
                     property bool expanded: false
                     width: root.width
                     height: root.itemHeight
                     border.width: 0
+                    MouseArea {
+                        id: expandableItemButtonMouseArea
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+                        onClicked: {
+                            if(mouse.button & Qt.LeftButton) {
+                                expandableItemButton.clicked();
+                            }
+                            else if(mouse.button & Qt.RightButton) {
+                                folderOptions.path = expandableItemList.getPathOfIndex(index);
+                                folderOptions.parent = expandableItemButton;
+                                folderOptions.x = mouseX;
+                                folderOptions.y = mouseY;
+                                folderOptions.open();
+                            }
+                        }
+                    }
                     Item {
                         id: expandableItem
                         x: root.indentPerLevel * root.level
@@ -113,9 +166,28 @@ Item {
             id: nonExpandableItemListView
             model: nonExpandableItemList
             MCtrl.Button {
+                id: nonExpandableItemButton
                 width: root.width
                 height: root.itemHeight
                 border.width: 0
+                MouseArea {
+                    id: nonExpandableItemButtonMouseArea
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton
+                    onClicked: {
+                        if(mouse.button & Qt.LeftButton) {
+                            nonExpandableItemButton.clicked();
+                        }
+                        else if(mouse.button & Qt.RightButton) {
+                            fileOptions.path = nonExpandableItemList.getPathOfIndex(index);
+                            fileOptions.parent = nonExpandableItemButton;
+                            fileOptions.x = mouseX;
+                            fileOptions.y = mouseY;
+                            fileOptions.open();
+                        }
+                    }
+                }
                 Item {
                     id: nonExpandableItem
                     x: root.indentPerLevel * root.level

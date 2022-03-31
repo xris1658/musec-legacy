@@ -31,6 +31,8 @@ SystemTimeStringType formatTime(const SystemTimeType& time);
 
 void openSpecialCharacterInput();
 
+void showFileInExplorer(const QString& path);
+
 int getProcessCPUCoreCount();
 
 ThreadMaskType getMIDIClockThreadAffinity();

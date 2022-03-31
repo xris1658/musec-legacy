@@ -1,5 +1,6 @@
 #include "Native.hpp"
 
+#include "base/Base.hpp"
 #include "base/Constants.hpp"
 
 #include <ShlObj_core.h>
@@ -139,6 +140,19 @@ SystemTimeStringType formatTime(const SystemTimeType& time)
 void openSpecialCharacterInput()
 {
     ShellExecuteA(nullptr, "open", "charmap.exe", nullptr, nullptr, SW_NORMAL);
+}
+
+void showFileInExplorer(const QString& path)
+{
+    constexpr char part1Raw[] = "explorer /select,";
+    constexpr auto size = Musec::Base::stackArraySize(part1Raw) - 1;
+    QString command = part1Raw;
+    for(int i = 0; i < path.size(); ++i)
+    {
+        command[int(i + size)] = path[i] == '/'? '\\': path[i];
+    }
+    auto commandWide = command.toStdWString();
+    ShellExecuteW(nullptr, L"open", commandWide.data(), nullptr, nullptr, SW_NORMAL);
 }
 
 int getProcessCPUCoreCount()

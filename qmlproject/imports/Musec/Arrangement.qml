@@ -48,7 +48,7 @@ Item {
         width: 200
         implicitHeight: 20
         height: contentHeight
-       MCtrl.Action {
+        MCtrl.Action {
             text: qsTr("剪切(&T)")
             shortcut: "Ctrl+X"
         }
