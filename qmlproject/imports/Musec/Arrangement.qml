@@ -291,6 +291,10 @@ Item {
                         y: showMasterTrackButton.currentIndex == 1? parent.height - 1: 0
                         color: Constants.borderColor
                     }
+                    DropArea {
+                        id: masterTrackDropArea
+                        anchors.fill: parent
+                    }
                 }
                 Item {
                     id: masterTrackHeader
@@ -615,6 +619,27 @@ Item {
                                         anchors.centerIn: parent
                                         font: Constants.font
                                         color: Constants.contentColor2
+                                    }
+                                    DropArea {
+                                        id: contentDropArea
+                                        anchors.fill: parent
+//                                        keys: ["text/plain"]
+                                        Rectangle {
+                                            anchors.fill: parent
+                                            color: Constants.mouseOverElementColor
+                                            opacity: parent.containsDrag? 0.6: 0
+                                        }
+                                        onEntered: {
+                                            //
+                                        }
+                                        onDropped: {
+                                            // Windows: key 为 FileName 和 FileNameW 的值是文件的路径。无法正常那个识别多个文件拖入的情况。原因未知。
+//                                            console.log(drop.keys);
+//                                            for(var key in drop.keys) {
+//                                                var value = drop.keys[key].toString().split('\"')[1];
+//                                                console.log(value, drop.getDataAsString(value), drop.getDataAsArrayBuffer(value));
+//                                            }
+                                        }
                                     }
                                 }
                             }

@@ -164,7 +164,6 @@ Item {
                     }
                 }
             }
-
         }
         Repeater {
             id: nonExpandableItemListView
@@ -178,15 +177,21 @@ Item {
                     id: nonExpandableItemForDrag
                     x: root.indentPerLevel * root.level
                     y: 0
-                    width: nonExpandableItemRow.width + 2
+                    property int contentWidth: nonExpandableItemRow.width + 2
+                    width: Math.max(contentWidth, root.width)
                     height: nonExpandableItemButton.height
                     color: Constants.mouseOverElementColor
                     Drag.active: dragArea.drag.active
-                    Drag.onActiveChanged: {
-                        if(active) {
-                            parent = Objects.mainWindow.mainArea;
-                        }
+                    Drag.hotSpot.x: 0
+                    Drag.hotSpot.y: 0
+                    Drag.mimeData: {
+                        "text/plain": root.nonExpandableItemList.getPathOfIndex(index)
                     }
+                    Drag.onActiveChanged: {
+                        //
+                    }
+//                    Drag.dragType: Drag.Automatic
+                    Drag.keys: ["text/plain"]
                     opacity: Drag.active? 0.6: 0
                     MouseArea {
                         id: dragArea
@@ -194,13 +199,13 @@ Item {
                         anchors.fill: parent
                         drag.target: nonExpandableItemForDrag
                         onReleased: {
+                            nonExpandableItemForDrag.Drag.drop();
                             resetDrag();
                         }
                         function resetDrag() {
-                            nonExpandableItemForDrag.Drag.cancel();
-                            nonExpandableItemForDrag.parent = nonExpandableItemButton;
-                            nonExpandableItemForDrag.x = 0;
-                            nonExpandableItemForDrag.y = 0;
+//                            nonExpandableItemForDrag.parent = nonExpandableItemButton;
+//                            nonExpandableItemForDrag.x = 0;
+//                            nonExpandableItemForDrag.y = 0;
                             dragArea.x = 0;
                             dragArea.y = 0;
                         }
