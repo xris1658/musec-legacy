@@ -483,7 +483,7 @@ Item {
                         id: timeIndicator
                         width: 1
                         height: parent.height
-                        x: root.position / 96.0 * (timeline.barWidth / timeline.numerator)
+                        x: root.position / 96.0 * (timeline.barWidth / timeline.numerator) + contentArea.x
                         y: 0
                         z: 3
                     }
