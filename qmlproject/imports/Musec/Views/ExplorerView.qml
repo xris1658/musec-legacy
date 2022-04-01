@@ -16,15 +16,16 @@ Item {
     property string path: ""
     property int itemHeight: 20
     property int level: 0
-    property int indentPerLevel: itemHeight
+    property int indentPerLevel: 10
     property MModel.FolderListModel expandableItemList: null
     property MModel.FileListModel nonExpandableItemList: null
+    property Item parentIcon: null
 
     function requestExplorerViewComplete() {
-        expandableItemListView.model = null;
-        nonExpandableItemListView.model = null;
-        expandableItemListView.model = expandableItemList;
-        nonExpandableItemListView.model = nonExpandableItemList;
+        if(parentIcon) {
+            parentIcon.loading = false;
+            parentIcon.notifyChildren();
+        }
     }
 
     function requestExplorerView(explorerView: ExplorerView) {
@@ -72,9 +73,10 @@ Item {
             model: expandableItemList
             Column {
                 id: expandableItemAndChild
-                MCtrl.Button { // 改成 MouseArea 会直接导致 Component is not ready. 原因未知.
+                MCtrl.Button {
                     id: expandableItemButton
                     property bool expanded: false
+                    property bool loading: false
                     width: root.width
                     height: root.itemHeight
                     border.width: 0
@@ -83,7 +85,6 @@ Item {
                         anchors.fill: parent
                         hoverEnabled: true
                         acceptedButtons: Qt.LeftButton | Qt.RightButton
-
                         onClicked: {
                             if(mouse.button & Qt.LeftButton) {
                                 expandableItemButton.clicked();
@@ -110,13 +111,15 @@ Item {
                                 height: width
                                 Image {
                                     anchors.centerIn: parent
-                                    source: expandableItemButton.expanded? "../../../images/expanded-folder.svg": "../../../images/folder.svg"
+                                    source: expandableItemButton.loading? "../../../images/loading.svg":
+                                            expandableItemButton.expanded? "../../../images/expanded-folder.svg":
+                                                                           "../../../images/folder.svg"
                                     width: sourceSize.width
                                     height: sourceSize.height
                                 }
                             }
                             Text {
-                                width: expandableItem.width - expandableItemIcon.width
+                                width: expandableItem.width - expandableItemIcon.width - 2
                                 text: name
                                 anchors.verticalCenter: parent.verticalCenter
                                 color: "#FFFFFF"
@@ -135,6 +138,7 @@ Item {
                         if(expanded) {
                             if(explorerViewLoader.source == "") {
                                 explorerViewLoader.source = "ExplorerView.qml";
+                                expandableItemButton.loading = true;
                             }
                         }
                     }
@@ -155,8 +159,8 @@ Item {
                     onLoaded: {
                         explorerViewLoader.item.path = expandableItemList.getPathOfIndex(index);
                         explorerViewLoader.item.level = root.level + 1;
+                        explorerViewLoader.item.parentIcon = expandableItemButton;
                         requestExplorerView(explorerViewLoader.item);
-                        expandableItemButton.notifyChildren();
                     }
                 }
             }
@@ -170,21 +174,56 @@ Item {
                 width: root.width
                 height: root.itemHeight
                 border.width: 0
-                MouseArea {
-                    id: nonExpandableItemButtonMouseArea
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    acceptedButtons: Qt.LeftButton | Qt.RightButton
-                    onClicked: {
-                        if(mouse.button & Qt.LeftButton) {
-                            nonExpandableItemButton.clicked();
+                Rectangle {
+                    id: nonExpandableItemForDrag
+                    x: root.indentPerLevel * root.level
+                    y: 0
+                    width: nonExpandableItemRow.width + 2
+                    height: nonExpandableItemButton.height
+                    color: Constants.mouseOverElementColor
+                    Drag.active: dragArea.drag.active
+                    Drag.onActiveChanged: {
+                        if(active) {
+                            parent = Objects.mainWindow.mainArea;
                         }
-                        else if(mouse.button & Qt.RightButton) {
-                            fileOptions.path = nonExpandableItemList.getPathOfIndex(index);
-                            fileOptions.parent = nonExpandableItemButton;
-                            fileOptions.x = mouseX;
-                            fileOptions.y = mouseY;
-                            fileOptions.open();
+                    }
+                    opacity: Drag.active? 0.6: 0
+                    MouseArea {
+                        id: dragArea
+                        parent: nonExpandableItemButton
+                        anchors.fill: parent
+                        drag.target: nonExpandableItemForDrag
+                        onReleased: {
+                            resetDrag();
+                        }
+                        function resetDrag() {
+                            nonExpandableItemForDrag.Drag.cancel();
+                            nonExpandableItemForDrag.parent = nonExpandableItemButton;
+                            nonExpandableItemForDrag.x = 0;
+                            nonExpandableItemForDrag.y = 0;
+                            dragArea.x = 0;
+                            dragArea.y = 0;
+                        }
+                    }
+                    Row {
+                        id: nonExpandableItemRow
+                        Item {
+                            id: nonExpandableItemIconForDrag
+                            width: nonExpandableItemForDrag.height
+                            height: width
+                            Image {
+                                anchors.centerIn: parent
+                                source: "../../../images/file.svg"
+                                width: sourceSize.width
+                                height: sourceSize.height
+                            }
+                        }
+                        Text {
+                            width: contentWidth
+                            text: name
+                            anchors.verticalCenter: parent.verticalCenter
+                            color: "#FFFFFF"
+                            font: Constants.font
                         }
                     }
                 }
@@ -206,7 +245,7 @@ Item {
                             }
                         }
                         Text {
-                            width: nonExpandableItem.width - nonExpandableItemIcon.width
+                            width: nonExpandableItem.width - nonExpandableItemIcon.width - 2
                             text: name
                             anchors.verticalCenter: parent.verticalCenter
                             color: "#FFFFFF"

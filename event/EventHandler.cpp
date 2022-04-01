@@ -298,7 +298,7 @@ void EventHandler::onRequestExplorerView()
     }
     auto newFolderListModel = new Musec::Model::FolderListModel(explorerView);
     auto newFileListModel = new Musec::Model::FileListModel(explorerView);
-    auto setList = [&explorerView, &newFileListModel, &newFolderListModel]()
+    auto setList = [this, &explorerView, &newFileListModel, &newFolderListModel]()
     {
         using namespace Musec::UI;
         auto path = explorerView->property("path").value<QString>();
@@ -308,8 +308,8 @@ void EventHandler::onRequestExplorerView()
         newFileListModel->setList(fileList);
         explorerView->setProperty("expandableItemList", QVariant::fromValue(newFolderListModel));
         explorerView->setProperty("nonExpandableItemList", QVariant::fromValue(newFileListModel));
+        requestExplorerViewComplete();
     };
-    std::async(std::launch::async, setList).get();
-    requestExplorerViewComplete();
+    std::async(std::launch::async, setList);
 }
 }

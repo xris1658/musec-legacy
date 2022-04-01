@@ -508,7 +508,7 @@ Rectangle {
                                 path: directory
                                 parent: directoryContent
                                 y: -rightVBar.position * height
-                                width: parent.width - rightVBar.width
+                                width: rightVBar.visible? parent.width - rightVBar.width: parent.width
                                 visible: directoryContent.currentIndex == index
                             }
                             ScrollBar {

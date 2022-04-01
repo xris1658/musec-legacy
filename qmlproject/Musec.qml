@@ -12,6 +12,7 @@ import Musec.Views 1.0 as MView
 
 ApplicationWindow {
     id: mainWindow
+    readonly property Item mainArea: mainFunctionArea
     MusecList { id: musecList }
     property alias pluginList: musecList.pluginList
     property alias assetDirectoryList: musecList.assetDirectoryList
