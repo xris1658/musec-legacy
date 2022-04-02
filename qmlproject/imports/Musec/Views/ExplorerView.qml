@@ -192,7 +192,7 @@ Item {
                     }
 //                    Drag.dragType: Drag.Automatic
                     Drag.keys: ["text/plain"]
-                    opacity: Drag.active? 0.6: 0
+                    opacity: 0
                     MouseArea {
                         id: dragArea
                         parent: nonExpandableItemButton
@@ -204,8 +204,8 @@ Item {
                         }
                         function resetDrag() {
 //                            nonExpandableItemForDrag.parent = nonExpandableItemButton;
-//                            nonExpandableItemForDrag.x = 0;
-//                            nonExpandableItemForDrag.y = 0;
+                            nonExpandableItemForDrag.x = 0;
+                            nonExpandableItemForDrag.y = 0;
                             dragArea.x = 0;
                             dragArea.y = 0;
                         }
