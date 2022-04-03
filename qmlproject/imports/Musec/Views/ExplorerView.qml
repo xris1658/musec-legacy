@@ -187,10 +187,9 @@ Item {
                     Drag.mimeData: {
                         "text/plain": root.nonExpandableItemList.getPathOfIndex(index)
                     }
-                    Drag.onActiveChanged: {
-                        //
-                    }
-//                    Drag.dragType: Drag.Automatic
+                    Drag.proposedAction: Qt.CopyAction
+                    Drag.supportedActions: Qt.CopyAction
+                    Drag.dragType: Drag.Automatic
                     Drag.keys: ["text/plain"]
                     opacity: 0
                     MouseArea {

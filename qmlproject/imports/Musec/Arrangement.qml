@@ -623,7 +623,6 @@ Item {
                                     DropArea {
                                         id: contentDropArea
                                         anchors.fill: parent
-//                                        keys: ["text/plain"]
                                         Rectangle {
                                             anchors.fill: parent
                                             color: Constants.mouseOverElementColor
@@ -633,6 +632,8 @@ Item {
                                             //
                                         }
                                         onDropped: {
+                                            console.log(drop.text);
+
                                             // Windows: key 为 FileName 和 FileNameW 的值是文件的路径。无法正常那个识别多个文件拖入的情况。原因未知。
 //                                            console.log(drop.keys);
 //                                            for(var key in drop.keys) {
