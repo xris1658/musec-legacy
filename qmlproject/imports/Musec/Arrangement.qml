@@ -294,6 +294,26 @@ Item {
                     DropArea {
                         id: masterTrackDropArea
                         anchors.fill: parent
+                        Rectangle {
+                            anchors.fill: parent
+                            visible: parent.containsDrag
+                            color: Constants.mouseOverElementColor
+                            opacity: 0.5
+                        }
+                        function checkDragEvent(dragEvent: DragEvent) {
+                            return dragEvent.getDataAsString("itemType") == "plugin"
+                                    && parseInt(dragEvent.getDataAsString("type")) == 3;
+                        }
+                        onEntered: {
+                            if(!checkDragEvent(drag)) {
+                                drag.accepted = false;
+                            }
+                        }
+                        onDropped: {
+                            if(checkDragEvent(drop)) {
+                                console.log(drop.getDataAsString("pluginId"));
+                            }
+                        }
                     }
                 }
                 Item {
@@ -339,8 +359,39 @@ Item {
                         width: headers.width
                         height: trackHeaderList.footerHeight
                     }
+                    DropArea {
+                        id: blankHeaderDropArea
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        y: parent.count?
+                               parent.itemAtIndex(parent.count - 1).mapToItem(parent, 0, parent.itemAtIndex(parent.count - 1).height).y:
+                               0
+                        height: masterTrackFooter.y - masterTrackHeader.height
+                        function checkDragEvent(dragEvent: DragEvent) {
+                            return dragEvent.getDataAsString("itemType") == "plugin"
+                                    && (parseInt(dragEvent.getDataAsString("type")) == 3
+                                    || parseInt(dragEvent.getDataAsString("type")) == 2);
+                        }
+                        Rectangle {
+                            anchors.fill: parent
+                            color: Constants.mouseOverElementColor
+                            opacity: parent.containsDrag? 0.6: 0
+                        }
+                        onEntered: {
+                            if(!checkDragEvent(drag)) {
+                                drag.accepted = false;
+                            }
+                        }
+                        onDropped: {
+                            if(checkDragEvent(drop)) {
+                                console.log("Create a new track with plugin: ");
+                                console.log(drop.getDataAsString("type"), drop.getDataAsString("pluginId"));
+                            }
+                        }
+                    }
                     delegate: TrackHeader {
                         id: trackHeader
+                        z: 3
                         trackName: name
                         trackColor: color
                         width: headers.width
@@ -372,6 +423,31 @@ Item {
                                     trackOptions.x = mouseX;
                                     trackOptions.y = mouseY;
                                     trackOptions.open();
+                                }
+                            }
+                        }
+                        DropArea {
+                            id: trackHeaderDropArea
+                            anchors.fill: parent
+                            function checkDragEvent(dragEvent: DragEvent) {
+                                return dragEvent.getDataAsString("itemType") == "plugin"
+                                        && (parseInt(dragEvent.getDataAsString("type")) == 3
+                                        || parseInt(dragEvent.getDataAsString("type")) == 2);
+                            }
+                            Rectangle {
+                                anchors.fill: parent
+                                color: Constants.mouseOverElementColor
+                                opacity: parent.containsDrag? 0.6: 0
+                            }
+                            onEntered: {
+                                if(!checkDragEvent(drag)) {
+                                    drag.accepted = false;
+                                }
+                            }
+                            onDropped: {
+                                if(checkDragEvent(drop)) {
+                                    console.log("Append a plugin to track: ");
+                                    console.log(drop.getDataAsString("type"), drop.getDataAsString("pluginId"));
                                 }
                             }
                         }
@@ -629,17 +705,15 @@ Item {
                                             opacity: parent.containsDrag? 0.6: 0
                                         }
                                         onEntered: {
-                                            //
+                                            if(drag.getDataAsString("FromWithin")) {
+                                                console.log("This drag event is generated in the application.");
+                                            }
+                                            else {
+                                                console.log("This drag event is generated out of the application.");
+                                            }
                                         }
                                         onDropped: {
-                                            console.log(drop.text);
-
-                                            // Windows: key 为 FileName 和 FileNameW 的值是文件的路径。无法正常那个识别多个文件拖入的情况。原因未知。
-//                                            console.log(drop.keys);
-//                                            for(var key in drop.keys) {
-//                                                var value = drop.keys[key].toString().split('\"')[1];
-//                                                console.log(value, drop.getDataAsString(value), drop.getDataAsArrayBuffer(value));
-//                                            }
+                                            console.log(drop.getDataAsString("FileName"));
                                         }
                                     }
                                 }
@@ -661,6 +735,17 @@ Item {
                                     width: 1
                                     height: parent.height
                                     color: Constants.gridColor
+                                }
+                            }
+                            DropArea {
+                                id: trackContentDropArea
+                                anchors.fill: parent
+                                Rectangle {
+                                    id: trackContentDropPositionIndicator
+                                    width: 1
+                                    height: parent.height
+                                    color: "#FFFFFF"
+                                    visible: parent.containsDrag
                                 }
                             }
                         }

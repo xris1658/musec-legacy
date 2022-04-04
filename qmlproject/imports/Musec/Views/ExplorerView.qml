@@ -183,12 +183,13 @@ Item {
                     Drag.hotSpot.x: 0
                     Drag.hotSpot.y: 0
                     Drag.mimeData: {
-                        "text/plain": root.nonExpandableItemList.getPathOfIndex(index)
+                        "FileName": root.nonExpandableItemList.getPathOfIndex(index),
+                        "FromWithin": true
                     }
                     Drag.proposedAction: Qt.CopyAction
                     Drag.supportedActions: Qt.CopyAction
                     Drag.dragType: Drag.Automatic
-                    Drag.keys: ["text/plain"]
+                    Drag.keys: ["FileName"]
                     MouseArea {
                         id: dragArea
                         parent: nonExpandableItemButton

@@ -30,6 +30,70 @@ Rectangle {
         assetDirectoryListModel.setProperty(assetDirectoryListModel.count - 1, "id", newId);
     }
 
+    Component {
+        id: pluginItemComponent
+        MCtrl.Button {
+            id: pluginItem
+            width: assetContent.width
+            height: 20
+            border.width: 0
+            Row {
+                Item {
+                    width: height
+                    height: pluginItem.height
+                    Image {
+                        width: 16
+                        height: width
+                        anchors.centerIn: parent
+                        source: type == 1? "../../images/midieffect.svg":
+                                type == 2? "../../images/instrument.svg":
+                                type == 3? "../../images/audioeffect.svg":
+                                /*type == 0?*/ "../../images/plugin.svg"
+                    }
+                }
+                Text {
+                    text: name
+                    font.family: Constants.font
+                    color: Constants.contentColor1
+                }
+            }
+            Item {
+                id: pluginItemForDrag
+                x: 0
+                y: 0
+                width: pluginItem.width
+                height: pluginItem.height
+                Drag.active: dragArea.drag.active
+                Drag.hotSpot.x: 0
+                Drag.hotSpot.y: 0
+                Drag.keys: ["pluginId"]
+                Drag.mimeData: {
+                    "itemType": "plugin",
+                    "pluginId": id,
+                    "type": type
+                }
+                Drag.proposedAction: Qt.CopyAction
+                Drag.supportedActions: Qt.CopyAction
+                Drag.dragType: Drag.Automatic
+                MouseArea {
+                    id: dragArea
+                    parent: pluginItem
+                    anchors.fill: parent
+                    drag.target: pluginItemForDrag
+                    function resetDrag() {
+                        pluginItemForDrag.x = 0;
+                        pluginItemForDrag.y = 0;
+                        dragArea.x = 0;
+                        dragArea.y = 0;
+                    }
+                    onReleased: {
+                        resetDrag();
+                    }
+                }
+            }
+        }
+    }
+
     Popup {
         id: assetDirectoryNameEditPopup
         width: _left.width - x
@@ -556,33 +620,7 @@ Rectangle {
                         }
                         ScrollBar.vertical: vbar
                         focus: true
-                        delegate: MCtrl.Button {
-                            id: assetFileListButton
-                            parent: pluginFileList
-                            width: pluginFileList.width
-                            height: 20
-                            border.width: 0
-                            Row {
-                                Item {
-                                    width: height
-                                    height: assetFileListButton.height
-                                    Image {
-                                        width: 16
-                                        height: width
-                                        anchors.centerIn: parent
-                                        source: type == 1? "../../images/midieffect.svg":
-                                                type == 2? "../../images/instrument.svg":
-                                                type == 3? "../../images/audioeffect.svg":
-                                                /*type == 0?*/ "../../images/plugin.svg"
-                                    }
-                                }
-                                Text {
-                                    text: name
-                                    font.family: Constants.font
-                                    color: Constants.contentColor1
-                                }
-                            }
-                        }
+                        delegate: pluginItemComponent
                     }
                     ListView {
                         id: midiEffectPluginList
@@ -597,34 +635,7 @@ Rectangle {
                         }
                         ScrollBar.vertical: vbar
                         focus: true
-                        delegate: MCtrl.Button {
-                            id: midiEffectItemButton
-                            parent: midiEffectPluginList
-                            width: midiEffectPluginList.width
-                            height: 20
-                            border.width: 0
-                            Row {
-                                Item {
-                                    width: height
-                                    height: midiEffectItemButton.height
-                                    Image {
-                                        width: 16
-                                        height: width
-                                        anchors.centerIn: parent
-                                        source: type == 1? "../../images/midieffect.svg":
-                                                type == 2? "../../images/instrument.svg":
-                                                type == 3? "../../images/audioeffect.svg":
-                                                /*type == 0?*/ "../../images/plugin.svg"
-
-                                    }
-                                }
-                                Text {
-                                    text: name
-                                    font.family: Constants.font
-                                    color: Constants.contentColor1
-                                }
-                            }
-                        }
+                        delegate: pluginItemComponent
                     }
                     ListView {
                         id: instrumentPluginList
@@ -639,34 +650,7 @@ Rectangle {
                         }
                         ScrollBar.vertical: vbar
                         focus: true
-                        delegate: MCtrl.Button {
-                            id: instrumentItemButton
-                            parent: instrumentPluginList
-                            width: instrumentPluginList.width
-                            height: 20
-                            border.width: 0
-                            Row {
-                                Item {
-                                    width: height
-                                    height: instrumentItemButton.height
-                                    Image {
-                                        width: 16
-                                        height: width
-                                        anchors.centerIn: parent
-                                        source: type == 1? "../../images/midieffect.svg":
-                                                type == 2? "../../images/instrument.svg":
-                                                type == 3? "../../images/audioeffect.svg":
-                                                /*type == 0?*/ "../../images/plugin.svg"
-
-                                    }
-                                }
-                                Text {
-                                    text: name
-                                    font.family: Constants.font
-                                    color: Constants.contentColor1
-                                }
-                            }
-                        }
+                        delegate: pluginItemComponent
                     }
                     ListView {
                         id: audioEffectPluginList
@@ -681,34 +665,7 @@ Rectangle {
                         }
                         ScrollBar.vertical: vbar
                         focus: true
-                        delegate: MCtrl.Button {
-                            id: audioEffectItemButton
-                            parent: audioEffectPluginList
-                            width: audioEffectPluginList.width
-                            height: 20
-                            border.width: 0
-                            Row {
-                                Item {
-                                    width: height
-                                    height: audioEffectItemButton.height
-                                    Image {
-                                        width: 16
-                                        height: width
-                                        anchors.centerIn: parent
-                                        source: type == 1? "../../images/midieffect.svg":
-                                                type == 2? "../../images/instrument.svg":
-                                                type == 3? "../../images/audioeffect.svg":
-                                                /*type == 0?*/ "../../images/plugin.svg"
-
-                                    }
-                                }
-                                Text {
-                                    text: name
-                                    font.family: Constants.font
-                                    color: Constants.contentColor1
-                                }
-                            }
-                        }
+                        delegate: pluginItemComponent
                     }
                 }
             }
