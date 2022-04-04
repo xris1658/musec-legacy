@@ -7,6 +7,7 @@
 
 namespace Musec::Audio::Driver
 {
+std::int8_t bufferIndex = 0;
 void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
 {
     ASIOTime timeInfo;
@@ -52,7 +53,6 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
             }
         }
     }
-    auto& buffer = Musec::Controller::AudioEngineController::AppMasterTrack().buffer_;
     for(int i = 0; i < inputCount; ++i)
     {
         auto buffer = bufferInfoList[inputs[i]].buffers;
@@ -112,7 +112,8 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
     {
         auto buffer = bufferInfoList[outputs[i]].buffers;
         // buffer[0] 和 buffer[1] 是 ASIO 的双缓冲区地址
-        // ASIO4ALL 不使用双缓冲，两个地址相同
+        // 有些驱动程序 (e.g. ASIO4ALL）不使用双缓冲，两个地址相同
+        // 多数驱动程序（FlexASIO）使用双缓冲，两个地址不同
         auto type = channelInfoList[i].type;
         switch(type)
         {
@@ -141,10 +142,7 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
             case ASIOSTInt32LSB:
                 for(long j = 0; j < bufferSize; ++j)
                 {
-//                    if(i == 0)
-//                    {
-//                        reinterpret_cast<std::int32_t*>(buffer[0])[j] = 0x10000000 * (std::rand() % 2? 1: -1);
-//                    }
+//                  reinterpret_cast<std::int32_t*>(buffer[bufferIndex])[j] = 0x10000000 * (std::rand() % 2? 1: -1);
                 }
                 break;
             case ASIOSTFloat32LSB:
@@ -170,6 +168,14 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
             default:
                 break;
         }
+    }
+    if(bufferIndex)
+    {
+        bufferIndex = 0;
+    }
+    else
+    {
+        bufferIndex = 1;
     }
     return nullptr;
 }

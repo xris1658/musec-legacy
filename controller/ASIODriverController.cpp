@@ -81,6 +81,7 @@ void loadASIODriver()
         char errorMessageBuffer[124];
         driver->getErrorMessage(errorMessageBuffer);
         // 输出错误字符串
+        return;
     }
     auto& channelInfoList = getASIOChannelInfoList();
     for(int i = 0; i < info.inputChannelCount + info.outputChannelCount; ++i)
