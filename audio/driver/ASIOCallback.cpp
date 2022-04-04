@@ -31,124 +31,144 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
                                      long doubleBufferIndex,
                                      ASIOBool directProcess)
 {
+    std::array<int, 64> inputs = {0};
+    std::array<int, 64> outputs = {0};
+    int inputCount = 0;
+    int outputCount = 0;
     auto bufferSize = getASIODriverStreamInfo(AppASIODriver()).preferredBufferSize;
     auto& bufferInfoList = getASIOBufferInfoList();
     auto& channelInfoList = getASIOChannelInfoList();
-    auto& buffer = Musec::Controller::AudioEngineController::AppMasterTrack().buffer_;
-    for(int i = 0; i < bufferInfoList.size(); ++i)
+    for(int i = 0; i < channelInfoList.size(); ++i)
     {
-        auto buffer = bufferInfoList[i].buffers;
-        if(bufferInfoList[i].isInput)
+        if(channelInfoList[i].isActive)
         {
-            // MSB -> BE; LSB -> LE;
-            auto type = channelInfoList[i].type;
-            switch(type)
+            if(channelInfoList[i].isInput)
             {
-                case ASIOSTInt16MSB:
-                    break;
-                case ASIOSTInt24MSB:
-                    break;
-                case ASIOSTInt32MSB:
-                    break;
-                case ASIOSTFloat32MSB:
-                    break;
-                case ASIOSTFloat64MSB:
-                    break;
-                case ASIOSTInt32MSB16:
-                    break;
-                case ASIOSTInt32MSB18:
-                    break;
-                case ASIOSTInt32MSB20:
-                    break;
-                case ASIOSTInt32MSB24:
-                    break;
-                case ASIOSTInt16LSB:
-                    break;
-                case ASIOSTInt24LSB:
-                    break;
-                case ASIOSTInt32LSB:
-                    break;
-                case ASIOSTFloat32LSB:
-                    break;
-                case ASIOSTFloat64LSB:
-                    break;
-                case ASIOSTInt32LSB16:
-                    break;
-                case ASIOSTInt32LSB18:
-                    break;
-                case ASIOSTInt32LSB20:
-                    break;
-                case ASIOSTInt32LSB24:
-                    break;
-                case ASIOSTDSDInt8LSB1:
-                    break;
-                case ASIOSTDSDInt8MSB1:
-                    break;
-                case ASIOSTDSDInt8NER8:
-                    break;
-                case ASIOSTLastEntry:
-                    break;
-                default:
-                    break;
+                inputs[inputCount++] = i;
+            }
+            else
+            {
+                outputs[outputCount++] = i;
             }
         }
-        else /*if(!bufferInfoList[i].isInput)*/
+    }
+    auto& buffer = Musec::Controller::AudioEngineController::AppMasterTrack().buffer_;
+    for(int i = 0; i < inputCount; ++i)
+    {
+        auto buffer = bufferInfoList[inputs[i]].buffers;
+        // MSB -> BE; LSB -> LE;
+        auto type = channelInfoList[i].type;
+        switch(type)
         {
-            auto type = channelInfoList[i].type;
-            switch(type)
-            {
-                case ASIOSTInt16MSB:
-                    break;
-                case ASIOSTInt24MSB:
-                    break;
-                case ASIOSTInt32MSB:
-                    break;
-                case ASIOSTFloat32MSB:
-                    break;
-                case ASIOSTFloat64MSB:
-                    break;
-                case ASIOSTInt32MSB16:
-                    break;
-                case ASIOSTInt32MSB18:
-                    break;
-                case ASIOSTInt32MSB20:
-                    break;
-                case ASIOSTInt32MSB24:
-                    break;
-                case ASIOSTInt16LSB:
-                    break;
-                case ASIOSTInt24LSB:
-                    break;
-                case ASIOSTInt32LSB:
-                    for(long i = 0; i < bufferSize; ++i)
-                    {
-                        // reinterpret_cast<std::int32_t*>(buffer[0])[i] = 0x04000000 * (std::rand() % 2? 1: -1);
-                        // reinterpret_cast<std::int32_t*>(buffer[1])[i] = 0x04000000 * (std::rand() % 2? 1: -1);
-                    }
-                    break;
-                case ASIOSTFloat32LSB:
-                    break;
-                case ASIOSTFloat64LSB:
-                    break;
-                case ASIOSTInt32LSB16:
-                    break;
-                case ASIOSTInt32LSB18:
-                    break;
-                case ASIOSTInt32LSB20:
-                    break;
-                case ASIOSTInt32LSB24:
-                    break;
-                case ASIOSTDSDInt8LSB1:
-                    break;
-                case ASIOSTDSDInt8MSB1:
-                    break;
-                case ASIOSTDSDInt8NER8:
-                    break;
-                case ASIOSTLastEntry:
-                    break;
-                default:
-                    break;
-            }
+            case ASIOSTInt16MSB:
+                break;
+            case ASIOSTInt24MSB:
+                break;
+            case ASIOSTInt32MSB:
+                break;
+            case ASIOSTFloat32MSB:
+                break;
+            case ASIOSTFloat64MSB:
+                break;
+            case ASIOSTInt32MSB16:
+                break;
+            case ASIOSTInt32MSB18:
+                break;
+            case ASIOSTInt32MSB20:
+                break;
+            case ASIOSTInt32MSB24:
+                break;
+            case ASIOSTInt16LSB:
+                break;
+            case ASIOSTInt24LSB:
+                break;
+            case ASIOSTInt32LSB:
+                break;
+            case ASIOSTFloat32LSB:
+                break;
+            case ASIOSTFloat64LSB:
+                break;
+            case ASIOSTInt32LSB16:
+                break;
+            case ASIOSTInt32LSB18:
+                break;
+            case ASIOSTInt32LSB20:
+                break;
+            case ASIOSTInt32LSB24:
+                break;
+            case ASIOSTDSDInt8LSB1:
+                break;
+            case ASIOSTDSDInt8MSB1:
+                break;
+            case ASIOSTDSDInt8NER8:
+                break;
+            case ASIOSTLastEntry:
+                break;
+            default:
+                break;
+        }
+    }
+    for(int i = 0; i < outputCount; ++i)
+    {
+        auto buffer = bufferInfoList[outputs[i]].buffers;
+        // buffer[0] 和 buffer[1] 是 ASIO 的双缓冲区地址
+        // ASIO4ALL 不使用双缓冲，两个地址相同
+        auto type = channelInfoList[i].type;
+        switch(type)
+        {
+            case ASIOSTInt16MSB:
+                break;
+            case ASIOSTInt24MSB:
+                break;
+            case ASIOSTInt32MSB:
+                break;
+            case ASIOSTFloat32MSB:
+                break;
+            case ASIOSTFloat64MSB:
+                break;
+            case ASIOSTInt32MSB16:
+                break;
+            case ASIOSTInt32MSB18:
+                break;
+            case ASIOSTInt32MSB20:
+                break;
+            case ASIOSTInt32MSB24:
+                break;
+            case ASIOSTInt16LSB:
+                break;
+            case ASIOSTInt24LSB:
+                break;
+            case ASIOSTInt32LSB:
+                for(long j = 0; j < bufferSize; ++j)
+                {
+//                    if(i == 0)
+//                    {
+//                        reinterpret_cast<std::int32_t*>(buffer[0])[j] = 0x10000000 * (std::rand() % 2? 1: -1);
+//                    }
+                }
+                break;
+            case ASIOSTFloat32LSB:
+                break;
+            case ASIOSTFloat64LSB:
+                break;
+            case ASIOSTInt32LSB16:
+                break;
+            case ASIOSTInt32LSB18:
+                break;
+            case ASIOSTInt32LSB20:
+                break;
+            case ASIOSTInt32LSB24:
+                break;
+            case ASIOSTDSDInt8LSB1:
+                break;
+            case ASIOSTDSDInt8MSB1:
+                break;
+            case ASIOSTDSDInt8NER8:
+                break;
+            case ASIOSTLastEntry:
+                break;
+            default:
+                break;
         }
     }
     return nullptr;
