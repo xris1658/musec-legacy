@@ -173,14 +173,12 @@ Item {
                 width: root.width
                 height: root.itemHeight
                 border.width: 0
-                Rectangle {
+                Item {
                     id: nonExpandableItemForDrag
                     x: root.indentPerLevel * root.level
                     y: 0
-                    property int contentWidth: nonExpandableItemRow.width + 2
-                    width: Math.max(contentWidth, root.width)
+                    width: root.width
                     height: nonExpandableItemButton.height
-                    color: Constants.mouseOverElementColor
                     Drag.active: dragArea.drag.active
                     Drag.hotSpot.x: 0
                     Drag.hotSpot.y: 0
@@ -191,7 +189,6 @@ Item {
                     Drag.supportedActions: Qt.CopyAction
                     Drag.dragType: Drag.Automatic
                     Drag.keys: ["text/plain"]
-                    opacity: 0
                     MouseArea {
                         id: dragArea
                         parent: nonExpandableItemButton
@@ -207,27 +204,6 @@ Item {
                             nonExpandableItemForDrag.y = 0;
                             dragArea.x = 0;
                             dragArea.y = 0;
-                        }
-                    }
-                    Row {
-                        id: nonExpandableItemRow
-                        Item {
-                            id: nonExpandableItemIconForDrag
-                            width: nonExpandableItemForDrag.height
-                            height: width
-                            Image {
-                                anchors.centerIn: parent
-                                source: "../../../images/file.svg"
-                                width: sourceSize.width
-                                height: sourceSize.height
-                            }
-                        }
-                        Text {
-                            width: contentWidth
-                            text: name
-                            anchors.verticalCenter: parent.verticalCenter
-                            color: "#FFFFFF"
-                            font: Constants.font
                         }
                     }
                 }
