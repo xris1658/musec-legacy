@@ -47,20 +47,26 @@ class VST2Plugin:
     public Musec::Audio::Plugin::IPlugin<SampleType>
 {
     using Base = Musec::Native::WindowsLibraryRAII;
+    using PluginInterface = Musec::Audio::Plugin::IPlugin<SampleType>;
 public:
-    VST2Plugin();
     VST2Plugin(const QString& path, bool scanPlugin = false, VstInt32 shellPluginId = 0);
     ~VST2Plugin() noexcept override;
 public:
     AEffect* effect() const;
 public:
+    std::uint8_t inputCount() const override;
+    std::uint8_t outputCount() const override;
+public:
     bool initialize(double sampleRate, std::int32_t maxSampleCount) override;
     bool uninitialize() override;
     bool startProcessing() override;
     bool stopProcessing() override;
-    void process(std::array<SampleType*, 2> input, std::array<SampleType*, 2> output) override;
+    void process(const Audio::Base::AudioBufferViews<SampleType>& inputs,
+        const Audio::Base::AudioBufferViews<SampleType>& outputs) override;
 private:
     AEffect* effect_ = nullptr;
+    std::vector<SampleType*> inputsRaw_;
+    std::vector<SampleType*> outputsRaw_;
 };
 
 extern template class VST2Plugin<float>;

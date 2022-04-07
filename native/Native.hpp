@@ -1,6 +1,8 @@
 #ifndef MUSEC_NATIVE_NATIVE
 #define MUSEC_NATIVE_NATIVE
 
+#include "util/Endian.hpp"
+
 #include <QString>
 
 #include <Windows.h>
@@ -43,6 +45,8 @@ ThreadMaskType setThreadMask(ThreadMaskType mask);
 std::int64_t currentTimeInNanosecond();
 
 void setThreadPriorityToTimeCritical();
+
+constexpr Musec::Util::Endian endian();
 }
 }
 

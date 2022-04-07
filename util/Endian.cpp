@@ -1,5 +1,7 @@
 #include "Endian.hpp"
 
+#include "native/Native.hpp"
+
 #include <algorithm>
 #include <cstdint>
 
@@ -7,8 +9,7 @@ namespace Musec::Util
 {
 constexpr Endian endian()
 {
-    // FIXME: 跨平台时的字节序判断
-    return Endian::LittleEndian;
+    return Musec::Native::endian();
 }
 
 void reverseEndianness(void* data, std::size_t byteCount)

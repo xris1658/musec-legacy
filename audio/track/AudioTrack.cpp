@@ -2,13 +2,18 @@
 
 namespace Musec::Audio::Track
 {
-void AudioTrack::process()
+template<typename SampleType>
+void AudioTrack<SampleType>::process()
 {
-    std::array<double*, 2> buffer = {buffer_.data(), buffer_.data() + currentBufferSize};
-    auto& list = PluginSequence::list_;
-    for(auto& item: list)
+    for(auto& sequence: pluginSequences_)
     {
-        item->process(buffer, buffer);
+        for(auto& plugin: sequence)
+        {
+            // TODO
+        }
     }
 }
+
+template class AudioTrack<float>;
+template class AudioTrack<double>;
 }

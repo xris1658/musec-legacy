@@ -32,6 +32,15 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
                                      long doubleBufferIndex,
                                      ASIOBool directProcess)
 {
+    auto currentBufferIndex = bufferIndex;
+    if(bufferIndex == 1)
+    {
+        bufferIndex = 0;
+    }
+    else
+    {
+        bufferIndex = 1;
+    }
     std::array<int, 64> inputs = {0};
     std::array<int, 64> outputs = {0};
     int inputCount = 0;
@@ -142,7 +151,7 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
             case ASIOSTInt32LSB:
                 for(long j = 0; j < bufferSize; ++j)
                 {
-//                  reinterpret_cast<std::int32_t*>(buffer[bufferIndex])[j] = 0x10000000 * (std::rand() % 2? 1: -1);
+//                  reinterpret_cast<std::int32_t*>(buffer[currentBufferIndex])[j] = 0x10000000 * (std::rand() % 2? 1: -1);
                 }
                 break;
             case ASIOSTFloat32LSB:
@@ -168,14 +177,6 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
             default:
                 break;
         }
-    }
-    if(bufferIndex)
-    {
-        bufferIndex = 0;
-    }
-    else
-    {
-        bufferIndex = 1;
     }
     return nullptr;
 }
@@ -205,26 +206,20 @@ long onASIOMessage(long selector,
                 ret = 1L;
             break;
         case kAsioResetRequest:
-        {
             ret = 1L;
             break;
-        }
         case kAsioResyncRequest:
             ret = 1L;
             break;
-
         case kAsioLatenciesChanged:
             ret = 1L;
             break;
-
         case kAsioEngineVersion:
             ret = 2L;
             break;
-
         case kAsioSupportsTimeInfo:
             ret = 1;
             break;
-
         case kAsioSupportsTimeCode:
             ret = 0;
             break;

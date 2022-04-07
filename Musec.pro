@@ -115,10 +115,10 @@ SOURCES += \
     audio/driver/ASIODriver.cpp \
     audio/engine/MIDIClock.cpp \
     audio/host/MusecVST3Host.cpp \
+    audio/plugin/ShellPluginId.cpp \
     audio/plugin/VST2Plugin.cpp \
     audio/plugin/VST3Plugin.cpp \
     audio/track/AudioTrack.cpp \
-    audio/track/PluginSequence.cpp \
     audio/util/Util.cpp \
     base/PluginBase.cpp \
     controller/AppController.cpp \

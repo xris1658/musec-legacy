@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <stdexcept>
+#include <vector>
 
 namespace Musec
 {
@@ -10,12 +11,19 @@ namespace Audio
 {
 namespace Base
 {
+// 不持有缓冲区内存的音频缓冲区查看器
 template<typename SampleType>
 class AudioBufferView
 {
     using Self = AudioBufferView<SampleType>;
 public:
-    AudioBufferView(SampleType* samples, size_t size): samples_(samples), size_(size)
+    AudioBufferView(SampleType* samples, size_t size):
+        samples_(samples),
+        size_(size)
+    {}
+    AudioBufferView():
+        samples_(nullptr),
+        size_(0)
     {}
     AudioBufferView(const Self&) = default;
     Self& operator=(const Self&) = default;
@@ -60,6 +68,9 @@ private:
     SampleType* samples_;
     std::size_t size_;
 };
+
+template<typename SampleType>
+using AudioBufferViews = std::vector<AudioBufferView<SampleType>>;
 }
 }
 }

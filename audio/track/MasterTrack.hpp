@@ -9,10 +9,9 @@ namespace Audio
 {
 namespace Track
 {
-class MasterTrack: public AudioTrack
+template<typename SampleType>
+class MasterTrack: public AudioTrack<SampleType>
 {
-private:
-    //
 };
 }
 }

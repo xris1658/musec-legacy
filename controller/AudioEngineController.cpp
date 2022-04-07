@@ -4,9 +4,9 @@
 
 namespace Musec::Controller::AudioEngineController
 {
-Musec::Audio::Track::MasterTrack& AppMasterTrack()
+Musec::Audio::Track::MasterTrack<double>& AppMasterTrack()
 {
-    static Musec::Audio::Track::MasterTrack ret;
+    static Musec::Audio::Track::MasterTrack<double> ret;
     return ret;
 }
 

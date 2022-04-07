@@ -97,11 +97,14 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                 int pluginType = effect->flags & effFlagsIsSynth?
                     PluginType::TypeInstrument:
                     PluginType::TypeAudioFX;
-                ret.append(std::make_tuple(
+                ret.append(
+                    std::make_tuple(
                         effect->uniqueID,
                         QString(nameBuffer.data()),
                         PluginFormat::FormatVST2,
-                        pluginType));
+                        pluginType
+                    )
+                );
             }
         }
         catch (WindowsLibraryRAII::ExceptionType exception)
@@ -233,19 +236,19 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                         setup.symbolicSampleSize = Vst::SymbolicSampleSizes::kSample64;
                         audioProcessor->setupProcessing(setup);
                         constexpr Vst::MediaTypes mediaTypes[] =
-                                {
-                                        Vst::MediaTypes::kAudio,
-                                        Vst::MediaTypes::kAudio,
-                                        Vst::MediaTypes::kEvent,
-                                        Vst::MediaTypes::kEvent
-                                };
+                            {
+                                Vst::MediaTypes::kAudio,
+                                Vst::MediaTypes::kAudio,
+                                Vst::MediaTypes::kEvent,
+                                Vst::MediaTypes::kEvent
+                            };
                         constexpr Vst::BusDirections busDirections[] =
-                                {
-                                        Vst::BusDirections::kInput,
-                                        Vst::BusDirections::kOutput,
-                                        Vst::BusDirections::kInput,
-                                        Vst::BusDirections::kOutput
-                                };
+                            {
+                                Vst::BusDirections::kInput,
+                                Vst::BusDirections::kOutput,
+                                Vst::BusDirections::kInput,
+                                Vst::BusDirections::kOutput
+                            };
                         //                    constexpr wchar_t names[][5] = { L"音频输入", L"音频输出", L"事件输入", L"事件输出" };
                         int32 busCounts[] = { 0, 0, 0, 0 };
                         // Vst::BusInfo busInfo;
@@ -333,7 +336,6 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
 QStringList& defaultPluginDirectoryList()
 {
     static QStringList ret;
-    ret.reserve(3);
     static wchar_t path[MAX_PATH] = {0};
     auto getFolderResult = SHGetFolderPathW(
         nullptr,
@@ -341,13 +343,13 @@ QStringList& defaultPluginDirectoryList()
         NULL,
         SHGFP_TYPE_CURRENT,
         path);
-    if(getFolderResult != S_OK)
+    if(getFolderResult == S_OK)
     {
-        // TODO: 异常处理
+        ret.reserve(3);
+        ret << QString::fromWCharArray(path).append("\\Steinberg\\VstPlugins")
+            << QString::fromWCharArray(path).append("\\VstPlugins")
+            << QString::fromWCharArray(path).append("\\Common Files\\VST3");
     }
-    ret << QString::fromWCharArray(path).append("\\Steinberg\\VstPlugins")
-        << QString::fromWCharArray(path).append("\\VstPlugins")
-        << QString::fromWCharArray(path).append("\\Common Files\\VST3");
     return ret;
 }
 }

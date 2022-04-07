@@ -3,6 +3,8 @@
 #include "base/Base.hpp"
 #include "base/Constants.hpp"
 
+#include <QtGlobal>
+
 #include <ShlObj_core.h>
 #include <shellapi.h>
 #include <processthreadsapi.h>
@@ -197,7 +199,7 @@ std::int64_t currentTimeInNanosecond()
     // Ver 1（现代 C++ API）
     // std::chrono::steady_clock 在 Windows，MSVC 平台使用 QPC 实现。
     // https://github.com/microsoft/STL/blob/main/stl/inc/__msvc_chrono.hpp#L668
-    // 用户需要保证此函数所在的线程只会在一个 CPU 核心上运行。
+    // 要保证获取时间的连贯性，用户需要保证此函数所在的线程只会在一个 CPU 核心上运行。
     return std::chrono::steady_clock::now().time_since_epoch().count();
 
      // // Ver 2
@@ -209,6 +211,13 @@ std::int64_t currentTimeInNanosecond()
 void setThreadPriorityToTimeCritical()
 {
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
+}
+
+constexpr Musec::Util::Endian endian()
+{
+    return Q_BYTE_ORDER == Q_LITTLE_ENDIAN? Musec::Util::Endian::LittleEndian:
+        Q_BYTE_ORDER == Q_BIG_ENDIAN? Musec::Util::Endian::BigEndian:
+        Musec::Util::Endian::UnknownEndian;
 }
 
 }

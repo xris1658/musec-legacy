@@ -72,7 +72,7 @@ public:
         Musec::Native::setThreadPriorityToTimeCritical();
         while(!aboutToDie_)
         {
-            while(!playing_) {}
+            while(!playing_) { Sleep(0); }
             auto fence = Impl::getCurrentTimeInNanosecond();
             while(playing_)
             {
@@ -80,7 +80,7 @@ public:
                  std::async(std::launch::async, notify_, position_);
                 auto delta = tempoAutomation_.secondElapsedInPulse(position_) * 1e9;
                 fence += delta;
-                while(Impl::getCurrentTimeInNanosecond() < fence) {}
+                while(Impl::getCurrentTimeInNanosecond() < fence) { Sleep(0); }
                 ++position_;
             }
         }

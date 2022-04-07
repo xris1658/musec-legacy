@@ -9,6 +9,7 @@ namespace Util
 {
 enum class Endian
 {
+    UnknownEndian,
     LittleEndian,
     BigEndian
 };

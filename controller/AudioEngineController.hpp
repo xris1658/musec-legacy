@@ -9,7 +9,7 @@ namespace Controller
 {
 namespace AudioEngineController
 {
-Musec::Audio::Track::MasterTrack& AppMasterTrack();
+Musec::Audio::Track::MasterTrack<double>& AppMasterTrack();
 
 void initializeFacility();
 }

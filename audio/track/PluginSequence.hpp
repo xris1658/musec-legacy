@@ -14,15 +14,8 @@ namespace Audio
 {
 namespace Track
 {
-struct PluginSequence
-{
-public:
-    PluginSequence();
-    void onMaximumBufferSizeChanged(long maximumBufferSize);
-    long currentBufferSize;
-    std::list<std::unique_ptr<Musec::Audio::Plugin::IPlugin<double>>> list_;
-    std::vector<double> buffer_;
-};
+template<typename SampleType>
+using PluginSequence = std::list<std::shared_ptr<Musec::Audio::Plugin::IPlugin<SampleType>>>;
 }
 }
 }
