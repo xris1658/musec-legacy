@@ -255,7 +255,9 @@ Item {
                 else {
                     root.height = lineHeight + 1;
                 }
-                tracks.get(trackIndex - 1).trackHeight = root.height;
+                if(trackIndex != 0) {
+                    tracks.get(trackIndex - 1).trackHeight = root.height;
+                }
                 initialY = mouseY;
             }
         }

@@ -39,8 +39,8 @@ Item {
                 id: editorSnapUnit
                 anchors.left: parent.left
                 anchors.top: parent.top
-                color: Constants.mouseOverElementColor
-                border.width: 0
+//                color: Constants.mouseOverElementColor
+//                border.width: 0
                 width: parent.width - height
                 height: parent.height / 2
                 font.family: Constants.font

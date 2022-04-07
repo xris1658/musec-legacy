@@ -4,6 +4,7 @@ import Musec 1.0
 import Musec.Controls 1.0 as MCtrl
 
 Item {
+    id: root
     width: 638
     height: 54
     property int numerator: timeSignatureIndicatorNumeratorComboBox.currentText
@@ -12,6 +13,7 @@ Item {
     property int currentKey: 10
     property int currentNoteName: Constants.NoteName.Sharp
     property double bpm: 128
+    property bool major: true
 
     function getFloorWithWidth(bpm_: double) {
         var ret = Math.floor(bpm).toString();
@@ -145,34 +147,51 @@ Item {
                         MCtrl.ComboBox {
                             id: keyComboBox2
                             showToolTip: MCtrl.ComboBox.ShowToolTip.Never
-                            width: parent.width * 5
+                            width: parent.contentWidth
                             height: parent.height
                             opacity: 0
                             font.family: Constants.font
-                            model: ["#", "b"]
+                            model: Constants.noteName
+                            textRole: "name"
                             currentIndex: currentNoteName
-                            displayText: Constants.blackKey(keyComboBox.currentIndex)? currentText: "\u25BC"
+                            displayText: Constants.blackKey(keyComboBox.currentIndex)?
+                                Constants.noteName.get(currentIndex).asciiName:
+                                "\u25BC"
                         }
                     }
                     Column {
                         anchors.verticalCenter: keyIndicatorMain.verticalCenter
                         Text {
                             text: qsTr("MAJOR")
-                            color: Constants.bigClockTextColor
+                            color: root.major? Constants.bigClockTextColor:
+                                               Constants.bigClockAltTextColor
                             font.family: "Noto Sans Mono"
                             font.styleName: "Condensed SemiBold"
                             font.pointSize: 8
                             height: contentHeight * 0.7
                             font.capitalization: Font.AllUppercase
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: {
+                                    root.major = !root.major;
+                                }
+                            }
                         }
                         Text {
                             text: qsTr("minor")
-                            color: Constants.bigClockAltTextColor
+                            color: root.major? Constants.bigClockAltTextColor:
+                                               Constants.bigClockTextColor
                             font.family: "Noto Sans Mono"
                             font.styleName: "Condensed SemiBold"
                             font.pointSize: 8
                             height: contentHeight * 0.7
                             font.capitalization: Font.AllLowercase
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: {
+                                    root.major = !root.major;
+                                }
+                            }
                         }
                     }
                 }

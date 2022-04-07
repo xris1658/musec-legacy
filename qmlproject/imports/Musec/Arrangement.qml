@@ -19,8 +19,9 @@ Item {
     property alias timelineNumerator: timeline.numerator
     property int showMasterTrack: Arrangement.ShowMasterTrack.Hide
     readonly property alias showMasterTrackModel: showMasterTrackButton.model
-    property int masterTrackHeight: 60
+    property alias masterTrackHeight: masterTrack.height
     property bool loop: false
+    property bool showAutomation: automationButton.automationEnabled
     property ListModel tracks
     property alias arrangementSnapUnit: editorSnapUnit
     property int barCount: 20
@@ -34,7 +35,6 @@ Item {
         color: Constants.backgroundColor
         title: qsTr("选择颜色")
         modality: Qt.WindowModal
-//        showAlphaChannel: false
         onAccepted: {
             tracks.get(colorDest1.trackIndex - 1).color = color;
         }
@@ -135,8 +135,8 @@ Item {
                     font.family: Constants.font
                     model: ["1/64", "1/32", "1/16", "1/8", "1/4", "1/2", "1/1", "2", "4", "8", "16"]
                     currentIndex: 4
-                    color: Constants.mouseOverElementColor
-                    border.width: 0
+//                    color: Constants.mouseOverElementColor
+//                    border.width: 0
                     z: 1
                     MCtrl.ToolTip {
                         visible: parent.hovered
@@ -146,6 +146,10 @@ Item {
                 MCtrl.Button {
                     id: automationButton
                     property bool automationEnabled: false
+                    property color enabledForeColor: Constants.backgroundColor
+                    property color disabledForeColor: Constants.contentColor1
+                    property color enabledBackColor: Constants.contentColor1
+                    property color disabledBackColor: Constants.backgroundColor
                     anchors.bottom: parent.bottom
                     anchors.left: parent.left
                     width: height
@@ -164,8 +168,7 @@ Item {
                             width: 5
                             height: width
                             radius: width / 2
-                            color: automationButton.automationEnabled? Constants.contentColor1: Constants.contentColor2
-                            border.color: color
+                            color: automationButton.automationEnabled? automationButton.enabledForeColor: automationButton.enabledBackColor
                         }
                         Rectangle {
                             anchors.right: parent.right
@@ -173,8 +176,7 @@ Item {
                             width: 5
                             height: width
                             radius: width / 2
-                            color: automationButton.automationEnabled? Constants.contentColor1: Constants.contentColor2
-                            border.color: color
+                            color: automationButton.automationEnabled? automationButton.enabledForeColor: automationButton.enabledBackColor
                         }
                         Shape {
                             width: parent.width
@@ -189,7 +191,8 @@ Item {
                                     y: 3
                                 }
                                 strokeWidth: 1.5
-                                strokeColor: automationButton.automationEnabled? Constants.contentColor1: Constants.contentColor2
+                                strokeColor: fillColor
+                                fillColor: automationButton.automationEnabled? automationButton.enabledForeColor: automationButton.enabledBackColor
                             }
                         }
                     }
@@ -197,7 +200,7 @@ Item {
                     z: 1
                     MCtrl.ToolTip {
                         visible: parent.hovered
-                        text: qsTr("自动化包络")
+                        text: qsTr("自动化包络: ") + (automationButton.automationEnabled? qsTr("显示"): qsTr("隐藏"))
                     }
                     onClicked:  {
                         automationEnabled = !automationEnabled;
@@ -283,7 +286,7 @@ Item {
                     id: masterTrack
                     trackName: qsTr("Master")
                     parent: showMasterTrackButton.currentIndex == 1? masterTrackHeader: masterTrackFooter
-                    height: showMasterTrackButton.currentIndex ? parent.height: 0
+                    height: 60
                     Rectangle {
                         width: parent.width
                         height: 1
@@ -327,7 +330,6 @@ Item {
                     id: trackHeaderList
                     property int footerHeight: 50
                     orientation: Qt.Vertical
-//                    anchors.fill: parent
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.top: masterTrackHeader.bottom
@@ -335,7 +337,6 @@ Item {
                     model: tracks
                     interactive: false
                     property int minimumBlankHeight: 50
-//                    property int blankHeight: height < contentHeight + minimumBlankHeight? contentHeight - height: minimumBlankHeight
                     z: 1
                     clip: true
                     ScrollBar.vertical: ScrollBar {
@@ -483,8 +484,9 @@ Item {
                     id: vbarPlaceholder
                     width: 15
                     anchors.top: ru.bottom
+                    anchors.topMargin: masterTrackHeader.height
                     anchors.right: parent.right
-                    height: headers.height
+                    height: headers.height - anchors.topMargin - masterTrackFooter.height
                     color: Constants.mouseOverElementColor
                 }
             }

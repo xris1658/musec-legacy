@@ -137,8 +137,8 @@ Item {
                         expanded = !expanded;
                         if(expanded) {
                             if(explorerViewLoader.source == "") {
-                                explorerViewLoader.source = "ExplorerView.qml";
                                 expandableItemButton.loading = true;
+                                explorerViewLoader.source = "ExplorerView.qml";
                             }
                         }
                     }

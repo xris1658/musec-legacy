@@ -21,46 +21,54 @@ QQC2.ComboBox {
     property alias border: _background.border
     font.family: Constants.font
     height: 20
-    property int popupWidth: width
+    property int popupMinWidth
+    property int popupWidth: Math.max(width, popupMinWidth)
     ToolTip {
         text: currentText
         visible: showToolTip === ComboBox.ShowToolTip.Always? hovered:
-                 showToolTip === ComboBox.ShowToolTip.Needed? (popupWidth < width) && hovered:
-                 false
+            showToolTip === ComboBox.ShowToolTip.Needed? (popupWidth < width) && hovered:
+            false
     }
     delegate: QQC2.ItemDelegate {
         id: comboBoxDelegate
-        width: comboBox.popup.width
+        width: comboBox.popupWidth
         height: 20
         background: Rectangle { // 实现高亮
-            width: parent.width
-            height: parent.height
+            width: comboBoxDelegate.width
+            height: comboBoxDelegate.height
             color: comboBox.highlightedIndex === index? Constants.menuHighlightBackgroundColor : Constants.menuBackgroundColor
             Item {
                 id: currentSelectionIndicator
                 anchors.right: parent.right
-                anchors.top: parent.top
                 width: parent.height
-                height: parent.height
+                height: width
+                visible: comboBox.currentIndex === index
                 Rectangle {
                     anchors.centerIn: parent
                     width: parent.width / 3
                     height: parent.width / 3
                     radius: width / 2
-                    color: comboBox.highlightedIndex === index? Constants.menuHighlightContentColor: Constants.menuContentColor
-                    opacity: comboBox.currentIndex === index? 1: 0
+                    color: Constants.menuContentColor
                 }
             }
         }
         contentItem: Rectangle {
             id: content
-//            width: parent.width
-            implicitWidth: comboBox.width
-            width: popupWidth == comboBox.width? comboBox.width: popupWidth + parent.height
-            height: parent.height
+            width: comboBoxDelegate.width
+            height: comboBoxDelegate.height
             Text {
                 id: contentText
-                width: parent.width - parent.height
+                function updatePopupMinWidth() {
+                    if(contentText.contentWidth + comboBoxDelegate.height - anchors.leftMargin > comboBox.popupMinWidth) {
+                        comboBox.popupMinWidth = contentText.contentWidth + comboBoxDelegate.height - anchors.leftMargin;
+                    }
+                }
+                Component.onCompleted: {
+                    updatePopupMinWidth();
+                }
+                onContentHeightChanged: {
+                    updatePopupMinWidth();
+                }
                 anchors.left: parent.left
                 anchors.leftMargin: -5
                 anchors.verticalCenter: content.verticalCenter
@@ -68,12 +76,6 @@ QQC2.ComboBox {
                 text: comboBox.textRole ? (Array.isArray(comboBox.model) ? modelData[comboBox.textRole] : model[comboBox.textRole]) : modelData
                 color: comboBox.highlightedIndex === index? Constants.menuHighlightContentColor: Constants.menuContentColor
                 font: comboBox.font
-//                elide: Text.ElideRight
-            }
-            Component.onCompleted: {
-                if(contentText.contentWidth > comboBox.popupWidth) {
-                    comboBox.popupWidth = contentText.contentWidth + 5;
-                }
             }
         }
     }
@@ -107,16 +109,14 @@ QQC2.ComboBox {
         border.width: comboBox.activeFocus? 2: 1
     }
     popup: Menu {
-        width: popupWidth == comboBox.width? comboBox.width: popupWidth + parent.height
+        width: comboBox.popupWidth
         y: parent.height
-        implicitWidth: comboBox.width
         implicitHeight: contentItem.implicitHeight + 2
         padding: 1
         contentItem: ListView {
             clip: true
             implicitHeight: contentHeight
-            model: comboBox.popup.visible?
-                       comboBox.delegateModel : null
+            model: comboBox.delegateModel
             currentIndex: comboBox.currentIndex
             focus: true
             interactive: false
