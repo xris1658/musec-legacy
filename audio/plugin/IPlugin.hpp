@@ -26,6 +26,8 @@ public:
 public:
     virtual bool initialize(double sampleRate, std::int32_t maxSampleCount) = 0;
     virtual bool uninitialize() = 0;
+    virtual bool activate() = 0;
+    virtual bool deactivate() = 0;
     virtual bool startProcessing() = 0;
     virtual bool stopProcessing() = 0;
 };

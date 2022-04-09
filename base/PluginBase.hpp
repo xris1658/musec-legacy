@@ -4,10 +4,10 @@
 #include <QList>
 #include <QString>
 
-#include <vst2.x/aeffect.h>
-#include <vst2.x/aeffectx.h>
+#include <pluginterfaces/vst2.x/aeffect.h>
+#include <pluginterfaces/vst2.x/aeffectx.h>
 
-#include <base/ipluginbase.h>
+#include <pluginterfaces/base/ipluginbase.h>
 
 namespace Musec
 {

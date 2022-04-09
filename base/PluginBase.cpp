@@ -172,32 +172,38 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                             }
                         }
                         auto pluginType = PluginType::TypeUnknown;
-                        for(auto i = 0; i <= wordCount; ++i)
+                        for(auto j = 0; j <= wordCount; ++j)
                         {
-                            if(std::strcmp(strings[i], Steinberg::Vst::PlugType::kFx) == 0)
+                            if(std::strcmp(strings[j], Steinberg::Vst::PlugType::kFx) == 0)
                             {
                                 pluginType = PluginType::TypeAudioFX;
-                                ret.append(std::make_tuple(
+                                ret.append(
+                                    std::make_tuple(
                                         i,
                                         QString(classInfo2.name),
                                         PluginFormat::FormatVST3,
                                         pluginType
-                                        ));
+                                    )
+                                );
                             }
-                            else if(std::strcmp(strings[i], Steinberg::Vst::PlugType::kInstrument) == 0)
+                            else if(std::strcmp(strings[j], Steinberg::Vst::PlugType::kInstrument) == 0)
                             {
                                 pluginType = PluginType::TypeInstrument;
-                                ret.append(std::make_tuple(
-                                        i, QString(classInfo2.name),
+                                ret.append(
+                                    std::make_tuple(
+                                        i,
+                                        QString(classInfo2.name),
                                         PluginFormat::FormatVST3,
                                         pluginType
-                                        ));
+                                    )
+                                );
                             }
                         }
                         if(pluginType == PluginType::TypeUnknown)
                         {
                             ret.append(std::make_tuple(
-                                    i, QString(classInfo2.name),
+                                    i,
+                                    QString(classInfo2.name),
                                     PluginFormat::FormatVST3,
                                     pluginType
                             ));
@@ -249,7 +255,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                                 Vst::BusDirections::kInput,
                                 Vst::BusDirections::kOutput
                             };
-                        //                    constexpr wchar_t names[][5] = { L"音频输入", L"音频输出", L"事件输入", L"事件输出" };
+                        // constexpr wchar_t names[][5] = { L"音频输入", L"音频输出", L"事件输入", L"事件输出" };
                         int32 busCounts[] = { 0, 0, 0, 0 };
                         // Vst::BusInfo busInfo;
                         for(int i = 0; i < 4; ++i)

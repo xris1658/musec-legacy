@@ -59,6 +59,8 @@ public:
 public:
     bool initialize(double sampleRate, std::int32_t maxSampleCount) override;
     bool uninitialize() override;
+    bool activate() override;
+    bool deactivate() override;
     bool startProcessing() override;
     bool stopProcessing() override;
     void process(const Audio::Base::AudioBufferViews<SampleType>& inputs,

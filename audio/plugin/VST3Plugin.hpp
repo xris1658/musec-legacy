@@ -6,6 +6,7 @@
 #include "native/WindowsLibraryRAII.hpp"
 
 #include <pluginterfaces/vst/ivstaudioprocessor.h>
+#include <pluginterfaces/vst/ivsteditcontroller.h>
 
 #include <QString>
 
@@ -30,12 +31,16 @@ public: // ctor & dtor
     ~VST3Plugin() noexcept override;
 public:
     Steinberg::Vst::IAudioProcessor* effect() const;
+    Steinberg::Vst::IComponent* component() const;
+    Steinberg::Vst::IEditController* editController() const;
 public: // IDevice interfaces
     uint8_t inputCount() const override;
     uint8_t outputCount() const override;
     void process(const Audio::Base::AudioBufferViews<SampleType>& inputs,
         const Audio::Base::AudioBufferViews<SampleType>& outputs) override;
 public: // IPlugin interfaces
+    bool activate() override;
+    bool deactivate() override;
     bool initialize(double sampleRate, std::int32_t sampleCount) override;
     bool uninitialize() override;
     bool startProcessing() override;
@@ -49,15 +54,21 @@ private:
     Steinberg::IPluginFactory* factory_ = nullptr;
     Steinberg::Vst::IComponent* component_ = nullptr;
     Steinberg::Vst::IAudioProcessor* effect_ = nullptr;
-    // 调用 process 函数时将缓冲区信息填入此处，交给插件处理
+    Steinberg::Vst::IEditController* editController_ = nullptr;
+private:
+    // IAudioProcessor::process 函数调用的实参
     Steinberg::Vst::ProcessData processData_;
-    // 调用 process 函数时将输入缓冲区信息填入此处，交给插件处理
+    // 调用 process 函数时将 data 赋值给 processData_
     std::vector<Steinberg::Vst::AudioBusBuffers> inputs_;
-    // 调用 process 函数时将输出缓冲区信息填入此处，交给插件处理
+    // 调用 process 函数时将 data 赋值给 processData_
     std::vector<Steinberg::Vst::AudioBusBuffers> outputs_;
+    // 输入音频缓冲区的原始数组
     std::vector<SampleType*> inputRaw_;
+    // 输出音频缓冲区的原始数组
     std::vector<SampleType*> outputRaw_;
+    // 各个总线的输入的扬声器布局
     SpeakerArrangements inputSpeakerArrangements_;
+    // 各个总线输出的扬声器布局
     SpeakerArrangements outputSpeakerArrangements_;
 };
 

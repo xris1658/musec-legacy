@@ -379,9 +379,22 @@ bool VST2Plugin<SampleType>::uninitialize()
 }
 
 template<typename SampleType>
-bool VST2Plugin<SampleType>::startProcessing()
+bool VST2Plugin<SampleType>::activate()
 {
     effect_->dispatcher(effect_, AEffectOpcodes::effMainsChanged,  0, 1, nullptr, 0);
+    return true;
+}
+
+template<typename SampleType>
+bool VST2Plugin<SampleType>::deactivate()
+{
+    effect_->dispatcher(effect_, AEffectOpcodes::effMainsChanged, 0, 0, nullptr, 0);
+    return true;
+}
+
+template<typename SampleType>
+bool VST2Plugin<SampleType>::startProcessing()
+{
     effect_->dispatcher(effect_, AEffectXOpcodes::effStartProcess, 0, 0, nullptr, 0);
     return true;
 }
@@ -390,7 +403,6 @@ template<typename SampleType>
 bool VST2Plugin<SampleType>::stopProcessing()
 {
     effect_->dispatcher(effect_, AEffectXOpcodes::effStopProcess, 0, 0, nullptr, 0);
-    effect_->dispatcher(effect_, AEffectOpcodes::effMainsChanged, 0, 0, nullptr, 0);
     return true;
 }
 
