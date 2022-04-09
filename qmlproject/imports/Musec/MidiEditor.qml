@@ -61,7 +61,7 @@ Item {
                 contentItem: Text {
                     anchors.centerIn: parent
                     text: "3"
-                    color: triplets? Constants.contentColor1: Constants.contentColor2
+                    color: triplets? Constants.backgroundColor: Constants.contentColor1
                     font.family: "Noto Sans Mono Condensed"
                     font.styleName: "SemiBold"
                     verticalAlignment: Text.AlignVCenter
@@ -94,7 +94,7 @@ Item {
                     font.styleName: "SemiBold"
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    color: showKeyScaleButton.showKeyScale? Constants.contentColor1: Constants.contentColor2
+                    color: showKeyScaleButton.showKeyScale? Constants.backgroundColor: Constants.contentColor1
                 }
                 background: Rectangle {
                     anchors.fill: parent
