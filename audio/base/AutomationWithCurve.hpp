@@ -64,11 +64,11 @@ public:
     }
     ~AutomationWithCurve() noexcept {}
 protected:
-    auto lowerBound(const T& time) const
+    PointVectorConstIterator lowerBound(const T& time) const
     {
         return std::lower_bound(points_.cbegin(), points_.cend(), time, timeFromPointWithCurveIsLessThanTime<T, V>);
     }
-    auto upperBound(const T& time) const
+    PointVectorConstIterator upperBound(const T& time) const
     {
         auto ret = lowerBound(time);
         if (ret != points_.cend() && ret->time_ == time)
@@ -77,11 +77,11 @@ protected:
         }
         return ret;
     }
-    auto lowerBound(const T& time)
+    PointVectorIterator lowerBound(const T& time)
     {
         return std::lower_bound(points_.begin(), points_.end(), time, timeFromPointWithCurveIsLessThanTime<T, V>);
     }
-    auto upperBound(const T& time)
+    PointVectorIterator upperBound(const T& time)
     {
         auto ret = lowerBound(time);
         if (ret != points_.cend() && ret->time_ == time)
@@ -90,19 +90,19 @@ protected:
         }
         return ret;
     }
-    auto begin() noexcept
+    PointVectorIterator begin() noexcept
     {
         return points_.begin();
     }
-    auto cbegin() const noexcept
+    PointVectorConstIterator cbegin() const noexcept
     {
         return points_.cbegin();
     }
-    auto end() noexcept
+    PointVectorIterator end() noexcept
     {
         return points_.end();
     }
-    auto cend() const noexcept
+    PointVectorConstIterator cend() const noexcept
     {
         return points_.cend();
     }

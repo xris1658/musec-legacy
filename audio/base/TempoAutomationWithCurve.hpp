@@ -50,6 +50,18 @@ public:
         auto right = Base::begin() + index;
         right->curve_ = 0;
     }
+private:
+    double secondElapsed(typename Base::PointVectorConstIterator left, const TimePoint<PPQ>& from, const TimePoint<PPQ>& to) const
+    {
+        auto function = Base::getFunction(left);
+        function.a *= PPQ;
+        function.b *= PPQ;
+        function.c *= PPQ;
+        double ret = Musec::Math::quadraticFunctionInvertIntegration(
+            function, from, to
+        ) * 60.0;
+        return ret;
+    }
 public:
     std::size_t ppq() const
     {
@@ -80,13 +92,7 @@ public:
             else
             {
                 auto beforeStart = notBeforeStart - 1;
-                auto function = Base::getFunction(beforeStart);
-                function.a *= PPQ;
-                function.b *= PPQ;
-                function.c *= PPQ;
-                ret = Musec::Math::quadraticFunctionInvertIntegration(
-                    function, from, to
-                ) * 60.0;
+                ret = secondElapsed(notBeforeStart, from, to);
                 return ret;
             }
         }
@@ -105,25 +111,13 @@ public:
         }
         else
         {
-            auto function = Base::getFunction(notBeforeStart - 1);
-            function.a *= PPQ;
-            function.b *= PPQ;
-            function.c *= PPQ;
-            ret += Musec::Math::quadraticFunctionInvertIntegration(
-                function, from, notBeforeStart->time_
-            ) * 60.0;
+            ret += secondElapsed(notBeforeStart - 1, from, notBeforeStart->time_);
         }
         auto beforeEnd = notBeforeEnd - 1;
         // Step 2 of 3: --point--point--
         for(auto it = notBeforeStart; it < beforeEnd; ++it)
         {
-            auto function = Base::getFunction(it);
-            function.a *= PPQ;
-            function.b *= PPQ;
-            function.c *= PPQ;
-            ret += Musec::Math::quadraticFunctionInvertIntegration(
-                function, it->time_, (it + 1)->time_
-            ) * 60.0;
+            ret += secondElapsed(it, it->time_, (it + 1)->time_);
         }
         // Step 3 of 3: --to
         if(notBeforeEnd == Base::cend())
@@ -132,13 +126,7 @@ public:
         }
         else
         {
-            auto function = Base::getFunction(beforeEnd);
-            function.a *= PPQ;
-            function.b *= PPQ;
-            function.c *= PPQ;
-            ret += Musec::Math::quadraticFunctionInvertIntegration(
-                function, beforeEnd->time_, to
-            ) * 60.0;
+            ret += secondElapsed(beforeEnd, beforeEnd->time_, to);
         }
         return ret;
     }
@@ -150,26 +138,76 @@ public:
     {
         return secondElapsed(pulse, TimePoint<PPQ>(pulse.pulse() + 1));
     }
-    double pulseElapsedFrom(const TimePoint<PPQ>& from, double second)
+    Duration<PPQ> pulseElapsedFrom(const TimePoint<PPQ>& from, double second, double precision = 60.0 / Musec::Audio::Base::maximumTempo / static_cast<double>(PPQ)) const
     {
         if(second == 0)
         {
-            return 0;
+            return Duration<PPQ>(0);
         }
         // from 右侧的点，或者与 from 重合的点
         auto lowerBound = Base::lowerBound(from);
-
-        // TODO: 在此处完成实际时间到节拍的转换
-        // 方法未知：硬算？二分法？或者是别的？
-        // 我大概得去看看数值分析的内容。
+        double sec = from == lowerBound->time_? 0: secondElapsed(from, lowerBound->time_);
+        for(auto i = lowerBound; i != Base::cend() - 1; ++i)
+        {
+            auto durationFromThisToNext = secondElapsed(i, i->time_, (i + 1)->time_);
+            if(sec + durationFromThisToNext < second)
+            {
+                sec += durationFromThisToNext;
+            }
+            else if(sec + durationFromThisToNext == second)
+            {
+                return Duration<PPQ>((i + 1)->time_);
+            }
+            else
+            {
+                if(i->value_ == (i + 1)->value_)
+                {
+                    auto pulsePerSecond = i->value_ * PPQ / 60.0;
+                    return Duration<PPQ>(std::round(sec + pulsePerSecond * (second - sec)));
+                }
+                auto remain = second - sec;
+                auto ret = i->time_;
+                constexpr double half = 0.5;
+                double ratio = half;
+                auto right = i->time_ + Duration<PPQ>(((i + 1)->time_ - i->time_) * ratio);
+                while(true)
+                {
+                    auto secondEl = secondElapsed(i, i->time_, right);
+                    ratio *= half;
+                    auto delta = Duration<PPQ>(std::round(((i + 1)->time_ - i->time_) * ratio));
+                    if(delta == 0)
+                    {
+                        break;
+                    }
+                    // 求出的脉冲得出的秒数过大
+                    if(secondEl - remain > precision)
+                    {
+                        right -= Duration<PPQ>(std::round(((i + 1)->time_ - i->time_) * ratio));
+                    }
+                    // 过小
+                    else if(remain - secondEl > precision)
+                    {
+                        right += Duration<PPQ>(std::round(((i + 1)->time_ - i->time_) * ratio));
+                    }
+                    // 在误差允许的范围内（在进行实际计算时进入这一块的可能性不大）
+                    else
+                    {
+                        return Duration<PPQ>(right.pulse());
+                    }
+                }
+                return Duration<PPQ>(right.pulse());
+            }
+        }
+        auto remain = second - sec;
+        auto pulsePerSecond = (Base::cend() - 1)->value_ * PPQ / 60.0;
+        auto ret = Duration<PPQ>(((Base::cend() - 1)->time_ - from).duration() + pulsePerSecond * remain);
+        return ret;
     }
-    double pulseAtTimePoint(double second)
+    double pulseAtTimePoint(double second, double precision = 60.0 / Musec::Audio::Base::maximumTempo / static_cast<double>(PPQ)) const
     {
-        return pulseElapsedFrom(TimePoint<PPQ>(0U), second);
+        return pulseElapsedFrom(TimePoint<PPQ>(0U), second, precision);
     }
 };
-
-
 }
 }
 }

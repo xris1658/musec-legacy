@@ -11,6 +11,9 @@ namespace Audio
 namespace Base
 {
 template<std::size_t PPQ>
+class Duration;
+
+template<std::size_t PPQ>
 class TimePoint
 {
     static_assert(PPQ % 24 == 0);
@@ -45,21 +48,23 @@ public:
         --pulse_;
         return *this;
     }
-    TimePoint<PPQ> operator--(int)
+    const TimePoint<PPQ> operator--(int)
     {
         TimePoint<PPQ> ret = *this;
         operator--();
         return ret;
     }
-    TimePoint<PPQ> operator++(int)
+    const TimePoint<PPQ> operator++(int)
     {
         TimePoint<PPQ> ret = *this;
         operator++();
         return ret;
     }
+    TimePoint<PPQ>& operator+=(const Duration<PPQ>& duration);
+    TimePoint<PPQ>& operator-=(const Duration<PPQ>& duration);
 public:
     template<std::size_t PPQ2>
-    operator TimePoint<PPQ2>()
+    explicit operator TimePoint<PPQ2>()
     {
         return TimePoint<PPQ2>(pulse_ * PPQ2 / PPQ);
     }
@@ -91,6 +96,18 @@ public:
     {
         return PPQ;
     }
+public:
+    Duration<PPQ>& operator+=(const Duration<PPQ>& rhs)
+    {
+        duration_ += rhs.duration_;
+        return *this;
+    }
+    Duration<PPQ>& operator-=(const Duration<PPQ>& rhs)
+    {
+        duration_ -= rhs.duration_;
+        return *this;
+    }
+public:
     template<std::size_t PPQ2>
     explicit operator Duration<PPQ2>()
     {
@@ -207,6 +224,20 @@ template<std::size_t PPQ>
 Duration<PPQ> operator-(const Duration<PPQ>& lhs, const Duration<PPQ>& rhs)
 {
     return Duration<PPQ>(lhs.duration() - rhs.duration());
+}
+
+template<std::size_t PPQ>
+TimePoint<PPQ>& TimePoint<PPQ>::operator+=(const Duration<PPQ>& duration)
+{
+    pulse_ += duration.duration();
+    return *this;
+}
+
+template<std::size_t PPQ>
+TimePoint<PPQ>& TimePoint<PPQ>::operator-=(const Duration<PPQ>& duration)
+{
+    pulse_ -= duration.duration();
+    return *this;
 }
 }
 }
