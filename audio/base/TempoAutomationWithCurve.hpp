@@ -198,9 +198,13 @@ public:
                     constexpr double half = 0.5;
                     // 除以 2.0 比乘 0.5 慢
                     double delta = half;
+                    // (leftRatio + rightRatio) / 2
                     double ratio = (leftRatio + rightRatio) * half;
+                    // ratio 对应的时间点（浮点）
                     auto timePoint = i->time_ + (pointIteratorAtRight->time_ - i->time_) * ratio;
+                    // leftRatio 对应的时间点（浮点）
                     auto leftRange = i->time_ + (pointIteratorAtRight->time_ - i->time_) * leftRatio;
+                    // rightRatio 对应的时间点（浮点）
                     auto rightRange = i->time_ + (pointIteratorAtRight->time_ - i->time_) * rightRatio;
                     while(rightRange - leftRange >= 1)
                     {
@@ -234,11 +238,22 @@ public:
                     {
                         ret = ceiling;
                     }
-                    else
+                    auto secondElapsedToRet = secondElapsed(from, TimePoint<PPQ>(ret.duration()));
+                    auto retUp = Duration<PPQ>(ret.duration() + 1);
+                    auto secondElapsedToRetUp = secondElapsed(from, TimePoint<PPQ>(retUp.duration()));
+                    if(std::abs(secondElapsedToRetUp - second) < std::abs(secondElapsedToRet - second))
                     {
-                        ret = floor;
+                        ret = retUp;
                     }
-                    // TODO
+                    if(ret.duration() != 0)
+                    {
+                        auto retDown = Duration<PPQ>(ret.duration() - 1);
+                        auto secondElapsedToRetDown = secondElapsed(from, TimePoint<PPQ>(retDown.duration()));
+                        if(std::abs(secondElapsedToRetDown - second) < std::abs(secondElapsedToRet - second))
+                        {
+                            ret = retDown;
+                        }
+                    }
                     return ret;
                 }
             }
