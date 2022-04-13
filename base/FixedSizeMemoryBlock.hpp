@@ -1,28 +1,53 @@
 #ifndef MUSEC_BASE_FIXEDSIZEMEMORYBLOCK
 #define MUSEC_BASE_FIXEDSIZEMEMORYBLOCK
 
+#include "base/Base.hpp"
+
 #include <cstddef>
 
 namespace Musec
 {
 namespace Base
 {
-class FixedBlockSizeMemoryBlock
+class FixedSizeMemoryBlock
 {
 public:
-    FixedBlockSizeMemoryBlock(std::size_t blockSize):
+    FixedSizeMemoryBlock(std::size_t blockSize):
         blockSize_(blockSize),
-        block_(new std::byte[blockSize])
+        block_(nullptr)
     {
+        if(blockSize_)
+        {
+            block_ = new std::byte[blockSize];
+        }
     }
-    ~FixedBlockSizeMemoryBlock()
+    FixedSizeMemoryBlock(const FixedSizeMemoryBlock& rhs) = delete;
+    FixedSizeMemoryBlock(FixedSizeMemoryBlock&& rhs) noexcept:
+        blockSize_(rhs.blockSize_),
+        block_(rhs.block_)
     {
-        delete[] block_;
+        rhs.blockSize_ = 0U;
+        // rhs.block_ = nullptr;
+    }
+    ~FixedSizeMemoryBlock()
+    {
+        if(blockSize_)
+        {
+            delete[] block_;
+        }
     }
 public:
-    std::byte* data() const
+    void init()
+    {
+        std::memset(block_, 0, blockSize());
+    }
+    std::byte* data() const noexcept
     {
         return block_;
+    }
+    std::size_t blockSize() const noexcept
+    {
+        return blockSize_;
     }
 private:
     std::size_t blockSize_;

@@ -183,7 +183,7 @@ public:
             // --o--x--o--
             else
             {
-                // 点两遍的速度值相等，用不着上迭代法
+                // 点两边的速度值相等，用不着上迭代法
                 if(i->value_ == (i + 1)->value_)
                 {
                     auto pulsePerSecond = i->value_ * PPQ / 60.0;

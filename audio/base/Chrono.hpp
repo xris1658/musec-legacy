@@ -75,7 +75,6 @@ private:
 template<std::size_t PPQ>
 class Duration
 {
-    static_assert(PPQ % 24 == 0);
 public:
     explicit Duration(std::int64_t duration): duration_(duration) {}
     Duration(const Duration<PPQ>&) = default;

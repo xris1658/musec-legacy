@@ -15,7 +15,7 @@ namespace Base
 class FixedSizeMemoryPool
 {
 private:
-    using SinglePool = Musec::Base::FixedBlockSizeMemoryBlock;
+    using SinglePool = Musec::Base::FixedSizeMemoryBlock;
     using SinglePoolAllocationStatus = std::vector<bool>;
     using LockGuard = std::lock_guard<std::mutex>;
     struct IteratorOfLists
@@ -43,7 +43,6 @@ public:
     FixedSizeMemoryPool(std::size_t memoryBlockSize, std::size_t initialBlockCount);
     ~FixedSizeMemoryPool() noexcept(false);
 private:
-    void returnMemoryBlock(SinglePool& pool, std::size_t blockIndex);
     void returnMemoryBlock(IteratorOfLists iterators, std::size_t blockIndex);
     bool empty() const;
     bool full() const;
