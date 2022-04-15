@@ -5,6 +5,7 @@
 
 #include <QString>
 
+#include <cstddef>
 #include <vector>
 
 namespace Musec
@@ -18,6 +19,8 @@ enum SampleFormat
     Integer,
     Float
 };
+
+// 非交错
 class AudioSequence
 {
 public:
@@ -26,13 +29,19 @@ public:
     AudioSequence(const AudioSequence& rhs);
     AudioSequence(AudioSequence&& rhs) noexcept;
     ~AudioSequence() noexcept;
+private:
+    std::byte* raw() const;
 public:
     double sampleRate() const;
     std::uint8_t channelCount() const;
     int bitDepth() const;
+    int byteCountPerSample() const;
     SampleFormat sampleFormat() const;
+    std::size_t sampleCountPerChannel() const;
     const Musec::Base::FixedSizeMemoryBlock& content() const;
     Musec::Base::FixedSizeMemoryBlock& content();
+    const std::byte* operator()(std::uint8_t channelIndex, std::size_t sampleIndex = 0) const;
+    std::byte* operator()(std::uint8_t channelIndex, std::size_t sampleIndex = 0);
 private:
     double sampleRate_;
     std::uint8_t channelCount_;
@@ -42,9 +51,6 @@ private:
 };
 
 std::vector<AudioSequence> loadAudioSequenceFromFile(const QString& path);
-
-AudioSequence convertAudioSequence(AudioSequence& audioSequence, double sampleRate,
-    std::uint8_t channelCount, int bitDepth, SampleFormat sampleFormat);
 }
 }
 }
