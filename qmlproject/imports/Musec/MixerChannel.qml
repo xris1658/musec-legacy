@@ -40,15 +40,18 @@ Item {
     property string channelName
     property color channelColor
     property int channelNumber: 0
+    property alias effectVisible: channelEffects.visible
+    property alias gainAndMeterVisible: channelGainAndPeak.visible
     Column {
         width: parent.width
         height: parent.height
         Item {
             id: channelEffects
             width: parent.width
-            height: (root.height - channelControl.height - channelStereo.height - channelInfo.height) / 2
+            height: (root.height - channelControl.height - channelStereo.height - channelInfo.height) / (gainAndMeterVisible? 2: 1)
             clip: true
             Column {
+                visible: parent.visible
                 Repeater {
                     model: effects
                     delegate: Item {
@@ -199,7 +202,7 @@ Item {
                         Text {
                             anchors.centerIn: parent
                             anchors.verticalCenterOffset: -1.2
-                            text: "I"
+                            text: "\u2205"
                             font.family: "Noto Sans Mono"
                             font.styleName: "Condensed SemiBold"
                             font.pixelSize: 15
@@ -297,9 +300,10 @@ Item {
         Item {
             id: channelGainAndPeak
             width: parent.width
-            height: (root.height - channelControl.height - channelStereo.height - channelInfo.height) / 2
+            height: root.height - (effectVisible? channelEffects.height: 0) - channelControl.height - channelStereo.height - channelInfo.height
             clip: true
             Row {
+                visible: parent.visible
                 Column {
                     Item {
                         width: root.width / 2

@@ -43,14 +43,16 @@ protected:
     using PointVectorIterator = typename PointVector::iterator;
     using PointVectorConstIterator = typename PointVector::const_iterator;
 public:
-    AutomationWithCurve(): points_() {}
-    AutomationWithCurve(const Self& rhs): points_(rhs.points_) {}
-    AutomationWithCurve(Self&& rhs) noexcept: points_(std::move(rhs.points_)) {}
+    AutomationWithCurve(double minValue, double maxValue): points_(), minValue_(minValue), maxValue_(maxValue) {}
+    AutomationWithCurve(const Self& rhs): points_(rhs.points_), minValue_(rhs.minValue_), maxValue_(rhs.maxValue) {}
+    AutomationWithCurve(Self&& rhs) noexcept: points_(std::move(rhs.points_)), minValue_(rhs.minValue_), maxValue_(rhs.maxValue_) {}
     Self& operator=(const Self& rhs)
     {
         if (this != &rhs)
         {
             points_ = rhs.points_;
+            minValue_ = rhs.minValue_;
+            maxValue_ = rhs.maxValue_;
         }
         return *this;
     }
@@ -59,6 +61,8 @@ public:
         if (this != &rhs)
         {
             points_ = std::move(rhs.points_);
+            minValue_ = rhs.minValue_;
+            maxValue_ = rhs.maxValue_;
         }
         return *this;
     }
@@ -212,33 +216,23 @@ public:
                 else
                 {
                     return getFunction(lower - 1)(time);
-                    // auto left = lower - 1;
-                    // auto& right = lower;
-                    // if(left->value_ == right->value_)
-                    // {
-                    //     return left->value_;
-                    // }
-                    // auto controlX = (left->time_ + right->time_) * 0.5;
-                    // auto up = right->curve_ * 0.5 + 0.5;
-                    // auto controlY = left->value_ < right->value_?
-                    //     left->value_ + up * (right->value_ - left->value_):
-                    //     right->value_ + up * (left->value_ - right->value_);
-                    // auto dLeft = (controlY - left->value_) / (controlX - left->time_);
-                    // auto dRight = (right->value_ - controlY) / (right->time_ - controlX);
-                    // auto a = (dRight - dLeft) * 0.5 / (right->time_ - left->time_);
-                    // auto b = dLeft - 2 * a * left->value_;
-                    // auto c = left->value_ - a * left->time_ * left->time_ - b * left->time_;
-                    // return Musec::Math::QuadraticFunction{a, b, c}(time);
-                    // // return (right->value_ - left->value_) / (right->time_ - left->time_) * (time - left->time_) + left->value_;
                 }
             }
         }
     }
-    // 插入点。
+    // 插入点，并返回点插入的索引。
     // 如果所在时间点没有其他点存在，则直接插入，忽略第二个参数。
     // 如果所在时间点有其他点存在，则按照给定的索引值将点插入到合适的位置。
-    virtual std::size_t insertPoint(const Point& point, std::size_t indexInEqualTimePoint = 0)
+    std::size_t insertPoint(Point point, std::size_t indexInEqualTimePoint = 0)
     {
+        if(point.value_ < minValue_)
+        {
+            point.value_ = minValue_;
+        }
+        else if(point.value_ > maxValue_)
+        {
+            point.value_ = maxValue_;
+        }
         auto lower = lowerBound(point.time_);
         if (lower == points_.end())
         {
@@ -270,9 +264,22 @@ public:
             }
         }
     }
-    virtual void deletePoint(std::size_t index)
+    void deletePoint(std::size_t index)
     {
         points_.erase(points_.begin() + index);
+        auto right = begin() + index;
+        right->curve_ = 0;
+    }
+    void setValueOfPoint(std::size_t index, double value)
+    {
+        if(value < minValue_)
+        {
+            value = minValue_;
+        }
+        else if(value > maxValue_)
+        {
+            value = maxValue_;
+        }
     }
     void clearPoints()
     {
@@ -280,6 +287,8 @@ public:
     }
 private:
     PointVector points_;
+    double minValue_;
+    double maxValue_;
 };
 }
 }

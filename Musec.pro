@@ -22,7 +22,9 @@ INCLUDEPATH += D:/apps/vcpkg/installed/x64-windows/include \
                D:/apps/vst3sdk \
                D:/apps/vst3sdk/pluginterfaces \
                D:/apps/vst3sdk/public.sdk/source \
-               C:/asiosdk_2.3.3_2019-06-14
+               C:/asiosdk_2.3.3_2019-06-14 \
+               D:/apps/avcpp/src \
+               D:/apps/ffmpeg-master-windows-desktop-vs2019-default/ffmpeg-master-windows-desktop-vs2019-default/include
 
 CONFIG(debug, debug | release) {
     QMAKE_LIBDIR += \
@@ -38,6 +40,8 @@ CONFIG(release, debug | release) {
 DEFINES += _CRT_SECURE_NO_WARNINGS
 
 HEADERS += \
+    audio/arrangement/ClipInTrack.hpp \
+    audio/arrangement/TrackSequence.hpp \
     audio/base/Automation.hpp \
     audio/base/AutomationWithCurve.hpp \
     audio/base/Chrono.hpp \
@@ -45,12 +49,14 @@ HEADERS += \
     audio/base/TempoAutomationWithCurve.hpp \
     audio/base/TimeSignature.hpp \
     audio/base/TimeSignatureSequence.hpp \
+    audio/device/IDevice.hpp \
     audio/driver/ASIODriverForward.hpp \
     audio/driver/ASIOCallback.hpp \
     audio/driver/ASIODriver.hpp \
     audio/driver/ASIODriverStreamInfo.hpp \
     audio/engine/MIDIClock.hpp \
     audio/host/MusecVST3Host.hpp \
+    audio/media/AudioSequence.hpp \
     audio/plugin/IPlugin.hpp \
     audio/plugin/VST2Plugin.hpp \
     audio/plugin/VST3Plugin.hpp \
@@ -64,6 +70,8 @@ HEADERS += \
     base/Base.hpp \
     base/Constants.hpp \
     base/FileBase.hpp \
+    base/FixedSizeMemoryBlock.hpp \
+    base/FixedSizeMemoryPool.hpp \
     base/FolderBase.hpp \
     base/PluginBase.hpp \
     base/Pool.hpp \
@@ -109,20 +117,21 @@ HEADERS += \
     util/Literal.hpp
 
 SOURCES += \
-    main.cpp \
     audio/base/TimeSignature.cpp \
     audio/driver/ASIOCallback.cpp \
     audio/driver/ASIODriver.cpp \
     audio/engine/MIDIClock.cpp \
     audio/host/MusecVST3Host.cpp \
+    audio/media/AudioSequence.cpp \
     audio/plugin/ShellPluginId.cpp \
     audio/plugin/VST2Plugin.cpp \
     audio/plugin/VST3Plugin.cpp \
     audio/track/AudioTrack.cpp \
     audio/util/Util.cpp \
+    base/FixedSizeMemoryPool.cpp \
     base/PluginBase.cpp \
-    controller/AppController.cpp \
     controller/ASIODriverController.cpp \
+    controller/AppController.cpp \
     controller/AssetController.cpp \
     controller/AssetDirectoryController.cpp \
     controller/AudioEngineController.cpp \
@@ -156,7 +165,32 @@ SOURCES += \
     ui/MessageDialog.cpp \
     ui/Render.cpp \
     ui/UI.cpp \
-    util/Literal.cpp
+    util/Literal.cpp \
+    main.cpp \
+    D:/apps/avcpp/src/audioresampler.cpp \
+    D:/apps/avcpp/src/averror.cpp \
+    D:/apps/avcpp/src/avtime.cpp \
+    D:/apps/avcpp/src/avutils.cpp \
+    D:/apps/avcpp/src/codec.cpp \
+    D:/apps/avcpp/src/codeccontext.cpp \
+    D:/apps/avcpp/src/dictionary.cpp \
+    D:/apps/avcpp/src/format.cpp \
+    D:/apps/avcpp/src/formatcontext.cpp \
+    D:/apps/avcpp/src/frame.cpp \
+    D:/apps/avcpp/src/packet.cpp \
+    D:/apps/avcpp/src/pixelformat.cpp \
+    D:/apps/avcpp/src/rational.cpp \
+    D:/apps/avcpp/src/rect.cpp \
+    D:/apps/avcpp/src/sampleformat.cpp \
+    D:/apps/avcpp/src/stream.cpp \
+    D:/apps/avcpp/src/timestamp.cpp \
+    D:/apps/avcpp/src/videorescaler.cpp \
+    D:/apps/avcpp/src/filters/buffersink.cpp \
+    D:/apps/avcpp/src/filters/buffersrc.cpp \
+    D:/apps/avcpp/src/filters/filter.cpp \
+    D:/apps/avcpp/src/filters/filtercontext.cpp \
+    D:/apps/avcpp/src/filters/filtergraph.cpp \
+    D:/apps/avcpp/src/filters/filterpad.cpp
 
 RESOURCES += \
     $$files(qmlproject/*) \
@@ -174,7 +208,14 @@ LIBS += \
     base.lib \
     pluginterfaces.lib \
     sdk_common.lib \
-    sdk_hosting.lib
+    sdk_hosting.lib \
+    avcodec.lib \
+    avdevice.lib \
+    avfilter.lib \
+    avformat.lib \
+    avutil.lib \
+    swresample.lib \
+    swscale.lib
 
 CONFIG(debug, debug | release) {
     LIBS += yaml-cppd.lib \

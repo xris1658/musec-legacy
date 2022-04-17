@@ -703,7 +703,6 @@ ApplicationWindow {
             }
         }
     }
-
     //状态栏
     Rectangle {
         id: statusBar

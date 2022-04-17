@@ -1,16 +1,66 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import Musec.Controls 1.0 as MCtrl
+
 Rectangle {
     id: root
     color: Constants.backgroundColor2
     property ListModel tracks
+    property bool effectVisible: true
+    property bool gainAndMeterVisible: true
     clip: true
     Rectangle {
         id: mixerContentIndicator
         width: 25
         height: parent.height
         color: Constants.backgroundColor
+        Column {
+            MCtrl.Button {
+                id: effectVisibleToggleButton
+                width: mixerContentIndicator.width
+                height: 20
+                border.width: 0
+                color: root.effectVisible? Constants.mouseOverElementColor: Constants.backgroundColor
+                Text {
+                    text: qsTr("fx")
+                    font.family: "Noto Sans Mono"
+                    font.styleName: "Condensed"
+                    font.italic: true
+                    anchors.centerIn: parent
+                    color: Constants.contentColor1
+                }
+                MCtrl.ToolTip {
+                    visible: parent.hovered
+                    text: qsTr("显示效果")
+                }
+                onClicked: {
+                    root.effectVisible  = !root.effectVisible;
+                }
+            }
+            MCtrl.Button {
+                id: gainAndMeterVisibleToggleButton
+                width: mixerContentIndicator.width
+                height: 20
+                border.width: 0
+                color: root.gainAndMeterVisible? Constants.mouseOverElementColor: Constants.backgroundColor
+                Text {
+                    text: qsTr("dB")
+                    font.family: "Noto Sans Mono"
+                    font.styleName: "Condensed"
+                    font.italic: true
+                    anchors.centerIn: parent
+                    color: Constants.contentColor1
+                }
+                MCtrl.ToolTip {
+                    visible: parent.hovered
+                    text: qsTr("显示电平表和增益推子")
+                }
+                onClicked: {
+                    root.gainAndMeterVisible = !root.gainAndMeterVisible;
+                }
+            }
+        }
         Rectangle {
             anchors.right: parent.right
             anchors.top: parent.top
@@ -35,6 +85,8 @@ Rectangle {
             channelNumber: 0
             width: 120
             height: root.height - scroll.height
+            effectVisible: root.effectVisible
+            gainAndMeterVisible: root.gainAndMeterVisible
         }
         Rectangle {
             id: masterChannelRightBorder
@@ -82,6 +134,8 @@ Rectangle {
                     width: 120
                     height: root.height - scroll.height
                     channelNumber: index + 1
+                    effectVisible: root.effectVisible
+                    gainAndMeterVisible: root.gainAndMeterVisible
                 }
                 Rectangle {
                     width: 1

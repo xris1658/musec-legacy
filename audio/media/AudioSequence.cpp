@@ -16,7 +16,6 @@ namespace Media
 {
 namespace Impl
 {
-
 class AvCppInit
 {
 private:
@@ -28,6 +27,7 @@ public:
     }
 };
 }
+
 AudioSequence::AudioSequence(double sampleRate, std::uint8_t channelCount, int bitDepth,
     SampleFormat sampleFormat, std::size_t sampleCountPerChannel):
     sampleRate_(sampleRate),
@@ -221,7 +221,6 @@ std::vector<AudioSequence> loadAudioSequenceFromFile(const QString& path)
                         // j 是声道索引
                         for(int j = 0; j < audioDecoderContext.channels(); ++j)
                         {
-                            // TODO: 写入 ret.back().content().data()
                             auto data = reinterpret_cast<const char*>(samples.data(j)) + i;
                             auto size = bytesPerSample;
                             auto dest = reinterpret_cast<void*>(ret.back()(j, i / bytesPerSample + offsetPerChannel));

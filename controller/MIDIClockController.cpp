@@ -15,7 +15,15 @@ Musec::Audio::Engine::MIDIClock<Musec::Controller::MIDIClockController::AppPPQ>&
         clockThread.detach();
     }
     auto tempo = Musec::UI::mainWindow->property("bpm").toDouble();
-    ret.tempoAutomation().insertPoint({Musec::Audio::Base::TimePoint<Musec::Controller::MIDIClockController::AppPPQ>(0), tempo, 0.0});
+    // FIXME
+    if(ret.tempoAutomation().pointCount())
+    {
+        ret.tempoAutomation()[0].value_ = tempo;
+    }
+    else
+    {
+        ret.tempoAutomation().insertPoint({Musec::Audio::Base::TimePoint<Musec::Controller::MIDIClockController::AppPPQ>(0), tempo, 0.0});
+    }
     return ret;
 }
 

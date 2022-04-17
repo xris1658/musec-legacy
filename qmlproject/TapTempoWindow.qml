@@ -18,6 +18,10 @@ Window {
         tapButton.forceActiveFocus();
     }
 
+    function applyTempo(tempo: double) {
+        //
+    }
+
     QtObject {
         id: variables
         property double start

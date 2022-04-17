@@ -518,8 +518,8 @@ Rectangle {
                                         text: name
                                         font.family: Constants.font
                                         color: rightColumn.currentIndex == 1 && assetContent.currentIndex == index?
-                                                   Constants.backgroundColor:
-                                                   Constants.contentColor1
+                                            Constants.backgroundColor:
+                                            Constants.contentColor1
                                     }
                                 }
                             }
@@ -574,6 +574,12 @@ Rectangle {
                                 y: -rightVBar.position * height
                                 width: rightVBar.visible? parent.width - rightVBar.width: parent.width
                                 visible: directoryContent.currentIndex == index
+                                onHeightChanged: {
+                                    if(rightVBar.visible && y + height  < rightFlickable.height) {
+                                        rightVBar.position = 1 - rightVBar.height / rightExplorerView.height;
+                                    }
+                                    rightVBar.position = -1 * y / height;
+                                }
                             }
                             ScrollBar {
                                 id: rightVBar

@@ -25,33 +25,13 @@ template<std::size_t PPQ>
 class TempoAutomationWithCurve: public AutomationWithCurve<TimePoint<PPQ>, double>
 {
     using Base = AutomationWithCurve<TimePoint<PPQ>, double>;
+public:
+    TempoAutomationWithCurve(): Base(minimumTempo, maximumTempo) {}
 private:
     // 给定速度和经过的脉冲数，求经过的实际时间，单位为秒。
     double secondElapsed(double bpm, const Duration<PPQ>& duration) const
     {
         return duration / (bpm * PPQ) * 60.0;
-    }
-public:
-    // 插入点。会将超出范围的速度值调回正常范围。
-    std::size_t insertPoint(const typename Base::Point& point, std::size_t indexInEqualTimePoint = 0) override
-    {
-        auto insertedPoint = point;
-        if(insertedPoint.value_ < minimumTempo)
-        {
-            insertedPoint.value_ = minimumTempo;
-        }
-        else if(insertedPoint.value_ > maximumTempo)
-        {
-            insertedPoint.value_ = maximumTempo;
-        }
-        return Base::insertPoint(insertedPoint, indexInEqualTimePoint);
-    }
-    // 移除点。会将相关点的弯曲值调为 0。
-    void deletePoint(std::size_t index) override
-    {
-        Base::deletePoint(index);
-        auto right = Base::begin() + index;
-        right->curve_ = 0;
     }
 private:
     // 给定一段速度自动化曲线中的一段和启动终止脉冲数，求经过的实际时间。假设启动和终止脉冲在曲线一段的范围内。
@@ -109,7 +89,7 @@ public:
             else
             {
                 auto beforeStart = notBeforeStart - 1;
-                ret = secondElapsed(notBeforeStart, from, to);
+                ret = secondElapsed(beforeStart, from, to);
                 return ret;
             }
         }

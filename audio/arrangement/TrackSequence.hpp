@@ -21,7 +21,20 @@ using AudioTrackSequence = TrackSequence<Musec::Audio::Media::AudioSequence, dou
 using MIDITrackSequence = TrackSequence<Musec::Audio::Media::MIDISequence, std::int64_t>;
 
 template<typename ClipType, typename TimePointType>
-std::shared_ptr<ClipType> getClipAtTime(const TrackSequence<ClipType, TimePointType>& trackSequence, TimePointType timePoint);
+std::shared_ptr<ClipType> getClipAtTime(const TrackSequence<ClipType, TimePointType>& trackSequence, TimePointType timePoint)
+{
+    auto afterTimePoint = std::lower_bound(trackSequence.begin(), trackSequence.end(), timePoint,
+        [](const Musec::Audio::Arrangement::ClipInTrack<ClipType, TimePointType>& clipInTrack, TimePointType timePoint)
+        {
+            return clipInTrack.endTime_ < timePoint;
+        }
+    );
+    if(afterTimePoint == trackSequence.end() || afterTimePoint->startTime_ > timePoint)
+    {
+        return std::shared_ptr<ClipType>(); // nullptr
+    }
+    return afterTimePoint->clip_;
+}
 }
 }
 }
