@@ -393,7 +393,6 @@ Rectangle {
                                                    parent.containsMouse? Constants.mouseOverElementColor:
                                                                          Constants.backgroundColor
                                     }
-
                                     Row {
                                         Item {
                                             width: 20

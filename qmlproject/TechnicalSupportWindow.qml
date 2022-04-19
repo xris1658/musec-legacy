@@ -41,7 +41,7 @@ Window {
                         width: parent.width
                         height: parent.height
                         Text {
-                            width: parent.width * 0.3
+                            width: parent.width * 0.4
                             text: "<a href=\"%1\">%2</a>".arg(homepage).arg(name)
                             anchors.verticalCenter: parent.verticalCenter
                             padding: 5
@@ -57,7 +57,7 @@ Window {
                                 anchors.verticalCenter: parent.verticalCenter
                             }
                             MCtrl.ToolTip {
-                                text: "<p>单击访问以下链接:</p>%1"
+                                text: "<p><b>单击访问以下链接:</b></p>%1"
                                        .arg(homepage)
                                 visible: hover.hovered
                             }
@@ -66,7 +66,7 @@ Window {
                             }
                         }
                         Text {
-                            width: parent.width * 0.7
+                            width: parent.width * 0.6
                             text: description
                             anchors.verticalCenter: parent.verticalCenter
                             padding: 5

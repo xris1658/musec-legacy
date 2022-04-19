@@ -158,6 +158,11 @@ QtObject {
             description: qsTr("用于操作多媒体文件的跨平台库")
         }
         ListElement {
+            name: "Avcpp"
+            homepage: "https://github.com/h4tr3d/avcpp"
+            description: qsTr("FFmpeg 的 C++ 封装")
+        }
+        ListElement {
             name: "Inno Setup"
             homepage: "https://jrsoftware.org/isinfo.php"
             description: qsTr("安装程序框架")
@@ -178,9 +183,24 @@ QtObject {
             description: qsTr("音频重采样工具")
         }
         ListElement {
+            name: "spdlog"
+            homepage: "https://github.com/gabime/spdlog"
+            description: qsTr("日志记录工具")
+        }
+        ListElement {
+            name: "{fmt}"
+            homepage: "https://fmt.dev"
+            description: qsTr("格式化文本工具，spdlog 的依赖")
+        }
+        ListElement {
             name: "SQLite"
             homepage: "https://www.sqlite.org/index.html"
             description: qsTr("轻量，高效的数据库引擎")
+        }
+        ListElement {
+            name: "sqlite-modern-cpp"
+            homepage: "https://github.com/aminroosta/sqlite_modern_cpp"
+            description: qsTr("SQLite 的现代 C++ 封装")
         }
         ListElement {
             name: "VST"

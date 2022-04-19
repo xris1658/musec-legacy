@@ -3,6 +3,7 @@
 
 #include "base/Color.hpp"
 
+#include <QColor>
 #include <QString>
 
 #include <array>
@@ -15,8 +16,9 @@ namespace Track
 {
 struct TrackInformation
 {
-    QString name_;
-    Musec::Base::Color color_;
+    QString name;
+    QColor color;
+    int height;
 };
 }
 }

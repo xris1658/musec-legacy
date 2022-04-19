@@ -30,6 +30,10 @@ public:
     virtual bool deactivate() = 0;
     virtual bool startProcessing() = 0;
     virtual bool stopProcessing() = 0;
+    virtual bool setBypass(bool bypass)
+    {
+        return bypass? stopProcessing(): startProcessing();
+    }
 };
 }
 }

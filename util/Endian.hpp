@@ -10,11 +10,11 @@ namespace Util
 enum class Endian
 {
     UnknownEndian,
-    LittleEndian,
+    LittleEndian, // 不以 k 开头，因为和 Steinberg VST3 SDK 中的宏定义撞车了
     BigEndian
 };
 
-constexpr Endian endian();
+constexpr Musec::Util::Endian endian();
 
 void reverseEndianness(void* data, std::size_t byteCount);
 

@@ -46,7 +46,7 @@ int PluginListModel::itemCount() const
 
 constexpr int PluginListModel::columnSize()
 {
-    return std::tuple_size<Item>::value;
+    return std::tuple_size_v<Item>;
 }
 
 int PluginListModel::rowCount(const QModelIndex&) const

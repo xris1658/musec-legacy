@@ -7,7 +7,9 @@
 
 namespace Musec
 {
-namespace DKWTP
+namespace Audio
+{
+namespace Engine
 {
 template<typename T>
 class Graph
@@ -156,19 +158,19 @@ bool containsPath(const Graph<T>& graph, T* const from, T* const to)
     static std::vector<T*> stack;
     stack.emplace_back(from);
     const auto& fromNext = graph.nextNodes(from);
-    auto ret = 
-    (std::find(fromNext.begin(), fromNext.end(), to) != fromNext.end())
-    ||
-    (
-        std::any_of
-        (
-            fromNext.begin(), fromNext.end(), [&](const auto& item)
-            {
-                return std::find(stack.begin(), stack.end(), item) == stack.end()
-                    && containsPath(graph, item, to);
-            }
-        )
-    );
+    auto ret =
+        (std::find(fromNext.begin(), fromNext.end(), to) != fromNext.end())
+            ||
+            (
+                std::any_of
+                    (
+                        fromNext.begin(), fromNext.end(), [&](const auto& item)
+                        {
+                            return std::find(stack.begin(), stack.end(), item) == stack.end()
+                                && containsPath(graph, item, to);
+                        }
+                    )
+            );
     stack.pop_back();
     return ret;
 }
@@ -178,15 +180,15 @@ template<typename T>
 bool introduceCycle(const Graph<T>& graph, const std::vector<T*>& prev, const std::vector<T*>& next)
 {
     return std::any_of(next.begin(), next.end(),
-       [&graph, &prev](const auto& nextData)
-       {
-           return std::any_of(prev.begin(), prev.end(),
-              [&](const auto& prevData)
-              {
-                  return containsPath(graph, nextData, prevData);
-              }
-           );
-       }
+        [&graph, &prev](const auto& nextData)
+        {
+            return std::any_of(prev.begin(), prev.end(),
+                [&](const auto& prevData)
+                {
+                    return containsPath(graph, nextData, prevData);
+                }
+            );
+        }
     );
 }
 
@@ -195,24 +197,25 @@ template<typename T>
 bool containsCycle(const Graph<T>& graph)
 {
     return std::any_of
-    (
-        graph.begin(), graph.end(), [&graph](const auto& nodePrev)
-        {
-            const auto& prevData = nodePrev.second.prev_;
-            return std::any_of
-            (
-                graph.begin(), graph.end(), [&graph, &prevData, &nodePrev](const auto& nodeNext)
-                {
-                    auto& prevPtr = nodePrev.first;
-                    auto& nextPtr = nodeNext.first;
-                    const auto& nextData = nodeNext.second.next_;
-                    return (prevPtr != nextPtr)
-                        && (containsPath(graph, prevPtr, nextPtr))
-                        && (introduceCycle(graph, prevData, nextData));
-                }
-            );
-        }
-    );
+        (
+            graph.begin(), graph.end(), [&graph](const auto& nodePrev)
+            {
+                const auto& prevData = nodePrev.second.prev_;
+                return std::any_of
+                    (
+                        graph.begin(), graph.end(), [&graph, &prevData, &nodePrev](const auto& nodeNext)
+                        {
+                            auto& prevPtr = nodePrev.first;
+                            auto& nextPtr = nodeNext.first;
+                            const auto& nextData = nodeNext.second.next_;
+                            return (prevPtr != nextPtr)
+                                && (containsPath(graph, prevPtr, nextPtr))
+                                && (introduceCycle(graph, prevData, nextData));
+                        }
+                    );
+            }
+        );
+}
 }
 }
 }

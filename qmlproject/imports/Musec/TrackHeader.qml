@@ -16,6 +16,8 @@ Item {
     property bool trackSolo: false
     property bool trackRecord: false
 
+    signal renameComplete(newName: string)
+
     Popup {
         id: trackNameEditPopup
         width: firstLine.width - x
@@ -48,7 +50,7 @@ Item {
             }
             font.family: Constants.font
             onAccepted: {
-                tracks.get(trackIndex - 1).name = text.length == 0? qsTr("未命名轨道"): text;
+                renameComplete(text);
                 trackNameEditPopup.visible = false;
             }
         }
@@ -67,7 +69,7 @@ Item {
     }
     clip: true
     width: 400
-    height: 100
+    height: 50
     implicitHeight: lineHeight
     Row {
         z: 1
@@ -256,7 +258,7 @@ Item {
                     root.height = lineHeight + 1;
                 }
                 if(trackIndex != 0) {
-                    tracks.get(trackIndex - 1).trackHeight = root.height;
+//                    tracks.get(trackIndex - 1).height = root.height;
                 }
                 initialY = mouseY;
             }

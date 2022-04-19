@@ -9,6 +9,7 @@ CONFIG += resources_big
 CONFIG += qtquickcompiler
 
 CONFIG(debug, debug | release) {
+    CONFIG += declarative_debug
     CONFIG += qml_debug
 }
 
@@ -42,39 +43,44 @@ DEFINES += _CRT_SECURE_NO_WARNINGS
 HEADERS += \
     audio/arrangement/ClipInTrack.hpp \
     audio/arrangement/TrackSequence.hpp \
+    audio/base/AudioBufferView.hpp \
     audio/base/Automation.hpp \
-    audio/base/AutomationWithCurve.hpp \
     audio/base/Chrono.hpp \
     audio/base/TempoAutomation.hpp \
-    audio/base/TempoAutomationWithCurve.hpp \
     audio/base/TimeSignature.hpp \
     audio/base/TimeSignatureSequence.hpp \
     audio/device/IDevice.hpp \
-    audio/driver/ASIODriverForward.hpp \
+    audio/device/IDevice.hpp \
     audio/driver/ASIOCallback.hpp \
     audio/driver/ASIODriver.hpp \
+    audio/driver/ASIODriverForward.hpp \
     audio/driver/ASIODriverStreamInfo.hpp \
+    audio/engine/Graph.hpp \
     audio/engine/MIDIClock.hpp \
+    audio/engine/Project.hpp \
     audio/host/MusecVST3Host.hpp \
+    audio/host/VST3ComponentHandler.hpp \
     audio/media/AudioSequence.hpp \
+    audio/media/MIDISequence.hpp \
     audio/plugin/IPlugin.hpp \
     audio/plugin/VST2Plugin.hpp \
     audio/plugin/VST3Plugin.hpp \
     audio/track/AudioTrack.hpp \
+    audio/track/InstrumentTrack.hpp \
     audio/track/ITrack.hpp \
-    audio/track/MasterTrack.hpp \
+    audio/track/MIDITrack.hpp \
     audio/track/PluginSequence.hpp \
     audio/track/TrackInformation.hpp \
     audio/util/Util.hpp \
     base/AssetDirectoryBase.hpp \
     base/Base.hpp \
+    base/Color.hpp \
     base/Constants.hpp \
     base/FileBase.hpp \
-    base/FixedSizeMemoryBlock.hpp \
     base/FixedSizeMemoryPool.hpp \
     base/FolderBase.hpp \
     base/PluginBase.hpp \
-    base/Pool.hpp \
+    base/QmlBase.hpp \
     controller/AppController.hpp \
     controller/ASIODriverController.hpp \
     controller/AssetController.hpp \
@@ -91,10 +97,13 @@ HEADERS += \
     dao/LoggingDAO.hpp \
     dao/PluginDAO.hpp \
     dao/PluginDirectoryDAO.hpp \
-    dkwtp/Graph.hpp \
+    dkwtp/ThreadPool.hpp \
+    entities/CompleteTrack.hpp \
+    entities/EntitiesInitializer.hpp \
     event/EventBase.hpp \
     event/EventHandler.hpp \
     event/MainWindow.hpp \
+    event/ObjectCreateListener.hpp \
     event/SplashScreen.hpp \
     event/SplashScreenForward.hpp \
     event/SplashScreenWorkerThread.hpp \
@@ -102,18 +111,21 @@ HEADERS += \
     math/QuadraticFunction.hpp \
     model/ASIODriverListModel.hpp \
     model/AssetDirectoryListModel.hpp \
+    model/AudioTrackSequenceModel.hpp \
+    model/AutomationModel.hpp \
     model/FileListModel.hpp \
     model/FolderListModel.hpp \
     model/ModelBase.hpp \
     model/ModelInitializer.hpp \
     model/PluginListModel.hpp \
+    model/TrackListModel.hpp \
     native/Native.hpp \
     native/WindowsLibraryRAII.hpp \
     ui/FontUtility.hpp \
     ui/MessageDialog.hpp \
     ui/Render.hpp \
     ui/UI.hpp \
-    util/FunctorInitializer.hpp \
+    util/Endian.hpp \
     util/Literal.hpp
 
 SOURCES += \
@@ -121,17 +133,22 @@ SOURCES += \
     audio/driver/ASIOCallback.cpp \
     audio/driver/ASIODriver.cpp \
     audio/engine/MIDIClock.cpp \
+    audio/engine/Project.cpp \
     audio/host/MusecVST3Host.cpp \
+    audio/host/VST3ComponentHandler.cpp \
     audio/media/AudioSequence.cpp \
     audio/plugin/ShellPluginId.cpp \
     audio/plugin/VST2Plugin.cpp \
     audio/plugin/VST3Plugin.cpp \
     audio/track/AudioTrack.cpp \
+    audio/track/InstrumentTrack.cpp \
+    audio/track/MIDITrack.cpp \
     audio/util/Util.cpp \
+    base/Color.cpp \
     base/FixedSizeMemoryPool.cpp \
     base/PluginBase.cpp \
-    controller/ASIODriverController.cpp \
     controller/AppController.cpp \
+    controller/ASIODriverController.cpp \
     controller/AssetController.cpp \
     controller/AssetDirectoryController.cpp \
     controller/AudioEngineController.cpp \
@@ -146,27 +163,36 @@ SOURCES += \
     dao/LoggingDAO.cpp \
     dao/PluginDAO.cpp \
     dao/PluginDirectoryDAO.cpp \
+    dkwtp/ThreadPool.cpp \
+    entities/CompleteTrack.cpp \
+    entities/EntitiesInitializer.cpp \
     event/EventBase.cpp \
     event/EventHandler.cpp \
     event/MainWindow.cpp \
+    event/ObjectCreateListener.cpp \
     event/SplashScreen.cpp \
     event/SplashScreenWorkerThread.cpp \
+    main.cpp \
     math/Integration.cpp \
     math/QuadraticFunction.cpp \
     model/ASIODriverListModel.cpp \
     model/AssetDirectoryListModel.cpp \
+    model/AudioTrackSequenceModel.cpp \
+    model/AutomationModel.cpp \
     model/FileListModel.cpp \
     model/FolderListModel.cpp \
     model/ModelInitializer.cpp \
     model/PluginListModel.cpp \
+    model/TrackListModel.cpp \
     native/Native.cpp \
     native/WindowsLibraryRAII.cpp \
     ui/FontUtility.cpp \
     ui/MessageDialog.cpp \
     ui/Render.cpp \
     ui/UI.cpp \
+    util/Endian.cpp \
     util/Literal.cpp \
-    main.cpp \
+    # avcpp 源码
     D:/apps/avcpp/src/audioresampler.cpp \
     D:/apps/avcpp/src/averror.cpp \
     D:/apps/avcpp/src/avtime.cpp \

@@ -16,6 +16,12 @@ namespace Track
 {
 template<typename SampleType>
 using PluginSequence = std::list<std::shared_ptr<Musec::Audio::Plugin::IPlugin<SampleType>>>;
+
+template<typename SampleType>
+using PluginSequenceIterator = typename PluginSequence<SampleType>::iterator;
+
+template<typename SampleType>
+using PluginSequenceConstIterator = typename PluginSequence<SampleType>::const_iterator;
 }
 }
 }

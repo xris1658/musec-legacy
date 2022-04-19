@@ -2,11 +2,12 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import Musec.Controls 1.0 as MCtrl
+import Musec.Models 1.0 as MModel
 
 Rectangle {
     id: root
     color: Constants.backgroundColor2
-    property ListModel tracks
+    property MModel.TrackListModel tracks
     property bool effectVisible: true
     property bool gainAndMeterVisible: true
     clip: true
@@ -129,8 +130,8 @@ Rectangle {
             }
             delegate: Row {
                 MixerChannel {
-                    channelName: name
-                    channelColor: color
+                    channelName: trackname
+                    channelColor: trackcolor
                     width: 120
                     height: root.height - scroll.height
                     channelNumber: index + 1

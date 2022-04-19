@@ -12,8 +12,8 @@ Item {
     id: root
     width: 200
     height: contentColumn.height
-    property string name: ""
-    property string path: ""
+    property string name
+    property string path
     property int itemHeight: 20
     property int level: 0
     property int indentPerLevel: 10
@@ -136,7 +136,7 @@ Item {
                     onClicked: {
                         expanded = !expanded;
                         if(expanded) {
-                            if(explorerViewLoader.source == "") {
+                            if(explorerViewLoader.item == null) {
                                 expandableItemButton.loading = true;
                                 explorerViewLoader.source = "ExplorerView.qml";
                             }

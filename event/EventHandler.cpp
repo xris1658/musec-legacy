@@ -5,11 +5,16 @@
 #include "controller/AppController.hpp"
 #include "controller/AssetController.hpp"
 #include "controller/AssetDirectoryController.hpp"
+#include "controller/AudioEngineController.hpp"
 #include "controller/GeneralSettingsController.hpp"
 #include "controller/MIDIClockController.hpp"
 #include "controller/PluginSettingsController.hpp"
 #include "event/EventBase.hpp"
 #include "ui/UI.hpp"
+
+#include <QDebug>
+
+#include <chrono>
 
 namespace Musec::Event
 {
@@ -49,13 +54,24 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      this,        SLOT(onPlayStop()));
     QObject::connect(eventBridge, SIGNAL(requestExplorerView()),
                      this,        SLOT(onRequestExplorerView()));
-    // C++ -> C++
+    QObject::connect(eventBridge, SIGNAL(appendTrack(Musec::Entities::CompleteTrack*)),
+                     this,        SLOT(onAppendTrack(Musec::Entities::CompleteTrack*)));
+    // (this) C++ -> C++ (other)
     QObject::connect(this,             &EventHandler::updatePluginList,
                      mainWindowEvents, &MainWindow::updatePluginList);
     QObject::connect(this,             &EventHandler::signalScanPluginComplete,
                      mainWindowEvents, &MainWindow::updatePluginList);
     QObject::connect(this,             &EventHandler::updateASIODriverList,
                      mainWindowEvents, &MainWindow::updateASIODriverList);
+    // (other) C++ -> C++ (this)
+    QObject::connect(&(Musec::Controller::AudioEngineController::AppTrackListModel()),
+                     &Musec::Model::TrackListModel::rowsInserted,
+                     this,
+                     &EventHandler::onTrackInserted);
+    QObject::connect(&(Musec::Controller::AudioEngineController::AppTrackListModel()),
+                     &Musec::Model::TrackListModel::rowsAboutToBeRemoved,
+                     this,
+                     &EventHandler::onTrackAboutToBeRemoved);
     // C++ -> QML
     QObject::connect(this,          SIGNAL(signalScanPluginComplete()),
                      optionsWindow, SIGNAL(scanPluginComplete()));
@@ -71,6 +87,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      eventBridge,   SIGNAL(messageDialog(QString, QString, int)));
     QObject::connect(this,          SIGNAL(requestExplorerViewComplete()),
                      eventBridge,   SIGNAL(requestExplorerViewComplete()));
+    QObject::connect(this,          SIGNAL(updateArrangement()),
+                     eventBridge,   SIGNAL(updateArrangement()));
 }
 
 EventHandler::~EventHandler()
@@ -301,6 +319,9 @@ void EventHandler::onRequestExplorerView()
     auto setList = [this, &explorerView, &newFileListModel, &newFolderListModel]()
     {
         using namespace Musec::UI;
+#ifndef NDEBUG
+        auto start = std::chrono::steady_clock::now().time_since_epoch().count();
+#endif
         auto path = explorerView->property("path").value<QString>();
         auto folderList = Musec::Controller::AssetController::getFolderInDirectory(path);
         auto fileList = Musec::Controller::AssetController::getFileInDirectory(path);
@@ -309,7 +330,25 @@ void EventHandler::onRequestExplorerView()
         explorerView->setProperty("expandableItemList", QVariant::fromValue(newFolderListModel));
         explorerView->setProperty("nonExpandableItemList", QVariant::fromValue(newFileListModel));
         requestExplorerViewComplete();
+#ifndef NDEBUG
+        auto duration = std::chrono::steady_clock::now().time_since_epoch().count() - start;
+        qDebug() << duration / 1e9;
+#endif
     };
     std::async(std::launch::async, setList);
+}
+
+void EventHandler::onAppendTrack(Musec::Entities::CompleteTrack* track)
+{
+    Musec::Controller::AudioEngineController::appendTrack(*track);
+}
+
+void EventHandler::onTrackInserted(const QModelIndex& parent, int first, int last)
+{
+}
+
+void EventHandler::onTrackAboutToBeRemoved(const QModelIndex &parent, int first, int last)
+{
+    emit updateArrangement();
 }
 }

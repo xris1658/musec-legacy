@@ -7,6 +7,8 @@ import Qt.labs.platform 1.1 as Labs
 
 import Musec 1.0
 import Musec.Controls 1.0 as MCtrl
+import Musec.Models 1.0 as MModel
+import Musec.Entities 1.0
 
 Item {
     id: root
@@ -22,10 +24,11 @@ Item {
     property alias masterTrackHeight: masterTrack.height
     property bool loop: false
     property bool showAutomation: automationButton.automationEnabled
-    property ListModel tracks
+    property MModel.TrackListModel tracks
     property alias arrangementSnapUnit: editorSnapUnit
     property int barCount: 20
     property int position
+    signal updateArrangement()
     // Qt 6 中移除了 QtQuick.Dialogs 中的 ColorDialog 和 MessageDialog,
     // 此处使用 Qt.labs.platform 中的 ColorDialog 以保证向后兼容.
     // 讲个笑话: Types in Qt.labs modules are not guaranteed to remain
@@ -36,9 +39,12 @@ Item {
         title: qsTr("选择颜色")
         modality: Qt.WindowModal
         onAccepted: {
-            tracks.get(colorDest1.trackIndex - 1).color = color;
+            colorDest1.setColor(this.currentColor);
         }
     }
+    signal appendTrack(track: CompleteTrack)
+    signal appendTrackComplete(index: int)
+
     MCtrl.Menu {
         id: trackOptions
         property int trackIndex
@@ -59,10 +65,6 @@ Item {
         MCtrl.Action {
             text: qsTr("创建副本(&L)")
             shortcut: "Ctrl+D"
-            onTriggered: {
-                var replica = tracks.get(trackOptions.trackIndex - 1);
-                tracks.insert(trackOptions.trackIndex - 1, replica);
-            }
         }
         MCtrl.Action {
             text: qsTr("粘贴(&P)")
@@ -72,7 +74,7 @@ Item {
             text: qsTr("删除(&D)")
             shortcut: "Delete"
             onTriggered: {
-                tracks.remove(trackOptions.trackIndex - 1);
+                trackOptions.trackHeader.remove();
             }
         }
         MCtrl.MenuSeparator {}
@@ -135,8 +137,6 @@ Item {
                     font.family: Constants.font
                     model: ["1/64", "1/32", "1/16", "1/8", "1/4", "1/2", "1/1", "2", "4", "8", "16"]
                     currentIndex: 4
-//                    color: Constants.mouseOverElementColor
-//                    border.width: 0
                     z: 1
                     MCtrl.ToolTip {
                         visible: parent.hovered
@@ -235,35 +235,27 @@ Item {
                     width: 200
                     height: contentHeight
                     MCtrl.Action {
-                        text: qsTr("添加 MIDI / 乐器轨道(&M)")
+                        text: qsTr("添加乐器轨道(&I)")
                         onTriggered: {
-                            var newTrack = {
-                                'name': 'MIDI',
-                                'color': Qt.rgba(Math.random(), Math.random(), Math.random()),
-                                'mute': false,
-                                'solo': false,
-                                'armRecord': false,
-                                'selected': false,
-                                'trackHeight': 60,
-                                'selected': false
-                            };
-                            tracks.append(newTrack);
+                            let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
+                                root, null);
+                            completeTrack.trackColor_ = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
+                            completeTrack.trackName_ = qsTr("乐器");
+                            completeTrack.trackType_ = CompleteTrack.InstrumentTrack;
+                            completeTrack.height_ = 60;
+                            appendTrack(completeTrack);
                         }
                     }
                     MCtrl.Action {
                         text: qsTr("添加音频轨道(&A)")
                         onTriggered: {
-                            var newTrack = {
-                                'name': '音频',
-                                'color': Qt.rgba(Math.random(), Math.random(), Math.random()),
-                                'mute': false,
-                                'solo': false,
-                                'armRecord': false,
-                                'selected': false,
-                                'trackHeight': 60,
-                                'selected': false
-                            };
-                            tracks.append(newTrack);
+                            let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
+                                root, null);
+                            completeTrack.trackColor_ = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
+                            completeTrack.trackName_ = qsTr("音频");
+                            completeTrack.trackType_ = CompleteTrack.AudioTrack;
+                            completeTrack.height_ = 60;
+                            appendTrack(completeTrack);
                         }
                     }
                     MCtrl.MenuSeparator {}
@@ -334,7 +326,7 @@ Item {
                     anchors.right: parent.right
                     anchors.top: masterTrackHeader.bottom
                     anchors.bottom: masterTrackFooter.top
-                    model: tracks
+                    model: root.tracks
                     interactive: false
                     property int minimumBlankHeight: 50
                     z: 1
@@ -393,12 +385,27 @@ Item {
                     delegate: TrackHeader {
                         id: trackHeader
                         z: 3
-                        trackName: name
-                        trackColor: color
+                        height: trackheight
+                        trackName: trackname
+                        trackColor: trackcolor
                         width: headers.width
-                        height: trackHeight
-                        trackIndex: index + 1
+                        trackIndex: model.index + 1
                         trackSelected: false
+                        function setColor(newColor: color) {
+                            trackcolor = newColor;
+                        }
+                        function remove() {
+                            console.log(model.index);
+                            tracks.removeTrack(model.index);
+                        }
+                        onRenameComplete: {
+                            trackname = newName;
+                        }
+                        // 不写这一项不会更改后端的高度数据
+                        // QML 会提示绑定循环
+                        onHeightChanged: {
+                            trackheight = height;
+                        }
                         Rectangle {
                             width: parent.width
                             height: 1
@@ -410,8 +417,6 @@ Item {
                             id: trackHeaderMouseArea
                             width: parent.width - 3 * 20
                             height: 20
-//                            width: parent.width
-//                            height: 20
                             acceptedButtons: Qt.LeftButton | Qt.RightButton
                             onClicked: {
                                 if(mouse.button == Qt.RightButton) {
@@ -667,14 +672,15 @@ Item {
                         color: Constants.backgroundColor2
                         clip: true
                         ListView {
+                            id: trackContentListView
                             z: 2
-                            model: tracks
                             orientation: Qt.Vertical
+                            model: tracks
                             interactive: false
                             anchors.fill: parent
                             delegate: Item {
                                 width: contentArea.width
-                                height: trackHeight
+                                height: trackheight
                                 Rectangle {
                                     anchors.bottom: parent.bottom
                                     anchors.left: parent.left

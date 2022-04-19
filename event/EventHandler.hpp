@@ -1,6 +1,8 @@
 #ifndef MUSEC_EVENT_EVENTHANDLER
 #define MUSEC_EVENT_EVENTHANDLER
 
+#include "entities/CompleteTrack.hpp"
+
 #include <QObject>
 #include <QQuickItem>
 
@@ -30,6 +32,7 @@ signals:
     void updateArrangementPosition(int position);
     void messageDialog(const QString& message, const QString& title, int icon);
     void requestExplorerViewComplete();
+    void updateArrangement();
 public slots:
     void onMainWindowOpened();
     void onOptionsWindowOpened();
@@ -50,6 +53,9 @@ public slots:
     void onPlayStart();
     void onPlayStop();
     void onRequestExplorerView();
+    void onAppendTrack(Musec::Entities::CompleteTrack* track);
+    void onTrackInserted(const QModelIndex& parent, int first, int last);
+    void onTrackAboutToBeRemoved(const QModelIndex &parent, int first, int last);
 private:
     std::vector<QMetaObject::Connection> optionsWindowConnection;
 };

@@ -18,6 +18,8 @@ using SystemTimeType = SYSTEMTIME;
 using ThreadMaskType = std::uint64_t;
 
 using SystemTimeStringType = std::array<char, 18>;
+
+using WindowType = HWND;
 // 漫游用户数据路径（用户文件夹\AppData\Roaming）
 const QString& RoamingDirectoryPath();
 

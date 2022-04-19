@@ -19,6 +19,7 @@ ApplicationWindow {
     property alias midiEffectList: musecList.midiEffectList
     property alias instrumentList: musecList.instrumentlist
     property alias audioEffectList: musecList.audioEffectList
+    property alias trackList: musecList.trackList
     property alias pluginDirectoryList: optionsWindow.pluginDirectoryList
     property alias driverList: optionsWindow.driverList
     property alias currentDriver: optionsWindow.currentDriver
@@ -38,6 +39,11 @@ ApplicationWindow {
     signal setStatusText(newText: string)
     onSetStatusText: {
         status.text = newText;
+    }
+
+    signal updateArrangement()
+    onUpdateArrangement: {
+        arrangement.updateArrangement();
     }
 
     OptionsWindow {
@@ -127,6 +133,11 @@ ApplicationWindow {
                 else mainWindow.showNormal();
             }
         }
+    }
+
+    signal trackInserted(index: int)
+    onTrackInserted: {
+        arrangement.appendTrackComplete(index);
     }
 
     signal exitASIOThreadFinished()
@@ -656,7 +667,7 @@ ApplicationWindow {
                             Arrangement {
                                 id: arrangement
                                 timelineNumerator: mainBar.numerator
-                                tracks: tracks
+                                tracks: trackList
                                 parent: arrangementFunctionArea.contentArea
                                 barCount: 40
                                 anchors.fill: parent
@@ -664,6 +675,9 @@ ApplicationWindow {
                                 y: parent.y
                                 loop: actionLoop.checked
                                 position: 0
+                                onAppendTrack: {
+                                    eventBridge.appendTrack(track);
+                                }
                             }
                         }
                     }
@@ -696,7 +710,7 @@ ApplicationWindow {
                             anchors.fill: parent
                             anchors.margins: 1
                             y: parent.y
-                            tracks: tracks
+                            tracks: trackList
                         }
                     }
                 }

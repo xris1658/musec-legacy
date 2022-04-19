@@ -1,6 +1,8 @@
 // 项目头文件
 #include "controller/AppController.hpp"
+#include "entities/EntitiesInitializer.hpp"
 #include "event/EventBase.hpp"
+#include "event/ObjectCreateListener.hpp"
 #include "event/MainWindow.hpp"
 #include "event/SplashScreen.hpp"
 #include "model/ModelInitializer.hpp"
@@ -16,6 +18,11 @@
 #if QT_VERSION_MAJOR < 6
 #include <QTextCodec>
 #endif
+#include <QDebug>
+#include <QUrl>
+
+#include <vector>
+#include <string>
 
 int main(int argc, char* argv[])
 {
@@ -40,11 +47,22 @@ int main(int argc, char* argv[])
     QFontDatabase fontDB;
 #endif
     FontUtility::loadFonts();
+    Musec::Entities::EntitiesInitializer::initialize();
     Musec::Model::ModelInitializer::initialize();
     QQmlApplicationEngine theEngine;
     engine = &theEngine;
     theEngine.addImportPath("qrc:/");
     theEngine.addImportPath("qrc:/qmlproject/imports");
+    auto list = theEngine.importPathList();
+    std::vector<std::string> listString;
+    listString.reserve(list.size());
+    for(auto& path: list)
+    {
+        listString.emplace_back(path.toStdString());
+    }
+    LoadQmlComponentListener& loadQmlComponentListener = LoadQmlComponentListener::instance();
+    QObject::connect(&theEngine, &QQmlApplicationEngine::objectCreated,
+                     &loadQmlComponentListener, &LoadQmlComponentListener::onObjectCreated);
     // 显示启动屏
     theEngine.load(QUrl("qrc:///qmlproject/SplashScreen.qml"));
     splashWindow = qobject_cast<QQuickWindow*>(theEngine.rootObjects()[0]);

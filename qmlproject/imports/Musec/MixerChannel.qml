@@ -67,6 +67,7 @@ Item {
                             border.color: Constants.borderColor
                             Row {
                                 Item {
+                                    id: effectEnabledIndicator
                                     width: effect.height
                                     height: effect.height
                                     Rectangle {
@@ -74,13 +75,21 @@ Item {
                                         width: 12
                                         height: 12
                                         radius: 6
-                                        color: effectEnabled == true? Constants.deviceEnabledColor
-                                                                    : Constants.deviceDisabledColor
+                                        color: effectEnabled?
+                                            Constants.deviceEnabledColor:
+                                            Constants.deviceDisabledColor
                                         border.width: 1
                                         border.color: Constants.backgroundColor
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            onClicked: {
+                                                effects.get(index).effectEnabled = !(effects.get(index).effectEnabled);
+                                            }
+                                        }
                                     }
                                 }
                                 Text {
+                                    width: effect.width - effectEnabledIndicator.width - (sidechainInputEnabled? sidechainInputIndicator.width: 2)
                                     color: Constants.contentColor1
                                     font.family: Constants.font
                                     text: name
@@ -88,7 +97,8 @@ Item {
                                 }
                             }
                             Item {
-                                opacity: sidechainInputEnabled? 1: 0
+                                id: sidechainInputIndicator
+                                visible: sidechainInputEnabled
                                 anchors.right: parent.right
                                 anchors.verticalCenter: parent.verticalCenter
                                 width: parent.height

@@ -4,15 +4,39 @@
 
 namespace Musec::Controller::AudioEngineController
 {
-Musec::Audio::Track::MasterTrack<double>& AppMasterTrack()
+Musec::Audio::Engine::Project& AppProject()
 {
-    static Musec::Audio::Track::MasterTrack<double> ret;
+    static Musec::Audio::Engine::Project ret;
     return ret;
+}
+
+Musec::Model::TrackListModel& AppTrackListModel()
+{
+    static Musec::Model::TrackListModel ret;
+    return ret;
+}
+
+Musec::Audio::Host::VST3ComponentHandler AppVST3ComponentHandler()
+{
+    return Musec::Audio::Host::VST3ComponentHandler::instance();
 }
 
 void initializeFacility()
 {
     Musec::Audio::Driver::AppASIODriver();
-    AppMasterTrack();
+    AppProject();
+    AppTrackListModel();
+    AppVST3ComponentHandler();
+}
+
+void insertTrack(std::size_t index, const Entities::CompleteTrack& track)
+{
+    // AppProject().insertTrack(index, track);
+    AppTrackListModel().insertTrack(static_cast<int>(index), track);
+}
+
+void appendTrack(const Entities::CompleteTrack& track)
+{
+    insertTrack(AppProject().trackCount(), track);
 }
 }

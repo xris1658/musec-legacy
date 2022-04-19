@@ -3,6 +3,7 @@
 #include "audio/driver/ASIODriver.hpp"
 #include "controller/ASIODriverController.hpp"
 #include "controller/AppController.hpp"
+#include "controller/AudioEngineController.hpp"
 #include "controller/MIDIClockController.hpp"
 #include "event/EventBase.hpp"
 #include "ui/UI.hpp"
@@ -31,7 +32,7 @@ void MainWindow::openMainWindow()
     auto visibility = mainWindow->visibility();
     mainWindow->showFullScreen();
     mainWindow->setVisibility(visibility);
-
+    Musec::Controller::AudioEngineController::initializeFacility();
     auto eventBridge = qvariant_cast<QObject*>(splashWindow->property("eventBridge"));
     Musec::Event::eventBridge = eventBridge;
     Musec::Event::eventHandler = &Musec::Event::EventHandler::instance(eventBridge);
@@ -41,7 +42,8 @@ void MainWindow::openMainWindow()
                      eventHandler, &Musec::Event::EventHandler::onMainWindowOpened);
     updateAssetDirectoryList();
     updatePluginList();
-    auto& clock = Musec::Controller::MIDIClockController::AppMIDIClock();
+    mainWindow->setProperty("trackList", QVariant::fromValue(&Musec::Controller::AudioEngineController::AppTrackListModel()));
+    Musec::Controller::MIDIClockController::AppMIDIClock();
     openMainWindowComplete();
 }
 

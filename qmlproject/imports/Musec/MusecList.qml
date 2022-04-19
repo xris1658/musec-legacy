@@ -9,4 +9,5 @@ QtObject {
     property PluginListModel instrumentlist: PluginListModel {}
     property PluginListModel audioEffectList: PluginListModel {}
     property AssetDirectoryListModel assetDirectoryList: AssetDirectoryListModel {}
+    property TrackListModel trackList
 }

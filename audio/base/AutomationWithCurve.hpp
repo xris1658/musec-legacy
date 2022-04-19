@@ -43,7 +43,7 @@ protected:
     using PointVectorIterator = typename PointVector::iterator;
     using PointVectorConstIterator = typename PointVector::const_iterator;
 public:
-    AutomationWithCurve(double minValue, double maxValue): points_(), minValue_(minValue), maxValue_(maxValue) {}
+    AutomationWithCurve(double minValue = 0.0, double maxValue = 1.0): points_(), minValue_(minValue), maxValue_(maxValue) {}
     AutomationWithCurve(const Self& rhs): points_(rhs.points_), minValue_(rhs.minValue_), maxValue_(rhs.maxValue) {}
     AutomationWithCurve(Self&& rhs) noexcept: points_(std::move(rhs.points_)), minValue_(rhs.minValue_), maxValue_(rhs.maxValue_) {}
     Self& operator=(const Self& rhs)

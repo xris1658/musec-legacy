@@ -1,19 +1,26 @@
 #include "AudioTrack.hpp"
 
+#include <utility>
+
 namespace Musec::Audio::Track
 {
-template<typename SampleType>
-void AudioTrack<SampleType>::process()
+const std::list<Musec::Audio::Track::PluginSequence<double>>& AudioTrack::getPluginSequences() const
 {
-    for(auto& sequence: pluginSequences_)
-    {
-        for(auto& plugin: sequence)
-        {
-            // TODO
-        }
-    }
+    return pluginSequences_;
 }
 
-template class AudioTrack<float>;
-template class AudioTrack<double>;
+void AudioTrack::setPluginSequences(const std::list<Musec::Audio::Track::PluginSequence<double>>& pluginSequences)
+{
+    pluginSequences_ = pluginSequences;
+}
+
+void AudioTrack::setPluginSequences(std::list<Musec::Audio::Track::PluginSequence<double>>&& pluginSequences)
+{
+    pluginSequences_ = std::move(pluginSequences);
+}
+
+TrackType AudioTrack::trackType() const
+{
+    return TrackType::kAudioTrack;
+}
 }

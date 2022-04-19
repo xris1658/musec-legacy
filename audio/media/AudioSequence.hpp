@@ -3,6 +3,7 @@
 
 #include "base/FixedSizeMemoryBlock.hpp"
 
+#include <QObject>
 #include <QString>
 
 #include <cstddef>
@@ -21,8 +22,9 @@ enum SampleFormat
 };
 
 // 非交错
-class AudioSequence
+class AudioSequence: public QObject
 {
+    Q_OBJECT
 public:
     AudioSequence(double sampleRate, std::uint8_t channelCount, int bitDepth,
         SampleFormat sampleFormat, std::size_t sampleCountPerChannel);

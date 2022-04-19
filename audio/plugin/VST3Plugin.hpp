@@ -3,12 +3,14 @@
 
 #include "audio/plugin/IPlugin.hpp"
 #include "base/PluginBase.hpp"
+#include "native/Native.hpp"
 #include "native/WindowsLibraryRAII.hpp"
 
 #include <pluginterfaces/vst/ivstaudioprocessor.h>
 #include <pluginterfaces/vst/ivsteditcontroller.h>
 
 #include <QString>
+#include <QWindow>
 
 namespace Musec
 {
@@ -30,9 +32,12 @@ public: // ctor & dtor
     VST3Plugin(const QString& path, int classIndex);
     ~VST3Plugin() noexcept override;
 public:
-    Steinberg::Vst::IAudioProcessor* effect() const;
+    Steinberg::IPluginFactory* factory() const;
     Steinberg::Vst::IComponent* component() const;
+    Steinberg::Vst::IAudioProcessor* effect() const;
     Steinberg::Vst::IEditController* editController() const;
+    Steinberg::IPlugView* getView() const;
+    bool isProcessorAndEditorUnified() const;
 public: // IDevice interfaces
     uint8_t inputCount() const override;
     uint8_t outputCount() const override;
@@ -48,6 +53,9 @@ public: // IPlugin interfaces
 public:
     const SpeakerArrangements& inputSpeakerArrangements();
     const SpeakerArrangements& outputSpeakerArrangements();
+public:
+    bool attachToWindow(QWindow* window);
+    bool detachWithWindow();
 private:
     void rawToProcessData();
 private:
@@ -55,6 +63,8 @@ private:
     Steinberg::Vst::IComponent* component_ = nullptr;
     Steinberg::Vst::IAudioProcessor* effect_ = nullptr;
     Steinberg::Vst::IEditController* editController_ = nullptr;
+    Steinberg::IPlugView* view_ = nullptr;
+    bool processorAndEditorUnified_ = false;
 private:
     // IAudioProcessor::process 函数调用的实参
     Steinberg::Vst::ProcessData processData_;

@@ -6,6 +6,7 @@ import QtQuick.Controls 2.15
 import Musec 1.0
 import Musec.Dialogs 1.0 as MDlg
 import Musec.Views 1.0 as MView
+import Musec.Entities 1.0
 
 QtObject {
     id: eventBridge
@@ -24,6 +25,7 @@ QtObject {
     signal openSpecialCharacterInput()
     signal setArrangementPosition(position: int)
     signal requestExplorerView()
+    signal appendTrack(track: CompleteTrack)
 
     signal addAssetDirectory(directory: string)
     signal renameAssetDirectory(id: int, name: string)
@@ -74,5 +76,15 @@ QtObject {
             rebootPrompt.icon = MDlg.MessageDialog.Icon.Info;
             rebootPrompt.showNormal();
         }
+    }
+
+    signal trackInserted(index: int)
+    onTrackInserted: {
+        Objects.mainWindow.trackInserted(index);
+    }
+
+    signal updateArrangement()
+    onUpdateArrangement: {
+        Objects.mainWindow.updateArrangement();
     }
 }
