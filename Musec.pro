@@ -1,15 +1,11 @@
 QT += quick
 QT += widgets
-# 1. 直接使用了 COM API，但没有使用 Active Qt
-# 2. Qt 6 中的 Active Qt 好像出了点小意外
-#QT += axcontainer
 
 CONFIG += c++17
 CONFIG += resources_big
 CONFIG += qtquickcompiler
 
 CONFIG(debug, debug | release) {
-    CONFIG += declarative_debug
     CONFIG += qml_debug
 }
 
@@ -19,24 +15,30 @@ QMAKE_CXXFLAGS += /Zc:wchar_t
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-INCLUDEPATH += D:/apps/vcpkg/installed/x64-windows/include \
-               D:/apps/vst3sdk \
-               D:/apps/vst3sdk/pluginterfaces \
-               D:/apps/vst3sdk/public.sdk/source \
-               C:/asiosdk_2.3.3_2019-06-14 \
-               D:/apps/avcpp/src \
-               D:/apps/ffmpeg-master-windows-desktop-vs2019-default/ffmpeg-master-windows-desktop-vs2019-default/include
+ASIOSDK_DIR        = C:/asiosdk_2.3.3_2019-06-14
+VST3SDK_DIR        = D:/apps/vst3sdk
+VCPKG_DIR          = D:/apps/vcpkg
+message(ASIO SDK directory: $$ASIOSDK_DIR)
+message( VST SDK direcotry: $$VST3SDK_DIR)
+message(   vcpkg directory: $$VCPKG_DIR)
+
+INCLUDEPATH += $$VCPKG_DIR/installed/x64-windows/include \
+               $$VST3SDK_DIR \
+               $$ASIOSDK_DIR
 
 CONFIG(debug, debug | release) {
     QMAKE_LIBDIR += \
-        D:/apps/vcpkg/installed/x64-windows/debug/lib \
-        D:/apps/vst3sdk/build/debug/lib
+        $$VCPKG_DIR/installed/x64-windows/debug/lib \
+        $$VST3SDK_DIR/build/debug/lib
 }
+
 CONFIG(release, debug | release) {
-     QMAKE_LIBDIR += \
-        D:/apps/vst3sdk/build/release/lib \
-        D:/apps/vcpkg/installed/x64-windows/lib
+    QMAKE_LIBDIR += \
+        $$VCPKG_DIR/installed/x64-windows/lib \
+        $$VST3SDK_DIR/build/release/lib \
 }
+
+message(Library directory: $$QMAKE_LIBDIR)
 
 DEFINES += _CRT_SECURE_NO_WARNINGS
 
@@ -191,32 +193,7 @@ SOURCES += \
     ui/Render.cpp \
     ui/UI.cpp \
     util/Endian.cpp \
-    util/Literal.cpp \
-    # avcpp 源码
-    D:/apps/avcpp/src/audioresampler.cpp \
-    D:/apps/avcpp/src/averror.cpp \
-    D:/apps/avcpp/src/avtime.cpp \
-    D:/apps/avcpp/src/avutils.cpp \
-    D:/apps/avcpp/src/codec.cpp \
-    D:/apps/avcpp/src/codeccontext.cpp \
-    D:/apps/avcpp/src/dictionary.cpp \
-    D:/apps/avcpp/src/format.cpp \
-    D:/apps/avcpp/src/formatcontext.cpp \
-    D:/apps/avcpp/src/frame.cpp \
-    D:/apps/avcpp/src/packet.cpp \
-    D:/apps/avcpp/src/pixelformat.cpp \
-    D:/apps/avcpp/src/rational.cpp \
-    D:/apps/avcpp/src/rect.cpp \
-    D:/apps/avcpp/src/sampleformat.cpp \
-    D:/apps/avcpp/src/stream.cpp \
-    D:/apps/avcpp/src/timestamp.cpp \
-    D:/apps/avcpp/src/videorescaler.cpp \
-    D:/apps/avcpp/src/filters/buffersink.cpp \
-    D:/apps/avcpp/src/filters/buffersrc.cpp \
-    D:/apps/avcpp/src/filters/filter.cpp \
-    D:/apps/avcpp/src/filters/filtercontext.cpp \
-    D:/apps/avcpp/src/filters/filtergraph.cpp \
-    D:/apps/avcpp/src/filters/filterpad.cpp
+    util/Literal.cpp
 
 RESOURCES += \
     $$files(qmlproject/*) \
@@ -235,13 +212,16 @@ LIBS += \
     pluginterfaces.lib \
     sdk_common.lib \
     sdk_hosting.lib \
+    ## FFmpeg
     avcodec.lib \
     avdevice.lib \
     avfilter.lib \
     avformat.lib \
     avutil.lib \
     swresample.lib \
-    swscale.lib
+    swscale.lib \
+    # avcpp
+    avcpp.lib
 
 CONFIG(debug, debug | release) {
     LIBS += yaml-cppd.lib \
