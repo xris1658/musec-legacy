@@ -3,8 +3,7 @@ import QtQuick 2.15
 
 Rectangle {
     id: root
-    property int fullNoteWidth: 80
-    property int barWidth: 80
+    property double barWidth: 80
     property int barCount: 20
     property int numerator: 4
     property int denominator: 4

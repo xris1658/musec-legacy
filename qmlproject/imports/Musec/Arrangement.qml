@@ -542,7 +542,6 @@ Item {
                             height: 1
                             color: Constants.borderColor
                         }
-
                         MouseArea {
                             anchors.fill: parent
                             onWheel: {
@@ -579,6 +578,7 @@ Item {
                         anchors.fill: parent
                         scrollGestureEnabled: true
                         onWheel: {
+                            // 纵向滚动
                             if(wheel.modifiers == Qt.NoModifier)
                             {
                                 vbar.position += 0.1 * wheel.angleDelta.y / 360.0 * (wheel.inverted? 1: -1);
@@ -600,7 +600,8 @@ Item {
                                     hbar.position = 0;
                                 }
                             }
-                            else if(wheel.modifiers & Qt.ShiftModifier)
+                            // 横向滚动
+                            else if(wheel.modifiers == Qt.ShiftModifier)
                             {
                                 hbar.position += 0.1 * wheel.angleDelta.y / 540.0 * (wheel.inverted? 1: -1);
                                 if(hbar.position > 1 - hbar.size)
@@ -621,6 +622,25 @@ Item {
                                     vbar.position = 0;
                                 }
                             }
+                            // 横向缩放
+                            else if(wheel.modifiers == Qt.ControlModifier) {
+                                let delta = wheel.angleDelta.y / -100.0;
+                                if(delta < 0) {
+                                    delta = -1 / delta;
+                                }
+                                timeline.barWidth *= delta;
+                                if(timeline.barWidth > 2000) {
+                                    timeline.barWidth = 2000;
+                                }
+                                if(timeline.width < hbar.width) {
+//                                    timeline.barWidth = Math.ceil(hbar.width / timeline.barCount);
+                                    timeline.barWidth = hbar.width / timeline.barCount;
+                                }
+                                if(timeline.x + timeline.width < hbar.width) {
+                                    hbar.position = 1.0 - hbar.width / timeline.width;
+                                }
+                            }
+                            // 纵向缩放（有这种东西吗？）
                         }
                     }
                     Rectangle {
@@ -679,6 +699,7 @@ Item {
                             interactive: false
                             anchors.fill: parent
                             delegate: Item {
+                                id: trackContentListDelegate
                                 width: contentArea.width
                                 height: trackheight
                                 Rectangle {
@@ -687,6 +708,49 @@ Item {
                                     width: parent.width
                                     height: 1
                                     color: Constants.gridColor
+                                }
+                                DropArea {
+                                    id: trackDropArea
+                                    anchors.fill: parent
+                                    Rectangle {
+                                        id: trackDropIndicator
+                                        x: 0
+                                        width: 10
+                                        height: parent.height - 1
+                                        visible: false
+                                        gradient: Gradient {
+                                            orientation: Qt.Horizontal
+                                            GradientStop {
+                                                position: 0
+                                                color: Constants.currentElementColor
+                                            }
+                                            GradientStop {
+                                                position: 1
+                                                color: "transparent"
+                                            }
+                                        }
+                                        color: Constants.mouseOverElementColor
+                                        opacity: parent.containsDrag? 0.6: 0
+                                    }
+                                    onEntered: {
+                                        var filePath = drag.getDataAsString("FileName");
+                                        var extension = filePath.slice(filePath.lastIndexOf('.')).toLowerCase();
+                                        if(type != CompleteTrack.AudioTrack) {
+                                            if(extension != ".mid" && extension != ".midi") {
+                                                drag.accepted = false;
+                                                return;
+                                            }
+                                        }
+                                        trackDropIndicator.visible = true;
+                                    }
+                                    onDropped: {
+                                        console.log(drop.getDataAsString("FileName"));
+                                        console.log(drop.x);
+                                        trackDropIndicator.visible = false;
+                                    }
+                                    onPositionChanged: {
+                                        trackDropIndicator.x = drag.x;
+                                    }
                                 }
                             }
                             footer: Item {
