@@ -319,9 +319,6 @@ void EventHandler::onRequestExplorerView()
     auto setList = [this, &explorerView, &newFileListModel, &newFolderListModel]()
     {
         using namespace Musec::UI;
-#ifndef NDEBUG
-        auto start = std::chrono::steady_clock::now().time_since_epoch().count();
-#endif
         auto path = explorerView->property("path").value<QString>();
         auto folderList = Musec::Controller::AssetController::getFolderInDirectory(path);
         auto fileList = Musec::Controller::AssetController::getFileInDirectory(path);
@@ -330,10 +327,6 @@ void EventHandler::onRequestExplorerView()
         explorerView->setProperty("expandableItemList", QVariant::fromValue(newFolderListModel));
         explorerView->setProperty("nonExpandableItemList", QVariant::fromValue(newFileListModel));
         requestExplorerViewComplete();
-#ifndef NDEBUG
-        auto duration = std::chrono::steady_clock::now().time_since_epoch().count() - start;
-        qDebug() << duration / 1e9;
-#endif
     };
     std::async(std::launch::async, setList);
 }
