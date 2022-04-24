@@ -401,8 +401,8 @@ Item {
                         onRenameComplete: {
                             trackname = newName;
                         }
+                        // QML 会提示绑定循环，然而
                         // 不写这一项不会更改后端的高度数据
-                        // QML 会提示绑定循环
                         onHeightChanged: {
                             trackheight = height;
                         }
@@ -625,10 +625,10 @@ Item {
                             // 横向缩放
                             else if(wheel.modifiers == Qt.ControlModifier) {
                                 let constant = 1250.0;
-                                let multiplier = (wheel.angleDelta.y * (wheel.inverted? 1: -1) + constant) / constant;
+                                let multiplier = (wheel.angleDelta.y/* * (wheel.inverted? 1: -1)*/ + constant) / constant;
                                 timeline.barWidth *= multiplier;
-                                if(timeline.barWidth > 2000) {
-                                    timeline.barWidth = 2000;
+                                if(timeline.barWidth * timeline.numerator > 500) {
+                                    timeline.barWidth = 500 / timeline.numerator;
                                 }
                                 if(timeline.width < hbar.width) {
 //                                    timeline.barWidth = Math.ceil(hbar.width / timeline.barCount);

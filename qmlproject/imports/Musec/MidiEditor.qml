@@ -10,8 +10,8 @@ Item {
     property alias midiEditorSnapUnit: editorSnapUnit
     property alias triplets: tripletsButton.triplets
     property alias showKeyScale: showKeyScaleButton.showKeyScale
-    property int verticalLineSpacing: 20
-    property int horizontalLineSpacing: 15
+    property double verticalLineSpacing: 20
+    property double horizontalLineSpacing: 15
     property int barCount: 20
     id: root
     clip: true
@@ -350,7 +350,7 @@ Item {
                                 hbar.position = 0;
                             }
                         }
-                        else if(wheel.modifiers & Qt.ShiftModifier)
+                        else if(wheel.modifiers == Qt.ShiftModifier)
                         {
                             hbar.position += 0.1 * wheel.angleDelta.y / 540.0 * (wheel.inverted? 1: -1);
                             if(hbar.position > 1 - hbar.size)
@@ -369,6 +369,20 @@ Item {
                             else if(vbar.position < 0)
                             {
                                 vbar.position = 0;
+                            }
+                        }
+                        else if(wheel.modifiers == Qt.ControlModifier) {
+                            let constant = 1250.0;
+                            let multiplier = (wheel.angleDelta.y/* * (wheel.inverted? 1: -1)*/ + constant) / constant;
+                            verticalLineSpacing *= multiplier;
+                            if(verticalLineSpacing > 2000) {
+                                verticalLineSpacing = 2000;
+                            }
+                            if(timeline.width < hbar.width) {
+                                verticalLineSpacing = hbar.width / timeline.barCount / timeline.numerator;
+                            }
+                            if(timeline.x + timeline.width < hbar.width) {
+                                hbar.position = 1.0 - hbar.width / timeline.width;
                             }
                         }
                     }
