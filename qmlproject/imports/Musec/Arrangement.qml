@@ -624,11 +624,9 @@ Item {
                             }
                             // 横向缩放
                             else if(wheel.modifiers == Qt.ControlModifier) {
-                                let delta = wheel.angleDelta.y / -100.0;
-                                if(delta < 0) {
-                                    delta = -1 / delta;
-                                }
-                                timeline.barWidth *= delta;
+                                let constant = 1250.0;
+                                let multiplier = (wheel.angleDelta.y * (wheel.inverted? 1: -1) + constant) / constant;
+                                timeline.barWidth *= multiplier;
                                 if(timeline.barWidth > 2000) {
                                     timeline.barWidth = 2000;
                                 }
