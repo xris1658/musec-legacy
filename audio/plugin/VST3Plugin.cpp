@@ -51,15 +51,14 @@ VST3Plugin<SampleType>::VST3Plugin(const QString& path, int classIndex):
     {
         throw std::runtime_error("");
     }
-    Steinberg::PClassInfo classInfo;
-    factory_->getClassInfo(classIndex, &classInfo);
-    auto createInstanceResult = factory_->createInstance(classInfo.cid, Steinberg::Vst::IAudioProcessor_iid,
+    factory_->getClassInfo(classIndex, &classInfo_);
+    auto createInstanceResult = factory_->createInstance(classInfo_.cid, Steinberg::Vst::IAudioProcessor_iid,
         reinterpret_cast<void**>(&effect_));
     if (createInstanceResult != Steinberg::kResultOk)
     {
         throw std::runtime_error("Error creating audio processor instance!");
     }
-    auto queryComponentResult = factory_->createInstance(classInfo.cid, Steinberg::Vst::IComponent_iid,
+    auto queryComponentResult = factory_->createInstance(classInfo_.cid, Steinberg::Vst::IComponent_iid,
         reinterpret_cast<void**>(&component_));
     if (queryComponentResult != Steinberg::kResultOk)
     {
@@ -85,6 +84,7 @@ VST3Plugin<SampleType>::VST3Plugin(const QString& path, int classIndex):
         editController_->initialize(nullptr);
         editController_->setComponentHandler(&(Musec::Audio::Host::VST3ComponentHandler::instance()));
         view_ = editController_->createView(Steinberg::Vst::ViewType::kEditor);
+        view_->addRef();
     }
 }
 
@@ -93,6 +93,7 @@ VST3Plugin<SampleType>::~VST3Plugin() noexcept
 {
     if (editController_)
     {
+        view_->release();
         editController_->terminate();
         editController_->release();
     }
@@ -358,6 +359,7 @@ bool VST3Plugin<SampleType>::attachToWindow(QWindow* window)
     window->setPosition(viewRect.left, viewRect.top);
     window->setWidth(viewRect.right - viewRect.left);
     window->setHeight(viewRect.bottom - viewRect.top);
+    window->setTitle(classInfo_.name);
     view_->attached(reinterpret_cast<HWND>(window->winId()), Steinberg::kPlatformTypeHWND);
     return true;
 }
@@ -367,6 +369,12 @@ bool VST3Plugin<SampleType>::detachWithWindow()
 {
     view_->removed();
     return true;
+}
+
+template<typename SampleType>
+const Steinberg::PClassInfo& VST3Plugin<SampleType>::getClassInfo() const
+{
+    return classInfo_;
 }
 
 template<typename SampleType>

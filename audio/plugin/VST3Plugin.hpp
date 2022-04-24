@@ -32,6 +32,7 @@ public: // ctor & dtor
     VST3Plugin(const QString& path, int classIndex);
     ~VST3Plugin() noexcept override;
 public:
+    const Steinberg::PClassInfo& getClassInfo() const;
     Steinberg::IPluginFactory* factory() const;
     Steinberg::Vst::IComponent* component() const;
     Steinberg::Vst::IAudioProcessor* effect() const;
@@ -59,6 +60,7 @@ public:
 private:
     void rawToProcessData();
 private:
+    Steinberg::PClassInfo classInfo_;
     Steinberg::IPluginFactory* factory_ = nullptr;
     Steinberg::Vst::IComponent* component_ = nullptr;
     Steinberg::Vst::IAudioProcessor* effect_ = nullptr;
