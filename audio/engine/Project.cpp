@@ -56,11 +56,14 @@ void Project::insertTrack(std::size_t index, const Musec::Entities::CompleteTrac
     switch(track.getTrackType())
     {
     case Musec::Entities::CompleteTrack::TrackType::AudioTrack:
-        trackPointer = std::static_pointer_cast<Musec::Audio::Track::ITrack>(std::make_shared<Musec::Audio::Track::AudioTrack>());
+        trackPointer = std::make_shared<Musec::Audio::Track::AudioTrack>();
+        break;
     case Musec::Entities::CompleteTrack::TrackType::MIDITrack:
-        trackPointer = std::static_pointer_cast<Musec::Audio::Track::ITrack>(std::make_shared<Musec::Audio::Track::MIDITrack>());
+        trackPointer = std::make_shared<Musec::Audio::Track::MIDITrack>();
+        break;
     case Musec::Entities::CompleteTrack::TrackType::InstrumentTrack:
-        trackPointer = std::static_pointer_cast<Musec::Audio::Track::ITrack>(std::make_shared<Musec::Audio::Track::InstrumentTrack>());
+        trackPointer = std::make_shared<Musec::Audio::Track::InstrumentTrack>();
+        break;
     default:
         break;
     }
