@@ -1,7 +1,4 @@
-# WARNING: The project can't be built properly using CMake: UI components written with QML are missed from the executable.
 cmake_minimum_required(VERSION 3.14)
-
-message(WARNING "The project can't be built properly using CMake: UI components written with QML are missed from the executable.")
 
 project(Musec VERSION 0.1 LANGUAGES CXX)
 
@@ -208,3 +205,5 @@ target_link_libraries(Musec
                       spdlog::spdlog
                       avcpp::FFmpeg
                       avcpp::avcpp-static)
+
+file(COPY Resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
