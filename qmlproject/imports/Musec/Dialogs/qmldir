@@ -1,6 +1,5 @@
 module Musec.Dialogs
 
-ColorSelector 1.0 ColorSelector.qml
 MessageDialog 1.0 MessageDialog.qml
 
 designersupported

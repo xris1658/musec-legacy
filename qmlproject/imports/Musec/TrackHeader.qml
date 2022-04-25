@@ -142,7 +142,6 @@ Item {
                             }
                             onClicked: {
                                 trackMute = !trackMute;
-                                tracks.get(trackIndex - 1).mute = trackMute;
                             }
                         }
                     }

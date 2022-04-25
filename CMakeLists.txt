@@ -9,9 +9,9 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 
-set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -188,7 +188,7 @@ set(PROJECT_SOURCES
     util/Endian.hpp
     util/Literal.cpp
     util/Literal.hpp
-    )
+    audio/media/MIDISequence.cpp)
 
 add_executable(Musec ${PROJECT_SOURCES} ${RESOURCE_FILE} ${QT_RESOURCES})
 

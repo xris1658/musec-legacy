@@ -10,8 +10,7 @@ const char16_t* createPluginDirectoryTableCommand()
 {
     static char16_t ret[] =
         u"CREATE TABLE IF NOT EXISTS plugin_directory("
-        "   `path` TEXT NOT NULL,"
-        "   PRIMARY KEY (`path`)"
+        "   `path` TEXT NOT NULL"
         ");";
     return ret;
 }
