@@ -15,9 +15,6 @@
         <file>qmlproject/TapTempoWindow.qml</file>
         <file>qmlproject/TechnicalSupportWindow.qml</file>
         <file>qmlproject/WelcomeWindow.qml</file>
-        <file>qmlproject/images/Musec-image-2.ico</file>
-        <file>qmlproject/images/SplashScreen.png</file>
-        <file>qmlproject/images/Splashscreen.png</file>
         <file>qmlproject/images/addfolder.svg</file>
         <file>qmlproject/images/audioeffect.svg</file>
         <file>qmlproject/images/check.png</file>
@@ -29,9 +26,11 @@
         <file>qmlproject/images/instrument.svg</file>
         <file>qmlproject/images/loading.svg</file>
         <file>qmlproject/images/midieffect.svg</file>
+        <file>qmlproject/images/Musec-image-2.ico</file>
         <file>qmlproject/images/plugin.svg</file>
         <file>qmlproject/images/qtlogo-64.png</file>
         <file>qmlproject/images/question.png</file>
+        <file>qmlproject/images/Splashscreen.png</file>
         <file>qmlproject/images/warning.png</file>
         <file>qmlproject/imports/Musec/Arrangement.qml</file>
         <file>qmlproject/imports/Musec/Assets.qml</file>
@@ -53,7 +52,9 @@
         <file>qmlproject/imports/Musec/Controls/SplitView.qml</file>
         <file>qmlproject/imports/Musec/Controls/Tab.qml</file>
         <file>qmlproject/imports/Musec/Controls/ToolTip.qml</file>
+        <file>qmlproject/imports/Musec/Controls/qmldir</file>
         <file>qmlproject/imports/Musec/Dialogs/MessageDialog.qml</file>
+        <file>qmlproject/imports/Musec/Dialogs/qmldir</file>
         <file>qmlproject/imports/Musec/DirectoryFontLoader.qml</file>
         <file>qmlproject/imports/Musec/FileInfo.qml</file>
         <file>qmlproject/imports/Musec/FunctionArea.qml</file>
@@ -68,5 +69,9 @@
         <file>qmlproject/imports/Musec/Timeline.qml</file>
         <file>qmlproject/imports/Musec/TrackHeader.qml</file>
         <file>qmlproject/imports/Musec/Views/ExplorerView.qml</file>
+        <file>qmlproject/imports/Musec/Views/qmldir</file>
+        <file>qmlproject/imports/Musec/qmldir</file>
+        <file>qmlproject/imports/QtQuick/Studio.zip</file>
+        <file>qmlproject/qmldir</file>
     </qresource>
 </RCC>

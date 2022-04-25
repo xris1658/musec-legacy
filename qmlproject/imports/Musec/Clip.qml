@@ -17,8 +17,7 @@ Item {
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             width: parent.width
-            color: root.color.r  * 0.299 + root.color.g * 0.587 + root.color.b * 0.514 > 0.6?
-                                               "#000000": "#FFFFFF"
+            color: Constants.contentColorOnBackground(root.color)
             font.family: Constants.font
         }
     }

@@ -456,8 +456,7 @@ Item {
                         text: channelNumber
                         font.family: "Noto Sans Mono"
                         font.styleName: "Condensed SemiBold"
-                        color: channelColor.r  * 0.299 + channelColor.g * 0.587 + channelColor.b * 0.514 > 0.6?
-                                   "#000000": "#FFFFFF"
+                        color: Constants.contentColorOnBackground(channelColor)
                     }
                 }
                 Item {

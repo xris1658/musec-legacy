@@ -257,6 +257,10 @@ QtObject {
     readonly property int minVelocity: 0
     property int titleTextPointSize: 8
 
+    function contentColorOnBackground(color: color) {
+        return color.r * 0.299 + color.g * 0.587 + color.b * 0.514 > 0.6? "#000000": "#FFFFFF"
+    }
+
     property DirectoryFontLoader directoryFontLoader: DirectoryFontLoader {
         id: directoryFontLoader
     }

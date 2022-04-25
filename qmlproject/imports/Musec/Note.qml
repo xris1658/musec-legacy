@@ -10,6 +10,8 @@ Item {
     property real mouseInitialX: 0
     property real mouseDeltaX: 0
     property int velocity: 100
+    property int startTime: 0
+    property int duration: 96
     width: 100
     Rectangle {
         anchors.fill: parent

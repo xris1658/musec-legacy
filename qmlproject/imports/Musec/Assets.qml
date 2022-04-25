@@ -66,7 +66,6 @@ Rectangle {
                 Drag.active: dragArea.drag.active
                 Drag.hotSpot.x: 0
                 Drag.hotSpot.y: 0
-                Drag.keys: ["pluginId"]
                 Drag.mimeData: {
                     "itemType": "plugin",
                     "pluginId": id,

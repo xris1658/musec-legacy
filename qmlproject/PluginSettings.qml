@@ -107,8 +107,8 @@ Rectangle {
                         onAccepted: {
                             let newPath = Constants.directoryFromUrl(folder);
                             EventBridge.pluginDirectoryAdded(String(newPath));
-                            // 不能直接对 pluginPathListModel 进行修改，否则界面中的数据不会更新。貌似 pluginPathListModel 是全局对象？
-                            // FIXME: 数据库中路径是主键，如果遇到重复路径，则数据库中不会添加，但 UI 会加
+                            // 不能直接对 pluginPathListModel 进行修改，否则界面中的数据不会更新。
+                            // 貌似 pluginPathListModel 是全局对象？
                             var oldModel = pluginPathListModel;
                             oldModel.push(newPath);
                             pluginPathListModel = oldModel;

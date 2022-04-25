@@ -8,6 +8,8 @@ BigClock 0.5 BigClockBackup.qml
 BigClockBackup 1.0 BigClockBackup.qml
 BigClock 1.0 BigClock.qml
 ContentArea 1.0 ContentArea.qml
+DirectoryFontLoader 1.0 DirectoryFontLoader.qml
+DynamicContentArea 1.0 DynamicContentArea.qml
 FileInfo 1.0 FileInfo.qml
 FunctionArea 1.0 FunctionArea.qml
 Level 1.0 Level.qml

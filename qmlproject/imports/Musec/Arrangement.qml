@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.15
 import QtQuick.Shapes 1.15
 import QtQuick.Window 2.15
 import Qt.labs.platform 1.1 as Labs
+import QtQml.Models 2.15
 
 import Musec 1.0
 import Musec.Controls 1.0 as MCtrl
@@ -42,6 +43,9 @@ Item {
             colorDest1.setColor(this.currentColor);
         }
     }
+    property ListModel trackClipboard: ListModel {
+        dynamicRoles: true
+    }
     signal appendTrack(track: CompleteTrack)
     signal appendTrackComplete(index: int)
 
@@ -52,7 +56,6 @@ Item {
         title: qsTr("轨道操作")
         delegate: MCtrl.MenuItem {}
         width: 200
-        implicitHeight: 20
         height: contentHeight
         MCtrl.Action {
             text: qsTr("剪切(&T)")
@@ -261,6 +264,7 @@ Item {
                     MCtrl.MenuSeparator {}
                     MCtrl.Action {
                         text: qsTr("粘贴(&P)")
+                        enabled: trackClipboard && (trackClipboard.count != 0)
                     }
                 }
                 MouseArea {
@@ -401,11 +405,21 @@ Item {
                         onRenameComplete: {
                             trackname = newName;
                         }
-                        // QML 会提示绑定循环，然而
-                        // 不写这一项不会更改后端的高度数据
+                        // QML 会提示绑定循环，然而不写这一项不
+                        // 会更改后端的高度数据，无视警告即可。
                         onHeightChanged: {
                             trackheight = height;
                         }
+                        onTrackMuteChanged: {
+                            mute = trackMute;
+                        }
+                        onTrackSoloChanged: {
+                            solo = trackSolo;
+                        }
+                        onTrackRecordChanged: {
+                            armRecording = trackRecord;
+                        }
+
                         Rectangle {
                             width: parent.width
                             height: 1
@@ -689,6 +703,28 @@ Item {
                         y: -(trackHeaderList.contentY) + masterTrackHeader.height
                         color: Constants.backgroundColor2
                         clip: true
+                        property int menuAtTrackIndex
+                        MCtrl.Menu {
+                            id: midiTrackContentOptions
+                            title: qsTr("MIDI 轨道操作")
+                            delegate: MCtrl.MenuItem {}
+                            width: 200
+                            height: contentHeight
+                            MCtrl.Action {
+                                text: qsTr("添加 MIDI 片段")
+                            }
+                        }
+                        MCtrl.Menu {
+                            id: audioTrackContentOptions
+                            title: qsTr("音频轨道操作")
+                            delegate: MCtrl.MenuItem {}
+                            width: 200
+                            height: contentHeight
+                            MCtrl.Action {
+                                text: qsTr("音频轨道操作")
+                                enabled: false
+                            }
+                        }
                         ListView {
                             id: trackContentListView
                             z: 2
@@ -710,6 +746,27 @@ Item {
                                 DropArea {
                                     id: trackDropArea
                                     anchors.fill: parent
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        hoverEnabled: false
+                                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+                                        onClicked: {
+                                            if(mouse.button == Qt.RightButton) {
+                                                contentArea.menuAtTrackIndex = index;
+                                                var pointOfTrackDropArea = trackDropArea.mapToItem(contentArea, mouse.x, mouse.y);
+                                                if(type != CompleteTrack.AudioTrack) {
+                                                    midiTrackContentOptions.x = pointOfTrackDropArea.x;
+                                                    midiTrackContentOptions.y = pointOfTrackDropArea.y;
+                                                    midiTrackContentOptions.open();
+                                                }
+                                                else {
+                                                    audioTrackContentOptions.x = pointOfTrackDropArea.x;
+                                                    audioTrackContentOptions.y = pointOfTrackDropArea.y;
+                                                    audioTrackContentOptions.open();
+                                                }
+                                            }
+                                        }
+                                    }
                                     Rectangle {
                                         id: trackDropIndicator
                                         x: 0
@@ -720,7 +777,7 @@ Item {
                                             orientation: Qt.Horizontal
                                             GradientStop {
                                                 position: 0
-                                                color: Constants.currentElementColor
+                                                color: Constants.mouseOverElementColor
                                             }
                                             GradientStop {
                                                 position: 1
@@ -731,6 +788,11 @@ Item {
                                         opacity: parent.containsDrag? 0.6: 0
                                     }
                                     onEntered: {
+                                        console.log(drag.keys);
+                                        var type = drag.getDataAsString(itemType);
+                                        if(type == "plugin") {
+                                            drag.accepted = false;
+                                        }
                                         var filePath = drag.getDataAsString("FileName");
                                         var extension = filePath.slice(filePath.lastIndexOf('.')).toLowerCase();
                                         if(type != CompleteTrack.AudioTrack) {
@@ -790,6 +852,7 @@ Item {
                             }
                         }
                         ListView {
+                            id: trackGrid
                             z: 1
                             model: timeline.barCount * timeline.numerator
                             orientation: Qt.Horizontal
@@ -805,17 +868,6 @@ Item {
                                     width: 1
                                     height: parent.height
                                     color: Constants.gridColor
-                                }
-                            }
-                            DropArea {
-                                id: trackContentDropArea
-                                anchors.fill: parent
-                                Rectangle {
-                                    id: trackContentDropPositionIndicator
-                                    width: 1
-                                    height: parent.height
-                                    color: "#FFFFFF"
-                                    visible: parent.containsDrag
                                 }
                             }
                         }

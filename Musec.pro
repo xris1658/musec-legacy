@@ -139,6 +139,7 @@ SOURCES += \
     audio/host/MusecVST3Host.cpp \
     audio/host/VST3ComponentHandler.cpp \
     audio/media/AudioSequence.cpp \
+    audio/media/MIDISequence.cpp \
     audio/plugin/ShellPluginId.cpp \
     audio/plugin/VST2Plugin.cpp \
     audio/plugin/VST3Plugin.cpp \
@@ -197,7 +198,7 @@ SOURCES += \
 
 RESOURCES += \
     $$files(qmlproject/*) \
-    $$files(qmlproject/imports/Musec) \
+#    $$files(qmlproject/imports/Musec) \
     Musec.qrc
 
 LIBS += \
@@ -238,13 +239,11 @@ RC_ICONS = qmlproject/images/Musec-image-2.ico
 
 VERSION = 0.0.0.1
 QMAKE_TARGET_COMPANY = "xris1658"
-QMAKE_TARGET_DESCRIPTION = "Musec based on Qt 5.15.2 (MSVC 2019 64-bit)"
+QMAKE_TARGET_DESCRIPTION = "Musec based on Qt $${QT_MAJOR_VERSION}.$${QT_MINOR_VERSION}.$${QT_PATCH_VERSION} \
+    (MSVC 2019 $${QT_MSVC_MAJOR_VERSION}.$${QT_MSVC_MINOR_VERSION}.$${QT_MSVC_PATCH_VERSION} 64-bit)"
 QMAKE_TARGET_COPYRIGHT = "Copyright xris1658 2021-2022. All rights reserved."
 QMAKE_TARGET_PRODUCT = "Musec"
 RC_LANG = 0x0804 # 简体中文（中国）
-
-TRANSLATIONS += \
-    Musec_zh_CN.ts
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH = qmlproject/imports
@@ -258,8 +257,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    $$files(qmlproject/*) \
-    $$files(qmlproject/imports/Musec)
+    $$files(qmlproject/*)
 
 #msvc:QMAKE_CXXFLAGS += -execution-charset:utf-8
 #msvc:QMAKE_CXXFLAGS += -source-charset:utf-8
