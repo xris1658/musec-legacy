@@ -20,7 +20,6 @@ Item {
     signal setMute(newMute: bool)
     signal setSolo(newSolo: bool)
     signal setArmRecording(newArmRecording: bool)
-    signal setHeight(newHeight: int)
 
     Popup {
         id: trackNameEditPopup
@@ -208,59 +207,6 @@ Item {
                         }
                     }
                 }
-            }
-        }
-    }
-    MouseArea {
-        id: resizeArea
-        z: 2
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        width: parent.width
-        height: 5
-        property int initialY: 0
-        Rectangle {
-            id: resizeAreaRect
-            anchors.fill: parent
-            opacity: 0
-            gradient: Gradient {
-                orientation: Qt.Vertical
-                GradientStop {
-                    position: 0
-                    color: "transparent"
-                }
-                GradientStop {
-                    position: 1
-                    color: Constants.borderColor
-                }
-            }
-        }
-        hoverEnabled: true
-        onEntered: {
-            cursorShape = Qt.SizeVerCursor;
-            resizeAreaRect.opacity = 1;
-        }
-        onExited: {
-            cursorShape = Qt.ArrowCursor;
-            resizeAreaRect.opacity = 0;
-        }
-        onPressed: {
-            initialY = mouseY;
-        }
-        onMouseYChanged: {
-            if(pressed) {
-                var rootY = mapToItem(root, mouseX, mouseY).y;
-                if(rootY >= lineHeight + 1) {
-                    var newHeight = root.height + mouseY - initialY;
-                    if(newHeight < lineHeight + 1) {
-                        newHeight = lineHeight + 1;
-                    }
-                    setHeight(newHeight);
-                }
-                else {
-                    setHeight(lineHeight + 1);
-                }
-                initialY = mouseY;
             }
         }
     }

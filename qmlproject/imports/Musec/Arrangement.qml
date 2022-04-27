@@ -408,10 +408,6 @@ Item {
                         onRenameComplete: {
                             trackname = newName;
                         }
-                        onSetHeight: (newHeight) => {
-                                         trackheight = newHeight;
-                                     }
-
                         onSetMute: (newMute) => {
                                        mute = newMute;
                                    }
@@ -427,6 +423,52 @@ Item {
                             x: 0
                             y: parent.height - 1
                             color: Constants.borderColor
+                        }
+                        MouseArea {
+                            id: resizeArea
+                            z: 2
+                            anchors.bottom: parent.bottom
+                            anchors.left: parent.left
+                            width: parent.width
+                            height: 5
+                            property int initialY: 0
+                            Rectangle {
+                                id: resizeAreaRect
+                                anchors.fill: parent
+                                visible: resizeArea.containsMouse
+                                gradient: Gradient {
+                                    orientation: Qt.Vertical
+                                    GradientStop {
+                                        position: 0
+                                        color: "transparent"
+                                    }
+                                    GradientStop {
+                                        position: 1
+                                        color: Constants.borderColor
+                                    }
+                                }
+                            }
+                            hoverEnabled: true
+                            cursorShape: containsMouse? Qt.SizeVerCursor: Qt.ArrowCursor
+                            onPressed: {
+                                initialY = mouseY;
+                            }
+                            onMouseYChanged: {
+                                if(pressed) {
+                                    var rootY = mapToItem(trackHeader, mouseX, mouseY).y;
+                                    if(rootY >= lineHeight + 1) {
+                                        var newHeight = trackHeader.height + mouseY - initialY;
+                                        if(newHeight < lineHeight + 1) {
+                                            newHeight = lineHeight + 1;
+                                        }
+                                        trackheight = newHeight;
+                                    }
+                                    else {
+                                        trackheight = lineHeight + 1;
+                                    }
+                                    initialY = mouseY;
+                                }
+                            }
                         }
                         MouseArea {
                             id: trackHeaderMouseArea
