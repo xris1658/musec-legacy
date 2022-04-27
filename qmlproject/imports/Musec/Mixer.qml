@@ -129,6 +129,7 @@ Rectangle {
                 height: root.height - scroll.height
             }
             delegate: Row {
+                id: trackChannelListDelegate
                 MixerChannel {
                     channelName: trackname
                     channelColor: trackcolor
@@ -137,6 +138,22 @@ Rectangle {
                     channelNumber: index + 1
                     effectVisible: root.effectVisible
                     gainAndMeterVisible: root.gainAndMeterVisible
+                    channelMuted: mute
+                    channelSolo: solo
+                    channelInverted: invertPhase
+                    channelArmRecording: armRecording
+                    onSetMute: (newMute) => {
+                                   mute = newMute;
+                               }
+                    onSetSolo: (newSolo) => {
+                                   solo = newSolo;
+                               }
+                    onSetInvertPhase: (newInvertPhase) => {
+                                          invertPhase = newInvertPhase;
+                                      }
+                    onSetArmRecording: (newArmRecording) => {
+                                           armRecording = newArmRecording;
+                                       }
                 }
                 Rectangle {
                     width: 1

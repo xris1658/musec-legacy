@@ -395,6 +395,9 @@ Item {
                         width: headers.width
                         trackIndex: model.index + 1
                         trackSelected: false
+                        trackMute: mute
+                        trackSolo: solo
+                        trackRecord: armRecording
                         function setColor(newColor: color) {
                             trackcolor = newColor;
                         }
@@ -405,21 +408,19 @@ Item {
                         onRenameComplete: {
                             trackname = newName;
                         }
-                        // QML 会提示绑定循环，然而不写这一项不
-                        // 会更改后端的高度数据，无视警告即可。
-                        onHeightChanged: {
-                            trackheight = height;
-                        }
-                        onTrackMuteChanged: {
-                            mute = trackMute;
-                        }
-                        onTrackSoloChanged: {
-                            solo = trackSolo;
-                        }
-                        onTrackRecordChanged: {
-                            armRecording = trackRecord;
-                        }
+                        onSetHeight: (newHeight) => {
+                                         trackheight = newHeight;
+                                     }
 
+                        onSetMute: (newMute) => {
+                                       mute = newMute;
+                                   }
+                        onSetSolo: (newSolo) => {
+                                       solo = newSolo;
+                                   }
+                        onSetArmRecording: (newArmRecording) => {
+                                               armRecording = newArmRecording;
+                                           }
                         Rectangle {
                             width: parent.width
                             height: 1

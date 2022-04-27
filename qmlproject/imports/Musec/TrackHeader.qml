@@ -17,6 +17,10 @@ Item {
     property bool trackRecord: false
 
     signal renameComplete(newName: string)
+    signal setMute(newMute: bool)
+    signal setSolo(newSolo: bool)
+    signal setArmRecording(newArmRecording: bool)
+    signal setHeight(newHeight: int)
 
     Popup {
         id: trackNameEditPopup
@@ -141,7 +145,7 @@ Item {
                                 horizontalAlignment: Text.AlignHCenter
                             }
                             onClicked: {
-                                trackMute = !trackMute;
+                                setMute(!trackMute);
                             }
                         }
                     }
@@ -170,7 +174,7 @@ Item {
                                 horizontalAlignment: Text.AlignHCenter
                             }
                             onClicked: {
-                                trackSolo = !trackSolo;
+                                setSolo(!trackSolo);
                             }
                         }
                     }
@@ -199,7 +203,7 @@ Item {
                                 horizontalAlignment: Text.AlignHCenter
                             }
                             onClicked: {
-                                trackRecord = !trackRecord;
+                                setArmRecording(!trackRecord);
                             }
                         }
                     }
@@ -251,13 +255,10 @@ Item {
                     if(newHeight < lineHeight + 1) {
                         newHeight = lineHeight + 1;
                     }
-                    root.height = newHeight;
+                    setHeight(newHeight);
                 }
                 else {
-                    root.height = lineHeight + 1;
-                }
-                if(trackIndex != 0) {
-//                    tracks.get(trackIndex - 1).height = root.height;
+                    setHeight(lineHeight + 1);
                 }
                 initialY = mouseY;
             }

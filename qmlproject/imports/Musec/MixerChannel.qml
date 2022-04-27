@@ -29,10 +29,10 @@ Item {
         }
 */
     }
-    property bool muted: false
-    property bool solo: false
-    property bool inverted: false
-    property bool armRecording: false
+    property bool channelMuted: false
+    property bool channelSolo: false
+    property bool  channelInverted: false
+    property bool channelArmRecording: false
     property real panning: 0.0
     property real stereo: 1.0
     property real gain: 1.00
@@ -42,6 +42,10 @@ Item {
     property int channelNumber: 0
     property alias effectVisible: channelEffects.visible
     property alias gainAndMeterVisible: channelGainAndPeak.visible
+    signal setMute(newMute: bool)
+    signal setSolo(newSolo: bool)
+    signal setInvertPhase(newInvertPhase: bool)
+    signal setArmRecording(newArmRecording: bool)
     Column {
         width: parent.width
         height: parent.height
@@ -160,7 +164,7 @@ Item {
                         height: parent.height - 2
                         border.width: 2
                         border.color: Constants.muteIndicatorColor
-                        color: muted? Qt.darker(border.color, 1.5) : Constants.backgroundColor
+                        color: channelMuted? Qt.darker(border.color, 1.5) : Constants.backgroundColor
                         Text {
                             anchors.centerIn: parent
                             anchors.verticalCenterOffset: -1.2
@@ -171,7 +175,7 @@ Item {
                             color: Constants.contentColor1
                         }
                         onClicked: {
-                            muted = !muted;
+                            setMute(!channelMuted);
                         }
                     }
                 }
@@ -184,7 +188,7 @@ Item {
                         height: parent.height - 2
                         border.width: 2
                         border.color: Constants.soloIndicatorColor
-                        color: solo? Qt.darker(border.color, 1.5) : Constants.backgroundColor
+                        color:  channelSolo? Qt.darker(border.color, 1.5) : Constants.backgroundColor
                         Text {
                             anchors.centerIn: parent
                             anchors.verticalCenterOffset: -1.2
@@ -195,7 +199,7 @@ Item {
                             color: Constants.contentColor1
                         }
                         onClicked: {
-                            solo = !solo;
+                            setSolo(!channelSolo);
                         }
                     }
                 }
@@ -208,7 +212,7 @@ Item {
                         height: parent.height - 2
                         border.width: 2
                         border.color: Constants.invertIndicatorColor
-                        color: inverted? border.color : Constants.backgroundColor
+                        color:  channelInverted? border.color : Constants.backgroundColor
                         Text {
                             anchors.centerIn: parent
                             anchors.verticalCenterOffset: -1.2
@@ -219,7 +223,7 @@ Item {
                             color: Constants.contentColor1
                         }
                         onClicked: {
-                            inverted = !inverted;
+                            setInvertPhase(!channelInverted);
                         }
                     }
                 }
@@ -232,7 +236,7 @@ Item {
                         height: parent.height - 2
                         border.width: 2
                         border.color: Constants.recordIndicatorColor
-                        color: armRecording? border.color : Constants.backgroundColor
+                        color: channelArmRecording? border.color : Constants.backgroundColor
                         Text {
                             anchors.centerIn: parent
                             anchors.verticalCenterOffset: -1.2
@@ -243,7 +247,7 @@ Item {
                             color: Constants.contentColor1
                         }
                         onClicked: {
-                           armRecording = !armRecording;
+                           setArmRecording(!channelArmRecording);
                         }
                     }
                 }
