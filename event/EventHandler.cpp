@@ -275,7 +275,14 @@ void EventHandler::onExitASIOThread()
 void EventHandler::onSampleRateChanged(int sampleRate)
 {
     using namespace Musec::Audio::Driver;
-    AppASIODriver()->setSampleRate(static_cast<ASIOSampleRate>(sampleRate));
+    // 使用 decltype 的推导规则进行自动推导。多在编写程序库时使用。
+    // 和单例模式一并使用效果绝佳。
+    // （话说回来这儿直接用 auto& 也没问题。）
+    decltype(auto) driver = AppASIODriver();
+    if(driver)
+    {
+        driver->setSampleRate(static_cast<ASIOSampleRate>(sampleRate));
+    }
 }
 
 void EventHandler::onSystemTextRenderingChanged(bool newValue)

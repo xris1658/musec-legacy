@@ -33,14 +33,14 @@ QList<ASIODriverBasicInfo> enumerateDrivers()
         L"SOFTWARE\\ASIO", 0, KEY_READ | KEY_WOW64_64KEY, &hKey);
     if(findKeyResult != ERROR_SUCCESS)
     {
-        // 异常处理
+        throw std::runtime_error("Can't enumerate ASIO drivers.");
     }
     DWORD numSubKey;
     auto queryInfoKeyResult = RegQueryInfoKeyW(hKey, NULL, NULL, NULL,
         &numSubKey, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
     if(queryInfoKeyResult != ERROR_SUCCESS)
     {
-        // 异常处理
+        throw std::runtime_error("Can't enumerate ASIO drivers.");
     }
     if(numSubKey > 0)
     {
@@ -53,7 +53,7 @@ QList<ASIODriverBasicInfo> enumerateDrivers()
             if(enumKeyExResult != ERROR_SUCCESS
             && enumKeyExResult != ERROR_MORE_DATA)
             {
-                // 异常处理
+                throw std::runtime_error("A error occured while enumerating ASIO drivers.");
             }
             else
             {
@@ -62,7 +62,7 @@ QList<ASIODriverBasicInfo> enumerateDrivers()
                     KEY_READ | KEY_WOW64_64KEY | KEY_QUERY_VALUE, &subKey);
                 if(openKeyResult != ERROR_SUCCESS)
                 {
-                    // 异常处理
+                    throw std::runtime_error("A error occured while enumerating ASIO drivers.");
                 }
                 else
                 {
@@ -71,11 +71,7 @@ QList<ASIODriverBasicInfo> enumerateDrivers()
                     DWORD clsidBufferLength;
                     auto getValueResult = RegGetValueW(subKey, NULL, name,
                         RRF_RT_REG_SZ, NULL, clsidBuffer.data(), &clsidBufferLength);
-                    if(getValueResult != ERROR_SUCCESS)
-                    {
-                        // 异常处理
-                    }
-                    else
+                    if(getValueResult == ERROR_SUCCESS && clsidBufferLength == clsidBuffer.size() * sizeof(wchar_t))
                     {
                         ret.append(
                             std::make_tuple(
@@ -84,9 +80,15 @@ QList<ASIODriverBasicInfo> enumerateDrivers()
                             )
                         );
                     }
+                    else
+                    {
+                        // 扫描的这个 ASIO 驱动信息有问题，因此不包含在内。
+                        // 要不要在这儿顺便把驱动的名字读出来，然后告知用户？
+                    }
                 }
             }
         }
+        assert(ret.size() <= numSubKey);
     }
     return ret;
 }
@@ -102,7 +104,7 @@ ASIODriver::ASIODriver(const ASIODriverBasicInfo& info): driverInfo_(info), driv
     auto convertToCLSIDResult = CLSIDFromString(clsidBuffer.data(), &clsid);
     if(convertToCLSIDResult != NOERROR)
     {
-        // 异常处理
+        throw std::runtime_error("Load driver info failed.");
     }
     auto loadDriverResult = CoCreateInstance(clsid, nullptr,
         CLSCTX_INPROC_SERVER, clsid,
@@ -110,7 +112,7 @@ ASIODriver::ASIODriver(const ASIODriverBasicInfo& info): driverInfo_(info), driv
     );
     if(loadDriverResult != S_OK)
     {
-        throw std::runtime_error("");
+        throw std::runtime_error("Load driver failed.");
     }
 }
 

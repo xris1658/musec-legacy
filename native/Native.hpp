@@ -49,6 +49,9 @@ std::int64_t currentTimeInNanosecond();
 void setThreadPriorityToTimeCritical();
 
 constexpr Musec::Util::Endian endian();
+
+// 检测应用自身是否处于调试状态。目前仅用于辅助选择文字渲染。
+bool isDebuggerPresent();
 }
 }
 

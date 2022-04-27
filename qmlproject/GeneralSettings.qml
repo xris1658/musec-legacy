@@ -123,6 +123,7 @@ Rectangle {
             width: 100
             text: qsTr("使用系统文字渲染")
             font.family: Constants.font
+            font.italic: true
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignVCenter
@@ -167,6 +168,22 @@ Rectangle {
                     visible: systemTextRenderingInfoButton.hovered | systemTextRenderingInfoButton.activeFocus
                 }
             }
+        }
+    }
+    Item {
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.margins: 10
+        height: experimentalFunctionText.contentHeight
+        Text {
+            id: experimentalFunctionText
+            anchors.left: parent.left
+            text: qsTr("<i>斜体字</i>设置项为实验性功能。")
+            font.family: Constants.font
+            color: Constants.contentColor2
+            horizontalAlignment: Text.AlignRight
+            verticalAlignment: Text.AlignVCenter
         }
     }
 }

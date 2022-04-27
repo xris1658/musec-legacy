@@ -220,5 +220,10 @@ constexpr Musec::Util::Endian endian()
         Musec::Util::Endian::UnknownEndian;
 }
 
+bool isDebuggerPresent()
+{
+    return IsDebuggerPresent();
+}
+
 }
 }

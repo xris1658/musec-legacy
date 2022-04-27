@@ -65,6 +65,7 @@ set(PROJECT_SOURCES
     audio/host/VST3ComponentHandler.hpp
     audio/media/AudioSequence.cpp
     audio/media/AudioSequence.hpp
+    audio/media/MIDISequence.cpp
     audio/media/MIDISequence.hpp
     audio/plugin/IPlugin.hpp
     audio/plugin/ShellPluginId.cpp
@@ -109,6 +110,8 @@ set(PROJECT_SOURCES
     controller/ConfigController.hpp
     controller/GeneralSettingsController.cpp
     controller/GeneralSettingsController.hpp
+    controller/LoggingController.cpp
+    controller/LoggingController.hpp
     controller/MIDIClockController.cpp
     controller/MIDIClockController.hpp
     controller/PluginController.cpp
@@ -185,7 +188,7 @@ set(PROJECT_SOURCES
     util/Endian.hpp
     util/Literal.cpp
     util/Literal.hpp
-    audio/media/MIDISequence.cpp)
+    )
 
 add_executable(Musec ${PROJECT_SOURCES} ${RESOURCE_FILE} ${QT_RESOURCES})
 

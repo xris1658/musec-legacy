@@ -90,6 +90,7 @@ HEADERS += \
     controller/AudioEngineController.hpp \
     controller/ConfigController.hpp \
     controller/GeneralSettingsController.hpp \
+    controller/LoggingController.hpp \
     controller/MIDIClockController.hpp \
     controller/PluginController.hpp \
     controller/PluginSettingsController.hpp \
@@ -157,6 +158,7 @@ SOURCES += \
     controller/AudioEngineController.cpp \
     controller/ConfigController.cpp \
     controller/GeneralSettingsController.cpp \
+    controller/LoggingController.cpp \
     controller/MIDIClockController.cpp \
     controller/PluginController.cpp \
     controller/PluginSettingsController.cpp \

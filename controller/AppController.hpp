@@ -16,7 +16,7 @@ namespace Musec
 namespace Controller
 {
 // 创建日志文件
-Musec::DAO::LoggingDAO::LoggerType& createLogger();
+Musec::DAO::LoggingDAO::LoggerType& AppLogger();
 
 // 初始化应用程序（打开启动屏后 -> 打开主界面前）
 void initApplication(Musec::Event::SplashScreen* splashScreen);

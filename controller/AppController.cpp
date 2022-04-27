@@ -9,6 +9,7 @@
 #include "native/Native.hpp"
 #include "ui/MessageDialog.hpp"
 #include "ui/Render.hpp"
+#include "LoggingController.hpp"
 
 #include <QDir>
 #include <QFile>
@@ -20,11 +21,6 @@
 
 namespace Musec::Controller
 {
-Musec::DAO::LoggingDAO::LoggerType& createLogger()
-{
-    return Musec::DAO::LoggingDAO::createLogger();
-}
-
 void initApplication(Musec::Event::SplashScreen* splashScreen)
 {
     using namespace Musec::Event;
@@ -51,8 +47,20 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     auto& appConfig = Musec::Controller::ConfigController::appConfig();
     splashScreen->setBootText("正在寻找音频设备...");
     // 加载 ASIO 驱动列表
-    auto driverList = Musec::Audio::Driver::enumerateDrivers();
-    AppASIODriverList().setList(driverList);
+    decltype(Musec::Audio::Driver::enumerateDrivers()) driverList;
+    try
+    {
+        driverList = Musec::Audio::Driver::enumerateDrivers();
+        AppASIODriverList().setList(driverList);
+    }
+    catch(std::exception& e)
+    {
+        Musec::UI::MessageDialog::messageDialog(
+           "在此电脑上寻找 ASIO 驱动程序时出现错误。程序将以未加载音频驱动的方式运行。",
+           "Musec",
+           Musec::UI::MessageDialog::IconType::Error
+        );
+    }
     // 加载 ASIO 驱动
     splashScreen->setBootText("正在寻找 ASIO 驱动程序...");
     Musec::Audio::Driver::AppASIODriver();
@@ -63,12 +71,11 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     if(driverList.empty())
     {
         // 没有找到 ASIO 驱动，程序将以音频引擎关闭的状态运行
-        Musec::Audio::Driver::AppASIODriver();
-//        Musec::UI::MessageDialog::messageDialog(
-//            "在此电脑上找不到 ASIO 驱动程序。程序将以未加载音频驱动的方式运行。",
-//            "Musec",
-//            Musec::UI::MessageDialog::IconType::Warning
-//        );
+        Musec::UI::MessageDialog::messageDialog(
+           "在此电脑上找不到 ASIO 驱动程序。程序将以未加载音频驱动的方式运行。",
+           "Musec",
+           Musec::UI::MessageDialog::IconType::Warning
+        );
     }
     else
     {
@@ -84,9 +91,9 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
                 }
                 catch(std::runtime_error& exception)
                 {
-//                    Musec::UI::MessageDialog::messageDialog("无法加载 ASIO 驱动程序。程序将以未加载音频驱动的方式运行。",
-//                                                         "Musec",
-//                                                         Musec::UI::MessageDialog::IconType::Warning);
+                   Musec::UI::MessageDialog::messageDialog("无法加载 ASIO 驱动程序。程序将以未加载音频驱动的方式运行。",
+                                                        "Musec",
+                                                        Musec::UI::MessageDialog::IconType::Warning);
                     AppASIODriver() = ASIODriver();
                 }
                 break;
