@@ -8,6 +8,7 @@
 
 #include <pluginterfaces/vst/ivstaudioprocessor.h>
 #include <pluginterfaces/vst/ivsteditcontroller.h>
+#include <pluginterfaces/vst/ivstmessage.h>
 
 #include <QString>
 #include <QWindow>
@@ -18,6 +19,29 @@ namespace Audio
 {
 namespace Plugin
 {
+// VST3 插件音频组件的状态。
+// 参见：https://developer.steinberg.help/display/VST/Audio+Processor+Call+Sequence
+enum class VST3AudioProcessorStatus: std::int8_t
+{
+    NoAudioProcessor = 0x00,
+    Factory = 0x01,
+    Created = 0x02,
+    Initialized = 0x04,
+    Connected = 0x08,
+    SetupDone = 0x10,
+    Activated = 0x20,
+    Processing = 0x40
+};
+// VST3 插件控制器（用户界面）的状态。
+// 参见：https://developer.steinberg.help/display/VST/Edit+Controller+Call+Sequence
+enum class VST3EditControllerStatus: std::int8_t
+{
+    NoEditController = 0x00,
+    Factory = 0x01,
+    Created = 0x02,
+    Initialized = 0x04,
+    Connected = 0x08
+};
 using SpeakerArrangements = std::vector<Steinberg::Vst::SpeakerArrangement>;
 template<typename SampleType>
 class VST3Plugin:
@@ -38,7 +62,6 @@ public:
     Steinberg::Vst::IAudioProcessor* effect() const;
     Steinberg::Vst::IEditController* editController() const;
     Steinberg::IPlugView* getView() const;
-    bool isProcessorAndEditorUnified() const;
 public: // IDevice interfaces
     uint8_t inputCount() const override;
     uint8_t outputCount() const override;
@@ -65,9 +88,9 @@ private:
     Steinberg::Vst::IComponent* component_ = nullptr;
     Steinberg::Vst::IAudioProcessor* effect_ = nullptr;
     Steinberg::Vst::IEditController* editController_ = nullptr;
+    Steinberg::Vst::IConnectionPoint* componentPoint_ = nullptr;
+    Steinberg::Vst::IConnectionPoint* editControllerPoint_ = nullptr;
     Steinberg::IPlugView* view_ = nullptr;
-    bool processorAndEditorUnified_ = false;
-private:
     // IAudioProcessor::process 函数调用的实参
     Steinberg::Vst::ProcessData processData_;
     // 调用 process 函数时将 data 赋值给 processData_
@@ -82,6 +105,8 @@ private:
     SpeakerArrangements inputSpeakerArrangements_;
     // 各个总线输出的扬声器布局
     SpeakerArrangements outputSpeakerArrangements_;
+    VST3AudioProcessorStatus audioProcessorStatus_ = VST3AudioProcessorStatus::NoAudioProcessor;
+    VST3EditControllerStatus editControllerStatus_ = VST3EditControllerStatus::NoEditController;
 };
 
 extern template class VST3Plugin<float>;
