@@ -22,7 +22,7 @@ public:
     {}
     IPlugin(const IPlugin<SampleType>&) = delete;
     IPlugin(IPlugin<SampleType>&&) = default;
-    virtual ~IPlugin() noexcept override = default;
+    virtual ~IPlugin() override = default;
 public:
     virtual bool initialize(double sampleRate, std::int32_t maxSampleCount) = 0;
     virtual bool uninitialize() = 0;

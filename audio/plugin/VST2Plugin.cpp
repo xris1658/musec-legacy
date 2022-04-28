@@ -335,7 +335,7 @@ VST2Plugin<SampleType>::VST2Plugin(const QString& path, bool scanPlugin, VstInt3
 }
 
 template<typename SampleType>
-VST2Plugin<SampleType>::~VST2Plugin() noexcept
+VST2Plugin<SampleType>::~VST2Plugin()
 {
     if(effect_)
     {

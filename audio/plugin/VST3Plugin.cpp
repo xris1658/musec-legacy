@@ -55,79 +55,55 @@ VST3Plugin<SampleType>::VST3Plugin(const QString& path, int classIndex):
         throw std::runtime_error("");
     }
     factory_->getClassInfo(classIndex, &classInfo_);
-    auto createAudioProcessorInstanceResult = factory_->createInstance(classInfo_.cid, Steinberg::Vst::IAudioProcessor_iid,
-        reinterpret_cast<void**>(&effect_));
-    if (createAudioProcessorInstanceResult != Steinberg::kResultOk)
+    auto createComponentResult = factory_->createInstance(classInfo_.cid,
+        Steinberg::Vst::IComponent_iid, reinterpret_cast<void**>(&component_));
+    if(createComponentResult != Steinberg::kResultOk)
     {
         throw std::runtime_error("Error creating audio processor instance!");
     }
     audioProcessorStatus_ = VST3AudioProcessorStatus::Created;
-    auto queryComponentResult = effect_->queryInterface(Steinberg::Vst::IComponent_iid, reinterpret_cast<void**>(&component_));
-    if (queryComponentResult != Steinberg::kResultOk)
+    auto queryEditorFromComponentResult = component_->queryInterface(Steinberg::Vst::IEditController_iid,
+        reinterpret_cast<void**>(&editController_));
+    if (queryEditorFromComponentResult == Steinberg::kResultOk)
     {
-        throw std::runtime_error("Cannot get IComponent interface!");
-    }
-    Steinberg::TUID controllerId;
-    if (component_->getControllerClassId(controllerId) == Steinberg::kResultOk)
-    {
-        auto createEditControllerInstanceResult = factory_->createInstance(controllerId, Steinberg::Vst::IEditController_iid,
-                                                                           reinterpret_cast<void**>(&editController_));
-        if(createEditControllerInstanceResult != Steinberg::kResultOk)
-        {
-            throw std::runtime_error("");
-        }
         editControllerStatus_ = VST3EditControllerStatus::Created;
+        effectAndEditorUnified_ = EffectAndEditorUnified::Unified;
     }
     else
     {
-        component_->queryInterface(Steinberg::Vst::IEditController_iid,
-            reinterpret_cast<void**>(&editController_));
+        Steinberg::TUID controllerId;
+        if (component_->getControllerClassId(controllerId) == Steinberg::kResultOk)
+        {
+            auto createEditControllerInstanceResult = factory_->createInstance(
+                controllerId, Steinberg::Vst::IEditController_iid,
+                reinterpret_cast<void**>(&editController_));
+            if(createEditControllerInstanceResult != Steinberg::kResultOk)
+            {
+                throw std::runtime_error("");
+            }
+            editControllerStatus_ = VST3EditControllerStatus::Created;
+        }
     }
 }
 
 template<typename SampleType>
-VST3Plugin<SampleType>::~VST3Plugin() noexcept
+VST3Plugin<SampleType>::~VST3Plugin()
 {
     if(audioProcessorStatus_ == VST3AudioProcessorStatus::Processing)
     {
         stopProcessing();
-        audioProcessorStatus_ = VST3AudioProcessorStatus::Activated;
     }
     if(audioProcessorStatus_ == VST3AudioProcessorStatus::Activated)
     {
         deactivate();
-        audioProcessorStatus_ = VST3AudioProcessorStatus::SetupDone;
     }
-    if (editController_)
+    if(audioProcessorStatus_ == VST3AudioProcessorStatus::SetupDone)
     {
-        if (view_)
-        {
-            view_->release();
-        }
-        if (componentPoint_ && editControllerPoint_)
-        {
-            componentPoint_->disconnect(editControllerPoint_);
-            editControllerPoint_->disconnect(componentPoint_);
-        }
-        editControllerStatus_ = VST3EditControllerStatus::Initialized;
-        editController_->terminate();
-        editControllerStatus_ = VST3EditControllerStatus::Created;
-        editController_->release();
-        editControllerStatus_ = VST3EditControllerStatus::Factory;
+        uninitialize();
     }
-    if (component_)
+    if(audioProcessorStatus_ == VST3AudioProcessorStatus::Created)
     {
-        if(audioProcessorStatus_ == VST3AudioProcessorStatus::SetupDone
-           || audioProcessorStatus_ == VST3AudioProcessorStatus::Initialized)
-        {
-            component_->terminate();
-            audioProcessorStatus_ = VST3AudioProcessorStatus::Created;
-        }
         component_->release();
-    }
-    if (effect_)
-    {
-        effect_->release();
         audioProcessorStatus_ = VST3AudioProcessorStatus::Factory;
     }
     if (factory_)
@@ -220,12 +196,26 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
     auto initializeComponentResult = component_->initialize(&host);
     if(initializeComponentResult != Steinberg::kResultOk)
     {
-        throw std::runtime_error("");
+        throw std::runtime_error("Error initializing VST3 component!");
+    }
+    auto queryAudioProcessorResult = component_->queryInterface(
+        Steinberg::Vst::IAudioProcessor_iid,
+        reinterpret_cast<void**>(&effect_));
+    if(queryAudioProcessorResult != Steinberg::kResultOk)
+    {
+        throw std::runtime_error("Error creating VST3 audio processor!");
     }
     audioProcessorStatus_ = VST3AudioProcessorStatus::Initialized;
     if (editController_)
     {
-        editController_->initialize(nullptr);
+        if(effectAndEditorUnified_ != EffectAndEditorUnified::Unified)
+        {
+            auto initEditControllerResult = editController_->initialize(nullptr);
+            if(initEditControllerResult != Steinberg::kResultOk)
+            {
+                throw std::runtime_error("");
+            }
+        }
         editControllerStatus_ = VST3EditControllerStatus::Initialized;
         editController_->setComponentHandler(&(Musec::Audio::Host::VST3ComponentHandler::instance()));
         component_->queryInterface(Steinberg::Vst::IConnectionPoint_iid,
@@ -340,12 +330,27 @@ bool VST3Plugin<SampleType>::uninitialize()
         componentPoint_->disconnect(editControllerPoint_);
         editControllerPoint_->disconnect(componentPoint_);
     }
-    auto ret = (component_->terminate() == Steinberg::kResultOk) && (editController_->terminate() == Steinberg::kResultOk);
-    if(ret)
+    audioProcessorStatus_ = VST3AudioProcessorStatus::Initialized;
+    editControllerStatus_ = VST3EditControllerStatus::Initialized;
+    effect_->release();
+    auto terminateComponentResult = component_->terminate();
+    if(terminateComponentResult != Steinberg::kResultOk)
     {
-        audioProcessorStatus_ = VST3AudioProcessorStatus::Created;
-        editControllerStatus_ = VST3EditControllerStatus::Created;
+        throw std::runtime_error("");
     }
+    audioProcessorStatus_ = VST3AudioProcessorStatus::Created;
+    Steinberg::tresult terminateEditControllerResult;
+    if(editController_ && (effectAndEditorUnified_ != EffectAndEditorUnified::Unified))
+    {
+        terminateEditControllerResult = editController_->terminate();
+        if(terminateEditControllerResult != Steinberg::kResultOk)
+        {
+            throw std::runtime_error("");
+        }
+    }
+    terminateEditControllerResult = Steinberg::kResultOk;
+    editControllerStatus_ = VST3EditControllerStatus::Created;
+    auto ret = (terminateComponentResult == Steinberg::kResultOk) && (terminateEditControllerResult == Steinberg::kResultOk);
     return ret;
 }
 

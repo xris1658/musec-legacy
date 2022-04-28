@@ -50,7 +50,7 @@ class VST2Plugin:
     using PluginInterface = Musec::Audio::Plugin::IPlugin<SampleType>;
 public:
     VST2Plugin(const QString& path, bool scanPlugin = false, VstInt32 shellPluginId = 0);
-    ~VST2Plugin() noexcept override;
+    ~VST2Plugin() override;
 public:
     AEffect* effect() const;
 public:

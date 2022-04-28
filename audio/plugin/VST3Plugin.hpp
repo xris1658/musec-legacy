@@ -42,6 +42,11 @@ enum class VST3EditControllerStatus: std::int8_t
     Initialized = 0x04,
     Connected = 0x08
 };
+enum class EffectAndEditorUnified: std::int8_t
+{
+    NotUnified = 0,
+    Unified = 1
+};
 using SpeakerArrangements = std::vector<Steinberg::Vst::SpeakerArrangement>;
 template<typename SampleType>
 class VST3Plugin:
@@ -54,7 +59,7 @@ class VST3Plugin:
 public: // ctor & dtor
     VST3Plugin();
     VST3Plugin(const QString& path, int classIndex);
-    ~VST3Plugin() noexcept override;
+    ~VST3Plugin() override;
 public:
     const Steinberg::PClassInfo& getClassInfo() const;
     Steinberg::IPluginFactory* factory() const;
@@ -107,6 +112,7 @@ private:
     SpeakerArrangements outputSpeakerArrangements_;
     VST3AudioProcessorStatus audioProcessorStatus_ = VST3AudioProcessorStatus::NoAudioProcessor;
     VST3EditControllerStatus editControllerStatus_ = VST3EditControllerStatus::NoEditController;
+    EffectAndEditorUnified effectAndEditorUnified_ = EffectAndEditorUnified::NotUnified;
 };
 
 extern template class VST3Plugin<float>;

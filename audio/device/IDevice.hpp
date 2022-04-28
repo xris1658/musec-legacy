@@ -19,7 +19,7 @@ public:
     {
         //
     }
-    virtual ~IDevice() noexcept = default;
+    virtual ~IDevice() = default;
 public:
     virtual std::uint8_t inputCount() const = 0;
     virtual std::uint8_t outputCount() const = 0;
