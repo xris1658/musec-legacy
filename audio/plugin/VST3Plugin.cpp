@@ -62,33 +62,15 @@ VST3Plugin<SampleType>::VST3Plugin(const QString& path, int classIndex):
         throw std::runtime_error("Error creating audio processor instance!");
     }
     audioProcessorStatus_ = VST3AudioProcessorStatus::Created;
-    auto queryEditorFromComponentResult = component_->queryInterface(Steinberg::Vst::IEditController_iid,
-        reinterpret_cast<void**>(&editController_));
-    if (queryEditorFromComponentResult == Steinberg::kResultOk)
-    {
-        editControllerStatus_ = VST3EditControllerStatus::Created;
-        effectAndEditorUnified_ = EffectAndEditorUnified::Unified;
-    }
-    else
-    {
-        Steinberg::TUID controllerId;
-        if (component_->getControllerClassId(controllerId) == Steinberg::kResultOk)
-        {
-            auto createEditControllerInstanceResult = factory_->createInstance(
-                controllerId, Steinberg::Vst::IEditController_iid,
-                reinterpret_cast<void**>(&editController_));
-            if(createEditControllerInstanceResult != Steinberg::kResultOk)
-            {
-                throw std::runtime_error("");
-            }
-            editControllerStatus_ = VST3EditControllerStatus::Created;
-        }
-    }
 }
 
 template<typename SampleType>
 VST3Plugin<SampleType>::~VST3Plugin()
 {
+    if(editControllerStatus_ == VST3EditControllerStatus::Connected)
+    {
+        uninitializeEditor();
+    }
     if(audioProcessorStatus_ == VST3AudioProcessorStatus::Processing)
     {
         stopProcessing();
@@ -206,37 +188,6 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
         throw std::runtime_error("Error creating VST3 audio processor!");
     }
     audioProcessorStatus_ = VST3AudioProcessorStatus::Initialized;
-    if (editController_)
-    {
-        if(effectAndEditorUnified_ != EffectAndEditorUnified::Unified)
-        {
-            auto initEditControllerResult = editController_->initialize(nullptr);
-            if(initEditControllerResult != Steinberg::kResultOk)
-            {
-                throw std::runtime_error("");
-            }
-        }
-        editControllerStatus_ = VST3EditControllerStatus::Initialized;
-        editController_->setComponentHandler(&(Musec::Audio::Host::VST3ComponentHandler::instance()));
-        component_->queryInterface(Steinberg::Vst::IConnectionPoint_iid,
-                                   reinterpret_cast<void**>(&componentPoint_)
-        );
-        editController_->queryInterface(Steinberg::Vst::IConnectionPoint_iid,
-                                        reinterpret_cast<void**>(&editControllerPoint_)
-        );
-        view_ = editController_->createView(Steinberg::Vst::ViewType::kEditor);
-        if (view_)
-        {
-            view_->addRef();
-        }
-    }
-    if(componentPoint_ && editControllerPoint_)
-    {
-        componentPoint_->connect(editControllerPoint_);
-        editControllerPoint_->connect(componentPoint_);
-        audioProcessorStatus_ = VST3AudioProcessorStatus::Connected;
-        editControllerStatus_ = VST3EditControllerStatus::Connected;
-    }
     // ProcessSetup -------------------------------------------------------------------------
     Steinberg::Vst::ProcessSetup setup{};
     setup.processMode = Steinberg::Vst::ProcessModes::kRealtime;
@@ -325,13 +276,7 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
 template<typename SampleType>
 bool VST3Plugin<SampleType>::uninitialize()
 {
-    if(componentPoint_ && editControllerPoint_)
-    {
-        componentPoint_->disconnect(editControllerPoint_);
-        editControllerPoint_->disconnect(componentPoint_);
-    }
     audioProcessorStatus_ = VST3AudioProcessorStatus::Initialized;
-    editControllerStatus_ = VST3EditControllerStatus::Initialized;
     effect_->release();
     auto terminateComponentResult = component_->terminate();
     if(terminateComponentResult != Steinberg::kResultOk)
@@ -339,7 +284,82 @@ bool VST3Plugin<SampleType>::uninitialize()
         throw std::runtime_error("");
     }
     audioProcessorStatus_ = VST3AudioProcessorStatus::Created;
-    Steinberg::tresult terminateEditControllerResult;
+    auto ret = (terminateComponentResult == Steinberg::kResultOk);
+    return ret;
+}
+
+template<typename SampleType>
+bool VST3Plugin<SampleType>::initializeEditor(QWindow* window)
+{
+    auto queryEditorFromComponentResult = component_->queryInterface(Steinberg::Vst::IEditController_iid,
+                                                                     reinterpret_cast<void**>(&editController_));
+    if (queryEditorFromComponentResult == Steinberg::kResultOk)
+    {
+        editControllerStatus_ = VST3EditControllerStatus::Created;
+        effectAndEditorUnified_ = EffectAndEditorUnified::Unified;
+    }
+    else
+    {
+        Steinberg::TUID controllerId;
+        if (component_->getControllerClassId(controllerId) == Steinberg::kResultOk)
+        {
+            auto createEditControllerInstanceResult = factory_->createInstance(
+                    controllerId, Steinberg::Vst::IEditController_iid,
+                    reinterpret_cast<void**>(&editController_));
+            if(createEditControllerInstanceResult != Steinberg::kResultOk)
+            {
+                return false;
+            }
+            else
+            {
+                editControllerStatus_ = VST3EditControllerStatus::Created;
+            }
+        }
+    }
+    if (editController_)
+    {
+        if(effectAndEditorUnified_ != EffectAndEditorUnified::Unified)
+        {
+            auto initEditControllerResult = editController_->initialize(nullptr);
+            if(initEditControllerResult != Steinberg::kResultOk)
+            {
+                throw std::runtime_error("");
+            }
+        }
+        editControllerStatus_ = VST3EditControllerStatus::Initialized;
+        editController_->setComponentHandler(&(Musec::Audio::Host::VST3ComponentHandler::instance()));
+        component_->queryInterface(Steinberg::Vst::IConnectionPoint_iid,
+                                   reinterpret_cast<void**>(&componentPoint_));
+        editController_->queryInterface(Steinberg::Vst::IConnectionPoint_iid,
+                                        reinterpret_cast<void**>(&editControllerPoint_));
+        view_ = editController_->createView(Steinberg::Vst::ViewType::kEditor);
+        if (view_)
+        {
+            view_->addRef();
+        }
+        if(componentPoint_ && editControllerPoint_)
+        {
+            componentPoint_->connect(editControllerPoint_);
+            editControllerPoint_->connect(componentPoint_);
+            audioProcessorStatus_ = VST3AudioProcessorStatus::Connected;
+            editControllerStatus_ = VST3EditControllerStatus::Connected;
+        }
+    }
+    attachToWindow(window);
+    return true;
+}
+
+template<typename SampleType>
+bool VST3Plugin<SampleType>::uninitializeEditor()
+{
+    detachWithWindow();
+    if(componentPoint_ && editControllerPoint_)
+    {
+        componentPoint_->disconnect(editControllerPoint_);
+        editControllerPoint_->disconnect(componentPoint_);
+        editControllerStatus_ = VST3EditControllerStatus::Initialized;
+    }
+    Steinberg::tresult terminateEditControllerResult = Steinberg::kResultOk;
     if(editController_ && (effectAndEditorUnified_ != EffectAndEditorUnified::Unified))
     {
         terminateEditControllerResult = editController_->terminate();
@@ -348,10 +368,8 @@ bool VST3Plugin<SampleType>::uninitialize()
             throw std::runtime_error("");
         }
     }
-    terminateEditControllerResult = Steinberg::kResultOk;
     editControllerStatus_ = VST3EditControllerStatus::Created;
-    auto ret = (terminateComponentResult == Steinberg::kResultOk) && (terminateEditControllerResult == Steinberg::kResultOk);
-    return ret;
+    return true;
 }
 
 template<typename SampleType>
@@ -451,21 +469,29 @@ const SpeakerArrangements& VST3Plugin<SampleType>::outputSpeakerArrangements()
 template<typename SampleType>
 bool VST3Plugin<SampleType>::attachToWindow(QWindow* window)
 {
-    Steinberg::ViewRect viewRect;
-    view_->getSize(&viewRect);
-    window->setPosition(viewRect.left, viewRect.top);
-    window->setWidth(viewRect.right - viewRect.left);
-    window->setHeight(viewRect.bottom - viewRect.top);
-    window->setTitle(classInfo_.name);
-    view_->attached(reinterpret_cast<HWND>(window->winId()), Steinberg::kPlatformTypeHWND);
-    return true;
+    if(view_)
+    {
+        Steinberg::ViewRect viewRect;
+        view_->getSize(&viewRect);
+        window->setPosition(viewRect.left, viewRect.top);
+        window->setWidth(viewRect.right - viewRect.left);
+        window->setHeight(viewRect.bottom - viewRect.top);
+        window->setTitle(classInfo_.name);
+        view_->attached(reinterpret_cast<HWND>(window->winId()), Steinberg::kPlatformTypeHWND);
+        return true;
+    }
+    return false;
 }
 
 template<typename SampleType>
 bool VST3Plugin<SampleType>::detachWithWindow()
 {
-    view_->removed();
-    return true;
+    if(view_)
+    {
+        view_->removed();
+        return true;
+    }
+    return false;
 }
 
 template<typename SampleType>

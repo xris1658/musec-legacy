@@ -7,9 +7,10 @@
 
 #include <pluginterfaces/vst2.x/aeffect.h>
 #include <pluginterfaces/vst2.x/aeffectx.h>
-#include <base/thread/include/flock.h>
 
 #include <QString>
+
+#include <mutex>
 
 namespace Musec
 {
@@ -38,7 +39,7 @@ public:
 private:
     VstInt32 id_ = 0;
     bool idShouldBeZero_ = true;
-    Steinberg::Base::Thread::FLock mutex_ = "shlPlgn";
+    std::mutex mutex_;
 };
 
 template<typename SampleType>
@@ -59,6 +60,8 @@ public:
 public:
     bool initialize(double sampleRate, std::int32_t maxSampleCount) override;
     bool uninitialize() override;
+    bool initializeEditor(QWindow* window) override;
+    bool uninitializeEditor() override;
     bool activate() override;
     bool deactivate() override;
     bool startProcessing() override;

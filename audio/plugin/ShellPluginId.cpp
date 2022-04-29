@@ -31,7 +31,7 @@ bool ShellPluginId::idShouldBeZero() const
 AEffect* ShellPluginId::getShellPlugin(VstInt32 id, bool idShouldBeZero,
     Musec::Base::VST2PluginEntryProc pluginEntryProc)
 {
-    Steinberg::Base::Thread::FGuard lg(mutex_);
+    std::lock_guard<std::mutex> lg(mutex_);
     id_ = id;
     idShouldBeZero_ = idShouldBeZero;
     return pluginEntryProc(pluginVST2Callback);

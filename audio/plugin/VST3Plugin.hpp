@@ -77,12 +77,14 @@ public: // IPlugin interfaces
     bool deactivate() override;
     bool initialize(double sampleRate, std::int32_t sampleCount) override;
     bool uninitialize() override;
+    bool initializeEditor(QWindow* window) override;
+    bool uninitializeEditor() override;
     bool startProcessing() override;
     bool stopProcessing() override;
 public:
     const SpeakerArrangements& inputSpeakerArrangements();
     const SpeakerArrangements& outputSpeakerArrangements();
-public:
+private:
     bool attachToWindow(QWindow* window);
     bool detachWithWindow();
 private:

@@ -3,10 +3,12 @@
 #include "audio/driver/ASIODriver.hpp"
 #include "base/Constants.hpp"
 #include "base/PluginBase.hpp"
+#include "native/Native.hpp"
 
 #include <windows.h>
 #include <errhandlingapi.h>
 
+#include <array>
 #include <cstring>
 
 // HostCanDos 命名空间只放到了源文件下，但是把用到这个命名空间内容的函数放到了别处
@@ -428,6 +430,36 @@ void VST2Plugin<SampleType>::process(const Musec::Audio::Base::AudioBufferViews<
     {
         effect_->processDoubleReplacing(effect_, inputsRaw_.data(), outputsRaw_.data(), sampleCount);
     }
+}
+
+template<typename SampleType> bool VST2Plugin<SampleType>::initializeEditor(QWindow* window)
+{
+    std::array<char, kVstMaxEffectNameLen> nameBuffer = {0};
+    effect_->dispatcher(effect_, AEffectXOpcodes::effGetEffectName, 0, 0, nameBuffer.data(), 0);
+    window->setTitle(nameBuffer.data());
+    ERect* rect = nullptr;
+    effect_->dispatcher(effect_, AEffectOpcodes::effEditOpen, 0, 0, reinterpret_cast<Musec::Native::WindowType>(window->winId()), 0);
+    effect_->dispatcher(effect_, AEffectOpcodes::effEditGetRect, 0, 0, &rect, 0);
+    if(rect)
+    {
+        auto width = rect->right - rect->left;
+        auto height = rect->bottom - rect->top;
+        window->setWidth(width);
+        window->setHeight(height);
+        // window->setX(rect->left);
+        // window->setY(rect->top);
+    }
+    else
+    {
+        return false;
+    }
+    return true;
+}
+
+template<typename SampleType> bool VST2Plugin<SampleType>::uninitializeEditor()
+{
+    effect_->dispatcher(effect_, AEffectOpcodes::effEditClose, 0, 0, nullptr, 0);
+    return true;
 }
 
 template class VST2Plugin<float>;
