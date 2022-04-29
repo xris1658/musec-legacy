@@ -20,6 +20,8 @@ using ThreadMaskType = std::uint64_t;
 using SystemTimeStringType = std::array<char, 18>;
 
 using WindowType = HWND;
+
+using ErrorCodeType = decltype(GetLastError());
 // 漫游用户数据路径（用户文件夹\AppData\Roaming）
 const QString& RoamingDirectoryPath();
 
@@ -52,6 +54,8 @@ constexpr Musec::Util::Endian endian();
 
 // 检测应用自身是否处于调试状态。目前仅用于辅助选择文字渲染。
 bool isDebuggerPresent();
+
+QString errorMessageFromErrorCode(ErrorCodeType errorCode);
 }
 }
 

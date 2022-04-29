@@ -225,5 +225,28 @@ bool isDebuggerPresent()
     return IsDebuggerPresent();
 }
 
+QString errorMessageFromErrorCode(ErrorCodeType errorCode)
+{
+    TCHAR* rawErrorString = nullptr;
+    auto messageLength = FormatMessage(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL, errorCode, 0, rawErrorString, 0, nullptr);
+    QString ret;
+    if(std::is_same_v<TCHAR, char>)
+    {
+        // 重解转换只是为了屏蔽类型不一致的误报
+        auto ptr = reinterpret_cast<char*>(rawErrorString);
+        ret = QString(ptr);
+    }
+    else if(std::is_same_v<TCHAR, wchar_t>)
+    {
+        // 重解转换只是为了屏蔽类型不一致的误报
+        auto ptr = reinterpret_cast<wchar_t*>(rawErrorString);
+        ret = QString::fromWCharArray(ptr);
+    }
+    LocalFree(rawErrorString);
+    return ret;
+}
+
 }
 }

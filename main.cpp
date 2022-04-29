@@ -6,6 +6,7 @@
 #include "event/MainWindow.hpp"
 #include "event/SplashScreen.hpp"
 #include "model/ModelInitializer.hpp"
+#include "native/Native.hpp"
 #include "ui/FontUtility.hpp"
 #include "ui/UI.hpp"
 
@@ -20,11 +21,12 @@
 #endif
 #include <QDebug>
 #include <QUrl>
+#include <QtGlobal>
 
 #include <vector>
 #include <string>
 
-int main(int argc, char* argv[])
+int main(int argc, char* argv[]) try
 {
     using namespace Musec::Event;
     using namespace Musec::UI;
@@ -72,4 +74,9 @@ int main(int argc, char* argv[])
     splashScreenEventHandler.onInitDialog();
     auto ret = app.exec();
     return ret;
+}
+catch(Musec::Native::ErrorCodeType errorCode)
+{
+    qFatal("%u", errorCode);
+    std::terminate();
 }
