@@ -238,6 +238,7 @@ Item {
                     width: 200
                     height: contentHeight
                     MCtrl.Action {
+                        id: insertInstrumentTrack
                         text: qsTr("添加乐器轨道(&I)")
                         onTriggered: {
                             let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
@@ -250,6 +251,7 @@ Item {
                         }
                     }
                     MCtrl.Action {
+                        id: insertAudioTrack
                         text: qsTr("添加音频轨道(&A)")
                         onTriggered: {
                             let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
@@ -381,6 +383,13 @@ Item {
                         }
                         onDropped: {
                             if(checkDragEvent(drop)) {
+                                var type = parseInt(drop.getDataAsString("type"));
+                                if(type == 2) {
+                                    insertInstrumentTrack.trigger(blankHeaderDropArea);
+                                }
+                                else if(type == 3) {
+                                    insertAudioTrack.trigger(blankHeaderDropArea);
+                                }
                                 console.log("Create a new track with plugin: ");
                                 console.log(drop.getDataAsString("type"), drop.getDataAsString("pluginId"));
                             }
@@ -831,25 +840,68 @@ Item {
                                         opacity: parent.containsDrag? 0.6: 0
                                     }
                                     onEntered: {
-                                        console.log(drag.keys);
-                                        var type = drag.getDataAsString(itemType);
-                                        if(type == "plugin") {
-                                            drag.accepted = false;
-                                        }
-                                        var filePath = drag.getDataAsString("FileName");
-                                        var extension = filePath.slice(filePath.lastIndexOf('.')).toLowerCase();
-                                        if(type != CompleteTrack.AudioTrack) {
-                                            if(extension != ".mid" && extension != ".midi") {
-                                                drag.accepted = false;
-                                                return;
+                                        var itemType = drag.getDataAsString("itemType");
+                                        if(itemType == "plugin") {
+                                            console.log("type:", type);
+                                            var pluginType = parseInt(drag.getDataAsString("type"));
+                                            if(type == CompleteTrack.InstrumentTrack) {
+                                                if(pluginType == 2) {
+                                                    console.log("将乐器应用到乐器轨");
+                                                }
+                                                else if(pluginType == 3) {
+                                                    console.log("将效果器放到乐器轨的末尾");
+                                                }
+                                            }
+                                            else if(type == CompleteTrack.AudioTrack) {
+                                                if(pluginType == 2) {
+                                                    console.log("将乐器应用到音频轨（不允许此操作）");
+                                                    drag.accepted = false;
+                                                    return;
+                                                }
+                                                else if(pluginType == 3) {
+                                                    console.log("将效果器放到音频轨的末尾");
+                                                }
                                             }
                                         }
-                                        trackDropIndicator.visible = true;
+                                        else {
+                                            var filePath = drag.getDataAsString("FileName");
+                                            var extension = filePath.slice(filePath.lastIndexOf('.')).toLowerCase();
+                                            if(type != CompleteTrack.AudioTrack) {
+                                                if(extension != ".mid" && extension != ".midi") {
+                                                    drag.accepted = false;
+                                                    return;
+                                                }
+                                            }
+                                            trackDropIndicator.visible = true;
+                                        }
                                     }
                                     onDropped: {
-                                        console.log(drop.getDataAsString("FileName"));
-                                        console.log(drop.x);
-                                        trackDropIndicator.visible = false;
+                                        var itemType = drop.getDataAsString("itemType");
+                                        if(itemType == "plugin") {
+                                            console.log("type:", type);
+                                            var pluginType = drop.getDataAsString("type");
+                                            if(type == CompleteTrack.InstrumentTrack) {
+                                                if(pluginType == 2) {
+                                                    console.log("将乐器应用到乐器轨");
+                                                }
+                                                else if(pluginType == 3) {
+                                                    console.log("将效果器放到乐器轨的末尾");
+                                                }
+                                            }
+                                            else if(type == CompleteTrack.AudioTrack) {
+                                                if(pluginType == 2) {
+                                                    console.log("将乐器应用到音频轨（不允许此操作）");
+                                                }
+                                                else if(pluginType == 3) {
+                                                    console.log("将效果器放到音频轨的末尾");
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            console.log(drop.getDataAsString("FileName"));
+                                            console.log(drop.x);
+                                            trackDropIndicator.visible = false;
+                                        }
                                     }
                                     onPositionChanged: {
                                         trackDropIndicator.x = drag.x;
@@ -888,6 +940,9 @@ Item {
                                             }
                                         }
                                         onDropped: {
+                                            if(drop.getDataAsString("itemType") == "plugin") {
+                                                blankHeaderDropArea.dropped(drop);
+                                            }
                                             console.log(drop.getDataAsString("FileName"));
                                         }
                                     }
