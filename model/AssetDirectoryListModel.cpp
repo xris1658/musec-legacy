@@ -22,12 +22,32 @@ AssetDirectoryListModel::~AssetDirectoryListModel()
 
 void AssetDirectoryListModel::setList(const QList<Item>& list)
 {
+    if(!list_.empty())
+    {
+        beginRemoveRows(QModelIndex(), 0, itemCount() - 1);
+        endRemoveRows();
+    }
     list_ = list;
+    if(!list_.empty())
+    {
+        beginInsertRows(QModelIndex(), 0, list_.size() - 1);
+        endInsertRows();
+    }
 }
 
 void AssetDirectoryListModel::setList(QList<Item>&& list)
 {
+    if(!list_.empty())
+    {
+        beginRemoveRows(QModelIndex(), 0, itemCount() - 1);
+        endRemoveRows();
+    }
     list_ = std::move(list);
+    if(!list_.empty())
+    {
+        beginInsertRows(QModelIndex(), 0, list_.size() - 1);
+        endInsertRows();
+    }
 }
 
 QList<AssetDirectoryListModel::Item> AssetDirectoryListModel::getList() const

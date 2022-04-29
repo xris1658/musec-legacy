@@ -20,12 +20,32 @@ FolderListModel::~FolderListModel()
 
 void FolderListModel::setList(const FolderListModel::List& list)
 {
+    if(!list_.empty())
+    {
+        beginRemoveRows(QModelIndex(), 0, itemCount() - 1);
+        endRemoveRows();
+    }
     list_ = list;
+    if(!list_.empty())
+    {
+        beginInsertRows(QModelIndex(), 0, list_.size() - 1);
+        endInsertRows();
+    }
 }
 
 void FolderListModel::setList(FolderListModel::List&& list)
 {
+    if(!list_.empty())
+    {
+        beginRemoveRows(QModelIndex(), 0, itemCount() - 1);
+        endRemoveRows();
+    }
     list_ = std::move(list);
+    if(!list_.empty())
+    {
+        beginInsertRows(QModelIndex(), 0, list_.size() - 1);
+        endInsertRows();
+    }
 }
 
 FolderListModel::List FolderListModel::getList() const

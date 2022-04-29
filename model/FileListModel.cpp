@@ -20,12 +20,32 @@ FileListModel::~FileListModel()
 
 void FileListModel::setList(const FileListModel::List& list)
 {
+    if(!list_.empty())
+    {
+        beginRemoveRows(QModelIndex(), 0, itemCount() - 1);
+        endRemoveRows();
+    }
     list_ = list;
+    if(!list_.empty())
+    {
+        beginInsertRows(QModelIndex(), 0, list_.size() - 1);
+        endInsertRows();
+    }
 }
 
 void FileListModel::setList(FileListModel::List&& list)
 {
+    if(!list_.empty())
+    {
+        beginRemoveRows(QModelIndex(), 0, itemCount() - 1);
+        endRemoveRows();
+    }
     list_ = std::move(list);
+    if(!list_.empty())
+    {
+        beginInsertRows(QModelIndex(), 0, list_.size() - 1);
+        endInsertRows();
+    }
 }
 
 FileListModel::List FileListModel::getList() const

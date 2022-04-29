@@ -20,12 +20,32 @@ AutomationModel::~AutomationModel()
 
 void AutomationModel::setAutomation(const Automation& automation)
 {
+    if(automation_.empty())
+    {
+        beginRemoveRows(QModelIndex(), 0, automation_.pointCount() - 1);
+        endRemoveRows();
+    }
     automation_ = automation;
+    if(!automation_.empty())
+    {
+        beginInsertRows(QModelIndex(), 0, automation_.pointCount() - 1);
+        endInsertRows();
+    }
 }
 
 void AutomationModel::setAutomation(Automation&& automation)
 {
+    if(automation_.empty())
+    {
+        beginRemoveRows(QModelIndex(), 0, automation_.pointCount() - 1);
+        endRemoveRows();
+    }
     automation_ = std::move(automation);
+    if(!automation_.empty())
+    {
+        beginInsertRows(QModelIndex(), 0, automation_.pointCount() - 1);
+        endInsertRows();
+    }
 }
 
 const AutomationModel::Automation& AutomationModel::getAutomation() const

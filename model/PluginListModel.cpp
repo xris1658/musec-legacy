@@ -21,17 +21,36 @@ PluginListModel::PluginListModel(QObject* parent): QAbstractListModel(parent)
 
 PluginListModel::~PluginListModel()
 {
-
 }
 
 void PluginListModel::setList(const PluginListModel::List& list)
 {
+    if(!list_.empty())
+    {
+        beginRemoveRows(QModelIndex(), 0, itemCount() - 1);
+        endRemoveRows();
+    }
     list_ = list;
+    if(!list_.empty())
+    {
+        beginInsertRows(QModelIndex(), 0, list_.size() - 1);
+        endInsertRows();
+    }
 }
 
 void PluginListModel::setList(PluginListModel::List&& list)
 {
+    if(!list_.empty())
+    {
+        beginRemoveRows(QModelIndex(), 0, itemCount() - 1);
+        endRemoveRows();
+    }
     list_ = std::move(list);
+    if(!list_.empty())
+    {
+        beginInsertRows(QModelIndex(), 0, list_.size() - 1);
+        endInsertRows();
+    }
 }
 
 PluginListModel::List PluginListModel::getList() const

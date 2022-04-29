@@ -19,12 +19,32 @@ ASIODriverListModel::~ASIODriverListModel()
 
 void ASIODriverListModel::setList(const List& list)
 {
+    if(!list_.empty())
+    {
+        beginRemoveRows(QModelIndex(), 0, itemCount() - 1);
+        endRemoveRows();
+    }
     list_ = list;
+    if(!list_.empty())
+    {
+        beginInsertRows(QModelIndex(), 0, list_.size() - 1);
+        endInsertRows();
+    }
 }
 
 void ASIODriverListModel::setList(List&& list)
 {
+    if(!list_.empty())
+    {
+        beginRemoveRows(QModelIndex(), 0, itemCount() - 1);
+        endRemoveRows();
+    }
     list_ = std::move(list);
+    if(!list_.empty())
+    {
+        beginInsertRows(QModelIndex(), 0, list_.size() - 1);
+        endInsertRows();
+    }
 }
 
 ASIODriverListModel::List ASIODriverListModel::getList() const
