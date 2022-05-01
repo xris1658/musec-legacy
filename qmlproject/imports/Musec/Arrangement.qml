@@ -47,6 +47,7 @@ Item {
         dynamicRoles: true
     }
     signal appendTrack(track: CompleteTrack)
+    signal insertTrack(track: CompleteTrack, index: int)
     signal appendTrackComplete(index: int)
 
     MCtrl.Menu {
@@ -92,6 +93,31 @@ Item {
             text: qsTr("颜色(&L)")
             onTriggered: {
                 colorDialog.open();
+            }
+        }
+        MCtrl.MenuSeparator {}
+        MCtrl.Action {
+            text: qsTr("在上方插入乐器轨道(&I)")
+            onTriggered: {
+                let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
+                    root, null);
+                completeTrack.trackColor_ = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
+                completeTrack.trackName_ = qsTr("乐器");
+                completeTrack.trackType_ = CompleteTrack.InstrumentTrack;
+                completeTrack.height_ = 60;
+                insertTrack(completeTrack, trackOptions.trackIndex - 1);
+            }
+        }
+        MCtrl.Action {
+            text: qsTr("在上方插入音频轨道(&A)")
+            onTriggered: {
+                let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
+                    root, null);
+                completeTrack.trackColor_ = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
+                completeTrack.trackName_ = qsTr("音频");
+                completeTrack.trackType_ = CompleteTrack.AudioTrack;
+                completeTrack.height_ = 60;
+                insertTrack(completeTrack, trackOptions.trackIndex - 1);
             }
         }
     }
@@ -320,7 +346,7 @@ Item {
                 Item {
                     id: masterTrackHeader
                     width: parent.width
-                    height: showMasterTrackButton.currentIndex == 1? masterTrackHeight: 0
+                    height: showMasterTrackButton.currentIndex != 0? masterTrackHeight: 0
                     anchors.top: parent.top
                     z: 2
                 }
@@ -392,6 +418,16 @@ Item {
                                 }
                                 console.log("Create a new track with plugin: ");
                                 console.log(drop.getDataAsString("type"), drop.getDataAsString("pluginId"));
+                            }
+                            else {
+                                var filePath = drop.getDataAsString("FileName");
+                                var extension = filePath.slice(filePath.lastIndexOf('.') + 1).toLowerCase();
+                                if(extension == "mid" || extension == "midi") {
+                                    insertInstrumentTrack.trigger(blankHeaderDropArea);
+                                }
+                                else {
+                                    insertAudioTrack.trigger(blankHeaderDropArea);
+                                }
                             }
                         }
                     }
@@ -943,7 +979,11 @@ Item {
                                             if(drop.getDataAsString("itemType") == "plugin") {
                                                 blankHeaderDropArea.dropped(drop);
                                             }
-                                            console.log(drop.getDataAsString("FileName"));
+                                            else {
+                                                console.log(drop.getDataAsString("FileName"));
+                                                console.log(drop.x);
+                                                blankHeaderDropArea.dropped(drop);
+                                            }
                                         }
                                     }
                                 }

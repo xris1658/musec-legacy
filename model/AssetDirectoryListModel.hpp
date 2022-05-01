@@ -33,6 +33,8 @@ public:
     int itemCount() const;
     static constexpr int columnSize();
     void append(const Item& item);
+    Q_INVOKABLE void remove(int id);
+    Q_INVOKABLE void rename(int id, const QString& name);
 public:
     virtual int rowCount(const QModelIndex&) const override;
     virtual int columnCount(const QModelIndex&) const override;

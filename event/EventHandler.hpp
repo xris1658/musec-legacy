@@ -54,6 +54,7 @@ public slots:
     void onPlayStop();
     void onRequestExplorerView();
     void onAppendTrack(Musec::Entities::CompleteTrack* track);
+    void onInsertTrack(Musec::Entities::CompleteTrack* track, int index);
     void onTrackInserted(const QModelIndex& parent, int first, int last);
     void onTrackAboutToBeRemoved(const QModelIndex &parent, int first, int last);
 private:

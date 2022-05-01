@@ -67,7 +67,38 @@ constexpr int AssetDirectoryListModel::columnSize()
 
 void AssetDirectoryListModel::append(const Item& item)
 {
+    beginInsertRows(QModelIndex(), itemCount(), itemCount());
     list_.append(item);
+    endInsertRows();
+}
+
+void AssetDirectoryListModel::remove(int id)
+{
+    auto itemCount = this->itemCount();
+    for(int i = 0; i < itemCount; ++i)
+    {
+        if(std::get<0>(list_[i]) == id)
+        {
+            beginRemoveRows(QModelIndex(), i, i);
+            list_.removeAt(i);
+            endRemoveRows();
+            return;
+        }
+    }
+}
+
+void AssetDirectoryListModel::rename(int id, const QString& name)
+{
+    auto itemCount = this->itemCount();
+    for(int i = 0; i < itemCount; ++i)
+    {
+        if(std::get<Musec::Base::AssetDirectoryInfoField::FieldId>(list_[i]) == id)
+        {
+            std::get<Musec::Base::AssetDirectoryInfoField::FieldName>(list_[i]) = name;
+            dataChanged(index(i), index(i), QVector<int>());
+            return;
+        }
+    }
 }
 
 int AssetDirectoryListModel::rowCount(const QModelIndex&) const

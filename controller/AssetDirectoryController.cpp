@@ -46,21 +46,21 @@ void renameAssetDirectory(int id, const QString& name)
                 );
         auto newName = directory.section('\\', -1);
         DAO::updateAssetDirectoryNameById(id, newName);
+        AppAssetDirectoryList().rename(id, newName);
     }
     else
     {
         DAO::updateAssetDirectoryNameById(id, name);
+        AppAssetDirectoryList().rename(id, name);
     }
-    auto& assetDirectoryList = AppAssetDirectoryList();
-    assetDirectoryList.setList(decltype(assetDirectoryList.getList())());
-    assetDirectoryList.setList(getAssetDirectory());
 }
 
 void removeAssetDirectory(int id)
 {
     DAO::removeAssetDirectoryById(id);
-    auto& assetDirectoryList = AppAssetDirectoryList();
-    assetDirectoryList.setList(decltype(assetDirectoryList.getList())());
-    assetDirectoryList.setList(getAssetDirectory());
+    AppAssetDirectoryList().remove(id);
+    // auto& assetDirectoryList = AppAssetDirectoryList();
+    // assetDirectoryList.setList(decltype(assetDirectoryList.getList())());
+    // assetDirectoryList.setList(getAssetDirectory());
 }
 }

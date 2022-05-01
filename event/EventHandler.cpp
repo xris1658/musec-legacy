@@ -56,6 +56,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      this,        SLOT(onRequestExplorerView()));
     QObject::connect(eventBridge, SIGNAL(appendTrack(Musec::Entities::CompleteTrack*)),
                      this,        SLOT(onAppendTrack(Musec::Entities::CompleteTrack*)));
+    QObject::connect(eventBridge, SIGNAL(insertTrack(Musec::Entities::CompleteTrack*, int)),
+                     this,        SLOT(onInsertTrack(Musec::Entities::CompleteTrack*, int)));
     // (this) C++ -> C++ (other)
     QObject::connect(this,             &EventHandler::updatePluginList,
                      mainWindowEvents, &MainWindow::updatePluginList);
@@ -237,19 +239,16 @@ void EventHandler::onPluginDirectoryRemoved(const QString& directory)
 void EventHandler::onAddAssetDirectory(const QString& directory)
 {
     Controller::AssetDirectoryController::addAssetDirectory(directory);
-    Musec::Event::mainWindowEvents->updateAssetDirectoryList();
 }
 
 void EventHandler::onRenameAssetDirectory(int id, const QString& name)
 {
     Controller::AssetDirectoryController::renameAssetDirectory(id, name);
-    Musec::Event::mainWindowEvents->updateAssetDirectoryList();
 }
 
 void EventHandler::onRemoveAssetDirectory(int id)
 {
     Controller::AssetDirectoryController::removeAssetDirectory(id);
-    Musec::Event::mainWindowEvents->updateAssetDirectoryList();
 }
 
 void EventHandler::onOpenASIODriverControlPanel()
@@ -341,6 +340,11 @@ void EventHandler::onRequestExplorerView()
 void EventHandler::onAppendTrack(Musec::Entities::CompleteTrack* track)
 {
     Musec::Controller::AudioEngineController::appendTrack(*track);
+}
+
+void EventHandler::onInsertTrack(Musec::Entities::CompleteTrack* track, int index)
+{
+    Musec::Controller::AudioEngineController::insertTrack(index, *track);
 }
 
 void EventHandler::onTrackInserted(const QModelIndex& parent, int first, int last)

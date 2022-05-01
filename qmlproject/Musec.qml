@@ -678,6 +678,9 @@ ApplicationWindow {
                                 onAppendTrack: {
                                     eventBridge.appendTrack(track);
                                 }
+                                onInsertTrack: {
+                                    eventBridge.insertTrack(track, index);
+                                }
                             }
                         }
                     }

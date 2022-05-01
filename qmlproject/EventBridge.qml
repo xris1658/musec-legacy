@@ -26,6 +26,7 @@ QtObject {
     signal setArrangementPosition(position: int)
     signal requestExplorerView()
     signal appendTrack(track: CompleteTrack)
+    signal insertTrack(track: CompleteTrack, index: int)
 
     signal addAssetDirectory(directory: string)
     signal renameAssetDirectory(id: int, name: string)
