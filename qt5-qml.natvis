@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+    <Type Name="QQmlType">
+        <DisplayString>{{ name = {QML Type Name} }}</DisplayString>
+        <Expand>
+            <Item Name="[QML Type Name]">d.o->name</Item>
+        </Expand>
+    </Type>
+    <Type Name="QQmlTypePrivate">
+        <DisplayString>{{ name = {QML Type Name} }}</DisplayString>
+        <Expand>
+            <Item Name="{QML Type Name}">name</Item>
+        </Expand>
+    </Type>
+</AutoVisualizer>
