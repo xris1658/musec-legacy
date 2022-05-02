@@ -34,9 +34,9 @@ public:
 public:
     Q_INVOKABLE int trackCount() const noexcept;
 public:
-    virtual int rowCount(const QModelIndex&) const override;
-    virtual int columnCount(const QModelIndex&) const override;
-    virtual QVariant data(const QModelIndex&, int) const override;
+    int rowCount(const QModelIndex&) const override;
+    int columnCount(const QModelIndex&) const override;
+    QVariant data(const QModelIndex&, int) const override;
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
 public:
     Q_INVOKABLE void insertTrack(int index, const Musec::Entities::CompleteTrack& track);

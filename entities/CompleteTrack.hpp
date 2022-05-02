@@ -15,16 +15,17 @@ namespace Entities
 class CompleteTrack: public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString trackName_ READ getTrackName WRITE setTrackName NOTIFY trackNameChanged)
-    Q_PROPERTY(QColor trackColor_ READ getTrackColor WRITE setTrackColor NOTIFY trackColorChanged)
-    Q_PROPERTY(TrackType trackType_ READ getTrackType WRITE setTrackType NOTIFY trackTypeChanged)
-    Q_PROPERTY(int height_ READ getHeight WRITE setHeight NOTIFY heightChanged)
-    Q_PROPERTY(double gain_ READ getGain WRITE setGain NOTIFY gainChanged)
-    Q_PROPERTY(double panning_ READ getPanning WRITE setPanning NOTIFY panningChanged)
-    Q_PROPERTY(bool trackMute_ READ isTrackMute WRITE setTrackMute NOTIFY trackMuteChanged)
-    Q_PROPERTY(bool trackSolo_ READ isTrackSolo WRITE setTrackSolo NOTIFY trackSoloChanged)
-    Q_PROPERTY(bool trackInvertPhase_ READ isTrackInvertPhase WRITE setTrackInvertPhase NOTIFY trackInvertPhaseChanged)
-    Q_PROPERTY(bool trackArmRecording_ READ isTrackArmRecording WRITE setTrackArmRecording NOTIFY trackArmRecordingChanged)
+    //         type      name              member                     getter                   setter                     signal
+    Q_PROPERTY(QString   trackName         MEMBER trackName_         READ getTrackName        WRITE setTrackName         NOTIFY trackNameChanged)
+    Q_PROPERTY(QColor    trackColor        MEMBER trackColor_        READ getTrackColor       WRITE setTrackColor        NOTIFY trackColorChanged)
+    Q_PROPERTY(TrackType trackType         MEMBER trackType_         READ getTrackType        WRITE setTrackType         NOTIFY trackTypeChanged)
+    Q_PROPERTY(int       height            MEMBER height_            READ getHeight           WRITE setHeight            NOTIFY heightChanged)
+    Q_PROPERTY(double    gain              MEMBER gain_              READ getGain             WRITE setGain              NOTIFY gainChanged)
+    Q_PROPERTY(double    panning           MEMBER panning_           READ getPanning          WRITE setPanning           NOTIFY panningChanged)
+    Q_PROPERTY(bool      trackMute         MEMBER trackMute_         READ isTrackMute         WRITE setTrackMute         NOTIFY trackMuteChanged)
+    Q_PROPERTY(bool      trackSolo         MEMBER trackSolo_         READ isTrackSolo         WRITE setTrackSolo         NOTIFY trackSoloChanged)
+    Q_PROPERTY(bool      trackInvertPhase  MEMBER trackInvertPhase_  READ isTrackInvertPhase  WRITE setTrackInvertPhase  NOTIFY trackInvertPhaseChanged)
+    Q_PROPERTY(bool      trackArmRecording MEMBER trackArmRecording_ READ isTrackArmRecording WRITE setTrackArmRecording NOTIFY trackArmRecordingChanged)
     QML_ELEMENT
 public:
     enum TrackType

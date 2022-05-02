@@ -32,7 +32,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     }
     else
     {
-        splashScreen->setBootText("正在初始化应用设置...");
+        splashScreen->setBootText("欢迎使用 Musec! 正在初始化应用设置...");
         Musec::Controller::initAppData();
         // 在这里添加打开初次设置窗口的操作
     }

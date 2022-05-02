@@ -36,7 +36,6 @@ set(RESOURCE_FILE Musec_resource.rc)
 qt5_add_resources(QT_RESOURCES ./Musec.qrc)
 
 set(PROJECT_SOURCES
-    main.cpp
     audio/arrangement/ClipInTrack.hpp
     audio/arrangement/TrackSequence.hpp
     audio/base/AudioBufferView.hpp
@@ -136,6 +135,8 @@ set(PROJECT_SOURCES
     entities/CompleteTrack.hpp
     entities/EntitiesInitializer.cpp
     entities/EntitiesInitializer.hpp
+    entities/Plugin.cpp
+    entities/Plugin.hpp
     event/EventBase.cpp
     event/EventBase.hpp
     event/EventHandler.cpp
@@ -170,6 +171,8 @@ set(PROJECT_SOURCES
     model/ModelInitializer.hpp
     model/PluginListModel.cpp
     model/PluginListModel.hpp
+    model/PluginSequenceModel.cpp
+    model/PluginSequenceModel.hpp
     model/TrackListModel.cpp
     model/TrackListModel.hpp
     native/Native.cpp
@@ -187,10 +190,23 @@ set(PROJECT_SOURCES
     util/Endian.cpp
     util/Endian.hpp
     util/Literal.cpp
-    util/Literal.hpp
-    )
+    util/Literal.hpp)
 
-add_executable(Musec ${PROJECT_SOURCES} ${RESOURCE_FILE} ${QT_RESOURCES})
+set(TEST_COMMON_SOURCES
+    test/common/PluginWindowThread.cpp
+    test/common/PluginWindowThread.hpp)
+
+set(VST2PLUGINTEST_SOURCES
+    test/VST2PluginTestWithQt/main.cpp)
+
+set(VST3PLUGINTEST_SOURCES
+    test/VST3PluginTestWithQt/main.cpp)
+
+add_executable(Musec main.cpp ${PROJECT_SOURCES} ${RESOURCE_FILE} ${QT_RESOURCES})
+
+add_executable(VST2PluginTestWithQt ${PROJECT_SOURCES} ${TEST_COMMON_SOURCES} ${VST2PLUGINTEST_SOURCES})
+
+add_executable(VST3PluginTestWithQt ${PROJECT_SOURCES} ${TEST_COMMON_SOURCES} ${VST3PLUGINTEST_SOURCES})
 
 target_compile_definitions(Musec
                            PRIVATE
@@ -200,6 +216,26 @@ target_compile_definitions(Musec
 #target_include_directories(Musec PRIVATE ${FFTWPP_INCLUDE_DIRS})
 
 target_link_libraries(Musec
+                      Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets
+                      base pluginterfaces sdk_common sdk_hosting
+                      unofficial::sqlite3::sqlite3
+                      yaml-cpp
+                      fmt::fmt
+                      spdlog::spdlog
+                      avcpp::FFmpeg
+                      avcpp::avcpp-static)
+
+target_link_libraries(VST2PluginTestWithQt
+                      Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets
+                      base pluginterfaces sdk_common sdk_hosting
+                      unofficial::sqlite3::sqlite3
+                      yaml-cpp
+                      fmt::fmt
+                      spdlog::spdlog
+                      avcpp::FFmpeg
+                      avcpp::avcpp-static)
+
+target_link_libraries(VST3PluginTestWithQt
                       Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets
                       base pluginterfaces sdk_common sdk_hosting
                       unofficial::sqlite3::sqlite3

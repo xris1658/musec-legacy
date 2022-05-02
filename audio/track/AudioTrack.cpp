@@ -4,17 +4,23 @@
 
 namespace Musec::Audio::Track
 {
-const std::list<Musec::Audio::Track::PluginSequence<double>>& AudioTrack::getPluginSequences() const
+AudioTrack::AudioTrack():
+    pluginSequences_()
+{
+    //
+}
+
+const std::vector<Musec::Audio::Track::PluginSequence<double>>& AudioTrack::getPluginSequences() const
 {
     return pluginSequences_;
 }
 
-void AudioTrack::setPluginSequences(const std::list<Musec::Audio::Track::PluginSequence<double>>& pluginSequences)
+void AudioTrack::setPluginSequences(const std::vector<Musec::Audio::Track::PluginSequence<double>>& pluginSequences)
 {
     pluginSequences_ = pluginSequences;
 }
 
-void AudioTrack::setPluginSequences(std::list<Musec::Audio::Track::PluginSequence<double>>&& pluginSequences)
+void AudioTrack::setPluginSequences(std::vector<Musec::Audio::Track::PluginSequence<double>>&& pluginSequences)
 {
     pluginSequences_ = std::move(pluginSequences);
 }

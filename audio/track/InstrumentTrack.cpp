@@ -4,19 +4,27 @@
 
 namespace Musec::Audio::Track
 {
-const std::list<Musec::Audio::Track::PluginSequence<double>>& InstrumentTrack::getMIDIEffectPluginSequences() const
+InstrumentTrack::InstrumentTrack():
+    midiEffectPluginSequences_(),
+    instrument_(),
+    audioEffectPluginSequences_()
+{
+    //
+}
+
+const std::vector<Musec::Audio::Track::PluginSequence<double>>& InstrumentTrack::getMIDIEffectPluginSequences() const
 {
     return midiEffectPluginSequences_;
 }
 
 void InstrumentTrack::setMIDIEffectPluginSequences(
-    const std::list<Musec::Audio::Track::PluginSequence<double>>& midiEffectPluginSequences)
+    const std::vector<Musec::Audio::Track::PluginSequence<double>>& midiEffectPluginSequences)
 {
     midiEffectPluginSequences_ = midiEffectPluginSequences;
 }
 
 void InstrumentTrack::setMIDIEffectPluginSequences(
-    std::list<Musec::Audio::Track::PluginSequence<double>>&& midiEffectPluginSequences)
+    std::vector<Musec::Audio::Track::PluginSequence<double>>&& midiEffectPluginSequences)
 {
     midiEffectPluginSequences_ = std::move(midiEffectPluginSequences);
 }
@@ -36,19 +44,19 @@ void InstrumentTrack::setInstrument(std::shared_ptr<Musec::Audio::Plugin::IPlugi
     instrument_ = std::move(instrument);
 }
 
-const std::list<Musec::Audio::Track::PluginSequence<double>>& InstrumentTrack::getAudioEffectPluginSequences() const
+const std::vector<Musec::Audio::Track::PluginSequence<double>>& InstrumentTrack::getAudioEffectPluginSequences() const
 {
     return audioEffectPluginSequences_;
 }
 
 void InstrumentTrack::setAudioEffectPluginSequences(
-    const std::list<Musec::Audio::Track::PluginSequence<double>>& audioEffectPluginSequences)
+    const std::vector<Musec::Audio::Track::PluginSequence<double>>& audioEffectPluginSequences)
 {
     audioEffectPluginSequences_ = audioEffectPluginSequences;
 }
 
 void InstrumentTrack::setAudioEffectPluginSequences(
-    std::list<Musec::Audio::Track::PluginSequence<double>>&& audioEffectPluginSequences)
+    std::vector<Musec::Audio::Track::PluginSequence<double>>&& audioEffectPluginSequences)
 {
     audioEffectPluginSequences_ = std::move(audioEffectPluginSequences);
 }

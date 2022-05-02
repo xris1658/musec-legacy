@@ -4,7 +4,7 @@
 #include "audio/track/PluginSequence.hpp"
 #include "audio/track/ITrack.hpp"
 
-#include <list>
+#include <vector>
 
 namespace Musec
 {
@@ -15,14 +15,16 @@ namespace Track
 class MIDITrack: public Musec::Audio::Track::ITrack
 {
 public:
-    const std::list<Musec::Audio::Track::PluginSequence<double>>& getPluginSequences() const;
-    void setPluginSequences(const std::list<Musec::Audio::Track::PluginSequence<double>>& pluginSequences);
-    void setPluginSequences(std::list<Musec::Audio::Track::PluginSequence<double>>&& pluginSequences);
+    MIDITrack();
+public:
+    const std::vector<Musec::Audio::Track::PluginSequence<double>>& getPluginSequences() const;
+    void setPluginSequences(const std::vector<Musec::Audio::Track::PluginSequence<double>>& pluginSequences);
+    void setPluginSequences(std::vector<Musec::Audio::Track::PluginSequence<double>>&& pluginSequences);
 
     TrackType trackType() const override;
 
 private:
-    std::list<Musec::Audio::Track::PluginSequence<double>> pluginSequences_;
+    std::vector<Musec::Audio::Track::PluginSequence<double>> pluginSequences_;
 };
 }
 }

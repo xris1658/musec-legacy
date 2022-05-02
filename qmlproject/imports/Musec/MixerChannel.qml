@@ -15,8 +15,7 @@ Item {
         anchors.fill: parent
         color: Constants.backgroundColor
     }
-    property bool midiEffect: true
-    property bool midiToAudio: true
+    readonly property int channelInfoHeight: 20
     property ListModel list: ListModel {
         id: effects
         dynamicRoles: true
@@ -445,13 +444,13 @@ Item {
         Rectangle {
             id: channelInfo
             width: parent.width
-            height: 20
+            height: channelInfoHeight
             color: channelColor
             Row {
                 Item {
                     id: mixerChannelIndex
                     width: channelNumber? 30: 0
-                    height: 20
+                    height: channelInfoHeight
                     clip: true
                     Text {
                         id: textInfoIndex
@@ -465,10 +464,8 @@ Item {
                 }
                 Item {
                     width: root.width - mixerChannelIndex.width
-                    height: 20
+                    height: channelInfoHeight
                     Text {
-//                        anchors.left: parent.left
-//                        anchors.verticalCenter: parent.verticalCenter
                         anchors.centerIn: parent
                         text: channelName
                         font.family: Constants.font

@@ -7,6 +7,9 @@
 #include "audio/plugin/IPlugin.hpp"
 #include "audio/track/ITrack.hpp"
 
+#include <QWindow>
+
+#include <map>
 #include <memory>
 #include <variant>
 #include <vector>
@@ -42,6 +45,10 @@ public:
 public:
     void insertTrack(std::size_t index, const Musec::Entities::CompleteTrack& track);
     void eraseTrack(std::size_t index);
+public:
+    void addPluginWindowMapping(void* plugin, QWindow* window);
+    void removePluginWindowMapping(void* plugin);
+    void setPluginWindowSize(void* plugin, int width, int height);
 private:
     Musec::Audio::Engine::Graph<std::shared_ptr<Musec::Audio::Plugin::IPlugin<double>>> pluginGraph_;
     std::vector<std::shared_ptr<Musec::Audio::Track::ITrack>> tracks_;
@@ -51,6 +58,7 @@ private:
     std::vector<bool> trackSolo_;
     std::vector<bool> trackInvertPhase_;
     std::vector<bool> trackArmRecording_;
+    std::map<void*, QWindow*> pluginAndWindow_;
 };
 }
 }

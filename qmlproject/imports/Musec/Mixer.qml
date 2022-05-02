@@ -16,50 +16,53 @@ Rectangle {
         width: 25
         height: parent.height
         color: Constants.backgroundColor
-        Column {
-            MCtrl.Button {
-                id: effectVisibleToggleButton
-                width: mixerContentIndicator.width
-                height: 20
-                border.width: 0
-                color: root.effectVisible? Constants.mouseOverElementColor: Constants.backgroundColor
-                Text {
-                    text: qsTr("fx")
-                    font.family: "Noto Sans Mono"
-                    font.styleName: "Condensed"
-                    font.italic: true
-                    anchors.centerIn: parent
-                    color: Constants.contentColor1
-                }
-                MCtrl.ToolTip {
-                    visible: parent.hovered
-                    text: qsTr("显示效果")
-                }
-                onClicked: {
-                    root.effectVisible  = !root.effectVisible;
-                }
+        MCtrl.Button {
+            id: effectVisibleToggleButton
+            width: parent.width
+            height: 20
+            visible: root.gainAndMeterVisible
+            anchors.top: parent.top
+            border.width: 0
+            color: root.effectVisible? Constants.mouseOverElementColor: Constants.backgroundColor
+            Text {
+                text: qsTr("fx")
+                font.family: "Noto Sans Mono"
+                font.styleName: "Condensed"
+                font.italic: true
+                anchors.centerIn: parent
+                color: Constants.contentColor1
             }
-            MCtrl.Button {
-                id: gainAndMeterVisibleToggleButton
-                width: mixerContentIndicator.width
-                height: 20
-                border.width: 0
-                color: root.gainAndMeterVisible? Constants.mouseOverElementColor: Constants.backgroundColor
-                Text {
-                    text: qsTr("dB")
-                    font.family: "Noto Sans Mono"
-                    font.styleName: "Condensed"
-                    font.italic: true
-                    anchors.centerIn: parent
-                    color: Constants.contentColor1
-                }
-                MCtrl.ToolTip {
-                    visible: parent.hovered
-                    text: qsTr("显示电平表和增益推子")
-                }
-                onClicked: {
-                    root.gainAndMeterVisible = !root.gainAndMeterVisible;
-                }
+            MCtrl.ToolTip {
+                visible: parent.hovered
+                text: qsTr("显示效果")
+            }
+            onClicked: {
+                root.effectVisible  = !root.effectVisible;
+            }
+        }
+        MCtrl.Button {
+            id: gainAndMeterVisibleToggleButton
+            width: parent.width
+            height: 20
+            visible: root.effectVisible
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: scroll.height + masterChannel.channelInfoHeight
+            border.width: 0
+            color: root.gainAndMeterVisible? Constants.mouseOverElementColor: Constants.backgroundColor
+            Text {
+                text: qsTr("dB")
+                font.family: "Noto Sans Mono"
+                font.styleName: "Condensed"
+                font.italic: true
+                anchors.centerIn: parent
+                color: Constants.contentColor1
+            }
+            MCtrl.ToolTip {
+                visible: parent.hovered
+                text: qsTr("显示音量推子和电平表")
+            }
+            onClicked: {
+                root.gainAndMeterVisible = !root.gainAndMeterVisible;
             }
         }
         Rectangle {

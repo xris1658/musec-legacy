@@ -18,6 +18,7 @@ Musec::Audio::Host::VST3ComponentHandler AppVST3ComponentHandler();
 void initializeFacility();
 void insertTrack(std::size_t index, const Musec::Entities::CompleteTrack& track);
 void appendTrack(const Musec::Entities::CompleteTrack& track);
+double getCurrentSampleRate();
 }
 }
 }

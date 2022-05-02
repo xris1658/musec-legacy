@@ -1,6 +1,8 @@
 #include "VST2Plugin.hpp"
 
 #include "audio/driver/ASIODriver.hpp"
+#include "audio/engine/Project.hpp"
+#include "controller/AudioEngineController.hpp"
 #include "base/Constants.hpp"
 #include "base/PluginBase.hpp"
 #include "native/Native.hpp"
@@ -95,6 +97,7 @@ VstIntPtr pluginVST2Callback(AEffect* effect, VstInt32 opcode, VstInt32 index, V
 #endif
         // index: 宽; value: 高; 返回值: 若支持则返回 1
     case audioMasterSizeWindow:
+        Musec::Controller::AudioEngineController::AppProject().setPluginWindowSize(effect, index, value);
         ret = 1;
         break;
         // 获取当前采样率
@@ -448,16 +451,18 @@ template<typename SampleType> bool VST2Plugin<SampleType>::initializeEditor(QWin
         window->setHeight(height);
         // window->setX(rect->left);
         // window->setY(rect->top);
+        Musec::Controller::AudioEngineController::AppProject().addPluginWindowMapping(effect_, window);
+        return true;
     }
     else
     {
         return false;
     }
-    return true;
 }
 
 template<typename SampleType> bool VST2Plugin<SampleType>::uninitializeEditor()
 {
+    Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(effect_);
     effect_->dispatcher(effect_, AEffectOpcodes::effEditClose, 0, 0, nullptr, 0);
     return true;
 }

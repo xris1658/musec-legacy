@@ -92,4 +92,25 @@ void Project::eraseTrack(std::size_t index)
     trackInvertPhase_.erase(trackInvertPhase_.begin() + index);
     trackArmRecording_.erase(trackArmRecording_.begin() + index);
 }
+
+void Project::addPluginWindowMapping(void* plugin, QWindow* window)
+{
+    pluginAndWindow_[plugin] = window;
+}
+
+void Project::removePluginWindowMapping(void* plugin)
+{
+    pluginAndWindow_.erase(plugin);
+}
+
+void Project::setPluginWindowSize(void* plugin, int width, int height)
+{
+    auto iterator = pluginAndWindow_.find(plugin);
+    if(iterator != pluginAndWindow_.end())
+    {
+        auto pluginWindow = iterator->second;
+        pluginWindow->setWidth(width);
+        pluginWindow->setHeight(height);
+    }
+}
 }

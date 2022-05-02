@@ -31,7 +31,6 @@ void initializeFacility()
 
 void insertTrack(std::size_t index, const Entities::CompleteTrack& track)
 {
-    // AppProject().insertTrack(index, track);
     AppTrackListModel().insertTrack(static_cast<int>(index), track);
 }
 
@@ -39,4 +38,10 @@ void appendTrack(const Entities::CompleteTrack& track)
 {
     insertTrack(AppProject().trackCount(), track);
 }
+
+double getCurrentSampleRate()
+{
+    double ret;
+    return Musec::Audio::Driver::AppASIODriver()->getSampleRate(&ret);
+    return ret;
 }

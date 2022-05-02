@@ -21,6 +21,11 @@ enum TrackType
 class ITrack
 {
 public:
+    ITrack() {}
+    ITrack(const TrackInformation& trackInformation):
+        trackInformation_(trackInformation)
+    {
+    }
     virtual ~ITrack() noexcept = default;
 public:
     const TrackInformation& getTrackInformation() const

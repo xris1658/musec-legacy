@@ -101,10 +101,10 @@ Item {
             onTriggered: {
                 let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
                     root, null);
-                completeTrack.trackColor_ = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
-                completeTrack.trackName_ = qsTr("乐器");
-                completeTrack.trackType_ = CompleteTrack.InstrumentTrack;
-                completeTrack.height_ = 60;
+                completeTrack.trackColor = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
+                completeTrack.trackName = qsTr("乐器");
+                completeTrack.trackType = CompleteTrack.InstrumentTrack;
+                completeTrack.height = 60;
                 insertTrack(completeTrack, trackOptions.trackIndex - 1);
             }
         }
@@ -113,10 +113,10 @@ Item {
             onTriggered: {
                 let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
                     root, null);
-                completeTrack.trackColor_ = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
-                completeTrack.trackName_ = qsTr("音频");
-                completeTrack.trackType_ = CompleteTrack.AudioTrack;
-                completeTrack.height_ = 60;
+                completeTrack.trackColor = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
+                completeTrack.trackName = qsTr("音频");
+                completeTrack.trackType = CompleteTrack.AudioTrack;
+                completeTrack.height = 60;
                 insertTrack(completeTrack, trackOptions.trackIndex - 1);
             }
         }
@@ -269,10 +269,10 @@ Item {
                         onTriggered: {
                             let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
                                 root, null);
-                            completeTrack.trackColor_ = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
-                            completeTrack.trackName_ = qsTr("乐器");
-                            completeTrack.trackType_ = CompleteTrack.InstrumentTrack;
-                            completeTrack.height_ = 60;
+                            completeTrack.trackColor = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
+                            completeTrack.trackName = qsTr("乐器");
+                            completeTrack.trackType = CompleteTrack.InstrumentTrack;
+                            completeTrack.height = 60;
                             appendTrack(completeTrack);
                         }
                     }
@@ -282,10 +282,10 @@ Item {
                         onTriggered: {
                             let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
                                 root, null);
-                            completeTrack.trackColor_ = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
-                            completeTrack.trackName_ = qsTr("音频");
-                            completeTrack.trackType_ = CompleteTrack.AudioTrack;
-                            completeTrack.height_ = 60;
+                            completeTrack.trackColor = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
+                            completeTrack.trackName = qsTr("音频");
+                            completeTrack.trackType = CompleteTrack.AudioTrack;
+                            completeTrack.height = 60;
                             appendTrack(completeTrack);
                         }
                     }

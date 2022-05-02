@@ -2,6 +2,7 @@
 
 #include "audio/host/MusecVST3Host.hpp"
 #include "audio/host/VST3ComponentHandler.hpp"
+#include "controller/AudioEngineController.hpp"
 
 #include <pluginterfaces/base/ibstream.h>
 #include <pluginterfaces/gui/iplugview.h>
@@ -478,6 +479,7 @@ bool VST3Plugin<SampleType>::attachToWindow(QWindow* window)
         window->setHeight(viewRect.bottom - viewRect.top);
         window->setTitle(classInfo_.name);
         view_->attached(reinterpret_cast<HWND>(window->winId()), Steinberg::kPlatformTypeHWND);
+        Musec::Controller::AudioEngineController::AppProject().addPluginWindowMapping(effect_, window);
         return true;
     }
     return false;
@@ -488,6 +490,7 @@ bool VST3Plugin<SampleType>::detachWithWindow()
 {
     if(view_)
     {
+        Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(effect_);
         view_->removed();
         return true;
     }
