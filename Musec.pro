@@ -102,6 +102,7 @@ HEADERS += \
     dao/PluginDirectoryDAO.hpp \
     dkwtp/ThreadPool.hpp \
     entities/CompleteTrack.hpp \
+    entities/Plugin.hpp \
     entities/EntitiesInitializer.hpp \
     event/EventBase.hpp \
     event/EventHandler.hpp \
@@ -170,6 +171,7 @@ SOURCES += \
     dao/PluginDirectoryDAO.cpp \
     dkwtp/ThreadPool.cpp \
     entities/CompleteTrack.cpp \
+    entities/Plugin.cpp \
     entities/EntitiesInitializer.cpp \
     event/EventBase.cpp \
     event/EventHandler.cpp \

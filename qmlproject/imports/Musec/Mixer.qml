@@ -49,14 +49,13 @@ Rectangle {
             anchors.bottomMargin: scroll.height + masterChannel.channelInfoHeight
             border.width: 0
             color: root.gainAndMeterVisible? Constants.mouseOverElementColor: Constants.backgroundColor
-            Text {
-                text: qsTr("dB")
-                font.family: "Noto Sans Mono"
-                font.styleName: "Condensed"
-                font.italic: true
+            Image {
+                source: "../../images/show-fader.svg"
+                width: 16
+                height: 16
                 anchors.centerIn: parent
-                color: Constants.contentColor1
             }
+
             MCtrl.ToolTip {
                 visible: parent.hovered
                 text: qsTr("显示音量推子和电平表")

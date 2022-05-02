@@ -45,3 +45,4 @@ double getCurrentSampleRate()
     return Musec::Audio::Driver::AppASIODriver()->getSampleRate(&ret);
     return ret;
 }
+}

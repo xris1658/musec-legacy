@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ccc;
+      }
+
+      .cls-2 {
+        fill: #333;
+      }
+    </style>
+  </defs>
+  <rect id="矩形_3" data-name="矩形 3" class="cls-1" x="7" y="2" width="2" height="1"/>
+  <rect id="矩形_3_拷贝" data-name="矩形 3 拷贝" class="cls-1" x="7" y="12" width="2" height="2"/>
+  <rect id="矩形_3_拷贝_2" data-name="矩形 3 拷贝 2" class="cls-1" x="6" y="4" width="4" height="7"/>
+  <rect id="矩形_4" data-name="矩形 4" class="cls-2" x="7" y="6" width="2" height="1"/>
+  <rect id="矩形_4_拷贝" data-name="矩形 4 拷贝" class="cls-2" x="7" y="8" width="2" height="1"/>
+</svg>
