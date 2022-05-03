@@ -135,6 +135,7 @@ Rectangle {
                 MixerChannel {
                     channelName: trackname
                     channelColor: trackcolor
+                    channelType: type
                     width: 120
                     height: root.height - scroll.height
                     channelNumber: index + 1

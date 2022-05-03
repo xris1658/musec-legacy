@@ -1,10 +1,8 @@
 #include "../common/PluginWindowThread.hpp"
 
 #include <audio/plugin/VST3Plugin.hpp>
-#include <audio/host/VST3ComponentHandler.hpp>
 
 #include <pluginterfaces/vst/ivstaudioprocessor.h>
-#include <pluginterfaces/vst/ivsthostapplication.h>
 #include <pluginterfaces/vst/ivstcomponent.h>
 
 #include <QGuiApplication>
@@ -16,34 +14,12 @@
 #include <thread>
 #include <chrono>
 
-#include "pluginterfaces/vst/ivsteditcontroller.h"
-namespace VST3Callback
-{
-	using namespace Steinberg;
-	using namespace Steinberg::Vst;
-	class ComponentHandler : public Vst::IComponentHandler
-	{
-	public:
-		~ComponentHandler() = default;
-	public:
-		tresult queryInterface(const TUID, void**) { return kResultOk; }
-		uint32 addRef() { return 1; }
-		uint32 release() { return 0; }
-	public:
-		tresult beginEdit(ParamID id) override { return kResultOk; }
-		tresult performEdit(ParamID, ParamValue) override { return kResultOk; }
-		tresult endEdit(ParamID id) override { return kResultOk; }
-		tresult restartComponent(int32) override { return kResultOk; }
-	};
-}
-
 int main(int argc, char** argv) try
 {
 	QGuiApplication application(argc, argv);
 	PluginWindowThread pluginWindowThread;
 	QWindow& window = *pluginWindowThread.window();
 	pluginWindowThread.start();
-	VST3Callback::ComponentHandler componentHandler;
 	{
 		Musec::Audio::Plugin::VST3Plugin<double> vst3(
 			"C:\\Program Files\\Common Files\\VST3\\FabFilter\\FabFilter Pro-Q 3.vst3"

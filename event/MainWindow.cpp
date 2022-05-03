@@ -25,14 +25,10 @@ void MainWindow::openMainWindow()
 {
     using namespace Musec::UI;
     using namespace Musec::Event;
+    Musec::Controller::AudioEngineController::initializeFacility();
     engine->load(QUrl("qrc:///qmlproject/Musec.qml"));
     mainWindow = qobject_cast<QQuickWindow*>(engine->rootObjects()[1]);
     optionsWindow = mainWindow->findChild<QQuickWindow*>("optionsWindow");
-    // Musec.qml, Musec.onActiveFocusItemChanged()
-    auto visibility = mainWindow->visibility();
-    mainWindow->showFullScreen();
-    mainWindow->setVisibility(visibility);
-    Musec::Controller::AudioEngineController::initializeFacility();
     auto eventBridge = qvariant_cast<QObject*>(splashWindow->property("eventBridge"));
     Musec::Event::eventBridge = eventBridge;
     Musec::Event::eventHandler = &Musec::Event::EventHandler::instance(eventBridge);
@@ -40,6 +36,10 @@ void MainWindow::openMainWindow()
                      this, &Musec::Event::MainWindow::updatePluginList);
     QObject::connect(this, &Musec::Event::MainWindow::openMainWindowComplete,
                      eventHandler, &Musec::Event::EventHandler::onMainWindowOpened);
+    // Musec.qml, Musec.onActiveFocusItemChanged()
+    auto visibility = mainWindow->visibility();
+    mainWindow->showFullScreen();
+    mainWindow->setVisibility(visibility);
     updateAssetDirectoryList();
     updatePluginList();
     mainWindow->setProperty("trackList", QVariant::fromValue(&Musec::Controller::AudioEngineController::AppTrackListModel()));

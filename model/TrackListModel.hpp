@@ -34,6 +34,8 @@ public:
 public:
     Q_INVOKABLE int trackCount() const noexcept;
 public:
+    Qt::ItemFlags flags(const QModelIndex& index) const override;
+
     int rowCount(const QModelIndex&) const override;
     int columnCount(const QModelIndex&) const override;
     QVariant data(const QModelIndex&, int) const override;
@@ -42,7 +44,6 @@ public:
     Q_INVOKABLE void insertTrack(int index, const Musec::Entities::CompleteTrack& track);
     Q_INVOKABLE void appendTrack(const Musec::Entities::CompleteTrack& track);
     Q_INVOKABLE void removeTrack(int index);
-
 protected:
     virtual RoleNamesType roleNames() const override;
 private:

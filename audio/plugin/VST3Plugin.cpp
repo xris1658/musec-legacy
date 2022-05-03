@@ -337,6 +337,7 @@ bool VST3Plugin<SampleType>::initializeEditor(QWindow* window)
         if (view_)
         {
             view_->addRef();
+            view_->setFrame(this);
         }
         if(componentPoint_ && editControllerPoint_)
         {
@@ -420,6 +421,40 @@ bool VST3Plugin<SampleType>::stopProcessing()
 }
 
 template<typename SampleType>
+Steinberg::tresult VST3Plugin<SampleType>::queryInterface(const Steinberg::int8* _iid, void** obj)
+{
+    if(_iid == Steinberg::IPlugView_iid)
+    {
+        *obj = this;
+        return Steinberg::kResultOk;
+    }
+    return Steinberg::kNoInterface;
+}
+
+template<typename SampleType>
+Steinberg::uint32 VST3Plugin<SampleType>::addRef()
+{
+    return 1;
+}
+
+template<typename SampleType>
+Steinberg::uint32 VST3Plugin<SampleType>::release()
+{
+    return 0;
+}
+
+template<typename SampleType>
+Steinberg::tresult VST3Plugin<SampleType>::resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* newSize)
+{
+    Steinberg::ViewRect oldSize; view->getSize(&oldSize);
+    window_->setWidth(newSize->getWidth());
+    window_->setHeight(newSize->getHeight());
+    view->onSize(newSize);
+    Steinberg::ViewRect newSize2; view->getSize(&newSize2);
+    return Steinberg::kResultOk;
+}
+
+template<typename SampleType>
 void VST3Plugin<SampleType>::rawToProcessData()
 {
     int rawIt = 0;
@@ -472,14 +507,19 @@ bool VST3Plugin<SampleType>::attachToWindow(QWindow* window)
 {
     if(view_)
     {
+        window_ = window;
         Steinberg::ViewRect viewRect;
         view_->getSize(&viewRect);
-        window->setPosition(viewRect.left, viewRect.top);
-        window->setWidth(viewRect.right - viewRect.left);
-        window->setHeight(viewRect.bottom - viewRect.top);
-        window->setTitle(classInfo_.name);
-        view_->attached(reinterpret_cast<HWND>(window->winId()), Steinberg::kPlatformTypeHWND);
-        Musec::Controller::AudioEngineController::AppProject().addPluginWindowMapping(effect_, window);
+        window_->setPosition(viewRect.left, viewRect.top);
+        window_->setWidth(viewRect.getWidth());
+        window_->setHeight(viewRect.getHeight());
+        window_->setTitle(classInfo_.name);
+        view_->attached(reinterpret_cast<HWND>(window_->winId()), Steinberg::kPlatformTypeHWND);
+        Musec::Controller::AudioEngineController::AppProject().addPluginWindowMapping(effect_, window_);
+        QObject::connect(window_, &QWindow::widthChanged,
+            [this](int) { onWindowSizeChanged(); });
+        QObject::connect(window_, &QWindow::heightChanged,
+            [this](int) { onWindowSizeChanged(); });
         return true;
     }
     return false;
@@ -492,6 +532,7 @@ bool VST3Plugin<SampleType>::detachWithWindow()
     {
         Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(effect_);
         view_->removed();
+        window_ = nullptr;
         return true;
     }
     return false;
@@ -513,6 +554,29 @@ template<typename SampleType>
 Steinberg::IPlugView* VST3Plugin<SampleType>::getView() const
 {
     return view_;
+}
+
+template<typename SampleType>
+void VST3Plugin<SampleType>::onWindowSizeChanged()
+{
+    if(view_)
+    {
+        std::printf("onWindowSizeChanged() called.\n");
+        auto x = window_->x();
+        auto y = window_->y();
+        auto width = window_->width();
+        auto height = window_->height();
+        auto newRect = Steinberg::ViewRect(x, y, x + width, y + height);
+        auto oldRect = Steinberg::ViewRect(); view_->getSize(&oldRect);
+        if(view_->checkSizeConstraint(&newRect) == Steinberg::kResultOk)
+        {
+            window_->setX(newRect.left);
+            window_->setY(newRect.top);
+            window_->setWidth(newRect.getWidth());
+            window_->setHeight(newRect.getHeight());
+            view_->onSize(&newRect);
+        }
+    }
 }
 
 template class VST3Plugin<float>;

@@ -7,6 +7,7 @@ Item {
     id: root
     property bool trackSelected: false
     readonly property int lineHeight: 20
+    readonly property int colorBarWidth: 10
     readonly property color itemUnselectedColor: Constants.backgroundColor
     readonly property color itemSelectedColor: Constants.currentElementColor
     property color trackColor
@@ -78,7 +79,7 @@ Item {
         z: 1
         Rectangle {
             id: colorBar
-            width: 10
+            width: root.colorBarWidth
             height: root.height
             color: trackColor
         }

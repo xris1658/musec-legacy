@@ -157,3 +157,8 @@ Musec::Model::RoleNamesType Musec::Model::TrackListModel::roleNames() const
 {
     return roleNames_;
 }
+
+Qt::ItemFlags Musec::Model::TrackListModel::flags(const QModelIndex& index) const
+{
+    return QAbstractListModel::flags(index) | Qt::ItemFlag::ItemIsEditable;
+}

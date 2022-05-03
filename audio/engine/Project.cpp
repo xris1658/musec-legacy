@@ -113,4 +113,9 @@ void Project::setPluginWindowSize(void* plugin, int width, int height)
         pluginWindow->setHeight(height);
     }
 }
+
+const Musec::Audio::Track::AudioTrack& Project::masterTrack() const
+{
+    return masterTrack_;
+}
 }

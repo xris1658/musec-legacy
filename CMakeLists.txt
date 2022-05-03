@@ -129,8 +129,8 @@ set(PROJECT_SOURCES
     dao/PluginDAO.hpp
     dao/PluginDirectoryDAO.cpp
     dao/PluginDirectoryDAO.hpp
-    dkwtp/ThreadPool.cpp
-    dkwtp/ThreadPool.hpp
+    concurrent/ThreadPool.cpp
+    concurrent/ThreadPool.hpp
     entities/CompleteTrack.cpp
     entities/CompleteTrack.hpp
     entities/EntitiesInitializer.cpp
@@ -190,7 +190,7 @@ set(PROJECT_SOURCES
     util/Endian.cpp
     util/Endian.hpp
     util/Literal.cpp
-    util/Literal.hpp)
+    util/Literal.hpp dkwtp/DKWTP.cpp dkwtp/DKWTP.hpp)
 
 set(TEST_COMMON_SOURCES
     test/common/PluginWindowThread.cpp

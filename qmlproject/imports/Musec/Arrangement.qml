@@ -310,6 +310,7 @@ Item {
                     id: masterTrack
                     trackName: qsTr("Master")
                     parent: showMasterTrackButton.currentIndex == 1? masterTrackHeader: masterTrackFooter
+                    width: headers.width
                     height: 60
                     Rectangle {
                         width: parent.width
@@ -317,6 +318,19 @@ Item {
                         x: 0
                         y: showMasterTrackButton.currentIndex == 1? parent.height - 1: 0
                         color: Constants.borderColor
+                    }
+                    Item {
+                        visible: root.showAutomation
+                        anchors.top: parent.top
+                        anchors.topMargin: masterTrack.lineHeight
+                        anchors.left: parent.left
+                        anchors.leftMargin: masterTrack.colorBarWidth
+                        anchors.right: parent.right
+                        height: 20
+                        MCtrl.Button {
+                            anchors.fill: parent
+                            anchors.margins: 2
+                        }
                     }
                     DropArea {
                         id: masterTrackDropArea
@@ -443,6 +457,19 @@ Item {
                         trackMute: mute
                         trackSolo: solo
                         trackRecord: armRecording
+                        Item {
+                            visible: root.showAutomation
+                            anchors.top: parent.top
+                            anchors.topMargin: masterTrack.lineHeight
+                            anchors.left: parent.left
+                            anchors.leftMargin: masterTrack.colorBarWidth
+                            anchors.right: parent.right
+                            height: 20
+                            MCtrl.Button {
+                                anchors.fill: parent
+                                anchors.margins: 2
+                            }
+                        }
                         function setColor(newColor: color) {
                             trackcolor = newColor;
                         }

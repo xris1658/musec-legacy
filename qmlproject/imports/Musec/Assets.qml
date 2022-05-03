@@ -479,7 +479,7 @@ Rectangle {
                                     iconPath: "../../images/midieffect.svg"
                                 }
                                 ListElement {
-                                    name: "音色发生器"
+                                    name: "乐器"
                                     iconPath: "../../images/instrument.svg"
                                 }
                                 ListElement {

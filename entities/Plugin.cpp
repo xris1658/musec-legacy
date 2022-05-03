@@ -4,9 +4,10 @@ namespace Musec
 {
 namespace Entities
 {
-Plugin::Plugin(QObject* parent, const QString& name, bool enabled,
-               bool sidechainExist, bool sidechainEnabled):
+Plugin::Plugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<double>> plugin, const QString& name, bool enabled,
+               bool sidechainExist, bool sidechainEnabled, QObject* parent):
     QObject(parent),
+    plugin_(plugin),
     name_(name),
     enabled_(enabled),
     sidechainExist_(sidechainExist),

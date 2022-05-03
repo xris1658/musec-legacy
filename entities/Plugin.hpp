@@ -1,6 +1,7 @@
 #ifndef MUSEC_ENTITIES_PLUGIN
 #define MUSEC_ENTITIES_PLUGIN
 
+#include "audio/plugin/IPlugin.hpp"
 #include "base/PluginBase.hpp"
 
 #include <QString>
@@ -13,10 +14,10 @@ namespace Entities
 class Plugin: public QObject
 {
     Q_OBJECT
-    //         type    name             member                   getter                  setter                    signal
-    Q_PROPERTY(QString name             MEMBER name_             READ getName            WRITE setName             NOTIFY nameChanged)
-    Q_PROPERTY(bool    enabled          MEMBER enabled_          READ isEnabled          WRITE setEnabled          NOTIFY enabledChanged)
-    Q_PROPERTY(bool    sidechainExist   MEMBER sidechainExist_   READ isSidechainExist   WRITE setSidechainExist   NOTIFY sidechainExistChanged)
+    //         type    name for UI      member in class          getter                  setter                    signal
+    Q_PROPERTY(QString name             MEMBER name_             READ getName            WRITE setName             NOTIFY nameChanged            )
+    Q_PROPERTY(bool    enabled          MEMBER enabled_          READ isEnabled          WRITE setEnabled          NOTIFY enabledChanged         )
+    Q_PROPERTY(bool    sidechainExist   MEMBER sidechainExist_   READ isSidechainExist   WRITE setSidechainExist   NOTIFY sidechainExistChanged  )
     Q_PROPERTY(bool    sidechainEnabled MEMBER sidechainEnabled_ READ isSidechainEnabled WRITE setSidechainEnabled NOTIFY sidechainEnabledChanged)
     QML_ELEMENT
 public:
@@ -29,8 +30,9 @@ public:
     };
     Q_ENUM(PluginType)
 public:
-    Plugin(QObject* parent = nullptr, const QString& name = "", bool enabled = true,
-           bool sidechainExist = false, bool sidechainEnabled = false);
+    Plugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<double>> plugin = nullptr, const QString& name = "",
+           bool enabled = false, bool sidechainExist = false, bool sidechainEnabled = false,
+           QObject* parent = nullptr);
 public:
     const QString& getName() const;
     void setName(const QString& name);
@@ -46,6 +48,7 @@ signals:
     void sidechainExistChanged();
     void sidechainEnabledChanged();
 private:
+    std::shared_ptr<Musec::Audio::Plugin::IPlugin<double>> plugin_;
     QString name_;
     bool enabled_;
     bool sidechainExist_;

@@ -5,6 +5,7 @@ import QtQml.Models 2.15
 
 import Musec 1.0
 import Musec.Controls 1.0 as MCtrl
+import Musec.Entities 1.0
 
 Item {
     id: root
@@ -16,6 +17,7 @@ Item {
         color: Constants.backgroundColor
     }
     readonly property int channelInfoHeight: 20
+    readonly property int channelEffectListFooterMinimumHeight: 20
     property ListModel list: ListModel {
         id: effects
         dynamicRoles: true
@@ -28,6 +30,7 @@ Item {
         }
 */
     }
+    property int channelType
     property bool channelMuted: false
     property bool channelSolo: false
     property bool  channelInverted: false
@@ -53,97 +56,45 @@ Item {
             width: parent.width
             height: (root.height - channelControl.height - channelStereo.height - channelInfo.height) / (gainAndMeterVisible? 2: 1)
             clip: true
-            Column {
+            ListView {
+                id: channelEffectList
+                anchors.fill: parent
+                anchors.margins: 2
                 visible: parent.visible
-                Repeater {
-                    model: effects
-                    delegate: Item {
-                        width: root.width
-                        height: 20
-                        Rectangle {
-                            id: effect
-                            anchors.centerIn: parent
-                            width: parent.width - 2
-                            height: parent.height - 2
-                            color: Constants.backgroundColor2
-                            border.width: 1
-                            border.color: Constants.borderColor
-                            Row {
-                                Item {
-                                    id: effectEnabledIndicator
-                                    width: effect.height
-                                    height: effect.height
-                                    Rectangle {
-                                        anchors.centerIn: parent
-                                        width: 12
-                                        height: 12
-                                        radius: 6
-                                        color: effectEnabled?
-                                            Constants.deviceEnabledColor:
-                                            Constants.deviceDisabledColor
-                                        border.width: 1
-                                        border.color: Constants.backgroundColor
-                                        MouseArea {
-                                            anchors.fill: parent
-                                            onClicked: {
-                                                effects.get(index).effectEnabled = !(effects.get(index).effectEnabled);
-                                            }
-                                        }
-                                    }
-                                }
-                                Text {
-                                    width: effect.width - effectEnabledIndicator.width - (sidechainInputEnabled? sidechainInputIndicator.width: 2)
-                                    color: Constants.contentColor1
-                                    font.family: Constants.font
-                                    text: name
-                                    elide: Text.ElideRight
-                                }
-                            }
-                            Item {
-                                id: sidechainInputIndicator
-                                visible: sidechainInputEnabled
-                                anchors.right: parent.right
-                                anchors.verticalCenter: parent.verticalCenter
-                                width: parent.height
-                                height: width
-                                Item {
-                                    opacity: sidechainInputArmed? 1: 0.5
-                                    anchors.centerIn: parent
-                                    width: 12
-                                    height: 10
-                                    Rectangle {
-                                        anchors.top: parent.top
-                                        anchors.horizontalCenter: parent.horizontalCenter
-                                        width: 6
-                                        height: 5
-                                        color: Constants.contentColor1
-                                    }
-                                    Rectangle {
-                                        anchors.left: parent.left
-                                        anchors.top: parent.top
-                                        anchors.topMargin: 2
-                                        width: 2
-                                        height: 2
-                                        color: Constants.contentColor1
-                                    }
-                                    Rectangle {
-                                        anchors.right: parent.right
-                                        anchors.top: parent.top
-                                        anchors.topMargin: 2
-                                        width: 2
-                                        height: 2
-                                        color: Constants.contentColor1
-                                    }
-                                    Rectangle {
-                                        anchors.bottom: parent.bottom
-                                        anchors.horizontalCenter: parent.horizontalCenter
-                                        width: 2
-                                        height: 4
-                                        color: Constants.contentColor1
-                                    }
-                                }
-                            }
-                        }
+                spacing: 2
+                property int headerHeight: 20
+                header: Item {
+                    id: effectListHeader
+                    width: parent.width
+                    height: channelEffectList.headerHeight + instrumentButton.anchors.bottomMargin
+                    MCtrl.Button {
+                        id: instrumentButton
+                        visible: root.channelType == CompleteTrack.InstrumentTrack
+                        anchors.fill: parent
+                        anchors.bottomMargin: channelEffectList.spacing
+                        text: qsTr("无乐器")
+                    }
+                }
+                delegate: Item {
+                    width: parent.width
+                    height: 20
+                    MCtrl.Button {
+                        anchors.fill: parent
+                    }
+                }
+                footer: Item {
+                    width: parent.width
+                    height: channelEffects.height <= channelEffectList.headerHeight + 20 * channelEffectList.count + root.channelEffectListFooterMinimumHeight?
+                        root.channelEffectListFooterMinimumHeight:
+                        channelEffects.height - channelEffectList.headerHeight - 20 * channelEffectList.count
+                    Rectangle {
+                        anchors.fill: parent
+                        anchors.topMargin: channelEffectList.spacing
+                        color: channelEffectDropArea.containsDrag? Constants.mouseOverElementColor: "transparent"
+                    }
+                    DropArea {
+                        id: channelEffectDropArea
+                        anchors.fill: parent
                     }
                 }
             }

@@ -15,7 +15,7 @@ namespace Entities
 class CompleteTrack: public QObject
 {
     Q_OBJECT
-    //         type      name              member                     getter                   setter                     signal
+    //         type      name              member                    getter                   setter                     signal
     Q_PROPERTY(QString   trackName         MEMBER trackName_         READ getTrackName        WRITE setTrackName         NOTIFY trackNameChanged)
     Q_PROPERTY(QColor    trackColor        MEMBER trackColor_        READ getTrackColor       WRITE setTrackColor        NOTIFY trackColorChanged)
     Q_PROPERTY(TrackType trackType         MEMBER trackType_         READ getTrackType        WRITE setTrackType         NOTIFY trackTypeChanged)

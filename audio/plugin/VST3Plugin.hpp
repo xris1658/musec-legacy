@@ -6,6 +6,7 @@
 #include "native/Native.hpp"
 #include "native/WindowsLibraryRAII.hpp"
 
+#include <pluginterfaces/gui/iplugview.h>
 #include <pluginterfaces/vst/ivstaudioprocessor.h>
 #include <pluginterfaces/vst/ivsteditcontroller.h>
 #include <pluginterfaces/vst/ivstmessage.h>
@@ -51,7 +52,8 @@ using SpeakerArrangements = std::vector<Steinberg::Vst::SpeakerArrangement>;
 template<typename SampleType>
 class VST3Plugin:
     public Musec::Native::WindowsLibraryRAII,
-    public Musec::Audio::Plugin::IPlugin<SampleType>
+    public Musec::Audio::Plugin::IPlugin<SampleType>,
+    public Steinberg::IPlugFrame
 {
     using Base = Musec::Native::WindowsLibraryRAII;
     using IPluginInterface = Musec::Audio::Plugin::IPlugin<SampleType>;
@@ -81,6 +83,12 @@ public: // IPlugin interfaces
     bool uninitializeEditor() override;
     bool startProcessing() override;
     bool stopProcessing() override;
+public: // FUnknown interfaces
+    Steinberg::tresult queryInterface(const Steinberg::TUID _iid, void** obj) override;
+    Steinberg::uint32 addRef() override;
+    Steinberg::uint32 release() override;
+public: // IPluginFrame interfaces
+    Steinberg::tresult resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* newSize) override;
 public:
     const SpeakerArrangements& inputSpeakerArrangements();
     const SpeakerArrangements& outputSpeakerArrangements();
@@ -89,6 +97,7 @@ private:
     bool detachWithWindow();
 private:
     void rawToProcessData();
+    void onWindowSizeChanged();
 private:
     Steinberg::PClassInfo classInfo_;
     Steinberg::IPluginFactory* factory_ = nullptr;
@@ -115,6 +124,7 @@ private:
     VST3AudioProcessorStatus audioProcessorStatus_ = VST3AudioProcessorStatus::NoAudioProcessor;
     VST3EditControllerStatus editControllerStatus_ = VST3EditControllerStatus::NoEditController;
     EffectAndEditorUnified effectAndEditorUnified_ = EffectAndEditorUnified::NotUnified;
+    QWindow* window_ = nullptr;
 };
 
 extern template class VST3Plugin<float>;
