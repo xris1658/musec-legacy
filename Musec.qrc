@@ -76,5 +76,6 @@
         <file>qmlproject/imports/Musec/Dialogs/qmldir</file>
         <file>qmlproject/imports/Musec/Views/ExplorerView.qml</file>
         <file>qmlproject/imports/Musec/Views/qmldir</file>
+        <file>qmlproject/imports/Musec/MixerSlot.qml</file>
     </qresource>
 </RCC>
