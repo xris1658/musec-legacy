@@ -4,6 +4,7 @@
 #include "audio/base/AudioBufferView.hpp"
 #include "audio/device/IDevice.hpp"
 
+#include <QString>
 #include <QWindow>
 
 #include <array>
@@ -38,6 +39,8 @@ public:
     {
         return bypass? stopProcessing(): startProcessing();
     }
+    virtual bool getBypass() const = 0;
+    virtual QString getName() const = 0;
 };
 }
 }

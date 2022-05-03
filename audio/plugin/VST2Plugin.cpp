@@ -401,6 +401,7 @@ template<typename SampleType>
 bool VST2Plugin<SampleType>::startProcessing()
 {
     effect_->dispatcher(effect_, AEffectXOpcodes::effStartProcess, 0, 0, nullptr, 0);
+    bypass_ = false;
     return true;
 }
 
@@ -408,6 +409,7 @@ template<typename SampleType>
 bool VST2Plugin<SampleType>::stopProcessing()
 {
     effect_->dispatcher(effect_, AEffectXOpcodes::effStopProcess, 0, 0, nullptr, 0);
+    bypass_ = true;
     return true;
 }
 
@@ -465,6 +467,22 @@ template<typename SampleType> bool VST2Plugin<SampleType>::uninitializeEditor()
     Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(effect_);
     effect_->dispatcher(effect_, AEffectOpcodes::effEditClose, 0, 0, nullptr, 0);
     return true;
+}
+
+template<typename SampleType> bool VST2Plugin<SampleType>::getBypass() const
+{
+    return bypass_;
+}
+
+template<typename SampleType> QString VST2Plugin<SampleType>::getName() const
+{
+    if(!effect_)
+    {
+        return QString();
+    }
+    std::array<char, kVstMaxEffectNameLen> nameBuffer = {0};
+    effect_->dispatcher(effect_, AEffectXOpcodes::effGetEffectName, 0, 0, nameBuffer.data(), 0);
+    return QString(nameBuffer.data());
 }
 
 template class VST2Plugin<float>;

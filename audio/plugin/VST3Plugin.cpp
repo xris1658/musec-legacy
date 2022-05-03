@@ -579,6 +579,21 @@ void VST3Plugin<SampleType>::onWindowSizeChanged()
     }
 }
 
+template<typename SampleType>
+bool VST3Plugin<SampleType>::getBypass() const
+{
+    return this->audioProcessorStatus_ != VST3AudioProcessorStatus::Processing;
+}
+
+template<typename SampleType> QString VST3Plugin<SampleType>::getName() const
+{
+    if(!effect_)
+    {
+        return QString();
+    }
+    return QString(getClassInfo().name);
+}
+
 template class VST3Plugin<float>;
 
 template class VST3Plugin<double>;

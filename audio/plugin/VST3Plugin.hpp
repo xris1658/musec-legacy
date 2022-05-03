@@ -83,6 +83,8 @@ public: // IPlugin interfaces
     bool uninitializeEditor() override;
     bool startProcessing() override;
     bool stopProcessing() override;
+    bool getBypass() const override;
+    QString getName() const override;
 public: // FUnknown interfaces
     Steinberg::tresult queryInterface(const Steinberg::TUID _iid, void** obj) override;
     Steinberg::uint32 addRef() override;

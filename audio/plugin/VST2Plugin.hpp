@@ -66,12 +66,15 @@ public:
     bool deactivate() override;
     bool startProcessing() override;
     bool stopProcessing() override;
+    bool getBypass() const override;
+    QString getName() const override;
     void process(const Audio::Base::AudioBufferViews<SampleType>& inputs,
         const Audio::Base::AudioBufferViews<SampleType>& outputs) override;
 private:
     AEffect* effect_ = nullptr;
     std::vector<SampleType*> inputsRaw_;
     std::vector<SampleType*> outputsRaw_;
+    bool bypass_ = true;
 };
 
 extern template class VST2Plugin<float>;
