@@ -27,6 +27,7 @@ QtObject {
     signal requestExplorerView()
     signal appendTrack(track: CompleteTrack)
     signal insertTrack(track: CompleteTrack, index: int)
+    signal newPluginWindowReady()
 
     signal addAssetDirectory(directory: string)
     signal renameAssetDirectory(id: int, name: string)
@@ -87,5 +88,10 @@ QtObject {
     signal updateArrangement()
     onUpdateArrangement: {
         Objects.mainWindow.updateArrangement();
+    }
+
+    signal newPluginWindow()
+    onNewPluginWindow: {
+        Objects.mainWindow.newPluginWindow();
     }
 }

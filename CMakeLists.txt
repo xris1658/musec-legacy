@@ -190,7 +190,7 @@ set(PROJECT_SOURCES
     util/Endian.cpp
     util/Endian.hpp
     util/Literal.cpp
-    util/Literal.hpp dkwtp/DKWTP.cpp dkwtp/DKWTP.hpp)
+    util/Literal.hpp dkwtp/DKWTP.cpp dkwtp/DKWTP.hpp ui/PluginWindow.cpp ui/PluginWindow.hpp)
 
 set(TEST_COMMON_SOURCES
     test/common/PluginWindowThread.cpp

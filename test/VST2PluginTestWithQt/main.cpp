@@ -30,12 +30,14 @@ int main(int argc, char *argv[])
         effect->dispatcher(effect, AEffectXOpcodes::effGetOutputProperties, i, 0, pinProperties.data() + i + inputCount, 0);
     }
     vst2.initialize(44100, 1024);
-    vst2.initializeEditor(&window);
+    vst2.initializeEditor();
+    vst2.attachToWindow(&window);
     window.showNormal();
     std::this_thread::sleep_for(std::chrono::seconds(1));
     vst2.activate();
     vst2.startProcessing();
     a.exec();
+    vst2.detachWithWindow();
     vst2.stopProcessing();
     vst2.deactivate();
     window.close();

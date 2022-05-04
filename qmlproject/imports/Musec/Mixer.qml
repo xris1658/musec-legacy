@@ -145,6 +145,10 @@ Rectangle {
                     channelSolo: solo
                     channelInverted: invertPhase
                     channelArmRecording: armRecording
+                    instrumentEnabled: instrument? instrument.enabled: false
+                    instrumentName: instrument? instrument.name: qsTr("无乐器")
+                    instrumentSidechainExist: instrument? instrument.sidechainExist: false
+                    instrumentSidechainEnabled: instrument? instrument.sidechainEnabled: false
                     onSetMute: (newMute) => {
                                    mute = newMute;
                                }
@@ -157,6 +161,9 @@ Rectangle {
                     onSetArmRecording: (newArmRecording) => {
                                            armRecording = newArmRecording;
                                        }
+                    onLoadInstrument: {
+                        tracks.loadInstrument(index, pluginFormat, pluginPath, pluginSubId);
+                    }
                 }
                 Rectangle {
                     width: 1

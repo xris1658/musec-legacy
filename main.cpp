@@ -55,13 +55,6 @@ int main(int argc, char* argv[]) try
     engine = &theEngine;
     theEngine.addImportPath("qrc:/");
     theEngine.addImportPath("qrc:/qmlproject/imports");
-    auto list = theEngine.importPathList();
-    std::vector<std::string> listString;
-    listString.reserve(list.size());
-    for(auto& path: list)
-    {
-        listString.emplace_back(path.toStdString());
-    }
     LoadQmlComponentListener& loadQmlComponentListener = LoadQmlComponentListener::instance();
     QObject::connect(&theEngine, &QQmlApplicationEngine::objectCreated,
                      &loadQmlComponentListener, &LoadQmlComponentListener::onObjectCreated);

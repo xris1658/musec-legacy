@@ -22,5 +22,6 @@ MusecList 1.0 MusecList.qml
 Note 1.0 Note.qml
 PianoKey 1.0 PianoKey.qml
 PianoKeyBackup 1.0 PianoKeyBackup.qml
+PluginWindow 1.0 PluginWindow.qml
 Timeline 1.0 Timeline.qml
 TrackHeader 1.0 TrackHeader.qml

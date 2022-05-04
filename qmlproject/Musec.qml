@@ -25,6 +25,7 @@ ApplicationWindow {
     property alias currentDriver: optionsWindow.currentDriver
     readonly property EventBridge eventBridge: EventBridge
     property bool canClose: false
+    property PluginWindow windowForPlugin: null
 
     property MView.ExplorerView explorerViewOnRequest
 
@@ -88,6 +89,21 @@ ApplicationWindow {
             _fullscreen = false;
             if(mainWindow.maximized) mainWindow.showMaximized();
             else mainWindow.showNormal();
+        }
+    }
+
+    function newPluginWindow() {
+        var component = Qt.createComponent(
+            "qrc:/qmlproject/imports/Musec/PluginWindow.qml",
+            mainWindow);
+        if(component.status == Component.Ready) {
+            var window = component.createObject(mainWindow);
+            mainWindow.windowForPlugin = window;
+            eventBridge.newPluginWindowReady();
+            // TODO: 将插件窗口传给后台
+        }
+        else {
+            console.log(component.errorString());
         }
     }
 

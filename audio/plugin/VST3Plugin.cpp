@@ -229,7 +229,6 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
         auto channelCount = busInfo.channelCount;
         //effect_->getBusArrangement(Steinberg::Vst::BusDirections::kOutput, i, outputSpeakerArrangements_[i]);
     }
-    // Waves VST3 插件在此处崩溃
     auto setBusArrangementsResult = effect_->setBusArrangements(
         inputSpeakerArrangements_.data(), inputBusCount,
         outputSpeakerArrangements_.data(), outputBusCount);
@@ -264,8 +263,15 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
         outputs_[i].numChannels = Steinberg::Vst::SpeakerArr::getChannelCount(outputSpeakerArrangements_[i]);
     }
     // ProcessData ---------------------------------------------------------------------------------
-    // Voxengo 插件均在此处崩溃
     auto setupProcessingResult = effect_->setupProcessing(setup);
+    auto eventInputBusCount = component_->getBusCount(Steinberg::Vst::MediaTypes::kEvent,
+                                                      Steinberg::Vst::BusDirections::kInput);
+    for(decltype(eventInputBusCount) i = 0; i < eventInputBusCount; ++i)
+    {
+        component_->getBusInfo(Steinberg::Vst::MediaTypes::kEvent, Steinberg::Vst::BusDirections::kInput,
+                               i, busInfo);
+        // TODO: 初始化乐器需要的事件 I/O
+    }
     if (setupProcessingResult != Steinberg::kResultOk)
     {
         throw std::runtime_error("");
@@ -290,7 +296,7 @@ bool VST3Plugin<SampleType>::uninitialize()
 }
 
 template<typename SampleType>
-bool VST3Plugin<SampleType>::initializeEditor(QWindow* window)
+bool VST3Plugin<SampleType>::initializeEditor()
 {
     auto queryEditorFromComponentResult = component_->queryInterface(Steinberg::Vst::IEditController_iid,
                                                                      reinterpret_cast<void**>(&editController_));
@@ -347,7 +353,6 @@ bool VST3Plugin<SampleType>::initializeEditor(QWindow* window)
             editControllerStatus_ = VST3EditControllerStatus::Connected;
         }
     }
-    attachToWindow(window);
     return true;
 }
 
@@ -587,7 +592,7 @@ bool VST3Plugin<SampleType>::getBypass() const
 
 template<typename SampleType> QString VST3Plugin<SampleType>::getName() const
 {
-    if(!effect_)
+    if(!factory_)
     {
         return QString();
     }

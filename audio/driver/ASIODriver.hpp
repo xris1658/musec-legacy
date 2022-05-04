@@ -69,7 +69,7 @@ private:
 // 退出时出现问题，有可能导致程序无法退出，或者程序崩溃。
 ASIODriver& AppASIODriver();
 
-ASIODriverStreamInfo getASIODriverStreamInfo(const ASIODriver& driver);
+ASIODriverStreamInfo getASIODriverStreamInfo(const ASIODriver& driver = AppASIODriver());
 }
 }
 }

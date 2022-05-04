@@ -42,7 +42,28 @@ void appendTrack(const Entities::CompleteTrack& track)
 double getCurrentSampleRate()
 {
     double ret;
-    return Musec::Audio::Driver::AppASIODriver()->getSampleRate(&ret);
-    return ret;
+    if(Musec::Audio::Driver::AppASIODriver())
+    {
+        return Musec::Audio::Driver::getASIODriverStreamInfo().sampleRate;
+    }
+    return 44100.0;
+}
+
+long getMaxBlockSize()
+{
+    if(Musec::Audio::Driver::AppASIODriver())
+    {
+        return Musec::Audio::Driver::getASIODriverStreamInfo().maximumBufferSize;
+    }
+    return 88200; // 我记得 FlexASIO 的最大采样数是这个
+}
+
+long getCurrentBlockSize()
+{
+    if(Musec::Audio::Driver::AppASIODriver())
+    {
+        return Musec::Audio::Driver::getASIODriverStreamInfo().preferredBufferSize;
+    }
+    return 512;
 }
 }

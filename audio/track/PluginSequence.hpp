@@ -4,7 +4,6 @@
 #include "audio/plugin/IPlugin.hpp"
 #include "audio/driver/ASIODriver.hpp"
 
-#include <list>
 #include <memory>
 #include <vector>
 
@@ -15,7 +14,7 @@ namespace Audio
 namespace Track
 {
 template<typename SampleType>
-using PluginSequence = std::list<std::shared_ptr<Musec::Audio::Plugin::IPlugin<SampleType>>>;
+using PluginSequence = std::vector<std::shared_ptr<Musec::Audio::Plugin::IPlugin<SampleType>>>;
 
 template<typename SampleType>
 using PluginSequenceIterator = typename PluginSequence<SampleType>::iterator;

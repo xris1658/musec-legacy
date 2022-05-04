@@ -45,10 +45,10 @@ Rectangle {
                         width: 16
                         height: width
                         anchors.centerIn: parent
-                        source: type == 1? "../../images/midieffect.svg":
-                                type == 2? "../../images/instrument.svg":
-                                type == 3? "../../images/audioeffect.svg":
-                                /*type == 0?*/ "../../images/plugin.svg"
+                        source: type == 1?   "../../images/midieffect.svg":
+                                type == 2?   "../../images/instrument.svg":
+                                type == 3?   "../../images/audioeffect.svg":
+                              /*type == 0?*/ "../../images/plugin.svg"
                     }
                 }
                 Text {
@@ -67,9 +67,13 @@ Rectangle {
                 Drag.hotSpot.x: 0
                 Drag.hotSpot.y: 0
                 Drag.mimeData: {
+                    "FromWithin": true,
                     "itemType": "plugin",
                     "pluginId": id,
-                    "type": type
+                    "type": type,
+                    "name": name,
+                    "path": path,
+                    "format": format
                 }
                 Drag.proposedAction: Qt.CopyAction
                 Drag.supportedActions: Qt.CopyAction

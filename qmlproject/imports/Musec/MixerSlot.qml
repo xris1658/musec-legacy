@@ -12,7 +12,7 @@ MCtrl.Button {
     property bool sidechainEnabled: false
     implicitWidth: 100
     signal entered(drag: var)
-    signal dropped(drag: var)
+    signal dropped(drop: var)
     signal exited()
     signal positionChanged(drag: var)
     Row {
@@ -61,7 +61,7 @@ MCtrl.Button {
             root.exited();
         }
         onDropped: {
-            root.dropped(drag);
+            root.dropped(drop);
         }
         onPositionChanged: {
             root.positionChanged(drag);

@@ -95,7 +95,7 @@ void AssetDirectoryListModel::rename(int id, const QString& name)
         if(std::get<Musec::Base::AssetDirectoryInfoField::FieldId>(list_[i]) == id)
         {
             std::get<Musec::Base::AssetDirectoryInfoField::FieldName>(list_[i]) = name;
-            dataChanged(index(i), index(i), QVector<int>());
+            dataChanged(index(i), index(i), QVector<int>(1, RoleNames::NameRole));
             return;
         }
     }

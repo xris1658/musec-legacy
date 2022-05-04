@@ -77,5 +77,6 @@
         <file>qmlproject/imports/Musec/Views/ExplorerView.qml</file>
         <file>qmlproject/imports/Musec/Views/qmldir</file>
         <file>qmlproject/imports/Musec/MixerSlot.qml</file>
+        <file>qmlproject/imports/Musec/PluginWindow.qml</file>
     </qresource>
 </RCC>

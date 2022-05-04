@@ -10,6 +10,7 @@
 #include "controller/MIDIClockController.hpp"
 #include "controller/PluginSettingsController.hpp"
 #include "event/EventBase.hpp"
+#include "ui/PluginWindow.hpp"
 #include "ui/UI.hpp"
 
 #include <QDebug>
@@ -58,6 +59,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      this,        SLOT(onAppendTrack(Musec::Entities::CompleteTrack*)));
     QObject::connect(eventBridge, SIGNAL(insertTrack(Musec::Entities::CompleteTrack*, int)),
                      this,        SLOT(onInsertTrack(Musec::Entities::CompleteTrack*, int)));
+    QObject::connect(eventBridge, SIGNAL(newPluginWindowReady()),
+                     this,        SLOT(onNewPluginWindowReady()));
     // (this) C++ -> C++ (other)
     QObject::connect(this,             &EventHandler::updatePluginList,
                      mainWindowEvents, &MainWindow::updatePluginList);
@@ -91,6 +94,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      eventBridge,   SIGNAL(requestExplorerViewComplete()));
     QObject::connect(this,          SIGNAL(updateArrangement()),
                      eventBridge,   SIGNAL(updateArrangement()));
+    QObject::connect(this,          SIGNAL(newPluginWindow()),
+                     eventBridge,   SIGNAL(newPluginWindow()));
 }
 
 EventHandler::~EventHandler()
@@ -354,5 +359,11 @@ void EventHandler::onTrackInserted(const QModelIndex& parent, int first, int las
 void EventHandler::onTrackAboutToBeRemoved(const QModelIndex &parent, int first, int last)
 {
     emit updateArrangement();
+}
+
+void EventHandler::onNewPluginWindowReady()
+{
+    auto window = Musec::UI::mainWindow->property("windowForPlugin").value<QWindow*>();
+    Musec::UI::createNewPluginWindowComplete(window);
 }
 }

@@ -16,6 +16,11 @@ Item {
         anchors.fill: parent
         color: Constants.backgroundColor
     }
+    property bool instrumentEnabled: false
+    property string instrumentName: qsTr("无乐器")
+    property bool instrumentSidechainExist: false
+    property bool instrumentSidechainEnabled: false
+    property alias effectListModel: channelEffectList.model
     readonly property int channelInfoHeight: 20
     readonly property int channelEffectListFooterMinimumHeight: 20
     property ListModel list: ListModel {
@@ -30,6 +35,20 @@ Item {
         }
 */
     }
+    signal dragEventEntered(drag: var)
+    onDragEventEntered: {
+        if(drag.getDataAsString("type") != 2) {
+            drag.accepted = false;
+        }
+    }
+    signal dragEventDropped(drop: var)
+    onDragEventDropped: {
+        var format = parseInt(drop.getDataAsString("format"));
+        var path = drop.getDataAsString("path");
+        var pluginSubId = parseInt(drop.getDataAsString("uid"));
+        loadInstrument(path, pluginSubId, format);
+    }
+    signal loadInstrument(pluginPath: string, pluginSubId: int, pluginFormat: int)
     property int channelType
     property bool channelMuted: false
     property bool channelSolo: false
@@ -62,24 +81,34 @@ Item {
                 anchors.margins: 2
                 visible: parent.visible
                 spacing: 2
+                interactive: false
                 property int headerHeight: 20
                 header: Item {
                     id: effectListHeader
                     width: parent.width
                     height: channelEffectList.headerHeight + instrumentButton.anchors.bottomMargin
-                    MCtrl.Button {
+                    MixerSlot {
                         id: instrumentButton
                         visible: root.channelType == CompleteTrack.InstrumentTrack
                         anchors.fill: parent
                         anchors.bottomMargin: channelEffectList.spacing
-                        text: qsTr("无乐器")
+                        name: root.instrumentName
+                        slotEnabled: root.instrumentEnabled
+                        sidechainExist: root.instrumentSidechainExist
+                        sidechainEnabled: root.instrumentSidechainEnabled
+                        onEntered: {
+                            root.dragEventEntered(drag);
+                        }
+                        onDropped: {
+                            root.dragEventDropped(drop);
+                        }
                     }
                 }
                 delegate: Item {
                     width: parent.width
                     height: 20
-                    MCtrl.Button {
-                        anchors.fill: parent
+                    MixerSlot {
+                        // TODO: 在此处绑定后台数据
                     }
                 }
                 footer: Item {
@@ -95,6 +124,21 @@ Item {
                     DropArea {
                         id: channelEffectDropArea
                         anchors.fill: parent
+                        onEntered: {
+                            if(drag.getDataAsString("itemType") == "plugin") {
+                                if(drag.getDataAsString("type") == 2 && root.channelType != CompleteTrack.InstrumentTrack) {
+                                    drag.accepted = false;
+                                }
+                            }
+                            else {
+                                drag.accepted = false;
+                            }
+                        }
+                        onDropped: {
+                            var pluginId = drop.getDataAsString("id");
+                            var pluginSubId = drop.getDataAsString("uid");
+                            var pluginType = drop.getDataAsString("type");
+                        }
                     }
                 }
             }

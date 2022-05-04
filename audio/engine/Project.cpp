@@ -56,14 +56,28 @@ void Project::insertTrack(std::size_t index, const Musec::Entities::CompleteTrac
     switch(track.getTrackType())
     {
     case Musec::Entities::CompleteTrack::TrackType::AudioTrack:
-        trackPointer = std::make_shared<Musec::Audio::Track::AudioTrack>();
+    {
+        auto audioTrack = std::make_shared<Musec::Audio::Track::AudioTrack>();
+        auto pluginSequences = audioTrack->getPluginSequences();
+        pluginSequences.emplace_back();
+        audioTrack->setPluginSequences(std::move(pluginSequences));
+        trackPointer = audioTrack;
         break;
+    }
     case Musec::Entities::CompleteTrack::TrackType::MIDITrack:
+    {
         trackPointer = std::make_shared<Musec::Audio::Track::MIDITrack>();
         break;
+    }
     case Musec::Entities::CompleteTrack::TrackType::InstrumentTrack:
-        trackPointer = std::make_shared<Musec::Audio::Track::InstrumentTrack>();
+    {
+        auto instrumentTrack = std::make_shared<Musec::Audio::Track::InstrumentTrack>();
+        auto pluginSequences = instrumentTrack->getAudioEffectPluginSequences();
+        pluginSequences.emplace_back();
+        instrumentTrack->setAudioEffectPluginSequences(std::move(pluginSequences));
+        trackPointer = instrumentTrack;
         break;
+    }
     default:
         break;
     }

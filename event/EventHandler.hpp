@@ -33,6 +33,7 @@ signals:
     void messageDialog(const QString& message, const QString& title, int icon);
     void requestExplorerViewComplete();
     void updateArrangement();
+    void newPluginWindow();
 public slots:
     void onMainWindowOpened();
     void onOptionsWindowOpened();
@@ -57,6 +58,7 @@ public slots:
     void onInsertTrack(Musec::Entities::CompleteTrack* track, int index);
     void onTrackInserted(const QModelIndex& parent, int first, int last);
     void onTrackAboutToBeRemoved(const QModelIndex &parent, int first, int last);
+    void onNewPluginWindowReady();
 private:
     std::vector<QMetaObject::Connection> optionsWindowConnection;
 };

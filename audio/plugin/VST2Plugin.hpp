@@ -60,8 +60,10 @@ public:
 public:
     bool initialize(double sampleRate, std::int32_t maxSampleCount) override;
     bool uninitialize() override;
-    bool initializeEditor(QWindow* window) override;
+    bool initializeEditor() override;
     bool uninitializeEditor() override;
+    bool attachToWindow(QWindow* window) override;
+    bool detachWithWindow() override;
     bool activate() override;
     bool deactivate() override;
     bool startProcessing() override;

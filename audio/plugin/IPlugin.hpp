@@ -29,8 +29,10 @@ public:
 public:
     virtual bool initialize(double sampleRate, std::int32_t maxSampleCount) = 0;
     virtual bool uninitialize() = 0;
-    virtual bool initializeEditor(QWindow* window) = 0;
+    virtual bool initializeEditor() = 0;
     virtual bool uninitializeEditor() = 0;
+    virtual bool attachToWindow(QWindow* window) = 0;
+    virtual bool detachWithWindow() = 0;
     virtual bool activate() = 0;
     virtual bool deactivate() = 0;
     virtual bool startProcessing() = 0;

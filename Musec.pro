@@ -83,6 +83,7 @@ HEADERS += \
     base/FolderBase.hpp \
     base/PluginBase.hpp \
     base/QmlBase.hpp \
+    concurrent/ThreadPool.hpp \
     controller/AppController.hpp \
     controller/ASIODriverController.hpp \
     controller/AssetController.hpp \
@@ -100,7 +101,6 @@ HEADERS += \
     dao/LoggingDAO.hpp \
     dao/PluginDAO.hpp \
     dao/PluginDirectoryDAO.hpp \
-    dkwtp/ThreadPool.hpp \
     entities/CompleteTrack.hpp \
     entities/Plugin.hpp \
     entities/EntitiesInitializer.hpp \
@@ -122,11 +122,13 @@ HEADERS += \
     model/ModelBase.hpp \
     model/ModelInitializer.hpp \
     model/PluginListModel.hpp \
+    model/PluginSequenceModel.hpp \
     model/TrackListModel.hpp \
     native/Native.hpp \
     native/WindowsLibraryRAII.hpp \
     ui/FontUtility.hpp \
     ui/MessageDialog.hpp \
+    ui/PluginWindow.hpp \
     ui/Render.hpp \
     ui/UI.hpp \
     util/Endian.hpp \
@@ -152,6 +154,7 @@ SOURCES += \
     base/Color.cpp \
     base/FixedSizeMemoryPool.cpp \
     base/PluginBase.cpp \
+    concurrent/ThreadPool.cpp \
     controller/AppController.cpp \
     controller/ASIODriverController.cpp \
     controller/AssetController.cpp \
@@ -169,7 +172,6 @@ SOURCES += \
     dao/LoggingDAO.cpp \
     dao/PluginDAO.cpp \
     dao/PluginDirectoryDAO.cpp \
-    dkwtp/ThreadPool.cpp \
     entities/CompleteTrack.cpp \
     entities/Plugin.cpp \
     entities/EntitiesInitializer.cpp \
@@ -190,11 +192,13 @@ SOURCES += \
     model/FolderListModel.cpp \
     model/ModelInitializer.cpp \
     model/PluginListModel.cpp \
+    model/PluginSequenceModel.cpp \
     model/TrackListModel.cpp \
     native/Native.cpp \
     native/WindowsLibraryRAII.cpp \
     ui/FontUtility.cpp \
     ui/MessageDialog.cpp \
+    ui/PluginWindow.cpp \
     ui/Render.cpp \
     ui/UI.cpp \
     util/Endian.cpp \

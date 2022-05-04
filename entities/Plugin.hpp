@@ -30,10 +30,14 @@ public:
     };
     Q_ENUM(PluginType)
 public:
-    Plugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<double>> plugin = nullptr, const QString& name = "",
-           bool enabled = false, bool sidechainExist = false, bool sidechainEnabled = false,
-           QObject* parent = nullptr);
+    Plugin(QObject* parent = nullptr);
+    Plugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<double>> plugin,
+           const QString& name, bool enabled,
+           bool sidechainExist, bool sidechainEnabled);
+    Plugin(Plugin&& rhs) noexcept;
+    Plugin& operator=(Plugin&& rhs) noexcept;
 public:
+    bool valid() const;
     const QString& getName() const;
     void setName(const QString& name);
     bool isEnabled() const;
@@ -47,6 +51,8 @@ signals:
     void enabledChanged();
     void sidechainExistChanged();
     void sidechainEnabledChanged();
+public:
+    void swap(Plugin& rhs) noexcept;
 private:
     std::shared_ptr<Musec::Audio::Plugin::IPlugin<double>> plugin_;
     QString name_;
@@ -55,6 +61,12 @@ private:
     bool sidechainEnabled_;
 };
 }
+}
+
+namespace std
+{
+template<>
+void swap(Musec::Entities::Plugin& lhs, Musec::Entities::Plugin& rhs) noexcept;
 }
 
 #endif //MUSEC_ENTITIES_PLUGIN

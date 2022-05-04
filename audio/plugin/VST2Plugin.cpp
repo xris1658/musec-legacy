@@ -11,7 +11,7 @@
 #include <errhandlingapi.h>
 
 #include <array>
-#include <cstring>
+#include <cstdlib>
 
 // HostCanDos 命名空间只放到了源文件下，但是把用到这个命名空间内容的函数放到了别处
 // 为了防止违反 ODR，将相关文件放到另一个命名空间下
@@ -437,11 +437,40 @@ void VST2Plugin<SampleType>::process(const Musec::Audio::Base::AudioBufferViews<
     }
 }
 
-template<typename SampleType> bool VST2Plugin<SampleType>::initializeEditor(QWindow* window)
+template<typename SampleType> bool VST2Plugin<SampleType>::initializeEditor()
 {
-    std::array<char, kVstMaxEffectNameLen> nameBuffer = {0};
+    return true;
+}
+
+template<typename SampleType> bool VST2Plugin<SampleType>::uninitializeEditor()
+{
+    return true;
+}
+
+template<typename SampleType> bool VST2Plugin<SampleType>::getBypass() const
+{
+    return bypass_;
+}
+
+template<typename SampleType> QString VST2Plugin<SampleType>::getName() const
+{
+    if(!effect_)
+    {
+        return QString();
+    }
+    // Sylenth1 和 Ableton SAK 写入的字符个数为 kVstMaxEffectNameLen + 1
+    // VST2 给的最大长度貌似不算空终止符，文档和代码内注释写得也并不清楚，只能靠试错
+    std::array<char, kVstMaxEffectNameLen + 1> nameBuffer = {0};
+#ifndef NDEBUG
+    std::memset(nameBuffer.data(), 0x7F, nameBuffer.size());
+#endif
     effect_->dispatcher(effect_, AEffectXOpcodes::effGetEffectName, 0, 0, nameBuffer.data(), 0);
-    window->setTitle(nameBuffer.data());
+    return QString(nameBuffer.data());
+}
+
+template<typename SampleType> bool VST2Plugin<SampleType>::attachToWindow(QWindow* window)
+{
+    window->setTitle(getName());
     ERect* rect = nullptr;
     effect_->dispatcher(effect_, AEffectOpcodes::effEditOpen, 0, 0, reinterpret_cast<Musec::Native::WindowType>(window->winId()), 0);
     effect_->dispatcher(effect_, AEffectOpcodes::effEditGetRect, 0, 0, &rect, 0);
@@ -462,27 +491,11 @@ template<typename SampleType> bool VST2Plugin<SampleType>::initializeEditor(QWin
     }
 }
 
-template<typename SampleType> bool VST2Plugin<SampleType>::uninitializeEditor()
+template<typename SampleType> bool VST2Plugin<SampleType>::detachWithWindow()
 {
     Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(effect_);
     effect_->dispatcher(effect_, AEffectOpcodes::effEditClose, 0, 0, nullptr, 0);
     return true;
-}
-
-template<typename SampleType> bool VST2Plugin<SampleType>::getBypass() const
-{
-    return bypass_;
-}
-
-template<typename SampleType> QString VST2Plugin<SampleType>::getName() const
-{
-    if(!effect_)
-    {
-        return QString();
-    }
-    std::array<char, kVstMaxEffectNameLen> nameBuffer = {0};
-    effect_->dispatcher(effect_, AEffectXOpcodes::effGetEffectName, 0, 0, nameBuffer.data(), 0);
-    return QString(nameBuffer.data());
 }
 
 template class VST2Plugin<float>;
