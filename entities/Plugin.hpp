@@ -14,7 +14,8 @@ namespace Entities
 class Plugin: public QObject
 {
     Q_OBJECT
-    //         type    name for UI      member in class          getter                  setter                    signal
+//  | ******* | type  | name for UI    | member in class        | getter                | setter                  | signal                       |
+//  | ------- | ----- | -------------- | ---------------------- | --------------------- | ----------------------- | ---------------------------- |
     Q_PROPERTY(QString name             MEMBER name_             READ getName            WRITE setName             NOTIFY nameChanged            )
     Q_PROPERTY(bool    enabled          MEMBER enabled_          READ isEnabled          WRITE setEnabled          NOTIFY enabledChanged         )
     Q_PROPERTY(bool    sidechainExist   MEMBER sidechainExist_   READ isSidechainExist   WRITE setSidechainExist   NOTIFY sidechainExistChanged  )

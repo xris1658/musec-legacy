@@ -162,8 +162,7 @@ bool PluginSequenceModel::setData(const QModelIndex& index, const QVariant& valu
         list_[row]->setEnabled(value.value<bool>());
         return true;
     case NameRole:
-        list_[row]->setName(value.value<QString>());
-        return true;
+        return false;
     case SidechainExistRole:
         list_[row]->setSidechainExist(value.value<bool>());
         return true;

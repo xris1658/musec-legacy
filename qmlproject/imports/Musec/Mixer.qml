@@ -133,6 +133,7 @@ Rectangle {
             delegate: Row {
                 id: trackChannelListDelegate
                 MixerChannel {
+                    effectListModel: pluginList
                     channelName: trackname
                     channelColor: trackcolor
                     channelType: type

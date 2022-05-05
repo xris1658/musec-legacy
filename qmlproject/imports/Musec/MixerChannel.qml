@@ -99,14 +99,10 @@ Item {
                 spacing: 2
                 interactive: false
                 property int headerHeight: 20
-                Text {
-                    text: channelEffectList.count
-                }
-
                 header: Item {
                     id: effectListHeader
                     width: parent.width
-                    height: channelEffectList.headerHeight + instrumentButton.anchors.bottomMargin
+                    height: channelEffectList.headerHeight + channelEffectList.spacing
                     MixerSlot {
                         id: instrumentButton
                         visible: root.channelType == CompleteTrack.InstrumentTrack
@@ -130,8 +126,11 @@ Item {
                 }
                 delegate: Item {
                     width: parent.width
-                    height: 20
-                    MixerSlot {}
+                    height: channelEffectList.headerHeight + channelEffectList.spacing
+                    MixerSlot {
+                        anchors.fill: parent
+                        anchors.bottomMargin: channelEffectList.spacing
+                    }
                 }
                 footer: Item {
                     width: parent.width
