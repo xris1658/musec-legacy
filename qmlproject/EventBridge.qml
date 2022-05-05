@@ -12,7 +12,7 @@ QtObject {
     id: eventBridge
     objectName: "eventBridge"
     // 发往 C++ 后端的信号
-    signal exitASIOThread()
+    signal prepareToQuit()
     signal optionsWindowOpened()
     signal optionsWindowClosed()
     signal pluginDirectoryAdded(directory: string)

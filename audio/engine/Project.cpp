@@ -12,9 +12,12 @@ Project::Project()
 
 }
 
-Project::~Project() noexcept
+Project::~Project()
 {
-
+    pluginGraph_.clear();
+    tracks_.clear();
+    masterTrack_.setPluginSequences({});
+    pluginAndWindow_.clear();
 }
 
 std::size_t Project::trackCount() const noexcept
@@ -131,5 +134,13 @@ void Project::setPluginWindowSize(void* plugin, int width, int height)
 const Musec::Audio::Track::AudioTrack& Project::masterTrack() const
 {
     return masterTrack_;
+}
+
+void Project::clear()
+{
+    pluginGraph_.clear();
+    tracks_.clear();
+    masterTrack_.clear();
+    pluginAndWindow_.clear();
 }
 }

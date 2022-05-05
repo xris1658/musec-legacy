@@ -156,8 +156,8 @@ ApplicationWindow {
         arrangement.appendTrackComplete(index);
     }
 
-    signal exitASIOThreadFinished()
-    onExitASIOThreadFinished: {
+    signal readyToQuit()
+    onReadyToQuit: {
         canClose = true;
         close();
     }
@@ -241,7 +241,7 @@ ApplicationWindow {
                 text: qsTr("退出(&X)")
                 shortcut: "Ctrl+Q"
                 onTriggered: {
-                    EventBridge.exitASIOThread();
+                    EventBridge.prepareToQuit();
                 }
             }
         }

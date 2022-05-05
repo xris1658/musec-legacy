@@ -26,7 +26,7 @@ public:
         trackInformation_(trackInformation)
     {
     }
-    virtual ~ITrack() noexcept = default;
+    virtual ~ITrack() = default;
 public:
     const TrackInformation& getTrackInformation() const
     {

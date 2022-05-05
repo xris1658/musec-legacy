@@ -373,12 +373,14 @@ bool VST2Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
 {
     effect_->dispatcher(effect_, AEffectOpcodes::effSetSampleRate, 0, 0, nullptr, sampleRate);
     effect_->dispatcher(effect_, AEffectOpcodes::effSetBlockSize, 0, maxSampleCount, nullptr, 0);
+    initializeEditor();
     return true;
 }
 
 template<typename SampleType>
 bool VST2Plugin<SampleType>::uninitialize()
 {
+    uninitializeEditor();
     stopProcessing();
     return true;
 }
@@ -483,6 +485,7 @@ template<typename SampleType> bool VST2Plugin<SampleType>::attachToWindow(QWindo
         // window->setX(rect->left);
         // window->setY(rect->top);
         Musec::Controller::AudioEngineController::AppProject().addPluginWindowMapping(effect_, window);
+        window_ = window;
         return true;
     }
     else
@@ -493,9 +496,16 @@ template<typename SampleType> bool VST2Plugin<SampleType>::attachToWindow(QWindo
 
 template<typename SampleType> bool VST2Plugin<SampleType>::detachWithWindow()
 {
+    window_ = nullptr;
     Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(effect_);
     effect_->dispatcher(effect_, AEffectOpcodes::effEditClose, 0, 0, nullptr, 0);
     return true;
+}
+
+template<typename SampleType>
+QWindow* VST2Plugin<SampleType>::window()
+{
+    return window_;
 }
 
 template class VST2Plugin<float>;

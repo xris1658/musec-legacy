@@ -16,26 +16,27 @@ class InstrumentTrack: public Musec::Audio::Track::ITrack
 {
 public:
     InstrumentTrack();
+    ~InstrumentTrack() override;
 public:
-    const std::vector<Musec::Audio::Track::PluginSequence<double>>& getMIDIEffectPluginSequences() const;
+    const std::vector<Musec::Audio::Track::PluginSequence<float>>& getMIDIEffectPluginSequences() const;
     void setMIDIEffectPluginSequences(
-        const std::vector<Musec::Audio::Track::PluginSequence<double>>& midiEffectPluginSequences);
+        const std::vector<Musec::Audio::Track::PluginSequence<float>>& midiEffectPluginSequences);
     void setMIDIEffectPluginSequences(
-        std::vector<Musec::Audio::Track::PluginSequence<double>>&& midiEffectPluginSequences);
-    const std::shared_ptr<Musec::Audio::Plugin::IPlugin<double>>& getInstrument() const;
-    void setInstrument(const std::shared_ptr<Musec::Audio::Plugin::IPlugin<double>>& instrument);
-    void setInstrument(std::shared_ptr<Musec::Audio::Plugin::IPlugin<double>>&& instrument);
-    const std::vector<Musec::Audio::Track::PluginSequence<double>>& getAudioEffectPluginSequences() const;
+        std::vector<Musec::Audio::Track::PluginSequence<float>>&& midiEffectPluginSequences);
+    const std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>>& getInstrument() const;
+    void setInstrument(const std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>>& instrument);
+    void setInstrument(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>>&& instrument);
+    const std::vector<Musec::Audio::Track::PluginSequence<float>>& getAudioEffectPluginSequences() const;
     void setAudioEffectPluginSequences(
-        const std::vector<Musec::Audio::Track::PluginSequence<double>>& audioEffectPluginSequences);
+        const std::vector<Musec::Audio::Track::PluginSequence<float>>& audioEffectPluginSequences);
     void setAudioEffectPluginSequences(
-        std::vector<Musec::Audio::Track::PluginSequence<double>>&& audioEffectPluginSequences);
+        std::vector<Musec::Audio::Track::PluginSequence<float>>&& audioEffectPluginSequences);
 public:
     TrackType trackType() const override;
 private:
-    std::vector<Musec::Audio::Track::PluginSequence<double>> midiEffectPluginSequences_;
-    std::shared_ptr<Musec::Audio::Plugin::IPlugin<double>> instrument_;
-    std::vector<Musec::Audio::Track::PluginSequence<double>> audioEffectPluginSequences_;
+    std::vector<Musec::Audio::Track::PluginSequence<float>> midiEffectPluginSequences_;
+    std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> instrument_;
+    std::vector<Musec::Audio::Track::PluginSequence<float>> audioEffectPluginSequences_;
 };
 }
 }

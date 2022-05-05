@@ -21,7 +21,7 @@ int main(int argc, char** argv) try
 	QWindow& window = *pluginWindowThread.window();
 	pluginWindowThread.start();
 	{
-		Musec::Audio::Plugin::VST3Plugin<double> vst3(
+		Musec::Audio::Plugin::VST3Plugin<float> vst3(
 			"C:\\Program Files\\Common Files\\VST3\\FabFilter\\FabFilter Pro-Q 3.vst3"
 			, 0);
 		try
@@ -44,8 +44,7 @@ int main(int argc, char** argv) try
 		{
 			std::cout << Steinberg::Vst::SpeakerArr::getSpeakerArrangementString(arr, false) << " (" << Steinberg::Vst::SpeakerArr::getChannelCount(arr) << " channels)" << std::endl;
 		}
-		vst3.initializeEditor();
-		vst3.attachToWindow(&window)
+		vst3.attachToWindow(&window);
 		window.showNormal();
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 		vst3.activate();
@@ -55,7 +54,6 @@ int main(int argc, char** argv) try
 		vst3.stopProcessing();
 		vst3.deactivate();
 		window.close();
-		vst3.uninitializeEditor();
 		vst3.uninitialize();
 	}
 	return 0;

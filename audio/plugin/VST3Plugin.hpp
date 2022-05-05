@@ -79,10 +79,15 @@ public: // IPlugin interfaces
     bool deactivate() override;
     bool initialize(double sampleRate, std::int32_t sampleCount) override;
     bool uninitialize() override;
-    bool initializeEditor() override;
-    bool uninitializeEditor() override;
+private:
+    bool initializeEditor();
+    bool uninitializeEditor();
+public:
     bool attachToWindow(QWindow* window) override;
     bool detachWithWindow() override;
+
+    QWindow* window() override;
+
     bool startProcessing() override;
     bool stopProcessing() override;
     bool getBypass() const override;

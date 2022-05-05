@@ -10,11 +10,13 @@ MCtrl.Button {
     property string name: "Sample Text"
     property bool sidechainExist: true
     property bool sidechainEnabled: false
+    property bool editorVisible: false
     implicitWidth: 100
     signal entered(drag: var)
     signal dropped(drop: var)
     signal exited()
     signal positionChanged(drag: var)
+    color: editorVisible? Constants.deviceEnabledColor: Constants.backgroundColor
     Row {
         Item {
             id: enabledIndicatorArea
@@ -34,7 +36,7 @@ MCtrl.Button {
             width: root.width - enabledIndicatorArea.width - (root.sidechainExist? sidechainIndicatorArea.width: 0)
             anchors.verticalCenter: parent.verticalCenter
             text: root.name
-            color: Constants.contentColor1
+            color: root.editorVisible? Constants.backgroundColor: Constants.contentColor1
             font.family: Constants.font
         }
         Item {

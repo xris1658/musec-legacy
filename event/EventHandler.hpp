@@ -28,7 +28,7 @@ signals:
     void setSystemTextRenderingComplete();
     void updatePluginList();
     void updateASIODriverList();
-    void exitASIOThreadFinished();
+    void readyToQuit();
     void updateArrangementPosition(int position);
     void messageDialog(const QString& message, const QString& title, int icon);
     void requestExplorerViewComplete();
@@ -46,7 +46,7 @@ public slots:
     void onRemoveAssetDirectory(int id);
     void onOpenASIODriverControlPanel();
     void onDriverASIOSelectionChanged(const QString& clsid);
-    void onExitASIOThread();
+    void onPrepareToQuit();
     void onSampleRateChanged(int sampleRate);
     void onSystemTextRenderingChanged(bool newValue);
     void onOpenSpecialCharacterInput();

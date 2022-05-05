@@ -16,15 +16,16 @@ class MIDITrack: public Musec::Audio::Track::ITrack
 {
 public:
     MIDITrack();
+    ~MIDITrack() override;
 public:
-    const std::vector<Musec::Audio::Track::PluginSequence<double>>& getPluginSequences() const;
-    void setPluginSequences(const std::vector<Musec::Audio::Track::PluginSequence<double>>& pluginSequences);
-    void setPluginSequences(std::vector<Musec::Audio::Track::PluginSequence<double>>&& pluginSequences);
+    const std::vector<Musec::Audio::Track::PluginSequence<float>>& getPluginSequences() const;
+    void setPluginSequences(const std::vector<Musec::Audio::Track::PluginSequence<float>>& pluginSequences);
+    void setPluginSequences(std::vector<Musec::Audio::Track::PluginSequence<float>>&& pluginSequences);
 
     TrackType trackType() const override;
 
 private:
-    std::vector<Musec::Audio::Track::PluginSequence<double>> pluginSequences_;
+    std::vector<Musec::Audio::Track::PluginSequence<float>> pluginSequences_;
 };
 }
 }

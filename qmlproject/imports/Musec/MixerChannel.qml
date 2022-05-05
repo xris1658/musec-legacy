@@ -20,6 +20,7 @@ Item {
     property string instrumentName: qsTr("无乐器")
     property bool instrumentSidechainExist: false
     property bool instrumentSidechainEnabled: false
+    property bool instrumentEditorVisible: false
     property alias effectListModel: channelEffectList.model
     readonly property int channelInfoHeight: 20
     readonly property int channelEffectListFooterMinimumHeight: 20
@@ -35,20 +36,35 @@ Item {
         }
 */
     }
-    signal dragEventEntered(drag: var)
-    onDragEventEntered: {
+    signal instrumentSlotDragEventEntered(drag: var)
+    onInstrumentSlotDragEventEntered: {
         if(drag.getDataAsString("type") != 2) {
             drag.accepted = false;
         }
     }
-    signal dragEventDropped(drop: var)
-    onDragEventDropped: {
+    signal instrumentSlotDragEventDropped(drop: var)
+    onInstrumentSlotDragEventDropped: {
         var format = parseInt(drop.getDataAsString("format"));
         var path = drop.getDataAsString("path");
         var pluginSubId = parseInt(drop.getDataAsString("uid"));
         loadInstrument(path, pluginSubId, format);
     }
+    signal instrumentSlotVisibleToggled(instrumentWindowVisible: bool)
+    signal blankAreaDragEventEntered(drag: var)
+    onBlankAreaDragEventEntered: {
+        if(drag.getDataAsString("type") != 3) {
+            drag.accepted = false;
+        }
+    }
+    signal blankAreaDragEventDropped(drop: var)
+    onBlankAreaDragEventDropped: {
+        var format = parseInt(drop.getDataAsString("format"));
+        var path = drop.getDataAsString("path");
+        var pluginSubId = parseInt(drop.getDataAsString("uid"));
+        loadEffect(path, pluginSubId, format, channelEffectList.count);
+    }
     signal loadInstrument(pluginPath: string, pluginSubId: int, pluginFormat: int)
+    signal loadEffect(pluginPath: string, pluginSubId: int, pluginFormat: int, effectIndex: int)
     property int channelType
     property bool channelMuted: false
     property bool channelSolo: false
@@ -83,6 +99,10 @@ Item {
                 spacing: 2
                 interactive: false
                 property int headerHeight: 20
+                Text {
+                    text: channelEffectList.count
+                }
+
                 header: Item {
                     id: effectListHeader
                     width: parent.width
@@ -96,20 +116,22 @@ Item {
                         slotEnabled: root.instrumentEnabled
                         sidechainExist: root.instrumentSidechainExist
                         sidechainEnabled: root.instrumentSidechainEnabled
+                        editorVisible: root.instrumentEditorVisible
                         onEntered: {
-                            root.dragEventEntered(drag);
+                            root.instrumentSlotDragEventEntered(drag);
                         }
                         onDropped: {
-                            root.dragEventDropped(drop);
+                            root.instrumentSlotDragEventDropped(drop);
+                        }
+                        onClicked: {
+                            root.instrumentSlotVisibleToggled(!editorVisible);
                         }
                     }
                 }
                 delegate: Item {
                     width: parent.width
                     height: 20
-                    MixerSlot {
-                        // TODO: 在此处绑定后台数据
-                    }
+                    MixerSlot {}
                 }
                 footer: Item {
                     width: parent.width
@@ -125,19 +147,10 @@ Item {
                         id: channelEffectDropArea
                         anchors.fill: parent
                         onEntered: {
-                            if(drag.getDataAsString("itemType") == "plugin") {
-                                if(drag.getDataAsString("type") == 2 && root.channelType != CompleteTrack.InstrumentTrack) {
-                                    drag.accepted = false;
-                                }
-                            }
-                            else {
-                                drag.accepted = false;
-                            }
+                            root.blankAreaDragEventEntered(drag);
                         }
                         onDropped: {
-                            var pluginId = drop.getDataAsString("id");
-                            var pluginSubId = drop.getDataAsString("uid");
-                            var pluginType = drop.getDataAsString("type");
+                            root.blankAreaDragEventDropped(drop);
                         }
                     }
                 }

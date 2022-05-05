@@ -149,6 +149,7 @@ Rectangle {
                     instrumentName: instrument? instrument.name: qsTr("无乐器")
                     instrumentSidechainExist: instrument? instrument.sidechainExist: false
                     instrumentSidechainEnabled: instrument? instrument.sidechainEnabled: false
+                    instrumentEditorVisible: instrument && instrument.windowVisible
                     onSetMute: (newMute) => {
                                    mute = newMute;
                                }
@@ -163,6 +164,15 @@ Rectangle {
                                        }
                     onLoadInstrument: {
                         tracks.loadInstrument(index, pluginFormat, pluginPath, pluginSubId);
+                    }
+                    onLoadEffect: {
+                        console.log("onLoadEffect() called.");
+                        tracks.loadEffect(index, pluginFormat, pluginPath, pluginSubId, effectIndex);
+                    }
+                    onInstrumentSlotVisibleToggled: {
+                        if(instrument) {
+                            instrument.windowVisible = instrumentWindowVisible;
+                        }
                     }
                 }
                 Rectangle {

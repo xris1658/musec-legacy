@@ -189,6 +189,7 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
         throw std::runtime_error("Error creating VST3 audio processor!");
     }
     audioProcessorStatus_ = VST3AudioProcessorStatus::Initialized;
+    initializeEditor();
     // ProcessSetup -------------------------------------------------------------------------
     Steinberg::Vst::ProcessSetup setup{};
     setup.processMode = Steinberg::Vst::ProcessModes::kRealtime;
@@ -247,10 +248,11 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
             // Youlean Loudness Meter 2 会在此处抛出 std::out_of_range
             effect_->getBusArrangement(Steinberg::Vst::BusDirections::kInput, i, inputSpeakerArrangements_[i]);
         }
-        effect_->setBusArrangements(inputSpeakerArrangements_.data(), inputSpeakerArrangements_.size(),
+        setBusArrangementsResult = effect_->setBusArrangements(
+            inputSpeakerArrangements_.data(), inputSpeakerArrangements_.size(),
             outputSpeakerArrangements_.data(), outputSpeakerArrangements_.size());
         // 不检查此处的结果。因为有些插件本身第一次就成功，结果两次 setBusArrangement 返回的结果均为 kResultFalse
-        // FabFilter 插件
+        // (e.g. FabFilter 插件)
     }
     for (decltype(inputBusCount) i = 0; i < inputBusCount; ++i)
     {
@@ -264,14 +266,6 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
     }
     // ProcessData ---------------------------------------------------------------------------------
     auto setupProcessingResult = effect_->setupProcessing(setup);
-    auto eventInputBusCount = component_->getBusCount(Steinberg::Vst::MediaTypes::kEvent,
-                                                      Steinberg::Vst::BusDirections::kInput);
-    for(decltype(eventInputBusCount) i = 0; i < eventInputBusCount; ++i)
-    {
-        component_->getBusInfo(Steinberg::Vst::MediaTypes::kEvent, Steinberg::Vst::BusDirections::kInput,
-                               i, busInfo);
-        // TODO: 初始化乐器需要的事件 I/O
-    }
     if (setupProcessingResult != Steinberg::kResultOk)
     {
         throw std::runtime_error("");
@@ -283,6 +277,7 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
 template<typename SampleType>
 bool VST3Plugin<SampleType>::uninitialize()
 {
+    uninitializeEditor();
     audioProcessorStatus_ = VST3AudioProcessorStatus::Initialized;
     effect_->release();
     auto terminateComponentResult = component_->terminate();
@@ -339,18 +334,20 @@ bool VST3Plugin<SampleType>::initializeEditor()
                                    reinterpret_cast<void**>(&componentPoint_));
         editController_->queryInterface(Steinberg::Vst::IConnectionPoint_iid,
                                         reinterpret_cast<void**>(&editControllerPoint_));
+        if(componentPoint_ && editControllerPoint_)
+        {
+            componentPoint_->addRef();
+            editControllerPoint_->addRef();
+            componentPoint_->connect(editControllerPoint_);
+            editControllerPoint_->connect(componentPoint_);
+            audioProcessorStatus_ = VST3AudioProcessorStatus::Connected;
+            editControllerStatus_ = VST3EditControllerStatus::Connected;
+        }
         view_ = editController_->createView(Steinberg::Vst::ViewType::kEditor);
         if (view_)
         {
             view_->addRef();
             view_->setFrame(this);
-        }
-        if(componentPoint_ && editControllerPoint_)
-        {
-            componentPoint_->connect(editControllerPoint_);
-            editControllerPoint_->connect(componentPoint_);
-            audioProcessorStatus_ = VST3AudioProcessorStatus::Connected;
-            editControllerStatus_ = VST3EditControllerStatus::Connected;
         }
     }
     return true;
@@ -364,6 +361,11 @@ bool VST3Plugin<SampleType>::uninitializeEditor()
     {
         componentPoint_->disconnect(editControllerPoint_);
         editControllerPoint_->disconnect(componentPoint_);
+
+        componentPoint_->release();
+        editControllerPoint_->release();
+        componentPoint_ = nullptr;
+        editControllerPoint_ = nullptr;
         editControllerStatus_ = VST3EditControllerStatus::Initialized;
     }
     Steinberg::tresult terminateEditControllerResult = Steinberg::kResultOk;
@@ -405,24 +407,32 @@ bool VST3Plugin<SampleType>::deactivate()
 template<typename SampleType>
 bool VST3Plugin<SampleType>::startProcessing()
 {
-    auto ret = effect_->setProcessing(true) == Steinberg::kResultOk;
-    if(ret)
+    if(audioProcessorStatus_ == VST3AudioProcessorStatus::Activated)
     {
-        audioProcessorStatus_ = VST3AudioProcessorStatus::Processing;
+        auto ret = effect_->setProcessing(true) == Steinberg::kResultOk;
+        if(ret)
+        {
+            audioProcessorStatus_ = VST3AudioProcessorStatus::Processing;
+        }
+        return ret;
     }
-    return ret;
+    return false;
 }
 
 // 或许上 RAII 更合适？
 template<typename SampleType>
 bool VST3Plugin<SampleType>::stopProcessing()
 {
-    auto ret = effect_->setProcessing(false) == Steinberg::kResultOk;
-    if(ret)
+    if(audioProcessorStatus_ == VST3AudioProcessorStatus::Processing)
     {
-        audioProcessorStatus_ = VST3AudioProcessorStatus::Activated;
+        auto ret = effect_->setProcessing(false) == Steinberg::kResultOk;
+        if(ret)
+        {
+            audioProcessorStatus_ = VST3AudioProcessorStatus::Activated;
+        }
+        return ret;
     }
-    return ret;
+    return false;
 }
 
 template<typename SampleType>
@@ -533,6 +543,10 @@ bool VST3Plugin<SampleType>::attachToWindow(QWindow* window)
 template<typename SampleType>
 bool VST3Plugin<SampleType>::detachWithWindow()
 {
+    if(!window_)
+    {
+        return true;
+    }
     if(view_)
     {
         Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(effect_);
@@ -599,7 +613,11 @@ template<typename SampleType> QString VST3Plugin<SampleType>::getName() const
     return QString(getClassInfo().name);
 }
 
-template class VST3Plugin<float>;
+template<typename SampleType> QWindow* VST3Plugin<SampleType>::window()
+{
+    return window_;
+}
 
+template class VST3Plugin<float>;
 template class VST3Plugin<double>;
 }

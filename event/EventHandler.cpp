@@ -43,8 +43,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      this,        SLOT(onRemoveAssetDirectory(int)));
     QObject::connect(eventBridge, SIGNAL(openASIODriverControlPanel()),
                      this,        SLOT(onOpenASIODriverControlPanel()));
-    QObject::connect(eventBridge, SIGNAL(exitASIOThread()),
-                     this,        SLOT(onExitASIOThread()));
+    QObject::connect(eventBridge, SIGNAL(prepareToQuit()),
+                     this,        SLOT(onPrepareToQuit()));
     QObject::connect(eventBridge, SIGNAL(openSpecialCharacterInput()),
                      this,        SLOT(onOpenSpecialCharacterInput()));
     QObject::connect(eventBridge, SIGNAL(setArrangementPosition(int)),
@@ -80,8 +80,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
     // C++ -> QML
     QObject::connect(this,          SIGNAL(signalScanPluginComplete()),
                      optionsWindow, SIGNAL(scanPluginComplete()));
-    QObject::connect(this,          SIGNAL(exitASIOThreadFinished()),
-                     mainWindow,    SIGNAL(exitASIOThreadFinished()));
+    QObject::connect(this,          SIGNAL(readyToQuit()),
+                     mainWindow,    SIGNAL(readyToQuit()));
     QObject::connect(this,          SIGNAL(setStatusText(QString)),
                      mainWindow,    SIGNAL(setStatusText(QString)));
     QObject::connect(this,          SIGNAL(setSystemTextRenderingComplete()),
@@ -270,10 +270,11 @@ void EventHandler::onDriverASIOSelectionChanged(const QString& clsid)
     }
 }
 
-void EventHandler::onExitASIOThread()
+void EventHandler::onPrepareToQuit()
 {
     Controller::ASIODriverController::unloadASIODriver();
-    exitASIOThreadFinished();
+    Musec::Controller::AudioEngineController::AppProject().clear();
+    readyToQuit();
 }
 
 void EventHandler::onSampleRateChanged(int sampleRate)

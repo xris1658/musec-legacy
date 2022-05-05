@@ -38,7 +38,7 @@ public:
     Project();
     Project(const Project&) = delete;
     Project(Project&&) = default;
-    ~Project() noexcept;
+    ~Project();
 public:
     std::size_t trackCount() const noexcept;
     CompleteTrackRef at(std::size_t index);
@@ -52,8 +52,10 @@ public:
     void addPluginWindowMapping(void* plugin, QWindow* window);
     void removePluginWindowMapping(void* plugin);
     void setPluginWindowSize(void* plugin, int width, int height);
+public:
+    void clear();
 private:
-    Musec::Audio::Engine::Graph<std::shared_ptr<Musec::Audio::Plugin::IPlugin<double>>> pluginGraph_;
+    Musec::Audio::Engine::Graph<std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>>> pluginGraph_;
     std::vector<std::shared_ptr<Musec::Audio::Track::ITrack>> tracks_;
     Musec::Audio::Track::AudioTrack masterTrack_;
     std::vector<double> gain_;

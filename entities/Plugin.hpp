@@ -19,6 +19,7 @@ class Plugin: public QObject
     Q_PROPERTY(bool    enabled          MEMBER enabled_          READ isEnabled          WRITE setEnabled          NOTIFY enabledChanged         )
     Q_PROPERTY(bool    sidechainExist   MEMBER sidechainExist_   READ isSidechainExist   WRITE setSidechainExist   NOTIFY sidechainExistChanged  )
     Q_PROPERTY(bool    sidechainEnabled MEMBER sidechainEnabled_ READ isSidechainEnabled WRITE setSidechainEnabled NOTIFY sidechainEnabledChanged)
+    Q_PROPERTY(bool    windowVisible                             READ isWindowVisible    WRITE setWindowVisible    NOTIFY windowVisibleChanged   )
     QML_ELEMENT
 public:
     enum PluginType
@@ -31,7 +32,7 @@ public:
     Q_ENUM(PluginType)
 public:
     Plugin(QObject* parent = nullptr);
-    Plugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<double>> plugin,
+    Plugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin,
            const QString& name, bool enabled,
            bool sidechainExist, bool sidechainEnabled);
     Plugin(Plugin&& rhs) noexcept;
@@ -46,15 +47,19 @@ public:
     void setSidechainExist(bool sidechainExist);
     bool isSidechainEnabled() const;
     void setSidechainEnabled(bool sidechainEnabled);
+    bool isWindowVisible() const;
+    void setWindowVisible(bool windowVisible);
+
 signals:
     void nameChanged();
     void enabledChanged();
     void sidechainExistChanged();
     void sidechainEnabledChanged();
+    void windowVisibleChanged();
 public:
     void swap(Plugin& rhs) noexcept;
 private:
-    std::shared_ptr<Musec::Audio::Plugin::IPlugin<double>> plugin_;
+    std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin_;
     QString name_;
     bool enabled_;
     bool sidechainExist_;

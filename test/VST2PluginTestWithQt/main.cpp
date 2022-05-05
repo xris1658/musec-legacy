@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     PluginWindowThread pluginWindowThread;
     auto& window = *pluginWindowThread.window();
     pluginWindowThread.start();
-    Musec::Audio::Plugin::VST2Plugin<double> vst2(
+    Musec::Audio::Plugin::VST2Plugin<float> vst2(
         "C:\\Program Files\\VstPlugins\\WaveShell1-VST 13.1_x64.dll", false, 1279677267);
     auto inputCount = vst2.inputCount();
     auto outputCount = vst2.outputCount();

@@ -8,17 +8,22 @@ MIDITrack::MIDITrack():
     //
 }
 
-const std::vector<Musec::Audio::Track::PluginSequence<double>>& MIDITrack::getPluginSequences() const
+MIDITrack::~MIDITrack()
+{
+    pluginSequences_.clear();
+}
+
+const std::vector<Musec::Audio::Track::PluginSequence<float>>& MIDITrack::getPluginSequences() const
 {
     return pluginSequences_;
 }
 
-void MIDITrack::setPluginSequences(const std::vector<Musec::Audio::Track::PluginSequence<double>>& pluginSequences)
+void MIDITrack::setPluginSequences(const std::vector<Musec::Audio::Track::PluginSequence<float>>& pluginSequences)
 {
     pluginSequences_ = pluginSequences;
 }
 
-void MIDITrack::setPluginSequences(std::vector<Musec::Audio::Track::PluginSequence<double>>&& pluginSequences)
+void MIDITrack::setPluginSequences(std::vector<Musec::Audio::Track::PluginSequence<float>>&& pluginSequences)
 {
     pluginSequences_ = std::move(pluginSequences);
 }

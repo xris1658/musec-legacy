@@ -12,10 +12,9 @@ Plugin::Plugin(QObject* parent):
     sidechainExist_(false),
     sidechainEnabled_(false)
 {
-    //
 }
 
-Plugin::Plugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<double>> plugin,
+Plugin::Plugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin,
                const QString& name, bool enabled,
                bool sidechainExist, bool sidechainEnabled):
     QObject(nullptr),
@@ -25,7 +24,15 @@ Plugin::Plugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<double>> plugin,
     sidechainExist_(sidechainExist),
     sidechainEnabled_(sidechainEnabled)
 {
-
+    if(plugin_ && plugin_->window())
+    {
+        QObject::connect(plugin_->window(), &QWindow::visibleChanged,
+            this, [this](bool visible)
+            {
+                windowVisibleChanged();
+            }
+        );
+    }
 }
 
 Plugin::Plugin(Plugin&& rhs) noexcept
@@ -102,6 +109,26 @@ void Plugin::swap(Plugin& rhs) noexcept
     rhs.enabledChanged();
     rhs.sidechainExistChanged();
     rhs.sidechainEnabledChanged();
+}
+
+bool Plugin::isWindowVisible() const
+{
+    return plugin_ && plugin_->window() && plugin_->window()->isVisible();
+}
+
+void Plugin::setWindowVisible(bool windowVisible)
+{
+    if(plugin_ && plugin_->window())
+    {
+        if(windowVisible)
+        {
+            plugin_->window()->show();
+        }
+        else
+        {
+            plugin_->window()->hide();
+        }
+    }
 }
 }
 }

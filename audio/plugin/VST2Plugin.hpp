@@ -60,10 +60,15 @@ public:
 public:
     bool initialize(double sampleRate, std::int32_t maxSampleCount) override;
     bool uninitialize() override;
-    bool initializeEditor() override;
-    bool uninitializeEditor() override;
+private:
+    bool initializeEditor();
+    bool uninitializeEditor();
+public:
     bool attachToWindow(QWindow* window) override;
     bool detachWithWindow() override;
+
+    QWindow* window() override;
+
     bool activate() override;
     bool deactivate() override;
     bool startProcessing() override;
@@ -77,6 +82,7 @@ private:
     std::vector<SampleType*> inputsRaw_;
     std::vector<SampleType*> outputsRaw_;
     bool bypass_ = true;
+    QWindow* window_ = nullptr;
 };
 
 extern template class VST2Plugin<float>;
