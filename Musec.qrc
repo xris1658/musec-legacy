@@ -37,6 +37,7 @@
         <file>qmlproject/imports/Musec/Arrangement.qml</file>
         <file>qmlproject/imports/Musec/Assets.qml</file>
         <file>qmlproject/imports/Musec/Automation.qml</file>
+        <file>qmlproject/imports/Musec/BasicPluginEditor.qml</file>
         <file>qmlproject/imports/Musec/BigClock.qml</file>
         <file>qmlproject/imports/Musec/BigClockBackup.qml</file>
         <file>qmlproject/imports/Musec/Clip.qml</file>
