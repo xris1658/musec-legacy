@@ -17,6 +17,7 @@ PluginSequenceModel::PluginSequenceModel(int trackIndex, QObject* parent):
     roleNames_[RoleNames::NameRole] = "plugin_name";
     roleNames_[RoleNames::SidechainExistRole] = "sidechain_exist";
     roleNames_[RoleNames::SidechainEnabledRole] = "sidechain_enabled";
+    roleNames_[RoleNames::WindowVisibleRole] = "window_visible";
     auto track = Musec::Controller::AudioEngineController::AppProject()[trackIndex].track;
     if(track->trackType() == Musec::Audio::Track::TrackType::kInstrumentTrack)
     {
@@ -39,7 +40,7 @@ int PluginSequenceModel::itemCount() const
     {
         return instrumentTrack_->getAudioEffectPluginSequences()[0].size();
     }
-    if(audioTrack_)
+    else if(audioTrack_)
     {
         return audioTrack_->getPluginSequences()[0].size();
     }
@@ -74,7 +75,7 @@ QVariant PluginSequenceModel::data(const QModelIndex& index, int role) const
     {
         pluginSequence = &(instrumentTrack_->getAudioEffectPluginSequences()[0]);
     }
-    if(audioTrack_)
+    else if(audioTrack_)
     {
         pluginSequence = &(audioTrack_->getPluginSequences()[0]);
     }
@@ -90,6 +91,15 @@ QVariant PluginSequenceModel::data(const QModelIndex& index, int role) const
         return QVariant::fromValue(false); // FIXME
     case RoleNames::SidechainEnabledRole:
         return QVariant::fromValue(false);
+    case RoleNames::WindowVisibleRole:
+    {
+        auto& plugin = (*pluginSequence)[row];
+        if(plugin->hasUI())
+        {
+            return QVariant::fromValue(plugin->window()->isVisible());
+        }
+        return QVariant::fromValue(false);
+    }
     default:
         return QVariant();
     }
@@ -102,10 +112,61 @@ bool PluginSequenceModel::setData(const QModelIndex& index, const QVariant& valu
     {
         return false;
     }
+    const Musec::Audio::Track::PluginSequence<float>* pluginSequence = nullptr;
+    if(instrumentTrack_)
+    {
+        pluginSequence = &(instrumentTrack_->getAudioEffectPluginSequences()[0]);
+    }
+    else if(audioTrack_)
+    {
+        pluginSequence = &(audioTrack_->getPluginSequences()[0]);
+    }
     switch(role)
     {
+    case RoleNames::WindowVisibleRole:
+    {
+        auto& plugin = (*pluginSequence)[row];
+        if(plugin->hasUI())
+        {
+            plugin->window()->setVisible(value.value<bool>());
+            return true;
+        }
+        return false;
+    }
     default:
         return false;
+    }
+}
+
+void PluginSequenceModel::setWindowVisible(int effectIndex, bool visible)
+{
+    if(effectIndex < 0 || effectIndex >= itemCount())
+    {
+        return;
+    }
+    const Musec::Audio::Track::PluginSequence<float>* pluginSequence = nullptr;
+    if(instrumentTrack_)
+    {
+        pluginSequence = &(instrumentTrack_->getAudioEffectPluginSequences()[0]);
+    }
+    else if(audioTrack_)
+    {
+        pluginSequence = &(audioTrack_->getPluginSequences()[0]);
+    }
+    auto plugin = (*pluginSequence)[effectIndex];
+    auto window = plugin->window();
+    if(plugin->hasUI() && window)
+    {
+        if(visible)
+        {
+            window->show();
+        }
+        else
+        {
+            window->hide();
+        }
+        plugin->window()->setVisible(visible);
+        dataChanged(index(effectIndex), index(effectIndex), { RoleNames::WindowVisibleRole });
     }
 }
 

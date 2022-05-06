@@ -182,7 +182,7 @@ Rectangle {
                         }
                     }
                     onAudioEffectSlotVisibleToggled: {
-                        // TODO
+                        plugin_list.setWindowVisible(effectIndex, audioEffectWindowVisible);
                     }
                 }
                 Rectangle {

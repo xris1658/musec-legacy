@@ -39,6 +39,7 @@ Item {
         loadInstrument(path, pluginSubId, format);
     }
     signal instrumentSlotVisibleToggled(instrumentWindowVisible: bool)
+    signal audioEffectSlotVisibleToggled(audioEffectWindowVisible: bool, effectIndex: int)
     // 效果器操作
     signal audioEffectSlotDragEventEntered(drag: var, audioEffectIndex: int)
     onAudioEffectSlotDragEventEntered: {
@@ -68,7 +69,6 @@ Item {
         insertEffect(path, pluginSubId, format, audioEffectIndex);
     }
     signal blankAreaDragEventEntered(drag: var)
-    signal audioEffectSlotVisibleToggled(audioEffectWindowVisible: bool, audioEffectIndex: int)
     onBlankAreaDragEventEntered: {
         if(drag.getDataAsString("type") != 3 && root.channelType != CompleteTrack.InstrumentTrack) {
             drag.accepted = false;
@@ -159,6 +159,7 @@ Item {
                         slotEnabled: valid && activated
                         sidechainExist: sidechain_exist
                         sidechainEnabled: sidechain_enabled
+                        editorVisible: window_visible
                         onEntered: {
                             root.audioEffectSlotDragEventEntered(drag, index);
                         }

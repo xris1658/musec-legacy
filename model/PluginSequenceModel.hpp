@@ -31,6 +31,7 @@ public:
         NameRole,
         SidechainExistRole,
         SidechainEnabledRole,
+        WindowVisibleRole,
         RoleNamesEnd
     };
 public:
@@ -44,6 +45,7 @@ public:
     int columnCount(const QModelIndex&) const override;
     QVariant data(const QModelIndex& index, int role) const override;
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
+    Q_INVOKABLE void setWindowVisible(int effectIndex, bool visible);
 protected:
     RoleNamesType roleNames() const override;
 private:
