@@ -70,6 +70,7 @@ Rectangle {
                     "FromWithin": true,
                     "itemType": "plugin",
                     "pluginId": id,
+                    "uid": uid,
                     "type": type,
                     "name": name,
                     "path": path,
