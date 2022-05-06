@@ -11,7 +11,7 @@ Item {
     id: root
     width: 80
     height: 320
-    clip: true
+    clip: false
     Rectangle {
         anchors.fill: parent
         color: Constants.backgroundColor
@@ -68,7 +68,7 @@ Item {
     property int channelType
     property bool channelMuted: false
     property bool channelSolo: false
-    property bool  channelInverted: false
+    property bool channelInverted: false
     property bool channelArmRecording: false
     property real panning: 0.0
     property real stereo: 1.0
@@ -90,7 +90,7 @@ Item {
             id: channelEffects
             width: parent.width
             height: (root.height - channelControl.height - channelStereo.height - channelInfo.height) / (gainAndMeterVisible? 2: 1)
-            clip: true
+            clip: false
             ListView {
                 id: channelEffectList
                 anchors.fill: parent
@@ -98,6 +98,7 @@ Item {
                 visible: parent.visible
                 spacing: 2
                 interactive: false
+                clip: false
                 property int headerHeight: 20
                 header: Item {
                     id: effectListHeader
@@ -106,6 +107,7 @@ Item {
                     MixerSlot {
                         id: instrumentButton
                         visible: root.channelType == CompleteTrack.InstrumentTrack
+                        anchors.left: parent.left
                         anchors.fill: parent
                         anchors.bottomMargin: channelEffectList.spacing
                         name: root.instrumentName
@@ -126,10 +128,13 @@ Item {
                 }
                 delegate: Item {
                     width: parent.width
-                    height: channelEffectList.headerHeight + channelEffectList.spacing
+                    height: channelEffectList.headerHeight
                     MixerSlot {
                         anchors.fill: parent
-                        anchors.bottomMargin: channelEffectList.spacing
+                        name: plugin_name
+                        slotEnabled: valid && activated
+                        sidechainExist: sidechain_exist
+                        sidechainEnabled: sidechain_enabled
                     }
                 }
                 footer: Item {

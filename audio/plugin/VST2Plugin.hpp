@@ -77,6 +77,7 @@ public:
     QString getName() const override;
     void process(const Audio::Base::AudioBufferViews<SampleType>& inputs,
         const Audio::Base::AudioBufferViews<SampleType>& outputs) override;
+    bool hasUI() override;
 private:
     AEffect* effect_ = nullptr;
     std::vector<SampleType*> inputsRaw_;

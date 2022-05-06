@@ -21,6 +21,8 @@ void appendTrack(const Musec::Entities::CompleteTrack& track);
 double getCurrentSampleRate();
 long getMaxBlockSize();
 long getCurrentBlockSize();
+long getInputLatency();
+long getOutputLatency();
 }
 }
 }

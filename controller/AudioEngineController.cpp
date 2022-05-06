@@ -66,4 +66,22 @@ long getCurrentBlockSize()
     }
     return 512;
 }
+
+long getInputLatency()
+{
+    if(Musec::Audio::Driver::AppASIODriver())
+    {
+        return Musec::Audio::Driver::getASIODriverStreamInfo().inputLatencyInSamples;
+    }
+    return getCurrentBlockSize();
+}
+
+long getOutputLatency()
+{
+    if(Musec::Audio::Driver::AppASIODriver())
+    {
+        return Musec::Audio::Driver::getASIODriverStreamInfo().outputLatencyInSamples;
+    }
+    return getCurrentBlockSize();
+}
 }

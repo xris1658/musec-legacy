@@ -3,6 +3,7 @@
 
 #include "audio/engine/Project.hpp"
 #include "model/ModelBase.hpp"
+#include "model/PluginSequenceModel.hpp"
 
 #include <QAbstractListModel>
 
@@ -52,6 +53,7 @@ protected:
     virtual RoleNamesType roleNames() const override;
 private:
     Musec::Audio::Engine::Project& project_;
+    std::vector<std::unique_ptr<Musec::Model::PluginSequenceModel>> pluginSequences_;
     RoleNamesType roleNames_;
 };
 }

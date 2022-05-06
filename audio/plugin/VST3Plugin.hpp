@@ -85,13 +85,12 @@ private:
 public:
     bool attachToWindow(QWindow* window) override;
     bool detachWithWindow() override;
-
     QWindow* window() override;
-
     bool startProcessing() override;
     bool stopProcessing() override;
     bool getBypass() const override;
     QString getName() const override;
+    bool hasUI() override;
 public: // FUnknown interfaces
     Steinberg::tresult queryInterface(const Steinberg::TUID _iid, void** obj) override;
     Steinberg::uint32 addRef() override;

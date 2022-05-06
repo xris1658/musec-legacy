@@ -7,7 +7,7 @@ MCtrl.Button {
     id: root
     height: 20
     property bool slotEnabled: true
-    property string name: "Sample Text"
+    property string name: "Sample Text abcdefghjiijklmn"
     property bool sidechainExist: true
     property bool sidechainEnabled: false
     property bool editorVisible: false
@@ -16,41 +16,57 @@ MCtrl.Button {
     signal dropped(drop: var)
     signal exited()
     signal positionChanged(drag: var)
-    color: editorVisible? Constants.deviceEnabledColor: Constants.backgroundColor
-    Row {
-        Item {
-            id: enabledIndicatorArea
-            width: height
-            height: root.height
-            Button {
-                anchors.fill: parent
-                anchors.margins: 3
-                background: Rectangle {
-                    radius: width / 2
-                    border.color: Constants.borderColor
-                    color: root.slotEnabled? Constants.deviceEnabledColor: Constants.deviceDisabledColor
-                }
+    color: hovered? Qt.lighter(editorVisible? Constants.currentElementColor: Constants.backgroundColor):
+                    editorVisible? Constants.currentElementColor: Constants.backgroundColor
+    function getFullWidth() {
+        var ret = enabledIndicatorArea.width + pluginNameText.contentWidth;
+        console.log(ret);
+        return ret;
+    }
+
+    Item {
+        id: enabledIndicatorArea
+        width: height
+        height: root.height
+        Button {
+            anchors.fill: parent
+            anchors.margins: 3
+            background: Rectangle {
+                radius: width / 2
+                border.color: Constants.borderColor
+                color: root.slotEnabled? Constants.deviceEnabledColor: Constants.deviceDisabledColor
             }
         }
+    }
+    Rectangle {
+        anchors.left: enabledIndicatorArea.right
+        width: pluginNameText.width
+        height: root.height - root.border.width * 2
+        anchors.verticalCenter: parent.verticalCenter
+        color: root.hovered? root.color: "transparent"
         Text {
-            width: root.width - enabledIndicatorArea.width - (root.sidechainExist? sidechainIndicatorArea.width: 0)
+            id: pluginNameText
+            width: root.hovered? contentWidth + root.height - contentHeight: root.width - enabledIndicatorArea.width - (root.sidechainExist? sidechainIndicatorArea.width: 0)
             anchors.verticalCenter: parent.verticalCenter
             text: root.name
             color: root.editorVisible? Constants.backgroundColor: Constants.contentColor1
             font.family: Constants.font
+            elide: root.hovered? Text.ElideNone: Text.ElideRight
         }
-        Item {
-            id: sidechainIndicatorArea
-            width: height
-            height: root.height
-            visible: root.sidechainExist
-            Text {
-                anchors.centerIn: parent
-                font.family: "Noto Sans Mono"
-                font.styleName: "Condensed SemiBold"
-                color: root.sidechainEnabled? Constants.contentColor1: Constants.contentColor2
-                text: "SC"
-            }
+    }
+
+    Item {
+        anchors.right: parent.right
+        id: sidechainIndicatorArea
+        width: height
+        height: root.height
+        visible: root.sidechainExist
+        Text {
+            anchors.centerIn: parent
+            font.family: "Noto Sans Mono"
+            font.styleName: "Condensed SemiBold"
+            color: root.sidechainEnabled? Constants.contentColor1: Constants.contentColor2
+            text: "SC"
         }
     }
     DropArea {

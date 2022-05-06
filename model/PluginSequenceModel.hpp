@@ -1,6 +1,9 @@
 #ifndef MUSEC_MODEL_PLUGINSEQUENCEMODEL
 #define MUSEC_MODEL_PLUGINSEQUENCEMODEL
 
+#include "audio/track/AudioTrack.hpp"
+#include "audio/track/InstrumentTrack.hpp"
+#include "audio/track/ITrack.hpp"
 #include "entities/Plugin.hpp"
 #include "model/ModelBase.hpp"
 
@@ -13,12 +16,14 @@ namespace Musec
 {
 namespace Model
 {
+class TrackListModel;
+
 class PluginSequenceModel: public QAbstractListModel
 {
+    friend class TrackListModel;
     Q_OBJECT
 public:
     using Item = Musec::Entities::Plugin;
-    using List = std::vector<Item*>;
     enum RoleNames
     {
         ValidRole = Qt::UserRole,
@@ -29,21 +34,11 @@ public:
         RoleNamesEnd
     };
 public:
-    PluginSequenceModel(const List& list);
-    PluginSequenceModel(List&& list);
-    explicit PluginSequenceModel(QObject* parent = nullptr);
+    explicit PluginSequenceModel(int trackIndex, QObject* parent = nullptr);
     virtual ~PluginSequenceModel();
-public:
-    const List& getList() const;
-    void setList(const List& list);
-    void setList(List&& list);
 public:
     Q_INVOKABLE int itemCount() const;
     static constexpr int columnSize();
-public:
-    void insert(Item* plugin, int index);
-    void move(int from, int to);
-    void remove(int index);
 public:
     int rowCount(const QModelIndex&) const override;
     int columnCount(const QModelIndex&) const override;
@@ -52,7 +47,8 @@ public:
 protected:
     RoleNamesType roleNames() const override;
 private:
-    List list_;
+    std::shared_ptr<Musec::Audio::Track::InstrumentTrack> instrumentTrack_;
+    std::shared_ptr<Musec::Audio::Track::AudioTrack> audioTrack_;
     RoleNamesType roleNames_;
 };
 }

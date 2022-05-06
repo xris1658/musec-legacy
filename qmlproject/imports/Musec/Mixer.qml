@@ -107,7 +107,7 @@ Rectangle {
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            clip: true
+            clip: false
             model: tracks
             interactive: false
             ScrollBar.horizontal: ScrollBar {
@@ -132,8 +132,12 @@ Rectangle {
             }
             delegate: Row {
                 id: trackChannelListDelegate
+                clip: false
+                z: trackChannelList.count - index - 1
                 MixerChannel {
-                    effectListModel: pluginList
+                    z: 2
+                    clip: false
+                    effectListModel: plugin_list
                     channelName: trackname
                     channelColor: trackcolor
                     channelType: type
@@ -150,7 +154,7 @@ Rectangle {
                     instrumentName: instrument? instrument.name: qsTr("无乐器")
                     instrumentSidechainExist: instrument? instrument.sidechainExist: false
                     instrumentSidechainEnabled: instrument? instrument.sidechainEnabled: false
-                    instrumentEditorVisible: instrument && instrument.windowVisible
+                    instrumentEditorVisible: instrument? (instrument && instrument.windowVisible): false
                     onSetMute: (newMute) => {
                                    mute = newMute;
                                }
@@ -167,7 +171,6 @@ Rectangle {
                         tracks.loadInstrument(index, pluginFormat, pluginPath, pluginSubId);
                     }
                     onLoadEffect: {
-                        console.log("onLoadEffect() called.");
                         tracks.loadEffect(index, pluginFormat, pluginPath, pluginSubId, effectIndex);
                     }
                     onInstrumentSlotVisibleToggled: {
@@ -177,6 +180,7 @@ Rectangle {
                     }
                 }
                 Rectangle {
+                    z: 1
                     width: 1
                     height: root.height
                     color: Constants.borderColor

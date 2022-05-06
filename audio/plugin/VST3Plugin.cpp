@@ -189,6 +189,20 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
         throw std::runtime_error("Error creating VST3 audio processor!");
     }
     audioProcessorStatus_ = VST3AudioProcessorStatus::Initialized;
+    if constexpr(std::is_same_v<SampleType, float>)
+    {
+        if(effect_->canProcessSampleSize(Steinberg::Vst::SymbolicSampleSizes::kSample32) == Steinberg::kResultFalse)
+        {
+            throw std::runtime_error("The plugin cannot process 32-bit float!");
+        }
+    }
+    if constexpr(std::is_same_v<SampleType, double>)
+    {
+        if(effect_->canProcessSampleSize(Steinberg::Vst::SymbolicSampleSizes::kSample64) == Steinberg::kResultFalse)
+        {
+            throw std::runtime_error("The plugin cannot process 64-bit float!");
+        }
+    }
     initializeEditor();
     // ProcessSetup -------------------------------------------------------------------------
     Steinberg::Vst::ProcessSetup setup{};
@@ -616,6 +630,10 @@ template<typename SampleType> QString VST3Plugin<SampleType>::getName() const
 template<typename SampleType> QWindow* VST3Plugin<SampleType>::window()
 {
     return window_;
+}
+template<typename SampleType> bool VST3Plugin<SampleType>::hasUI()
+{
+    return view_;
 }
 
 template class VST3Plugin<float>;

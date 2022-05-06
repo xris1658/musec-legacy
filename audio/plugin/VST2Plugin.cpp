@@ -102,44 +102,20 @@ VstIntPtr pluginVST2Callback(AEffect* effect, VstInt32 opcode, VstInt32 index, V
         break;
         // 获取当前采样率
     case audioMasterGetSampleRate:
-    {
-        auto& driver = Musec::Audio::Driver::AppASIODriver();
-        if (driver)
-        {
-            ret = Musec::Audio::Driver::getASIODriverStreamInfo(driver).sampleRate;
-        }
+        ret = Musec::Controller::AudioEngineController::getCurrentSampleRate();
         break;
-    }
         // 获取缓冲区大小
     case audioMasterGetBlockSize:
-    {
-        auto& driver = Musec::Audio::Driver::AppASIODriver();
-        if (driver)
-        {
-            ret = Musec::Audio::Driver::getASIODriverStreamInfo(driver).preferredBufferSize;
-        }
+        ret = Musec::Controller::AudioEngineController::getCurrentBlockSize();
         break;
-    }
         // 获取输入延迟
     case audioMasterGetInputLatency:
-    {
-        auto& driver = Musec::Audio::Driver::AppASIODriver();
-        if (driver)
-        {
-            ret = Musec::Audio::Driver::getASIODriverStreamInfo(driver).inputLatencyInSamples;
-        }
+        ret = Musec::Controller::AudioEngineController::getInputLatency();
         break;
-    }
         // 获取输出延迟
     case audioMasterGetOutputLatency:
-    {
-        auto& driver = Musec::Audio::Driver::AppASIODriver();
-        if (driver)
-        {
-            ret = Musec::Audio::Driver::getASIODriverStreamInfo(driver).outputLatencyInSamples;
-        }
+        ret = Musec::Controller::AudioEngineController::getOutputLatency();
         break;
-    }
 #if kVstVersion < 2400
         case audioMasterGetPreviousPlug:
             break;
@@ -174,14 +150,14 @@ VstIntPtr pluginVST2Callback(AEffect* effect, VstInt32 opcode, VstInt32 index, V
         case audioMasterGetOutputSpeakerArrangement:
             break;
 #endif
-        // ptr: 字符串缓冲区, 填入软件厂商的名字
+        // ptr: 字符串缓冲区, 填入软件厂商的名称
     case audioMasterGetVendorString:
     {
         constexpr int vendorNameLength = sizeof(Musec::Base::CompanyName) + 1;
         std::strncpy(reinterpret_cast<char*>(ptr), Musec::Base::CompanyName, vendorNameLength);
         break;
     }
-        // ptr: 字符串缓冲区, 填入软件产品的名字
+        // ptr: 字符串缓冲区, 填入软件产品的名称
     case audioMasterGetProductString:
     {
         constexpr int productNameLength = sizeof(Musec::Base::ProductName) + 1;
@@ -334,6 +310,13 @@ VST2Plugin<SampleType>::VST2Plugin(const QString& path, bool scanPlugin, VstInt3
     {
         effect_ = ShellPluginId::instance().getShellPlugin(shellPluginId, true, pluginEntryProc);
     }
+    if constexpr(std::is_same_v<SampleType, double>)
+    {
+        if(!(effect_->flags & VstAEffectFlags::effFlagsCanDoubleReplacing))
+        {
+            throw std::runtime_error("This plugin cannot process 64-bit float!");
+        }
+    }
     effect_->dispatcher(effect_, effOpen, 0, 0, nullptr, 0);
     inputsRaw_ = std::vector<SampleType*>(inputCount(), nullptr);
     outputsRaw_ = std::vector<SampleType*>(outputCount(), nullptr);
@@ -441,7 +424,7 @@ void VST2Plugin<SampleType>::process(const Musec::Audio::Base::AudioBufferViews<
 
 template<typename SampleType> bool VST2Plugin<SampleType>::initializeEditor()
 {
-    return true;
+    return effect_->flags & VstAEffectFlags::effFlagsHasEditor;
 }
 
 template<typename SampleType> bool VST2Plugin<SampleType>::uninitializeEditor()
@@ -461,7 +444,7 @@ template<typename SampleType> QString VST2Plugin<SampleType>::getName() const
         return QString();
     }
     // Sylenth1 和 Ableton SAK 写入的字符个数为 kVstMaxEffectNameLen + 1
-    // VST2 给的最大长度貌似不算空终止符，文档和代码内注释写得也并不清楚，只能靠试错
+    // VST2 给的最大长度貌似不算空终止符，文档和代码内注释写得也并不清楚，只能靠试错得出结论
     std::array<char, kVstMaxEffectNameLen + 1> nameBuffer = {0};
 #ifndef NDEBUG
     std::memset(nameBuffer.data(), 0x7F, nameBuffer.size());
@@ -506,6 +489,12 @@ template<typename SampleType>
 QWindow* VST2Plugin<SampleType>::window()
 {
     return window_;
+}
+
+template<typename SampleType>
+bool VST2Plugin<SampleType>::hasUI()
+{
+    return effect_ && (effect_->flags & VstAEffectFlags::effFlagsHasEditor);
 }
 
 template class VST2Plugin<float>;
