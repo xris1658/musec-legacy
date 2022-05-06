@@ -15,20 +15,23 @@ WindowsLibraryRAII::WindowsLibraryRAII(): module_(NULL)
 
 WindowsLibraryRAII::WindowsLibraryRAII(const QString& path)
 {
+#ifndef NDEBUG
+    path_ = path;
+#endif
     std::wstring widePath = path.toStdWString();
     module_ = LoadLibraryExW(widePath.c_str(), NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
     if(module_ == NULL)
     {
         throw GetLastError();
     }
-    else
-    {
-    }
 }
 
 WindowsLibraryRAII::WindowsLibraryRAII(WindowsLibraryRAII&& rhs): module_(NULL)
 {
     std::swap(module_, rhs.module_);
+#ifndef NDEBUG
+    path_ = std::move(rhs.path_);
+#endif
 }
 
 WindowsLibraryRAII& WindowsLibraryRAII::operator=(WindowsLibraryRAII&& rhs)
@@ -36,6 +39,9 @@ WindowsLibraryRAII& WindowsLibraryRAII::operator=(WindowsLibraryRAII&& rhs)
     if(module_ != rhs.module_)
     {
         std::swap(module_, rhs.module_);
+#ifndef NDEBUG
+        std::swap(path_, rhs.path_);
+#endif
     }
     return *this;
 }

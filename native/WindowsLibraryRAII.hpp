@@ -25,6 +25,9 @@ public:
     HMODULE module() const;
 private:
     HMODULE module_;
+#ifndef NDEBUG
+    QString path_;
+#endif
 };
 
 template<typename ReturnType>
