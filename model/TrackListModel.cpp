@@ -262,8 +262,9 @@ void Musec::Model::TrackListModel::loadInstrument(int trackIndex, int pluginForm
     }
 }
 
-void Musec::Model::TrackListModel::loadEffect(
-    int trackIndex, int pluginFormat, const QString& path, int pluginSubId, int pluginIndex)
+
+void Musec::Model::TrackListModel::insertEffect(int trackIndex, int pluginFormat, const QString& path, int pluginSubId,
+    int pluginIndex)
 {
     auto track = project_[trackIndex];
     auto trackType = track.track->trackType();
@@ -271,53 +272,101 @@ void Musec::Model::TrackListModel::loadEffect(
     {
         return;
     }
-    else
+    std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin(nullptr);
+    if(pluginFormat == Musec::Base::PluginFormat::FormatVST2)
     {
-        std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin(nullptr);
-        if(pluginFormat == Musec::Base::PluginFormat::FormatVST2)
-        {
-            auto effect = std::make_shared<Musec::Audio::Plugin::VST2Plugin<float>>(path, false, pluginSubId);
-            plugin = std::static_pointer_cast<Musec::Audio::Plugin::IPlugin<float>>(effect);
-        }
-        else if(pluginFormat == Musec::Base::PluginFormat::FormatVST3)
-        {
-            auto effect = std::make_shared<Musec::Audio::Plugin::VST3Plugin<float>>(path, pluginSubId);
-            plugin = std::static_pointer_cast<Musec::Audio::Plugin::IPlugin<float>>(effect);
-        }
-        auto pluginInitResult =
-            plugin->initialize(Musec::Controller::AudioEngineController::getCurrentSampleRate(),
-                Musec::Controller::AudioEngineController::getMaxBlockSize());
-        if(!pluginInitResult)
-        {
-            plugin.reset();
-            return;
-        }
-        if(plugin->hasUI())
-        {
-            Musec::UI::createNewPluginWindow(plugin);
-        }
-        auto& pluginSequenceModel = pluginSequences_[trackIndex];
-        if(trackType == Musec::Audio::Track::TrackType::kInstrumentTrack)
-        {
-            auto instrumentTrack = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(project_[trackIndex].track);
-            pluginSequenceModel->beginInsertRows(QModelIndex(), pluginIndex, pluginIndex);
-            auto pluginSequences = instrumentTrack->getAudioEffectPluginSequences();
-            pluginSequences[0].insert(pluginSequences[0].begin() + pluginIndex, plugin);
-            instrumentTrack->setAudioEffectPluginSequences(std::move(pluginSequences));
-            pluginSequenceModel->endInsertRows();
-        }
-        else if(trackType == Musec::Audio::Track::TrackType::kAudioTrack)
-        {
-            auto audioTrack = std::static_pointer_cast<Musec::Audio::Track::AudioTrack>(project_[trackIndex].track);
-            pluginSequenceModel->beginInsertRows(QModelIndex(), pluginIndex, pluginIndex);
-            auto pluginSequences = audioTrack->getPluginSequences();
-            auto& pluginSequence = pluginSequences[0];
-            pluginSequence.insert(pluginSequence.begin() + pluginIndex, plugin);
-            audioTrack->setPluginSequences(std::move(pluginSequences));
-            pluginSequenceModel->endInsertRows();
-        }
-        dataChanged(index(trackIndex), index(trackIndex), QVector<int>(1, RoleNames::PluginListRole));
+        auto effect = std::make_shared<Musec::Audio::Plugin::VST2Plugin<float>>(path, false, pluginSubId);
+        plugin = std::static_pointer_cast<Musec::Audio::Plugin::IPlugin<float>>(effect);
     }
+    else if(pluginFormat == Musec::Base::PluginFormat::FormatVST3)
+    {
+        auto effect = std::make_shared<Musec::Audio::Plugin::VST3Plugin<float>>(path, pluginSubId);
+        plugin = std::static_pointer_cast<Musec::Audio::Plugin::IPlugin<float>>(effect);
+    }
+    auto pluginInitResult =
+        plugin->initialize(Musec::Controller::AudioEngineController::getCurrentSampleRate(),
+            Musec::Controller::AudioEngineController::getMaxBlockSize());
+    if(!pluginInitResult)
+    {
+        plugin.reset();
+        return;
+    }
+    if(plugin->hasUI())
+    {
+        Musec::UI::createNewPluginWindow(plugin);
+    }
+    auto& pluginSequenceModel = pluginSequences_[trackIndex];
+    if(trackType == Musec::Audio::Track::TrackType::kInstrumentTrack)
+    {
+        auto instrumentTrack = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(project_[trackIndex].track);
+        pluginSequenceModel->beginInsertRows(QModelIndex(), pluginIndex, pluginIndex);
+        auto pluginSequences = instrumentTrack->getAudioEffectPluginSequences();
+        pluginSequences[0].insert(pluginSequences[0].begin() + pluginIndex, plugin);
+        instrumentTrack->setAudioEffectPluginSequences(std::move(pluginSequences));
+        pluginSequenceModel->endInsertRows();
+    }
+    else if(trackType == Musec::Audio::Track::TrackType::kAudioTrack)
+    {
+        auto audioTrack = std::static_pointer_cast<Musec::Audio::Track::AudioTrack>(project_[trackIndex].track);
+        pluginSequenceModel->beginInsertRows(QModelIndex(), pluginIndex, pluginIndex);
+        auto pluginSequences = audioTrack->getPluginSequences();
+        auto& pluginSequence = pluginSequences[0];
+        pluginSequence.insert(pluginSequence.begin() + pluginIndex, plugin);
+        audioTrack->setPluginSequences(std::move(pluginSequences));
+        pluginSequenceModel->endInsertRows();
+    }
+    dataChanged(index(trackIndex), index(trackIndex), QVector<int>(1, RoleNames::PluginListRole));
+}
+
+void Musec::Model::TrackListModel::replaceEffect(int trackIndex, int pluginFormat, const QString& path, int pluginSubId,
+    int pluginIndex)
+{
+    auto track = project_[trackIndex];
+    auto trackType = track.track->trackType();
+    if(trackType == Musec::Audio::Track::TrackType::kMIDITrack)
+    {
+        return;
+    }
+    std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin(nullptr);
+    if(pluginFormat == Musec::Base::PluginFormat::FormatVST2)
+    {
+        auto effect = std::make_shared<Musec::Audio::Plugin::VST2Plugin<float>>(path, false, pluginSubId);
+        plugin = std::static_pointer_cast<Musec::Audio::Plugin::IPlugin<float>>(effect);
+    }
+    else if(pluginFormat == Musec::Base::PluginFormat::FormatVST3)
+    {
+        auto effect = std::make_shared<Musec::Audio::Plugin::VST3Plugin<float>>(path, pluginSubId);
+        plugin = std::static_pointer_cast<Musec::Audio::Plugin::IPlugin<float>>(effect);
+    }
+    auto pluginInitResult =
+        plugin->initialize(Musec::Controller::AudioEngineController::getCurrentSampleRate(),
+                           Musec::Controller::AudioEngineController::getMaxBlockSize());
+    if(!pluginInitResult)
+    {
+        plugin.reset();
+        return;
+    }
+    if(plugin->hasUI())
+    {
+        Musec::UI::createNewPluginWindow(plugin);
+    }
+    auto& pluginSequenceModel = pluginSequences_[trackIndex];
+    if(trackType == Musec::Audio::Track::TrackType::kInstrumentTrack)
+    {
+        auto instrumentTrack = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(project_[trackIndex].track);
+        auto pluginSequences = instrumentTrack->getAudioEffectPluginSequences();
+        pluginSequences[0][pluginIndex] = std::move(plugin);
+        instrumentTrack->setAudioEffectPluginSequences(std::move(pluginSequences));
+    }
+    else if(trackType == Musec::Audio::Track::TrackType::kAudioTrack)
+    {
+        auto audioTrack = std::static_pointer_cast<Musec::Audio::Track::AudioTrack>(project_[trackIndex].track);
+        auto pluginSequences = audioTrack->getPluginSequences();
+        pluginSequences[0][pluginIndex] = std::move(plugin);
+        audioTrack->setPluginSequences(std::move(pluginSequences));
+    }
+    pluginSequenceModel->dataChanged(index(pluginIndex), index(pluginIndex), {});
+    dataChanged(index(trackIndex), index(trackIndex), QVector<int>(1, RoleNames::PluginListRole));
 }
 
 Musec::Model::RoleNamesType Musec::Model::TrackListModel::roleNames() const

@@ -48,7 +48,8 @@ public:
     Q_INVOKABLE void appendTrack(const Musec::Entities::CompleteTrack& track);
     Q_INVOKABLE void removeTrack(int index);
     Q_INVOKABLE void loadInstrument(int trackIndex, int pluginFormat, const QString& path, int pluginSubId);
-    Q_INVOKABLE void loadEffect(int trackIndex, int pluginFormat, const QString& path, int pluginSubId, int pluginIndex);
+    Q_INVOKABLE void insertEffect(int trackIndex, int pluginFormat, const QString& path, int pluginSubId, int pluginIndex);
+    Q_INVOKABLE void replaceEffect(int trackIndex, int pluginFormat, const QString& path, int pluginSubId, int pluginIndex);
 protected:
     virtual RoleNamesType roleNames() const override;
 private:

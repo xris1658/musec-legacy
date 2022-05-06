@@ -24,18 +24,7 @@ Item {
     property alias effectListModel: channelEffectList.model
     readonly property int channelInfoHeight: 20
     readonly property int channelEffectListFooterMinimumHeight: 20
-    property ListModel list: ListModel {
-        id: effects
-        dynamicRoles: true
-/*
-        ListElement {
-            name: //插件名
-            effectEnabled: //插件启用状态
-            sidechainInputEnabled: //插件侧链输入存在
-            sidechainInputArmed: //插件侧链输入接入
-        }
-*/
-    }
+    // 乐器操作
     signal instrumentSlotDragEventEntered(drag: var)
     onInstrumentSlotDragEventEntered: {
         if(drag.getDataAsString("type") != 2) {
@@ -50,9 +39,38 @@ Item {
         loadInstrument(path, pluginSubId, format);
     }
     signal instrumentSlotVisibleToggled(instrumentWindowVisible: bool)
-    signal blankAreaDragEventEntered(drag: var)
-    onBlankAreaDragEventEntered: {
+    // 效果器操作
+    signal audioEffectSlotDragEventEntered(drag: var, audioEffectIndex: int)
+    onAudioEffectSlotDragEventEntered: {
         if(drag.getDataAsString("type") != 3) {
+            drag.accepted = false;
+        }
+    }
+    signal audioEffectSlotDragEventDropped(drop: var, audioEffectIndex: int)
+    onAudioEffectSlotDragEventDropped: {
+        var format = parseInt(drop.getDataAsString("format"));
+        var path = drop.getDataAsString("path");
+        var pluginSubId = parseInt(drop.getDataAsString("uid"));
+        replaceEffect(path, pluginSubId, format, audioEffectIndex);
+    }
+    signal betweenAudioEffectSlotDragEventEntered(drag: var, audioEffectIndex: int)
+    onBetweenAudioEffectSlotDragEventEntered: {
+        if(drag.getDataAsString("type") != 3) {
+            drag.accepted = false;
+        }
+    }
+
+    signal betweenAudioEffectSlotDragEventDropped(drop: var, audioEffectIndex: int)
+    onBetweenAudioEffectSlotDragEventDropped: {
+        var format = parseInt(drop.getDataAsString("format"));
+        var path = drop.getDataAsString("path");
+        var pluginSubId = parseInt(drop.getDataAsString("uid"));
+        insertEffect(path, pluginSubId, format, audioEffectIndex);
+    }
+    signal blankAreaDragEventEntered(drag: var)
+    signal audioEffectSlotVisibleToggled(audioEffectWindowVisible: bool, audioEffectIndex: int)
+    onBlankAreaDragEventEntered: {
+        if(drag.getDataAsString("type") != 3 && root.channelType != CompleteTrack.InstrumentTrack) {
             drag.accepted = false;
         }
     }
@@ -61,10 +79,16 @@ Item {
         var format = parseInt(drop.getDataAsString("format"));
         var path = drop.getDataAsString("path");
         var pluginSubId = parseInt(drop.getDataAsString("uid"));
-        loadEffect(path, pluginSubId, format, channelEffectList.count);
+        if(drop.getDataAsString("type") == 2) {
+            loadInstrument(path, pluginSubId, format);
+        }
+        else {
+            insertEffect(path, pluginSubId, format, channelEffectList.count);
+        }
     }
     signal loadInstrument(pluginPath: string, pluginSubId: int, pluginFormat: int)
-    signal loadEffect(pluginPath: string, pluginSubId: int, pluginFormat: int, effectIndex: int)
+    signal insertEffect(pluginPath: string, pluginSubId: int, pluginFormat: int, effectIndex: int)
+    signal replaceEffect(pluginPath: string, pluginSubId: int, pluginFormat: int, effectIndex: int)
     property int channelType
     property bool channelMuted: false
     property bool channelSolo: false
@@ -135,6 +159,32 @@ Item {
                         slotEnabled: valid && activated
                         sidechainExist: sidechain_exist
                         sidechainEnabled: sidechain_enabled
+                        onEntered: {
+                            root.audioEffectSlotDragEventEntered(drag, index);
+                        }
+                        onDropped: {
+                            root.audioEffectSlotDragEventDropped(drop, index);
+                        }
+                        onClicked: {
+                            root.audioEffectSlotVisibleToggled(!editorVisible, index);
+                        }
+                    }
+                    DropArea {
+                        id: betweenMixerSlot
+                        width: parent.width
+                        height: 10
+                        anchors.top: parent.top
+                        anchors.topMargin: (-height) / 2
+                        Rectangle {
+                            anchors.fill: parent
+                            color: betweenMixerSlot.containsDrag? Constants.mouseOverElementColor: "transparent"
+                        }
+                        onEntered: {
+                            root.betweenAudioEffectSlotDragEventEntered(drag, index);
+                        }
+                        onDropped: {
+                            root.betweenAudioEffectSlotDragEventDropped(drop, index);
+                        }
                     }
                 }
                 footer: Item {

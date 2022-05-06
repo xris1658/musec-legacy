@@ -117,7 +117,14 @@ void Project::addPluginWindowMapping(void* plugin, QWindow* window)
 
 void Project::removePluginWindowMapping(void* plugin)
 {
-    pluginAndWindow_.erase(plugin);
+    auto iterator = pluginAndWindow_.find(plugin);
+    if(iterator != pluginAndWindow_.end())
+    {
+        auto pluginWindow = iterator->second;
+        pluginWindow->setProperty("destroyingPlugin", QVariant::fromValue(true));
+        pluginWindow->close();
+        pluginWindow->destroy();
+    }
 }
 
 void Project::setPluginWindowSize(void* plugin, int width, int height)

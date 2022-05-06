@@ -7,7 +7,7 @@ MCtrl.Button {
     id: root
     height: 20
     property bool slotEnabled: true
-    property string name: "Sample Text abcdefghjiijklmn"
+    property string name: "Sample Text abcdefghjiijklmnopqrstuvwxyz"
     property bool sidechainExist: true
     property bool sidechainEnabled: false
     property bool editorVisible: false

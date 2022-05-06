@@ -479,9 +479,13 @@ template<typename SampleType> bool VST2Plugin<SampleType>::attachToWindow(QWindo
 
 template<typename SampleType> bool VST2Plugin<SampleType>::detachWithWindow()
 {
-    window_ = nullptr;
+    if(!window_)
+    {
+        return true;
+    }
     Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(effect_);
     effect_->dispatcher(effect_, AEffectOpcodes::effEditClose, 0, 0, nullptr, 0);
+    window_ = nullptr;
     return true;
 }
 

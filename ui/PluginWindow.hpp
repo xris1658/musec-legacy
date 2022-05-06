@@ -11,6 +11,7 @@ namespace UI
 {
 void createNewPluginWindow(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> pluginNeedsWindow);
 void createNewPluginWindowComplete(QWindow* window);
+void destroyPluginWindow(QWindow* window);
 }
 }
 

@@ -170,13 +170,19 @@ Rectangle {
                     onLoadInstrument: {
                         tracks.loadInstrument(index, pluginFormat, pluginPath, pluginSubId);
                     }
-                    onLoadEffect: {
-                        tracks.loadEffect(index, pluginFormat, pluginPath, pluginSubId, effectIndex);
+                    onInsertEffect: {
+                        tracks.insertEffect(index, pluginFormat, pluginPath, pluginSubId, effectIndex);
+                    }
+                    onReplaceEffect: {
+                        tracks.replaceEffect(index, pluginFormat, pluginPath, pluginSubId, effectIndex);
                     }
                     onInstrumentSlotVisibleToggled: {
                         if(instrument) {
                             instrument.windowVisible = instrumentWindowVisible;
                         }
+                    }
+                    onAudioEffectSlotVisibleToggled: {
+                        // TODO
                     }
                 }
                 Rectangle {

@@ -20,4 +20,13 @@ void createNewPluginWindowComplete(QWindow* window)
         window->showNormal();
     }
 }
+
+void destroyPluginWindow(QWindow* window)
+{
+    if(window)
+    {
+        window->setProperty("destroyingPlugin", QVariant::fromValue(true));
+        window->close();
+    }
+}
 }
