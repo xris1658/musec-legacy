@@ -355,6 +355,7 @@ void Musec::Model::TrackListModel::replaceEffect(int trackIndex, int pluginForma
     {
         auto instrumentTrack = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(project_[trackIndex].track);
         auto pluginSequences = instrumentTrack->getAudioEffectPluginSequences();
+        pluginSequences[0][pluginIndex].reset();
         pluginSequences[0][pluginIndex] = std::move(plugin);
         instrumentTrack->setAudioEffectPluginSequences(std::move(pluginSequences));
     }
@@ -362,6 +363,7 @@ void Musec::Model::TrackListModel::replaceEffect(int trackIndex, int pluginForma
     {
         auto audioTrack = std::static_pointer_cast<Musec::Audio::Track::AudioTrack>(project_[trackIndex].track);
         auto pluginSequences = audioTrack->getPluginSequences();
+        pluginSequences[0][pluginIndex].reset();
         pluginSequences[0][pluginIndex] = std::move(plugin);
         audioTrack->setPluginSequences(std::move(pluginSequences));
     }

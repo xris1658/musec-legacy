@@ -327,7 +327,12 @@ VST2Plugin<SampleType>::~VST2Plugin()
 {
     if(effect_)
     {
+        if(hasUI())
+        {
+            uninitializeEditor();
+        }
         stopProcessing();
+        deactivate();
         uninitialize();
         effect_->dispatcher(effect_, effClose, 0, 0, nullptr, 0);
     }
@@ -429,7 +434,7 @@ template<typename SampleType> bool VST2Plugin<SampleType>::initializeEditor()
 
 template<typename SampleType> bool VST2Plugin<SampleType>::uninitializeEditor()
 {
-    return true;
+    return detachWithWindow();
 }
 
 template<typename SampleType> bool VST2Plugin<SampleType>::getBypass() const
@@ -483,8 +488,8 @@ template<typename SampleType> bool VST2Plugin<SampleType>::detachWithWindow()
     {
         return true;
     }
-    Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(effect_);
     effect_->dispatcher(effect_, AEffectOpcodes::effEditClose, 0, 0, nullptr, 0);
+    Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(effect_);
     window_ = nullptr;
     return true;
 }

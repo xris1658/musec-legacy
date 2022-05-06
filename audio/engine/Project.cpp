@@ -4,6 +4,7 @@
 #include "audio/track/AudioTrack.hpp"
 #include "audio/track/InstrumentTrack.hpp"
 #include "audio/track/MIDITrack.hpp"
+#include "ui/PluginWindow.hpp"
 
 namespace Musec::Audio::Engine
 {
@@ -121,9 +122,7 @@ void Project::removePluginWindowMapping(void* plugin)
     if(iterator != pluginAndWindow_.end())
     {
         auto pluginWindow = iterator->second;
-        pluginWindow->setProperty("destroyingPlugin", QVariant::fromValue(true));
-        pluginWindow->close();
-        pluginWindow->destroy();
+        Musec::UI::destroyPluginWindow(pluginWindow);
     }
 }
 

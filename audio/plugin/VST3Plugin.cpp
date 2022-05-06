@@ -291,7 +291,10 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
 template<typename SampleType>
 bool VST3Plugin<SampleType>::uninitialize()
 {
-    uninitializeEditor();
+    if(editControllerStatus_ == VST3EditControllerStatus::Initialized)
+    {
+        uninitializeEditor();
+    }
     audioProcessorStatus_ = VST3AudioProcessorStatus::Initialized;
     effect_->release();
     auto terminateComponentResult = component_->terminate();
@@ -563,8 +566,8 @@ bool VST3Plugin<SampleType>::detachWithWindow()
     }
     if(view_)
     {
-        Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(effect_);
         view_->removed();
+        Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(effect_);
         window_ = nullptr;
         return true;
     }
