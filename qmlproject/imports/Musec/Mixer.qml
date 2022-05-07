@@ -22,6 +22,10 @@ Rectangle {
         height: contentHeight
         MCtrl.Action {
             text: qsTr("删除(&D)")
+            onTriggered: {
+                instrumentSlotOptions.parent = null;
+                tracks.removeInstrument(instrumentSlotOptions.trackIndex);
+            }
         }
     }
     MCtrl.Menu {
@@ -34,11 +38,16 @@ Rectangle {
         height: contentHeight
         MCtrl.Action {
             text: qsTr("删除(&D)")
+            onTriggered: {
+                audioEffectSlotOptions.parent = null;
+                tracks.removeEffect(audioEffectSlotOptions.trackIndex, audioEffectSlotOptions.effectIndex);
+            }
         }
     }
     signal instrumentSlotRightClicked(trackIndex: int, x: int, y: int)
     onInstrumentSlotRightClicked: {
         instrumentSlotOptions.parent = (trackChannelList.itemAtIndex(trackIndex).mixerChannelOfThis.instrumentSlot);
+        instrumentSlotOptions.trackIndex = trackIndex;
         instrumentSlotOptions.x = x;
         instrumentSlotOptions.y = y;
         instrumentSlotOptions.open();
@@ -46,7 +55,9 @@ Rectangle {
 
     signal audioEffectSlotRightClicked(trackIndex: int, audioEffectIndex: int, x: int, y: int)
     onAudioEffectSlotRightClicked: {
-        audioEffectSlotOptions.parent = trackChannelList.itemAtIndex(trackIndex).getAudioEffectSlot(audioEffectIndex);
+        audioEffectSlotOptions.parent = trackChannelList.itemAtIndex(trackIndex).mixerChannelOfThis.getAudioEffectSlot(audioEffectIndex);
+        audioEffectSlotOptions.trackIndex = trackIndex;
+        audioEffectSlotOptions.effectIndex = audioEffectIndex;
         audioEffectSlotOptions.x = x;
         audioEffectSlotOptions.y = y;
         audioEffectSlotOptions.open();

@@ -16,7 +16,7 @@
 
 namespace Impl
 {
-Musec::Entities::Plugin getPlugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin)
+Musec::Entities::Plugin getPlugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin = nullptr)
 {
     if(plugin)
     {
@@ -360,6 +360,67 @@ void Musec::Model::TrackListModel::replaceEffect(int trackIndex, int pluginForma
     }
     pluginSequenceModel->dataChanged(index(pluginIndex), index(pluginIndex), {});
     dataChanged(index(trackIndex), index(trackIndex), QVector<int>(1, RoleNames::PluginListRole));
+}
+
+void Musec::Model::TrackListModel::removeInstrument(int trackIndex)
+{
+    if(trackIndex < 0 || trackIndex >= trackCount())
+    {
+        return;
+    }
+    auto track = project_[trackIndex].track;
+    if(track->trackType() == Musec::Audio::Track::kInstrumentTrack)
+    {
+        auto instrumentTrack = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(track);
+        instrumentTrack->setInstrument(nullptr);
+        *(instruments_[trackIndex]) = Impl::getPlugin();
+        dataChanged(this->index(trackIndex), this->index(trackIndex), { RoleNames::InstrumentRole });
+    }
+}
+void Musec::Model::TrackListModel::removeEffect(int trackIndex, int pluginIndex)
+{
+    if(trackIndex < 0 || trackIndex >= trackCount())
+    {
+        return;
+    }
+    auto track = project_[trackIndex].track;
+    auto& pluginSequenceModel = pluginSequences_[trackIndex];
+    if(track->trackType() == Musec::Audio::Track::kInstrumentTrack)
+    {
+        auto instrumentTrack = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(track);
+        pluginSequenceModel->beginRemoveRows(QModelIndex(), pluginIndex, pluginIndex);
+        auto pluginSequences = instrumentTrack->getAudioEffectPluginSequences();
+        pluginSequences[0].erase(pluginSequences[0].begin() + pluginIndex);
+        instrumentTrack->setAudioEffectPluginSequences(std::move(pluginSequences));
+        pluginSequenceModel->endRemoveRows();
+    }
+    else if(track->trackType() == Musec::Audio::Track::kAudioTrack)
+    {
+        auto audioTrack = std::static_pointer_cast<Musec::Audio::Track::AudioTrack>(track);
+        pluginSequenceModel->beginRemoveRows(QModelIndex(), pluginIndex, pluginIndex);
+        auto pluginSequences = audioTrack->getPluginSequences();
+        pluginSequences[0].erase(pluginSequences[0].begin() + pluginIndex);
+        audioTrack->setPluginSequences(std::move(pluginSequences));
+        pluginSequenceModel->endRemoveRows();
+    }
+}
+void Musec::Model::TrackListModel::copyInstrument(int fromTrackIndex, int toTrackIndex)
+{
+
+}
+void Musec::Model::TrackListModel::copyEffect(
+    int fromTrackIndex, int fromPluginIndex, int toTrackIndex, int toPluginIndex)
+{
+
+}
+void Musec::Model::TrackListModel::moveInstrument(int fromTrackIndex, int toTrackIndex)
+{
+
+}
+void Musec::Model::TrackListModel::moveEffect(
+    int fromTrackIndex, int fromPluginIndex, int toTrackIndex, int toPluginIndex)
+{
+
 }
 
 Musec::Model::RoleNamesType Musec::Model::TrackListModel::roleNames() const

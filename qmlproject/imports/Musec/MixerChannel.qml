@@ -186,7 +186,7 @@ Item {
                             //
                         }
                         onRightClicked: {
-                            //
+                            root.audioSlotRightClicked(index, x, y);
                         }
                     }
                     DropArea {
