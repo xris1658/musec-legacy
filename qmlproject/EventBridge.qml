@@ -28,6 +28,11 @@ QtObject {
     signal appendTrack(track: CompleteTrack)
     signal insertTrack(track: CompleteTrack, index: int)
     signal newPluginWindowReady()
+    signal setIcon()
+    function setWindowIcon(window: Window) {
+        Objects.mainWindow.windowToSetIcon = window;
+        setIcon();
+    }
 
     signal addAssetDirectory(directory: string)
     signal renameAssetDirectory(id: int, name: string)

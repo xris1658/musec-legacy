@@ -18,6 +18,8 @@ extern QQuickWindow* splashWindow;
 extern QQuickWindow* mainWindow;
 // 选项窗口
 extern QQuickWindow* optionsWindow;
+
+void setIcon(QWindow* window);
 }
 }
 

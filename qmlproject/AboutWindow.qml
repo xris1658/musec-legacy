@@ -107,6 +107,7 @@ Window {
                         var component = Qt.createComponent("TechnicalSupportWindow.qml");
                         if(component.status == Component.Ready) {
                             var aboutWindow = component.createObject(root);
+                            EventBridge.setWindowIcon(aboutWindow);
                             aboutWindow.showNormal();
                         }
                     }

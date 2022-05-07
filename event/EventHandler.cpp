@@ -61,6 +61,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      this,        SLOT(onInsertTrack(Musec::Entities::CompleteTrack*, int)));
     QObject::connect(eventBridge, SIGNAL(newPluginWindowReady()),
                      this,        SLOT(onNewPluginWindowReady()));
+    QObject::connect(eventBridge, SIGNAL(setIcon()),
+                     this,        SLOT(onSetIcon()));
     // (this) C++ -> C++ (other)
     QObject::connect(this,             &EventHandler::updatePluginList,
                      mainWindowEvents, &MainWindow::updatePluginList);
@@ -366,5 +368,11 @@ void EventHandler::onNewPluginWindowReady()
 {
     auto window = Musec::UI::mainWindow->property("windowForPlugin").value<QWindow*>();
     Musec::UI::createNewPluginWindowComplete(window);
+}
+
+void EventHandler::onSetIcon()
+{
+    auto window = Musec::UI::mainWindow->property("windowToSetIcon").value<QWindow*>();
+    Musec::UI::setIcon(window);
 }
 }

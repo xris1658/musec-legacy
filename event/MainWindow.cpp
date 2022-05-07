@@ -28,6 +28,7 @@ void MainWindow::openMainWindow()
     Musec::Controller::AudioEngineController::initializeFacility();
     engine->load(QUrl("qrc:///qmlproject/Musec.qml"));
     mainWindow = qobject_cast<QQuickWindow*>(engine->rootObjects()[1]);
+    mainWindow->setIcon(QIcon(":/qmlproject/images/Musec-image-2.ico"));
     optionsWindow = mainWindow->findChild<QQuickWindow*>("optionsWindow");
     auto eventBridge = qvariant_cast<QObject*>(splashWindow->property("eventBridge"));
     Musec::Event::eventBridge = eventBridge;

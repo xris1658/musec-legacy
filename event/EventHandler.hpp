@@ -59,6 +59,7 @@ public slots:
     void onTrackInserted(const QModelIndex& parent, int first, int last);
     void onTrackAboutToBeRemoved(const QModelIndex &parent, int first, int last);
     void onNewPluginWindowReady();
+    void onSetIcon();
 private:
     std::vector<QMetaObject::Connection> optionsWindowConnection;
 };

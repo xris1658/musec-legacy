@@ -26,6 +26,7 @@ ApplicationWindow {
     readonly property EventBridge eventBridge: EventBridge
     property bool canClose: false
     property PluginWindow windowForPlugin: null
+    property Window windowToSetIcon: null
 
     property MView.ExplorerView explorerViewOnRequest
 
@@ -208,6 +209,7 @@ ApplicationWindow {
                     var component = Qt.createComponent("AboutWindow.qml");
                     if(component.status == Component.Ready) {
                         var aboutWindow = component.createObject(mainWindow);
+                        EventBridge.setWindowIcon(aboutWindow);
                         aboutWindow.showNormal();
                     }
                 }
@@ -218,6 +220,7 @@ ApplicationWindow {
                     var component = Qt.createComponent("AboutQtWindow.qml");
                     if(component.status == Component.Ready) {
                         var aboutWindow = component.createObject(mainWindow);
+                        EventBridge.setWindowIcon(aboutWindow);
                         aboutWindow.showNormal();
                     }
                 }
@@ -231,6 +234,7 @@ ApplicationWindow {
                 text: qsTr("选项(&P)...")
                 shortcut: "Ctrl+,"
                 onTriggered: {
+                    EventBridge.setWindowIcon(optionsWindow);
                     optionsWindow.showNormal();
                     EventBridge.optionsWindowOpened();
                 }
@@ -302,6 +306,7 @@ ApplicationWindow {
                         var component = Qt.createComponent("MixdownWindow.qml");
                         if(component.status == Component.Ready) {
                             var mixdownWindow = component.createObject(mainWindow);
+                            EventBridge.setWindowIcon(mixdownWindow);
                             mixdownWindow.showNormal();
                         }
                     }
@@ -332,6 +337,7 @@ ApplicationWindow {
                         projectPropertiesWindow.fileName = openedFile;
                         projectPropertiesWindow.filePath = filePath;
                         projectPropertiesWindow.newProject = newProject;
+                        EventBridge.setWindowIcon(projectPropertiesWindow);
                         projectPropertiesWindow.showNormal();
                     }
                 }
@@ -582,6 +588,7 @@ ApplicationWindow {
                     if(component.status == Component.Ready) {
                         var tapTempoWindow = component.createObject(mainWindow);
                         tapTempoWindow.bpm = mainWindow.bpm;
+                        EventBridge.setWindowIcon(tapTempoWindow);
                         tapTempoWindow.showNormal();
                     }
                 }
