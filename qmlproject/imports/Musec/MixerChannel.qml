@@ -17,13 +17,19 @@ Item {
         color: Constants.backgroundColor
     }
     property bool instrumentEnabled: false
-    property string instrumentName: qsTr("无乐器")
+    property string instrumentName
     property bool instrumentSidechainExist: false
     property bool instrumentSidechainEnabled: false
     property bool instrumentEditorVisible: false
     property alias effectListModel: channelEffectList.model
     readonly property int channelInfoHeight: 20
     readonly property int channelEffectListFooterMinimumHeight: 20
+    property Item instrumentSlot
+    signal instrumentSlotRightClicked(x: int, y: int)
+    function getAudioEffectSlot(index: int) {
+        return channelEffectList.itemAtIndex(index);
+    }
+    signal audioSlotRightClicked(index: int, x: int, y: int)
     // 乐器操作
     signal instrumentSlotDragEventEntered(drag: var)
     onInstrumentSlotDragEventEntered: {
@@ -148,6 +154,13 @@ Item {
                         onClicked: {
                             root.instrumentSlotVisibleToggled(!editorVisible);
                         }
+                        onEnabledButtonClicked: {
+                            //
+                        }
+                        onRightClicked: {
+                            root.instrumentSlot = instrumentButton;
+                            root.instrumentSlotRightClicked(x, y);
+                        }
                     }
                 }
                 delegate: Item {
@@ -168,6 +181,12 @@ Item {
                         }
                         onClicked: {
                             root.audioEffectSlotVisibleToggled(!editorVisible, index);
+                        }
+                        onEnabledButtonClicked: {
+                            //
+                        }
+                        onRightClicked: {
+                            //
                         }
                     }
                     DropArea {

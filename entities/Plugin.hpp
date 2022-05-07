@@ -38,6 +38,7 @@ public:
            bool sidechainExist, bool sidechainEnabled);
     Plugin(Plugin&& rhs) noexcept;
     Plugin& operator=(Plugin&& rhs) noexcept;
+    ~Plugin();
 public:
     bool valid() const;
     const QString& getName() const;
@@ -59,6 +60,8 @@ signals:
     void windowVisibleChanged();
 public:
     void swap(Plugin& rhs) noexcept;
+private:
+    void initSignal();
 private:
     std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin_;
     QString name_;

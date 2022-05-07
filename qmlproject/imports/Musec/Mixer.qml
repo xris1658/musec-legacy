@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQml 2.15
 
 import Musec.Controls 1.0 as MCtrl
 import Musec.Models 1.0 as MModel
@@ -11,6 +12,46 @@ Rectangle {
     property bool effectVisible: true
     property bool gainAndMeterVisible: true
     clip: true
+
+    MCtrl.Menu {
+        id: instrumentSlotOptions
+        property int trackIndex
+        title: qsTr("乐器操作")
+        delegate: MCtrl.MenuItem {}
+        width: 100
+        height: contentHeight
+        MCtrl.Action {
+            text: qsTr("删除(&D)")
+        }
+    }
+    MCtrl.Menu {
+        id: audioEffectSlotOptions
+        property int trackIndex
+        property int effectIndex
+        title: qsTr("音频效果器操作")
+        delegate: MCtrl.MenuItem {}
+        width: 100
+        height: contentHeight
+        MCtrl.Action {
+            text: qsTr("删除(&D)")
+        }
+    }
+    signal instrumentSlotRightClicked(trackIndex: int, x: int, y: int)
+    onInstrumentSlotRightClicked: {
+        instrumentSlotOptions.parent = (trackChannelList.itemAtIndex(trackIndex).mixerChannelOfThis.instrumentSlot);
+        instrumentSlotOptions.x = x;
+        instrumentSlotOptions.y = y;
+        instrumentSlotOptions.open();
+    }
+
+    signal audioEffectSlotRightClicked(trackIndex: int, audioEffectIndex: int, x: int, y: int)
+    onAudioEffectSlotRightClicked: {
+        audioEffectSlotOptions.parent = trackChannelList.itemAtIndex(trackIndex).getAudioEffectSlot(audioEffectIndex);
+        audioEffectSlotOptions.x = x;
+        audioEffectSlotOptions.y = y;
+        audioEffectSlotOptions.open();
+    }
+
     Rectangle {
         id: mixerContentIndicator
         width: 25
@@ -134,7 +175,9 @@ Rectangle {
                 id: trackChannelListDelegate
                 clip: false
                 z: trackChannelList.count - index - 1
+                property MixerChannel mixerChannelOfThis: mixerChannel
                 MixerChannel {
+                    id: mixerChannel
                     z: 2
                     clip: false
                     effectListModel: plugin_list
@@ -151,7 +194,7 @@ Rectangle {
                     channelInverted: invertPhase
                     channelArmRecording: armRecording
                     instrumentEnabled: instrument? instrument.enabled: false
-                    instrumentName: instrument? instrument.name: qsTr("无乐器")
+                    instrumentName: instrument? instrument.name: undefined
                     instrumentSidechainExist: instrument? instrument.sidechainExist: false
                     instrumentSidechainEnabled: instrument? instrument.sidechainEnabled: false
                     instrumentEditorVisible: instrument? (instrument && instrument.windowVisible): false
@@ -183,6 +226,12 @@ Rectangle {
                     }
                     onAudioEffectSlotVisibleToggled: {
                         plugin_list.setWindowVisible(effectIndex, audioEffectWindowVisible);
+                    }
+                    onInstrumentSlotRightClicked: {
+                        root.instrumentSlotRightClicked(index, x, y);
+                    }
+                    onAudioSlotRightClicked: (audioEffectIndex, menuX, menuY) => {
+                        root.audioEffectSlotRightClicked(index, audioEffectIndex, menuX, menuY);
                     }
                 }
                 Rectangle {

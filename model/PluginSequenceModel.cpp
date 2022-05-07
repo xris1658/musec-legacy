@@ -157,15 +157,7 @@ void PluginSequenceModel::setWindowVisible(int effectIndex, bool visible)
     auto window = plugin->window();
     if(plugin->hasUI() && window)
     {
-        if(visible)
-        {
-            window->show();
-        }
-        else
-        {
-            window->hide();
-        }
-        plugin->window()->setVisible(visible);
+        window->setVisible(visible);
         dataChanged(index(effectIndex), index(effectIndex), { RoleNames::WindowVisibleRole });
     }
 }

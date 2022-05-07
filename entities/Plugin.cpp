@@ -24,20 +24,13 @@ Plugin::Plugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin,
     sidechainExist_(sidechainExist),
     sidechainEnabled_(sidechainEnabled)
 {
-    if(plugin_ && plugin_->window())
-    {
-        QObject::connect(plugin_->window(), &QWindow::visibleChanged,
-            this, [this](bool visible)
-            {
-                windowVisibleChanged();
-            }
-        );
-    }
+    initSignal();
 }
 
 Plugin::Plugin(Plugin&& rhs) noexcept
 {
     swap(rhs);
+    initSignal();
 }
 
 Plugin& Plugin::operator=(Plugin&& rhs) noexcept
@@ -45,8 +38,14 @@ Plugin& Plugin::operator=(Plugin&& rhs) noexcept
     if(this != &rhs)
     {
         swap(rhs);
+        initSignal();
     }
     return *this;
+}
+
+Plugin::~Plugin()
+{
+
 }
 
 bool Plugin::valid() const
@@ -62,6 +61,7 @@ const QString& Plugin::getName() const
 void Plugin::setName(const QString& name)
 {
     name_ = name;
+    nameChanged();
 }
 
 bool Plugin::isEnabled() const
@@ -72,6 +72,7 @@ bool Plugin::isEnabled() const
 void Plugin::setEnabled(bool enabled)
 {
     enabled_ = enabled;
+    enabledChanged();
 }
 
 bool Plugin::isSidechainExist() const
@@ -82,6 +83,7 @@ bool Plugin::isSidechainExist() const
 void Plugin::setSidechainExist(bool sidechainExist)
 {
     sidechainExist_ = sidechainExist;
+    sidechainExistChanged();
 }
 
 bool Plugin::isSidechainEnabled() const
@@ -92,6 +94,7 @@ bool Plugin::isSidechainEnabled() const
 void Plugin::setSidechainEnabled(bool sidechainEnabled)
 {
     sidechainEnabled_ = sidechainEnabled;
+    sidechainEnabledChanged();
 }
 
 void Plugin::swap(Plugin& rhs) noexcept
@@ -128,6 +131,19 @@ void Plugin::setWindowVisible(bool windowVisible)
         {
             plugin_->window()->hide();
         }
+        windowVisibleChanged();
+    }
+}
+void Plugin::initSignal()
+{
+    if(plugin_ && plugin_->window())
+    {
+        QObject::connect(plugin_->window(), &QWindow::visibleChanged,
+            this, [this](bool visible)
+            {
+                windowVisibleChanged();
+            }
+        );
     }
 }
 }

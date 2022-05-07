@@ -23,8 +23,10 @@ MCtrl.Button {
         console.log(ret);
         return ret;
     }
-
+    signal enabledButtonClicked()
+    signal rightClicked(x: int, y: int)
     Item {
+        z: 1
         id: enabledIndicatorArea
         width: height
         height: root.height
@@ -36,9 +38,34 @@ MCtrl.Button {
                 border.color: Constants.borderColor
                 color: root.slotEnabled? Constants.deviceEnabledColor: Constants.deviceDisabledColor
             }
+            onClicked: {
+                root.enabledButtonClicked();
+            }
+        }
+    }
+
+    MouseArea {
+        id: nameMouseArea
+        anchors.left: enabledIndicatorArea.right
+        anchors.right: root.right
+        height: root.height
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        Item {
+            id: nameMouseAreaRect
+            anchors.fill: parent
+        }
+        onClicked: {
+            if(mouse.button == Qt.LeftButton) {
+                root.clicked();
+            }
+            else {
+                var pointToRoot = nameMouseAreaRect.mapToItem(root, mouse.x, mouse.y);
+                root.rightClicked(pointToRoot.x, pointToRoot.y);
+            }
         }
     }
     Rectangle {
+        z: 2
         anchors.left: enabledIndicatorArea.right
         width: pluginNameText.width
         height: root.height - root.border.width * 2
@@ -54,8 +81,8 @@ MCtrl.Button {
             elide: root.hovered? Text.ElideNone: Text.ElideRight
         }
     }
-
     Item {
+        z: 1
         anchors.right: parent.right
         id: sidechainIndicatorArea
         width: height

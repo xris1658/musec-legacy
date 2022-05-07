@@ -104,8 +104,8 @@ QVariant Musec::Model::TrackListModel::data(const QModelIndex& index, int role) 
         {
             return QVariant();
         }
-        auto plugin = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(track.track)->getInstrument();
-        return QVariant::fromValue(new Musec::Entities::Plugin(Impl::getPlugin(plugin)));
+        // data() 有 const 约束，但指向 const 的指针不能用于 Qt 的元对象系统，因此转走 const
+        return QVariant::fromValue(const_cast<Musec::Entities::Plugin*>(instruments_[row].get()));
     }
     case RoleNames::PluginListRole:
     {
@@ -185,6 +185,10 @@ void Musec::Model::TrackListModel::insertTrack(int index, const Musec::Entities:
 {
     emit beginInsertRows(QModelIndex(), index, index);
     project_.insertTrack(index, track);
+    instruments_.insert(
+        instruments_.begin() + index,
+        std::make_unique<Musec::Entities::Plugin>(Impl::getPlugin(nullptr))
+    );
     pluginSequences_.insert(
         pluginSequences_.begin() + index,
         std::make_unique<Musec::Model::PluginSequenceModel>(index)
@@ -204,6 +208,7 @@ void Musec::Model::TrackListModel::removeTrack(int index)
         return;
     }
     emit beginRemoveRows(QModelIndex(), index, index);
+    instruments_.erase(instruments_.begin() + index);
     pluginSequences_.erase(pluginSequences_.begin() + index);
     project_.eraseTrack(index);
     emit endRemoveRows();
@@ -217,51 +222,37 @@ void Musec::Model::TrackListModel::loadInstrument(int trackIndex, int pluginForm
         return;
     }
     auto instrumentTrack = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(project_[trackIndex].track);
+    std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> instrument = nullptr;
     if(pluginFormat == Musec::Base::PluginFormat::FormatVST3)
     {
-        auto instrument = std::make_shared<Musec::Audio::Plugin::VST3Plugin<float>>(
+        instrument = std::make_shared<Musec::Audio::Plugin::VST3Plugin<float>>(
             path, pluginSubId
         );
-        instrumentTrack->setInstrument(instrument);
-        try
-        {
-            instrument->initialize(Musec::Controller::AudioEngineController::getCurrentSampleRate(),
-                                   Musec::Controller::AudioEngineController::getMaxBlockSize());
-        }
-        catch(...)
-        {
-            return;
-        }
-        if(instrument->hasUI())
-        {
-            Musec::UI::createNewPluginWindow(instrument);
-        }
-        instrument->activate();
-        instrument->startProcessing();
-        dataChanged(index(trackIndex), index(trackIndex), QVector<int>(1, RoleNames::InstrumentRole));
     }
     else if(pluginFormat == Musec::Base::PluginFormat::FormatVST2)
     {
-        auto instrument = std::make_shared<Musec::Audio::Plugin::VST2Plugin<float>>(
+        instrument = std::make_shared<Musec::Audio::Plugin::VST2Plugin<float>>(
             path, false, pluginSubId
         );
-        instrumentTrack->setInstrument(instrument);
-        instrument->initialize(Musec::Controller::AudioEngineController::getCurrentSampleRate(),
-                               Musec::Controller::AudioEngineController::getMaxBlockSize());
-        if (instrument->hasUI())
-        {
-            Musec::UI::createNewPluginWindow(instrument);
-        }
-        instrument->activate();
-        instrument->startProcessing();
-        dataChanged(index(trackIndex), index(trackIndex), QVector<int>(1, RoleNames::InstrumentRole));
     }
     else
     {
         return;
     }
+    instrument->initialize(Musec::Controller::AudioEngineController::getCurrentSampleRate(),
+                           Musec::Controller::AudioEngineController::getMaxBlockSize());
+    instrumentTrack->setInstrument(nullptr);
+    dataChanged(index(trackIndex), index(trackIndex), QVector<int>(1, RoleNames::InstrumentRole));
+    if (instrument->hasUI())
+    {
+        Musec::UI::createNewPluginWindow(instrument);
+    }
+    instrument->activate();
+    instrument->startProcessing();
+    instrumentTrack->setInstrument(instrument);
+    instruments_[trackIndex] = std::make_unique<Musec::Entities::Plugin>(Impl::getPlugin(instrument));
+    dataChanged(index(trackIndex), index(trackIndex), QVector<int>(1, RoleNames::InstrumentRole));
 }
-
 
 void Musec::Model::TrackListModel::insertEffect(int trackIndex, int pluginFormat, const QString& path, int pluginSubId,
     int pluginIndex)
