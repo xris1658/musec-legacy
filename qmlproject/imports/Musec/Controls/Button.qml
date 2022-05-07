@@ -7,6 +7,16 @@ QQC2.Button {
     property alias color: _background.color
     id: control
     text: ""
+    signal pressed()
+    signal released()
+    function press() {
+        down = true;
+        pressed();
+    }
+    function release() {
+        down = false;
+        released();
+    }
     contentItem: Text {
         text: control.text.indexOf('&')>=0?
                   control.text.split('&')[0] + control.text.split('&')[1].substring(0, 1) + control.text.split('&')[1].substring(1, control.text.split('&')[1].length)
@@ -29,6 +39,21 @@ QQC2.Button {
     Keys.onEnterPressed: {
         if(control.activeFocus) {
             control.clicked();
+        }
+    }
+    Keys.onSpacePressed: {
+        if(control.activeFocus && (!down)) {
+            press();
+        }
+    }
+//    Keys.onEscapePressed: {
+//        down = false;
+//    }
+
+    Keys.onReleased: {
+        if(control.activeFocus && down) {
+            release();
+            clicked();
         }
     }
 }

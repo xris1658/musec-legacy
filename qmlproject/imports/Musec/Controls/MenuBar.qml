@@ -7,9 +7,10 @@ QQC2.MenuBar {
     width: contentItem.contentWidth
     height: 20
     property color backgroundColor: "#000000"
+    property bool oneMenuOpened: false
     delegate: QQC2.MenuBarItem {
         id: menuBarItem
-        font.family: "Noto Sans CJK SC Medium"
+        font.family: Constants.font
         font.pointSize: 10
         height: 20
         // 菜单项内容
@@ -33,6 +34,9 @@ QQC2.MenuBar {
             color: menuBarItem.highlighted? Constants.menuHighlightBackgroundColor: menuBar.background.color
             border.width: 1
             border.color: color
+        }
+        onPressed: {
+            menu.open();
         }
     }
     background: Rectangle {
