@@ -117,6 +117,7 @@ void setASIODriver(const QString& clsid)
         {
             try
             {
+                AppASIODriver() = ASIODriver();
                 AppASIODriver() = ASIODriver(item);
                 auto& appConfig = ConfigController::appConfig();
                 appConfig["musec"]["options"]["audio-hardware"]["driver-id"] =
