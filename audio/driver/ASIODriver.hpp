@@ -56,7 +56,7 @@ public:
     IASIO* operator*() const;
     IASIO* operator->() const;
 public:
-    // static QList<ASIODriverBasicInfo> enumerateDrivers();
+    void swap(ASIODriver& rhs);
 private:
     ASIODriverBasicInfo driverInfo_;
     IASIO* driver_; // 有必要上 shared_ptr 吗？
@@ -72,6 +72,14 @@ ASIODriver& AppASIODriver();
 ASIODriverStreamInfo getASIODriverStreamInfo(const ASIODriver& driver = AppASIODriver());
 }
 }
+}
+
+namespace std
+{
+template<>
+void swap(Musec::Audio::Driver::ASIODriver& lhs, Musec::Audio::Driver::ASIODriver& rhs)
+    noexcept(std::is_move_constructible_v<Musec::Audio::Driver::ASIODriver>
+        && std::is_move_assignable_v<Musec::Audio::Driver::ASIODriver>);
 }
 
 #endif // MUSEC_AUDIO_DRIVER_ASIODRIVER

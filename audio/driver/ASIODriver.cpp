@@ -118,14 +118,12 @@ ASIODriver::ASIODriver(const ASIODriverBasicInfo& info): driverInfo_(info), driv
 
 ASIODriver::ASIODriver(ASIODriver&& rhs) noexcept: driverInfo_(std::tuple<QString, QString>("", "")), driver_(nullptr)
 {
-    std::swap(driverInfo_, rhs.driverInfo_);
-    std::swap(driver_, rhs.driver_);
+    swap(rhs);
 }
 
 ASIODriver& ASIODriver::operator=(ASIODriver&& rhs) noexcept
 {
-    std::swap(driverInfo_, rhs.driverInfo_);
-    std::swap(driver_, rhs.driver_);
+    swap(rhs);
     return *this;
 }
 
@@ -166,6 +164,12 @@ IASIO* ASIODriver::operator->() const
     return driver();
 }
 
+void ASIODriver::swap(ASIODriver& rhs)
+{
+    std::swap(driver_, rhs.driver_);
+    std::swap(driverInfo_, rhs.driverInfo_);
+}
+
 // QList<ASIODriverBasicInfo> ASIODriver::enumerateDrivers()
 // {
 //     return Musec::Audio::Driver::enumerateDrivers();
@@ -180,18 +184,31 @@ ASIODriver& AppASIODriver()
 ASIODriverStreamInfo getASIODriverStreamInfo(const ASIODriver& driver)
 {
     std::array<char, 64> name = {0};
-    driver->getDriverName(name.data());
-    // auto version = driver->getDriverVersion();
-    ASIODriverStreamInfo ret;
-    driver->getChannels(&ret.inputChannelCount,
-                        &ret.outputChannelCount);
-    driver->getLatencies(&ret.inputLatencyInSamples,
-                         &ret.outputLatencyInSamples);
-    driver->getBufferSize(&ret.minimumBufferSize,
-                          &ret.maximumBufferSize,
-                          &ret.preferredBufferSize,
-                          &ret.bufferSizeGranularity);
-    driver->getSampleRate(&ret.sampleRate);
-    return ret;
+    if(*driver)
+    {
+        driver->getDriverName(name.data());
+        // auto version = driver->getDriverVersion();
+        ASIODriverStreamInfo ret;
+        driver->getChannels(&ret.inputChannelCount,
+                            &ret.outputChannelCount);
+        driver->getLatencies(&ret.inputLatencyInSamples,
+                             &ret.outputLatencyInSamples);
+        driver->getBufferSize(&ret.minimumBufferSize,
+                              &ret.maximumBufferSize,
+                              &ret.preferredBufferSize,
+                              &ret.bufferSizeGranularity);
+        driver->getSampleRate(&ret.sampleRate);
+        return ret;
+    }
+}
+}
+
+namespace std
+{
+template<> void swap(Musec::Audio::Driver::ASIODriver& lhs, Musec::Audio::Driver::ASIODriver& rhs)
+noexcept(std::is_move_constructible_v<Musec::Audio::Driver::ASIODriver>
+         && std::is_move_assignable_v<Musec::Audio::Driver::ASIODriver>)
+{
+    lhs.swap(rhs);
 }
 }
