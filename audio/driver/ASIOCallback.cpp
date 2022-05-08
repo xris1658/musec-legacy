@@ -32,43 +32,45 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
                                      long doubleBufferIndex,
                                      ASIOBool directProcess)
 {
-    auto currentBufferIndex = bufferIndex;
-    if(bufferIndex == 1)
+    if(*AppASIODriver())
     {
-        bufferIndex = 0;
-    }
-    else
-    {
-        bufferIndex = 1;
-    }
-    std::array<int, 64> inputs = {0};
-    std::array<int, 64> outputs = {0};
-    int inputCount = 0;
-    int outputCount = 0;
-    auto bufferSize = getASIODriverStreamInfo(AppASIODriver()).preferredBufferSize;
-    auto& bufferInfoList = getASIOBufferInfoList();
-    auto& channelInfoList = getASIOChannelInfoList();
-    for(int i = 0; i < channelInfoList.size(); ++i)
-    {
-        if(channelInfoList[i].isActive)
+        auto currentBufferIndex = bufferIndex;
+        if(bufferIndex == 1)
         {
-            if(channelInfoList[i].isInput)
+            bufferIndex = 0;
+        }
+        else
+        {
+            bufferIndex = 1;
+        }
+        std::array<int, 64> inputs = {0};
+        std::array<int, 64> outputs = {0};
+        int inputCount = 0;
+        int outputCount = 0;
+        auto bufferSize = getASIODriverStreamInfo(AppASIODriver()).preferredBufferSize;
+        auto& bufferInfoList = getASIOBufferInfoList();
+        auto& channelInfoList = getASIOChannelInfoList();
+        for(int i = 0; i < channelInfoList.size(); ++i)
+        {
+            if(channelInfoList[i].isActive)
             {
-                inputs[inputCount++] = i;
-            }
-            else
-            {
-                outputs[outputCount++] = i;
+                if(channelInfoList[i].isInput)
+                {
+                    inputs[inputCount++] = i;
+                }
+                else
+                {
+                    outputs[outputCount++] = i;
+                }
             }
         }
-    }
-    for(int i = 0; i < inputCount; ++i)
-    {
-        auto buffer = bufferInfoList[inputs[i]].buffers;
-        // MSB -> BE; LSB -> LE;
-        auto type = channelInfoList[i].type;
-        switch(type)
+        for(int i = 0; i < inputCount; ++i)
         {
+            auto buffer = bufferInfoList[inputs[i]].buffers;
+            // MSB -> BE; LSB -> LE;
+            auto type = channelInfoList[i].type;
+            switch(type)
+            {
             case ASIOSTInt16MSB:
                 break;
             case ASIOSTInt24MSB:
@@ -115,17 +117,17 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
                 break;
             default:
                 break;
+            }
         }
-    }
-    for(int i = 0; i < outputCount; ++i)
-    {
-        auto buffer = bufferInfoList[outputs[i]].buffers;
-        // buffer[0] 和 buffer[1] 是 ASIO 的双缓冲区地址
-        // 有些驱动程序 (e.g. ASIO4ALL）不使用双缓冲，两个地址相同
-        // 多数驱动程序（FlexASIO）使用双缓冲，两个地址不同
-        auto type = channelInfoList[i].type;
-        switch(type)
+        for(int i = 0; i < outputCount; ++i)
         {
+            auto buffer = bufferInfoList[outputs[i]].buffers;
+            // buffer[0] 和 buffer[1] 是 ASIO 的双缓冲区地址
+            // 有些驱动程序 (e.g. ASIO4ALL）不使用双缓冲，两个地址相同
+            // 多数驱动程序（FlexASIO）使用双缓冲，两个地址不同
+            auto type = channelInfoList[i].type;
+            switch(type)
+            {
             case ASIOSTInt16MSB:
                 break;
             case ASIOSTInt24MSB:
@@ -176,7 +178,9 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
                 break;
             default:
                 break;
+            }
         }
+        return nullptr;
     }
     return nullptr;
 }
@@ -191,7 +195,6 @@ long onASIOMessage(long selector,
                    void* message,
                    double* opt)
 {
-    // TODO
     long ret = 0;
     switch(selector)
     {
