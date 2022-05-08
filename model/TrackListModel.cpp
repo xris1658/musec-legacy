@@ -286,6 +286,8 @@ void Musec::Model::TrackListModel::insertEffect(int trackIndex, int pluginFormat
     {
         Musec::UI::createNewPluginWindow(plugin);
     }
+    plugin->activate();
+    plugin->startProcessing();
     auto& pluginSequenceModel = pluginSequences_[trackIndex];
     if(trackType == Musec::Audio::Track::TrackType::kInstrumentTrack)
     {

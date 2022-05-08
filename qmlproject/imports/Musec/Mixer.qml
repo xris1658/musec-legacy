@@ -205,7 +205,7 @@ Rectangle {
                     channelInverted: invertPhase
                     channelArmRecording: armRecording
                     instrumentEnabled: instrument? instrument.enabled: false
-                    instrumentName: instrument? instrument.name: undefined
+                    instrumentName: instrument? instrument.name: ""
                     instrumentSidechainExist: instrument? instrument.sidechainExist: false
                     instrumentSidechainEnabled: instrument? instrument.sidechainEnabled: false
                     instrumentEditorVisible: instrument? (instrument && instrument.windowVisible): false
