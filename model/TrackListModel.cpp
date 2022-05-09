@@ -242,7 +242,6 @@ void Musec::Model::TrackListModel::loadInstrument(int trackIndex, int pluginForm
     instrument->initialize(Musec::Controller::AudioEngineController::getCurrentSampleRate(),
                            Musec::Controller::AudioEngineController::getMaxBlockSize());
     instrumentTrack->setInstrument(nullptr);
-    dataChanged(index(trackIndex), index(trackIndex), QVector<int>(1, RoleNames::InstrumentRole));
     if (instrument->hasUI())
     {
         Musec::UI::createNewPluginWindow(instrument);
@@ -379,6 +378,7 @@ void Musec::Model::TrackListModel::removeInstrument(int trackIndex)
         dataChanged(this->index(trackIndex), this->index(trackIndex), { RoleNames::InstrumentRole });
     }
 }
+
 void Musec::Model::TrackListModel::removeEffect(int trackIndex, int pluginIndex)
 {
     if(trackIndex < 0 || trackIndex >= trackCount())
@@ -406,19 +406,23 @@ void Musec::Model::TrackListModel::removeEffect(int trackIndex, int pluginIndex)
         pluginSequenceModel->endRemoveRows();
     }
 }
+
 void Musec::Model::TrackListModel::copyInstrument(int fromTrackIndex, int toTrackIndex)
 {
 
 }
+
 void Musec::Model::TrackListModel::copyEffect(
     int fromTrackIndex, int fromPluginIndex, int toTrackIndex, int toPluginIndex)
 {
 
 }
+
 void Musec::Model::TrackListModel::moveInstrument(int fromTrackIndex, int toTrackIndex)
 {
 
 }
+
 void Musec::Model::TrackListModel::moveEffect(
     int fromTrackIndex, int fromPluginIndex, int toTrackIndex, int toPluginIndex)
 {

@@ -66,9 +66,7 @@ private:
 public:
     bool attachToWindow(QWindow* window) override;
     bool detachWithWindow() override;
-
     QWindow* window() override;
-
     bool activate() override;
     bool deactivate() override;
     bool startProcessing() override;

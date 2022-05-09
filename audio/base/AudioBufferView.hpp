@@ -40,6 +40,11 @@ public:
         return size_;
     }
 public:
+    void init()
+    {
+        std::memset(samples_, 0, size_ * sizeof(SampleType));
+    }
+public:
     const SampleType& operator[](std::size_t index) const
     {
         return samples_[index];

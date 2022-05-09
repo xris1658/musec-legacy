@@ -52,6 +52,8 @@ private:
         return reinterpret_cast<void*>(poolIterator->data() + memoryBlockSize_ * blockIndex);
     }
 public:
+    std::size_t memoryBlockSize() const noexcept;
+public:
     std::shared_ptr<void> lendMemoryBlock();
 private:
     std::size_t memoryBlockSize_;

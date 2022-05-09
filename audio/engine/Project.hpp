@@ -3,6 +3,7 @@
 
 #include "audio/arrangement/TrackSequence.hpp"
 #include "audio/engine/Graph.hpp"
+#include "base/FixedSizeMemoryPool.hpp"
 #include "entities/CompleteTrack.hpp"
 #include "audio/plugin/IPlugin.hpp"
 #include "audio/track/AudioTrack.hpp"
@@ -21,6 +22,7 @@ namespace Audio
 {
 namespace Engine
 {
+constexpr int initialReserveTrackCount = 16;
 class Project
 {
 public:
@@ -35,7 +37,7 @@ public:
         std::vector<bool>::reference trackArmRecording;
     };
 public:
-    Project();
+    Project(int reserveTrackCount = initialReserveTrackCount);
     Project(const Project&) = delete;
     Project(Project&&) = default;
     ~Project();
@@ -48,13 +50,17 @@ public:
 public:
     void insertTrack(std::size_t index, const Musec::Entities::CompleteTrack& track);
     void eraseTrack(std::size_t index);
+    void clear();
 public:
     void addPluginWindowMapping(void* plugin, QWindow* window);
     void removePluginWindowMapping(void* plugin);
     void setPluginWindowSize(void* plugin, int width, int height);
 public:
-    void clear();
+    void process();
 private:
+    Musec::Base::FixedSizeMemoryPool audioBufferPool_;
+    std::vector<std::shared_ptr<float>> audioBuffer_;
+    Musec::Base::FixedSizeMemoryBlock masterTrackAudioBuffer_;
     Musec::Audio::Engine::Graph<std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>>> pluginGraph_;
     std::vector<std::shared_ptr<Musec::Audio::Track::ITrack>> tracks_;
     Musec::Audio::Track::AudioTrack masterTrack_;

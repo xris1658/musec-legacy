@@ -92,6 +92,11 @@ void FixedSizeMemoryPool::expandPool()
     mutexes_.emplace_back();
 }
 
+std::size_t FixedSizeMemoryPool::memoryBlockSize() const noexcept
+{
+    return memoryBlockSize_;
+}
+
 std::shared_ptr<void> FixedSizeMemoryPool::lendMemoryBlock()
 {
     for(auto iterators = begin(); iterators != end(); ++iterators)

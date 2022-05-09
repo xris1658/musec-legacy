@@ -8,9 +8,26 @@
 
 namespace Musec::Audio::Engine
 {
-Project::Project()
+Project::Project(int reserveTrackCount):
+    audioBufferPool_(
+        sizeof(float) * Musec::Controller::AudioEngineController::getMaxBlockSize() * 2, reserveTrackCount
+    ),
+    audioBuffer_(),
+    masterTrackAudioBuffer_(audioBufferPool_.memoryBlockSize()),
+    pluginGraph_(),
+    tracks_(),
+    masterTrack_(),
+    gain_(), panning_(),
+    trackMute_(), trackSolo_(), trackInvertPhase_(), trackArmRecording_(),
+    pluginAndWindow_()
 {
-
+    audioBuffer_.reserve(reserveTrackCount);
+    tracks_.reserve(reserveTrackCount);
+    gain_.reserve(reserveTrackCount);
+    trackMute_.reserve(reserveTrackCount);
+    trackSolo_.reserve(reserveTrackCount);
+    trackInvertPhase_.reserve(reserveTrackCount);
+    trackArmRecording_.reserve(reserveTrackCount);
 }
 
 Project::~Project()
@@ -61,6 +78,9 @@ void Project::insertTrack(std::size_t index, const Musec::Entities::CompleteTrac
     {
     case Musec::Entities::CompleteTrack::TrackType::AudioTrack:
     {
+        audioBuffer_.emplace_back(
+            std::reinterpret_pointer_cast<float>(audioBufferPool_.lendMemoryBlock())
+        );
         auto audioTrack = std::make_shared<Musec::Audio::Track::AudioTrack>();
         auto pluginSequences = audioTrack->getPluginSequences();
         pluginSequences.emplace_back();
@@ -70,11 +90,15 @@ void Project::insertTrack(std::size_t index, const Musec::Entities::CompleteTrac
     }
     case Musec::Entities::CompleteTrack::TrackType::MIDITrack:
     {
+        audioBuffer_.emplace_back(std::shared_ptr<float>(nullptr));
         trackPointer = std::make_shared<Musec::Audio::Track::MIDITrack>();
         break;
     }
     case Musec::Entities::CompleteTrack::TrackType::InstrumentTrack:
     {
+        audioBuffer_.emplace_back(
+            std::reinterpret_pointer_cast<float>(audioBufferPool_.lendMemoryBlock())
+        );
         auto instrumentTrack = std::make_shared<Musec::Audio::Track::InstrumentTrack>();
         auto pluginSequences = instrumentTrack->getAudioEffectPluginSequences();
         pluginSequences.emplace_back();
@@ -102,6 +126,7 @@ void Project::insertTrack(std::size_t index, const Musec::Entities::CompleteTrac
 
 void Project::eraseTrack(std::size_t index)
 {
+    audioBuffer_.erase(audioBuffer_.begin() + index);
     tracks_.erase(tracks_.begin() + index);
     gain_.erase(gain_.begin() + index);
     panning_.erase(panning_.begin() + index);
@@ -142,11 +167,64 @@ const Musec::Audio::Track::AudioTrack& Project::masterTrack() const
     return masterTrack_;
 }
 
+void Project::process()
+{
+    masterTrackAudioBuffer_.init();
+    std::size_t currentBlockSize = Musec::Controller::AudioEngineController::getCurrentBlockSize();
+    Musec::Audio::Base::AudioBufferViews<float> audioBufferViews(
+        2, Musec::Audio::Base::AudioBufferView<float>()
+    );
+    Musec::Audio::Base::AudioBufferViews<float> masterTrackAudioBufferViews{
+        Musec::Audio::Base::AudioBufferView<float>(reinterpret_cast<float*>(masterTrackAudioBuffer_.data()), currentBlockSize),
+        Musec::Audio::Base::AudioBufferView<float>(reinterpret_cast<float*>(masterTrackAudioBuffer_.data() + currentBlockSize), currentBlockSize)
+    };
+    for(int i = 0; i < trackCount(); ++i)
+    {
+        auto& track = tracks_[i];
+        audioBufferViews = {
+            {audioBuffer_[i].get(), currentBlockSize},
+            {audioBuffer_[i].get() + currentBlockSize, currentBlockSize}
+        };
+        audioBufferViews[0].init();
+        audioBufferViews[1].init();
+        if(track->trackType() == Musec::Audio::Track::TrackType::kInstrumentTrack)
+        {
+            auto instrumentTrack = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(track);
+            const auto& audioEffectPlugins = instrumentTrack->getAudioEffectPluginSequences()[0];
+            for(const auto& audioEffect: audioEffectPlugins)
+            {
+                audioEffect->process(audioBufferViews, audioBufferViews);
+            }
+        }
+        else if(track->trackType() == Musec::Audio::Track::TrackType::kAudioTrack)
+        {
+            auto audioTrack = std::static_pointer_cast<Musec::Audio::Track::AudioTrack>(track);
+            const auto& plugins = audioTrack->getPluginSequences()[0];
+            for(const auto& audioEffect: plugins)
+            {
+                audioEffect->process(audioBufferViews, audioBufferViews);
+            }
+        }
+    }
+    // const auto& masterTrackAudioEffects = masterTrack_.getPluginSequences()[0];
+    // for(const auto& audioEffect: masterTrackAudioEffects)
+    // {
+    //     audioEffect->process(masterTrackAudioBufferViews, masterTrackAudioBufferViews);
+    // }
+}
+
 void Project::clear()
 {
     pluginGraph_.clear();
+    audioBuffer_.clear();
     tracks_.clear();
     masterTrack_.clear();
+    gain_.clear();
+    panning_.clear();
+    trackMute_.clear();
+    trackSolo_.clear();
+    trackInvertPhase_.clear();
+    trackArmRecording_.clear();
     pluginAndWindow_.clear();
 }
 }

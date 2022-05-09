@@ -62,7 +62,15 @@ long getCurrentBlockSize()
 {
     if(Musec::Audio::Driver::AppASIODriver())
     {
-        return Musec::Audio::Driver::getASIODriverStreamInfo().preferredBufferSize;
+        auto ret = Musec::Audio::Driver::getASIODriverStreamInfo().preferredBufferSize;
+        if(ret != 0)
+        {
+            return ret;
+        }
+        else
+        {
+            return Musec::Audio::Driver::getASIODriverStreamInfo().maximumBufferSize;
+        }
     }
     return 512;
 }

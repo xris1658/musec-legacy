@@ -154,8 +154,6 @@ void VST3Plugin<SampleType>::process(const Musec::Audio::Base::AudioBufferViews<
 {
     auto inputsSize = inputs.size();
     auto outputsSize = outputs.size();
-    assert(inputCount() == inputsSize);
-    assert(outputCount() == outputsSize);
     for (int i = 0; i < inputsSize; ++i)
     {
         inputRaw_[i] = inputs[i].getSamples();
