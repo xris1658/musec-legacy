@@ -53,7 +53,9 @@ long getMaxBlockSize()
 {
     if(Musec::Audio::Driver::AppASIODriver())
     {
-        return Musec::Audio::Driver::getASIODriverStreamInfo().maximumBufferSize;
+        auto ret = Musec::Audio::Driver::getASIODriverStreamInfo().maximumBufferSize;
+        if(ret != 0xcccccccc && ret != 0)
+        return ret;
     }
     return 88200; // 我记得 FlexASIO 的最大采样数是这个
 }

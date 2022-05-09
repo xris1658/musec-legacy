@@ -57,6 +57,7 @@ public:
     void setPluginWindowSize(void* plugin, int width, int height);
 public:
     void process();
+    const Musec::Base::FixedSizeMemoryBlock& masterTrackAudioBuffer() const;
 private:
     Musec::Base::FixedSizeMemoryPool audioBufferPool_;
     std::vector<std::shared_ptr<float>> audioBuffer_;

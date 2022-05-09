@@ -28,6 +28,9 @@ Project::Project(int reserveTrackCount):
     trackSolo_.reserve(reserveTrackCount);
     trackInvertPhase_.reserve(reserveTrackCount);
     trackArmRecording_.reserve(reserveTrackCount);
+    auto seq = masterTrack_.getPluginSequences();
+    seq.emplace_back();
+    masterTrack_.setPluginSequences(std::move(seq));
 }
 
 Project::~Project()
@@ -167,6 +170,11 @@ const Musec::Audio::Track::AudioTrack& Project::masterTrack() const
     return masterTrack_;
 }
 
+const Musec::Base::FixedSizeMemoryBlock& Project::masterTrackAudioBuffer() const
+{
+    return masterTrackAudioBuffer_;
+}
+
 void Project::process()
 {
     masterTrackAudioBuffer_.init();
@@ -178,39 +186,55 @@ void Project::process()
         Musec::Audio::Base::AudioBufferView<float>(reinterpret_cast<float*>(masterTrackAudioBuffer_.data()), currentBlockSize),
         Musec::Audio::Base::AudioBufferView<float>(reinterpret_cast<float*>(masterTrackAudioBuffer_.data() + currentBlockSize), currentBlockSize)
     };
-    for(int i = 0; i < trackCount(); ++i)
+#pragma omp parallel
     {
-        auto& track = tracks_[i];
-        audioBufferViews = {
-            {audioBuffer_[i].get(), currentBlockSize},
-            {audioBuffer_[i].get() + currentBlockSize, currentBlockSize}
-        };
-        audioBufferViews[0].init();
-        audioBufferViews[1].init();
-        if(track->trackType() == Musec::Audio::Track::TrackType::kInstrumentTrack)
+#pragma omp for
+        for(int i = 0; i < trackCount(); ++i)
         {
-            auto instrumentTrack = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(track);
-            const auto& audioEffectPlugins = instrumentTrack->getAudioEffectPluginSequences()[0];
-            for(const auto& audioEffect: audioEffectPlugins)
+            auto& track = tracks_[i];
+            audioBufferViews = {
+                    {audioBuffer_[i].get(), currentBlockSize},
+                    {audioBuffer_[i].get() + currentBlockSize, currentBlockSize}
+            };
+            audioBufferViews[0].init();
+            audioBufferViews[1].init();
+            if(track->trackType() == Musec::Audio::Track::TrackType::kInstrumentTrack)
             {
-                audioEffect->process(audioBufferViews, audioBufferViews);
+                auto instrumentTrack = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(track);
+                const auto& instrument = instrumentTrack->getInstrument();
+                if(instrument)
+                {
+                    instrument->process({}, audioBufferViews);
+                }
+                const auto& audioEffectPlugins = instrumentTrack->getAudioEffectPluginSequences()[0];
+                for(const auto& audioEffect: audioEffectPlugins)
+                {
+                    audioEffect->process(audioBufferViews, audioBufferViews);
+                }
             }
-        }
-        else if(track->trackType() == Musec::Audio::Track::TrackType::kAudioTrack)
-        {
-            auto audioTrack = std::static_pointer_cast<Musec::Audio::Track::AudioTrack>(track);
-            const auto& plugins = audioTrack->getPluginSequences()[0];
-            for(const auto& audioEffect: plugins)
+            else if(track->trackType() == Musec::Audio::Track::TrackType::kAudioTrack)
             {
-                audioEffect->process(audioBufferViews, audioBufferViews);
+                auto audioTrack = std::static_pointer_cast<Musec::Audio::Track::AudioTrack>(track);
+                const auto& plugins = audioTrack->getPluginSequences()[0];
+                for(const auto& audioEffect: plugins)
+                {
+                    audioEffect->process(audioBufferViews, audioBufferViews);
+                }
+            }
+            for(auto i = 0; i < masterTrackAudioBufferViews.size(); ++i)
+            {
+                for(auto j = 0; j < currentBlockSize; ++j)
+                {
+                    masterTrackAudioBufferViews[i][j] += audioBufferViews[i][j];
+                }
             }
         }
     }
-    // const auto& masterTrackAudioEffects = masterTrack_.getPluginSequences()[0];
-    // for(const auto& audioEffect: masterTrackAudioEffects)
-    // {
-    //     audioEffect->process(masterTrackAudioBufferViews, masterTrackAudioBufferViews);
-    // }
+    const auto& masterTrackAudioEffects = masterTrack_.getPluginSequences()[0];
+    for(const auto& audioEffect: masterTrackAudioEffects)
+    {
+        audioEffect->process(masterTrackAudioBufferViews, masterTrackAudioBufferViews);
+    }
 }
 
 void Project::clear()

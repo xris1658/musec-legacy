@@ -410,6 +410,10 @@ void VST2Plugin<SampleType>::process(const Musec::Audio::Base::AudioBufferViews<
     for(int i = 0; i < inputs.size(); ++i)
     {
         inputsRaw_[i] = inputs[i].getSamples();
+        if(inputsRaw_.size() > inputs.size())
+        {
+            inputsRaw_[i + inputs.size()] = inputs[i].getSamples();
+        }
     }
     for(int i = 0; i < outputs.size(); ++i)
     {

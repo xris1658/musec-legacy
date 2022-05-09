@@ -1,5 +1,6 @@
 #include "ASIOCallback.hpp"
 
+#include "audio/base/Constants.hpp"
 #include "audio/driver/ASIODriver.hpp"
 #include "base/Base.hpp"
 #include "controller/ASIODriverController.hpp"
@@ -34,6 +35,17 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
 {
     if(*AppASIODriver())
     {
+        Musec::Controller::AudioEngineController::AppProject().process();
+        std::array<Musec::Audio::Base::AudioBufferView<float>, 2> masterTrackAudioBufferView = {};
+        auto bufferSize = getASIODriverStreamInfo(AppASIODriver()).preferredBufferSize;
+        masterTrackAudioBufferView[0] = Musec::Audio::Base::AudioBufferView<float>(
+            reinterpret_cast<float*>(Musec::Controller::AudioEngineController::AppProject().masterTrackAudioBuffer().data()),
+            bufferSize
+        );
+        masterTrackAudioBufferView[1] = Musec::Audio::Base::AudioBufferView<float>(
+            reinterpret_cast<float*>(Musec::Controller::AudioEngineController::AppProject().masterTrackAudioBuffer().data()) + bufferSize,
+            bufferSize
+        );
         auto currentBufferIndex = bufferIndex;
         if(bufferIndex == 1)
         {
@@ -47,7 +59,6 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
         std::array<int, 64> outputs = {0};
         int inputCount = 0;
         int outputCount = 0;
-        auto bufferSize = getASIODriverStreamInfo(AppASIODriver()).preferredBufferSize;
         auto& bufferInfoList = getASIOBufferInfoList();
         auto& channelInfoList = getASIOChannelInfoList();
         for(int i = 0; i < channelInfoList.size(); ++i)
@@ -119,7 +130,7 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
                 break;
             }
         }
-        for(int i = 0; i < outputCount; ++i)
+        for(int i = 0; i < 2; ++i)
         {
             auto buffer = bufferInfoList[outputs[i]].buffers;
             // buffer[0] 和 buffer[1] 是 ASIO 的双缓冲区地址
@@ -151,12 +162,16 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
             case ASIOSTInt24LSB:
                 break;
             case ASIOSTInt32LSB:
-                for(long j = 0; j < bufferSize; ++j)
+            {
+                std::int32_t* int32Buffer = reinterpret_cast<std::int32_t*>(buffer[currentBufferIndex]);
+                for(int j = 0; j < bufferSize; ++j)
                 {
-//                  reinterpret_cast<std::int32_t*>(buffer[currentBufferIndex])[j] = 0x10000000 * (std::rand() % 2? 1: -1);
+                    int32Buffer[j] = static_cast<std::int32_t>(masterTrackAudioBufferView[i][j] * Musec::Audio::Base::Int32Max);
                 }
                 break;
+            }
             case ASIOSTFloat32LSB:
+                std::memcpy(buffer[currentBufferIndex], masterTrackAudioBufferView[i].getSamples(), bufferSize * sizeof(float));
                 break;
             case ASIOSTFloat64LSB:
                 break;

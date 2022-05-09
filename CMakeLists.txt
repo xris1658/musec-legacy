@@ -31,6 +31,8 @@ find_package(avcpp CONFIG REQUIRED)
 
 add_definitions(${Qt5Widgets_DEFINITIONS} ${QtQml_DEFINITIONS} ${${Qt5Quick_DEFINITIONS}} -DUNICODE -D_UNICODE)
 
+add_compile_options(/W4 /Zc:wchar_t)
+
 set(RESOURCE_FILE Musec_resource.rc)
 
 qt5_add_resources(QT_RESOURCES ./Musec.qrc)
@@ -41,6 +43,7 @@ set(PROJECT_SOURCES
     audio/base/AudioBufferView.hpp
     audio/base/Automation.hpp
     audio/base/Chrono.hpp
+    audio/base/Constants.hpp
     audio/base/TempoAutomation.hpp
     audio/base/TimeSignature.cpp
     audio/base/TimeSignature.hpp
@@ -190,7 +193,9 @@ set(PROJECT_SOURCES
     util/Endian.cpp
     util/Endian.hpp
     util/Literal.cpp
-    util/Literal.hpp dkwtp/DKWTP.cpp dkwtp/DKWTP.hpp ui/PluginWindow.cpp ui/PluginWindow.hpp)
+    util/Literal.hpp
+    ui/PluginWindow.cpp
+    ui/PluginWindow.hpp)
 
 set(TEST_COMMON_SOURCES
     test/common/PluginWindowThread.cpp

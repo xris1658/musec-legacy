@@ -9,7 +9,7 @@ CONFIG(debug, debug | release) {
     CONFIG += qml_debug
 }
 
-QMAKE_CXXFLAGS += /Zc:wchar_t
+QMAKE_CXXFLAGS += /Zc:wchar_t /W4
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -48,6 +48,7 @@ HEADERS += \
     audio/base/AudioBufferView.hpp \
     audio/base/Automation.hpp \
     audio/base/Chrono.hpp \
+    audio/base/Constants.hpp \
     audio/base/TempoAutomation.hpp \
     audio/base/TimeSignature.hpp \
     audio/base/TimeSignatureSequence.hpp \
@@ -274,7 +275,7 @@ DISTFILES += \
 # 参考链接：
 # http://www.databaseforum.info/2/9/f69800e14add61dd.html
 # https://docs.microsoft.com/en-us/cpp/build/reference/eh-exception-handling-model?view=msvc-160
-QMAKE_CXXFLAGS_RELEASE -= -EHsc
-QMAKE_CXXFLAGS_RELEASE += -EHs
-QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO -= -EHsc
-QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO += -EHs
+QMAKE_CXXFLAGS_RELEASE -= /EHsc
+QMAKE_CXXFLAGS_RELEASE += /EHs
+QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO -= /EHsc
+QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO += /EHs

@@ -157,6 +157,10 @@ void VST3Plugin<SampleType>::process(const Musec::Audio::Base::AudioBufferViews<
     for (int i = 0; i < inputsSize; ++i)
     {
         inputRaw_[i] = inputs[i].getSamples();
+        if(inputRaw_.size() > inputs.size())
+        {
+            inputRaw_[i + inputs.size()] = inputs[i].getSamples();
+        }
     }
     for (int i = 0; i < outputsSize; ++i)
     {
@@ -277,6 +281,8 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
         outputs_[i].numChannels = Steinberg::Vst::SpeakerArr::getChannelCount(outputSpeakerArrangements_[i]);
     }
     // ProcessData ---------------------------------------------------------------------------------
+    inputRaw_ = std::vector<SampleType*>(inputCount(), nullptr);
+    outputRaw_ = std::vector<SampleType*>(outputCount(), nullptr);
     auto setupProcessingResult = effect_->setupProcessing(setup);
     if (setupProcessingResult != Steinberg::kResultOk)
     {
