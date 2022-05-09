@@ -213,7 +213,7 @@ void setThreadPriorityToTimeCritical()
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
 }
 
-constexpr Musec::Util::Endian endian()
+Musec::Util::Endian endian()
 {
     return Q_BYTE_ORDER == Q_LITTLE_ENDIAN? Musec::Util::Endian::LittleEndian:
         Q_BYTE_ORDER == Q_BIG_ENDIAN? Musec::Util::Endian::BigEndian:

@@ -14,7 +14,7 @@ enum class Endian
     BigEndian
 };
 
-constexpr Musec::Util::Endian endian();
+Endian endian();
 
 void reverseEndianness(void* data, std::size_t byteCount);
 

@@ -7,7 +7,7 @@
 
 namespace Musec::Util
 {
-constexpr Endian endian()
+Endian endian()
 {
     return Musec::Native::endian();
 }
