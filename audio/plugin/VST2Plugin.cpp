@@ -510,6 +510,12 @@ bool VST2Plugin<SampleType>::hasUI()
     return effect_ && (effect_->flags & VstAEffectFlags::effFlagsHasEditor);
 }
 
+template<typename SampleType>
+Musec::Base::PluginFormat VST2Plugin<SampleType>::pluginFormat()
+{
+    return Musec::Base::PluginFormat::FormatVST2;
+}
+
 template class VST2Plugin<float>;
 template class VST2Plugin<double>;
 // ------------------------------------------------------------------------------------------

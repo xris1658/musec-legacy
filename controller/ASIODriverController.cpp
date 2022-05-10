@@ -1,6 +1,7 @@
 #include "ASIODriverController.hpp"
 
 #include "audio/driver/ASIOCallback.hpp"
+#include "audio/driver/ASIODriver.hpp"
 #include "controller/AppController.hpp"
 #include "controller/ConfigController.hpp"
 #include "dao/DatabaseDAO.hpp"
@@ -56,8 +57,8 @@ void loadASIODriver()
                                              "Musec - 驱动程序警告",
                                              Musec::UI::MessageDialog::IconType::Warning);
     }
-    constexpr int inputBufferCount = 64;
-    constexpr int outputBufferCount = 64;
+    constexpr int inputBufferCount = Musec::Audio::Driver::inputChannelCount;
+    constexpr int outputBufferCount = Musec::Audio::Driver::outputChannelCount;
     auto& bufferInfo = getASIOBufferInfoList();
     for(int i = 0; i < info.inputChannelCount; ++i)
     {

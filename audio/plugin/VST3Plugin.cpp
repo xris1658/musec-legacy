@@ -643,6 +643,12 @@ template<typename SampleType> bool VST3Plugin<SampleType>::hasUI()
     return view_;
 }
 
+template<typename SampleType>
+Musec::Base::PluginFormat VST3Plugin<SampleType>::pluginFormat()
+{
+    return Musec::Base::PluginFormat::FormatVST3;
+}
+
 template class VST3Plugin<float>;
 template class VST3Plugin<double>;
 }

@@ -91,6 +91,7 @@ public:
     bool getBypass() const override;
     QString getName() const override;
     bool hasUI() override;
+    Musec::Base::PluginFormat pluginFormat() override;
 public: // FUnknown interfaces
     Steinberg::tresult queryInterface(const Steinberg::TUID _iid, void** obj) override;
     Steinberg::uint32 addRef() override;

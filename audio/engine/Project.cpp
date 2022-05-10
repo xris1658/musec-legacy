@@ -1,10 +1,14 @@
 #include "Project.hpp"
 
 #include "controller/AudioEngineController.hpp"
+#include "audio/plugin/VST2Plugin.hpp"
 #include "audio/track/AudioTrack.hpp"
 #include "audio/track/InstrumentTrack.hpp"
 #include "audio/track/MIDITrack.hpp"
 #include "ui/PluginWindow.hpp"
+
+#include <future>
+#include <thread>
 
 namespace Musec::Audio::Engine
 {
@@ -182,51 +186,52 @@ void Project::process()
     Musec::Audio::Base::AudioBufferViews<float> audioBufferViews(
         2, Musec::Audio::Base::AudioBufferView<float>()
     );
-    Musec::Audio::Base::AudioBufferViews<float> masterTrackAudioBufferViews{
+    Musec::Audio::Base::AudioBufferViews<float> masterTrackAudioBufferViews {
         Musec::Audio::Base::AudioBufferView<float>(reinterpret_cast<float*>(masterTrackAudioBuffer_.data()), currentBlockSize),
-        Musec::Audio::Base::AudioBufferView<float>(reinterpret_cast<float*>(masterTrackAudioBuffer_.data() + currentBlockSize), currentBlockSize)
+        Musec::Audio::Base::AudioBufferView<float>(reinterpret_cast<float*>(masterTrackAudioBuffer_.data()) + currentBlockSize, currentBlockSize)
     };
-#pragma omp parallel
+    for (int i = 0; i < trackCount(); ++i)
     {
-#pragma omp for
-        for(int i = 0; i < trackCount(); ++i)
+        auto& track = tracks_[i];
+        audioBufferViews = {
+            {audioBuffer_[i].get(),                    currentBlockSize},
+            {audioBuffer_[i].get() + currentBlockSize, currentBlockSize}
+        };
+        audioBufferViews[0].init();
+        audioBufferViews[1].init();
+        if (track->trackType() == Musec::Audio::Track::TrackType::kInstrumentTrack)
         {
-            auto& track = tracks_[i];
-            audioBufferViews = {
-                    {audioBuffer_[i].get(), currentBlockSize},
-                    {audioBuffer_[i].get() + currentBlockSize, currentBlockSize}
-            };
-            audioBufferViews[0].init();
-            audioBufferViews[1].init();
-            if(track->trackType() == Musec::Audio::Track::TrackType::kInstrumentTrack)
+            auto instrumentTrack = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(track);
+            const auto& instrument = instrumentTrack->getInstrument();
+            if (instrument)
             {
-                auto instrumentTrack = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(track);
-                const auto& instrument = instrumentTrack->getInstrument();
-                if(instrument)
+                if(instrument->pluginFormat() == Musec::Base::PluginFormat::FormatVST2)
                 {
-                    instrument->process({}, audioBufferViews);
+                    auto instrumentAsVST2 = std::static_pointer_cast<Musec::Audio::Plugin::VST2Plugin<float>>(instrument);
+                    std::async(std::launch::async, [instrumentAsVST2]() { instrumentAsVST2->effect()->dispatcher(instrumentAsVST2->effect(), AEffectOpcodes::effEditIdle, 0, 0, nullptr, 0.0); });
                 }
-                const auto& audioEffectPlugins = instrumentTrack->getAudioEffectPluginSequences()[0];
-                for(const auto& audioEffect: audioEffectPlugins)
-                {
-                    audioEffect->process(audioBufferViews, audioBufferViews);
-                }
+                instrument->process({}, audioBufferViews);
             }
-            else if(track->trackType() == Musec::Audio::Track::TrackType::kAudioTrack)
+            const auto& audioEffectPlugins = instrumentTrack->getAudioEffectPluginSequences()[0];
+            for (const auto& audioEffect: audioEffectPlugins)
             {
-                auto audioTrack = std::static_pointer_cast<Musec::Audio::Track::AudioTrack>(track);
-                const auto& plugins = audioTrack->getPluginSequences()[0];
-                for(const auto& audioEffect: plugins)
-                {
-                    audioEffect->process(audioBufferViews, audioBufferViews);
-                }
+                audioEffect->process(audioBufferViews, audioBufferViews);
             }
-            for(auto i = 0; i < masterTrackAudioBufferViews.size(); ++i)
+        }
+        else if (track->trackType() == Musec::Audio::Track::TrackType::kAudioTrack)
+        {
+            auto audioTrack = std::static_pointer_cast<Musec::Audio::Track::AudioTrack>(track);
+            const auto& plugins = audioTrack->getPluginSequences()[0];
+            for (const auto& audioEffect: plugins)
             {
-                for(auto j = 0; j < currentBlockSize; ++j)
-                {
-                    masterTrackAudioBufferViews[i][j] += audioBufferViews[i][j];
-                }
+                audioEffect->process(audioBufferViews, audioBufferViews);
+            }
+        }
+        for (auto i = 0; i < masterTrackAudioBufferViews.size(); ++i)
+        {
+            for (auto j = 0; j < currentBlockSize; ++j)
+            {
+                masterTrackAudioBufferViews[i][j] += audioBufferViews[i][j];
             }
         }
     }
