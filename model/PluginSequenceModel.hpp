@@ -8,6 +8,7 @@
 #include "model/ModelBase.hpp"
 
 #include <QAbstractListModel>
+#include <QMetaObject>
 
 #include <memory>
 #include <vector>
@@ -48,11 +49,17 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
     Q_INVOKABLE void setWindowVisible(int effectIndex, bool visible);
+    void insert(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin, int index);
+    void replace(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin, int index);
+    void remove(int index);
+    void clear();
 protected:
     RoleNamesType roleNames() const override;
 private:
     Musec::Audio::Track::InstrumentTrack* instrumentTrack_ = nullptr;
     Musec::Audio::Track::AudioTrack* audioTrack_ = nullptr;
+    std::vector<std::unique_ptr<Musec::Entities::Plugin>> pluginWindowConnections_;
+    std::vector<QMetaObject::Connection> connections_;
     RoleNamesType roleNames_;
 };
 }

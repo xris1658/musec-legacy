@@ -41,7 +41,12 @@ Rectangle {
             text: qsTr("删除(&D)")
             onTriggered: {
                 audioEffectSlotOptions.parent = null;
-                tracks.removeEffect(audioEffectSlotOptions.trackIndex, audioEffectSlotOptions.effectIndex);
+                if(audioEffectSlotOptions.trackIndex == -1) {
+                    tracks.removeEffectMasterTrack(audioEffectSlotOptions.effectIndex);
+                }
+                else {
+                    tracks.removeEffect(audioEffectSlotOptions.trackIndex, audioEffectSlotOptions.effectIndex);
+                }
             }
         }
     }
@@ -56,7 +61,7 @@ Rectangle {
 
     signal audioEffectSlotRightClicked(trackIndex: int, audioEffectIndex: int, x: int, y: int)
     onAudioEffectSlotRightClicked: {
-        audioEffectSlotOptions.parent = trackChannelList.itemAtIndex(trackIndex).mixerChannelOfThis.getAudioEffectSlot(audioEffectIndex);
+        audioEffectSlotOptions.parent = trackIndex == -1? masterChannel.getAudioEffectSlot(audioEffectIndex): trackChannelList.itemAtIndex(trackIndex).mixerChannelOfThis.getAudioEffectSlot(audioEffectIndex);
         audioEffectSlotOptions.trackIndex = trackIndex;
         audioEffectSlotOptions.effectIndex = audioEffectIndex;
         audioEffectSlotOptions.x = x;
@@ -172,8 +177,8 @@ Rectangle {
             onAudioEffectSlotVisibleToggled: {
                 masterTrackPluginSequence.setWindowVisible(effectIndex, audioEffectWindowVisible);s
             }
-            onAudioSlotRightClicked: {
-                //
+            onAudioSlotRightClicked: (audioEffectIndex, menuX, menuY) => {
+                root.audioEffectSlotRightClicked(-1, audioEffectIndex, menuX, menuY);
             }
         }
         Rectangle {

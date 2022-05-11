@@ -33,6 +33,7 @@ enum class VST3AudioProcessorStatus: std::int8_t
     Activated = 0x20,
     Processing = 0x40
 };
+
 // VST3 插件控制器（用户界面）的状态。
 // 参见：https://developer.steinberg.help/display/VST/Edit+Controller+Call+Sequence
 enum class VST3EditControllerStatus: std::int8_t
@@ -43,11 +44,13 @@ enum class VST3EditControllerStatus: std::int8_t
     Initialized = 0x04,
     Connected = 0x08
 };
+
 enum class EffectAndEditorUnified: std::int8_t
 {
     NotUnified = 0,
     Unified = 1
 };
+
 using SpeakerArrangements = std::vector<Steinberg::Vst::SpeakerArrangement>;
 template<typename SampleType>
 class VST3Plugin:

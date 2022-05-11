@@ -48,6 +48,18 @@ Plugin::~Plugin()
 
 }
 
+Musec::Entities::Plugin Plugin::fromPlugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin)
+{
+    if(plugin)
+    {
+        return Musec::Entities::Plugin(plugin, plugin->getName(), !plugin->getBypass(), false, false);
+    }
+    else
+    {
+        return Musec::Entities::Plugin();
+    }
+}
+
 bool Plugin::valid() const
 {
     return plugin_.get();

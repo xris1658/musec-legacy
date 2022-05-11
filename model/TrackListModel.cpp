@@ -51,18 +51,6 @@ std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> startPluginFromPathAndSubI
     plugin->startProcessing();
     return plugin;
 }
-
-Musec::Entities::Plugin getPlugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin = nullptr)
-{
-    if(plugin)
-    {
-        return Musec::Entities::Plugin(plugin, plugin->getName(), !plugin->getBypass(), false, false);
-    }
-    else
-    {
-        return Musec::Entities::Plugin();
-    }
-}
 }
 
 TrackListModel::TrackListModel(QObject* parent):
@@ -86,7 +74,9 @@ TrackListModel::TrackListModel(QObject* parent):
 
 TrackListModel::~TrackListModel()
 {
-
+    project_.clear();
+    masterPluginSequences_.clear();
+    pluginSequences_.clear();
 }
 
 constexpr int TrackListModel::columnSize()
@@ -230,7 +220,7 @@ void TrackListModel::insertTrack(int index, const Musec::Entities::CompleteTrack
     project_.insertTrack(index, track);
     instruments_.insert(
         instruments_.begin() + index,
-        std::make_unique<Musec::Entities::Plugin>(Impl::getPlugin(nullptr))
+        std::make_unique<Musec::Entities::Plugin>(Musec::Entities::Plugin::fromPlugin(nullptr))
     );
     pluginSequences_.insert(
         pluginSequences_.begin() + index,
@@ -271,7 +261,7 @@ void TrackListModel::loadInstrument(int trackIndex, int pluginFormat, const QStr
         return;
     }
     instrumentTrack->setInstrument(instrument);
-    instruments_[trackIndex] = std::make_unique<Musec::Entities::Plugin>(Impl::getPlugin(instrument));
+    instruments_[trackIndex] = std::make_unique<Musec::Entities::Plugin>(Musec::Entities::Plugin::fromPlugin(instrument));
     dataChanged(index(trackIndex), index(trackIndex), QVector<int>(1, RoleNames::InstrumentRole));
 }
 
@@ -309,6 +299,7 @@ void TrackListModel::insertEffect(int trackIndex, int pluginFormat, const QStrin
         audioTrack->setPluginSequences(std::move(pluginSequences));
         pluginSequenceModel->endInsertRows();
     }
+    pluginSequenceModel->insert(plugin, pluginIndex);
     dataChanged(index(trackIndex), index(trackIndex), QVector<int>(1, RoleNames::PluginListRole));
 }
 
@@ -340,9 +331,10 @@ void TrackListModel::replaceEffect(int trackIndex, int pluginFormat, const QStri
         auto audioTrack = std::static_pointer_cast<Musec::Audio::Track::AudioTrack>(project_[trackIndex].track);
         auto pluginSequences = audioTrack->getPluginSequences();
         pluginSequences[0][pluginIndex].reset();
-        pluginSequences[0][pluginIndex] = std::move(plugin);
+        pluginSequences[0][pluginIndex] = plugin;
         audioTrack->setPluginSequences(std::move(pluginSequences));
     }
+    pluginSequenceModel->replace(plugin, pluginIndex);
     pluginSequenceModel->dataChanged(index(pluginIndex), index(pluginIndex), {});
     dataChanged(index(trackIndex), index(trackIndex), QVector<int>(1, RoleNames::PluginListRole));
 }
@@ -358,7 +350,7 @@ void TrackListModel::removeInstrument(int trackIndex)
     {
         auto instrumentTrack = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(track);
         instrumentTrack->setInstrument(nullptr);
-        *(instruments_[trackIndex]) = Impl::getPlugin();
+        *(instruments_[trackIndex]) = Musec::Entities::Plugin::fromPlugin();
         dataChanged(this->index(trackIndex), this->index(trackIndex), { RoleNames::InstrumentRole });
     }
 }
@@ -389,6 +381,7 @@ void TrackListModel::removeEffect(int trackIndex, int pluginIndex)
         audioTrack->setPluginSequences(std::move(pluginSequences));
         pluginSequenceModel->endRemoveRows();
     }
+    pluginSequenceModel->remove(pluginIndex);
 }
 
 void TrackListModel::copyInstrument(int fromTrackIndex, int toTrackIndex)
@@ -427,6 +420,7 @@ void TrackListModel::insertEffectMasterTrack(int pluginFormat, const QString& pa
     masterTrackPluginSequences[0].insert(masterTrackPluginSequences[0].begin() + pluginIndex, plugin);
     track.setPluginSequences(masterTrackPluginSequences);
     masterTrackPluginSequenceModel.endInsertRows();
+    masterTrackPluginSequenceModel.insert(plugin, pluginIndex);
 }
 
 void TrackListModel::replaceEffectMasterTrack(int pluginFormat, const QString& path, int pluginSubId, int pluginIndex)
@@ -441,8 +435,9 @@ void TrackListModel::replaceEffectMasterTrack(int pluginFormat, const QString& p
     masterTrackPluginSequenceModel.beginInsertRows(QModelIndex(), pluginIndex, pluginIndex);
     auto masterTrackPluginSequences = track.getPluginSequences();
     masterTrackPluginSequences[0][pluginIndex].reset();
-    masterTrackPluginSequences[0][pluginIndex] = std::move(plugin);
+    masterTrackPluginSequences[0][pluginIndex] = plugin;
     track.setPluginSequences(std::move(masterTrackPluginSequences));
+    masterTrackPluginSequenceModel.replace(plugin, pluginIndex);
     masterTrackPluginSequenceModel.dataChanged(index(pluginIndex), index(pluginIndex), {});
 }
 
@@ -453,6 +448,8 @@ void TrackListModel::removeEffectMasterTrack(int pluginIndex)
     masterTrackPluginSequenceModel.beginRemoveRows(QModelIndex(), pluginIndex, pluginIndex);
     auto masterTrackPluginSequences = track.getPluginSequences();
     masterTrackPluginSequences[0].erase(masterTrackPluginSequences[0].begin() + pluginIndex);
+    track.setPluginSequences(std::move(masterTrackPluginSequences));
+    masterTrackPluginSequenceModel.remove(pluginIndex);
     masterTrackPluginSequenceModel.endRemoveRows();
 }
 

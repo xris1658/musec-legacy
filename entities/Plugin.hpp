@@ -7,6 +7,8 @@
 #include <QString>
 #include <qqml.h>
 
+#include <memory>
+
 namespace Musec
 {
 namespace Entities
@@ -40,6 +42,7 @@ public:
     Plugin& operator=(Plugin&& rhs) noexcept;
     ~Plugin();
 public:
+    static Musec::Entities::Plugin fromPlugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin = nullptr);
     bool valid() const;
     const QString& getName() const;
     void setName(const QString& name);

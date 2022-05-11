@@ -4,9 +4,7 @@
 #include "audio/track/InstrumentTrack.hpp"
 #include "controller/AudioEngineController.hpp"
 
-namespace Musec
-{
-namespace Model
+namespace Musec::Model
 {
 PluginSequenceModel::PluginSequenceModel(int trackIndex, QObject* parent):
     QAbstractListModel(parent)
@@ -32,7 +30,7 @@ PluginSequenceModel::PluginSequenceModel():
 
 PluginSequenceModel::~PluginSequenceModel()
 {
-
+    clear();
 }
 
 void PluginSequenceModel::initRoleNames()
@@ -50,11 +48,17 @@ int PluginSequenceModel::itemCount() const
 {
     if(instrumentTrack_)
     {
-        return instrumentTrack_->getAudioEffectPluginSequences()[0].size();
+        if(auto& seqs = instrumentTrack_->getAudioEffectPluginSequences(); seqs.size())
+        {
+            return seqs[0].size();
+        }
     }
     else if(audioTrack_)
     {
-        return audioTrack_->getPluginSequences()[0].size();
+        if (auto& seqs = audioTrack_->getPluginSequences(); seqs.size())
+        {
+            return seqs[0].size();
+        }
     }
     return 0;
 }
@@ -156,27 +160,73 @@ void PluginSequenceModel::setWindowVisible(int effectIndex, bool visible)
     {
         return;
     }
-    const Musec::Audio::Track::PluginSequence<float>* pluginSequence = nullptr;
-    if(instrumentTrack_)
-    {
-        pluginSequence = &(instrumentTrack_->getAudioEffectPluginSequences()[0]);
-    }
-    else if(audioTrack_)
-    {
-        pluginSequence = &(audioTrack_->getPluginSequences()[0]);
-    }
-    auto plugin = (*pluginSequence)[effectIndex];
-    auto window = plugin->window();
-    if(plugin->hasUI() && window)
-    {
-        window->setVisible(visible);
-        dataChanged(index(effectIndex), index(effectIndex), { RoleNames::WindowVisibleRole });
-    }
+    setData(index(effectIndex), QVariant::fromValue(visible), RoleNames::WindowVisibleRole);
+    dataChanged(index(effectIndex), index(effectIndex), { RoleNames::WindowVisibleRole });
+    // const Musec::Audio::Track::PluginSequence<float>* pluginSequence = nullptr;
+    // if(instrumentTrack_)
+    // {
+    //     pluginSequence = &(instrumentTrack_->getAudioEffectPluginSequences()[0]);
+    // }
+    // else if(audioTrack_)
+    // {
+    //     pluginSequence = &(audioTrack_->getPluginSequences()[0]);
+    // }
+    // auto plugin = (*pluginSequence)[effectIndex];
+    // auto window = plugin->window();
+    // if(plugin->hasUI() && window)
+    // {
+    //     window->setVisible(visible);
+    //     dataChanged(index(effectIndex), index(effectIndex), { RoleNames::WindowVisibleRole });
+    // }
+}
+
+void PluginSequenceModel::insert(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin, int index)
+{
+    pluginWindowConnections_.insert(pluginWindowConnections_.begin() + index,
+        std::make_unique<Musec::Entities::Plugin>(Musec::Entities::Plugin::fromPlugin(plugin)));
+    connections_.insert(connections_.begin() + index,
+        QObject::connect(pluginWindowConnections_[index].get(), &Musec::Entities::Plugin::windowVisibleChanged,
+            this, [this, pluginIndex = index]()
+        {
+            dataChanged(this->index(pluginIndex), this->index(pluginIndex),
+                { RoleNames::WindowVisibleRole }
+            );
+        }
+    ));
+}
+
+void PluginSequenceModel::replace(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin, int index)
+{
+    QObject::disconnect(connections_[index]);
+    pluginWindowConnections_[index].reset();
+    pluginWindowConnections_[index] = std::make_unique<Musec::Entities::Plugin>(
+        Musec::Entities::Plugin::fromPlugin(plugin));
+    connections_[index] =
+    QObject::connect(pluginWindowConnections_[index].get(), &Musec::Entities::Plugin::windowVisibleChanged,
+        this, [this, pluginIndex = index]()
+        {
+            dataChanged(this->index(pluginIndex), this->index(pluginIndex),
+                { RoleNames::WindowVisibleRole }
+            );
+        }
+    );
+}
+
+void PluginSequenceModel::remove(int index)
+{
+    connections_.erase(connections_.begin() + index);
+    pluginWindowConnections_.erase(pluginWindowConnections_.begin() + index);
+}
+
+void PluginSequenceModel::clear()
+{
+    std::for_each(connections_.begin(), connections_.end(), [](const QMetaObject::Connection& connection) { QObject::disconnect(connection); });
+    connections_.clear();
+    pluginWindowConnections_.clear();
 }
 
 RoleNamesType PluginSequenceModel::roleNames() const
 {
     return roleNames_;
-}
 }
 }
