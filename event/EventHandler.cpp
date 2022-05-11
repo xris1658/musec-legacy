@@ -268,7 +268,6 @@ void EventHandler::onDriverASIOSelectionChanged(const QString& clsid)
     if(clsid.length())
     {
         Controller::ASIODriverController::setASIODriver(clsid);
-        Controller::ASIODriverController::loadASIODriver();
     }
 }
 

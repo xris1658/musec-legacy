@@ -11,6 +11,32 @@ namespace Model
 PluginSequenceModel::PluginSequenceModel(int trackIndex, QObject* parent):
     QAbstractListModel(parent)
 {
+    initRoleNames();
+    auto track = Musec::Controller::AudioEngineController::AppProject()[trackIndex].track;
+    if (track->trackType() == Musec::Audio::Track::TrackType::kInstrumentTrack)
+    {
+        instrumentTrack_ = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(track).get();
+    }
+    else if (track->trackType() == Musec::Audio::Track::TrackType::kAudioTrack)
+    {
+        audioTrack_ = std::static_pointer_cast<Musec::Audio::Track::AudioTrack>(track).get();
+    }
+}
+
+PluginSequenceModel::PluginSequenceModel():
+    QAbstractListModel(nullptr)
+{
+    initRoleNames();
+    audioTrack_ = &Musec::Controller::AudioEngineController::AppProject().masterTrackRef().masterTrack;
+}
+
+PluginSequenceModel::~PluginSequenceModel()
+{
+
+}
+
+void PluginSequenceModel::initRoleNames()
+{
     roleNames_.reserve(columnSize());
     roleNames_[RoleNames::ValidRole] = "valid";
     roleNames_[RoleNames::ActivatedRole] = "activated";
@@ -18,20 +44,6 @@ PluginSequenceModel::PluginSequenceModel(int trackIndex, QObject* parent):
     roleNames_[RoleNames::SidechainExistRole] = "sidechain_exist";
     roleNames_[RoleNames::SidechainEnabledRole] = "sidechain_enabled";
     roleNames_[RoleNames::WindowVisibleRole] = "window_visible";
-    auto track = Musec::Controller::AudioEngineController::AppProject()[trackIndex].track;
-    if(track->trackType() == Musec::Audio::Track::TrackType::kInstrumentTrack)
-    {
-        instrumentTrack_ = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(track);
-    }
-    else if(track->trackType() == Musec::Audio::Track::TrackType::kAudioTrack)
-    {
-        audioTrack_ = std::static_pointer_cast<Musec::Audio::Track::AudioTrack>(track);
-    }
-}
-
-PluginSequenceModel::~PluginSequenceModel()
-{
-
 }
 
 int PluginSequenceModel::itemCount() const

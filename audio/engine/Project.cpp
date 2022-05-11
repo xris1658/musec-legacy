@@ -50,9 +50,9 @@ std::size_t Project::trackCount() const noexcept
     return tracks_.size();
 }
 
-Project::CompleteTrackRef Project::at(std::size_t index)
+Project::TrackRef Project::at(std::size_t index)
 {
-    return CompleteTrackRef
+    return TrackRef
     {
         tracks_.at(index),
         gain_[index],
@@ -64,9 +64,9 @@ Project::CompleteTrackRef Project::at(std::size_t index)
     };
 }
 
-Project::CompleteTrackRef Project::operator[](std::size_t index)
+Project::TrackRef Project::operator[](std::size_t index)
 {
-    return CompleteTrackRef
+    return TrackRef
     {
         tracks_[index],
         gain_[index],
@@ -75,6 +75,20 @@ Project::CompleteTrackRef Project::operator[](std::size_t index)
         trackSolo_[index],
         trackInvertPhase_[index],
         trackArmRecording_[index]
+    };
+}
+
+Project::MasterTrackRef Project::masterTrackRef()
+{
+    return MasterTrackRef
+    {
+        masterTrack_,
+        masterTrackGain_,
+        masterTrackPanning_,
+        masterTrackMute(),
+        masterTrackSolo(),
+        masterTrackInvertPhase(),
+        masterTrackArmRecording()
     };
 }
 
@@ -169,11 +183,6 @@ void Project::setPluginWindowSize(void* plugin, int width, int height)
     }
 }
 
-const Musec::Audio::Track::AudioTrack& Project::masterTrack() const
-{
-    return masterTrack_;
-}
-
 const Musec::Base::FixedSizeMemoryBlock& Project::masterTrackAudioBuffer() const
 {
     return masterTrackAudioBuffer_;
@@ -197,8 +206,10 @@ void Project::process()
             {audioBuffer_[i].get(),                    currentBlockSize},
             {audioBuffer_[i].get() + currentBlockSize, currentBlockSize}
         };
-        audioBufferViews[0].init();
-        audioBufferViews[1].init();
+        for(auto& bufferView: audioBufferViews)
+        {
+            bufferView.init();
+        }
         if (track->trackType() == Musec::Audio::Track::TrackType::kInstrumentTrack)
         {
             auto instrumentTrack = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(track);
@@ -227,11 +238,41 @@ void Project::process()
                 audioEffect->process(audioBufferViews, audioBufferViews);
             }
         }
+        // 按帧操作。
+        // 逐列操纵，因此缓冲区较大时可能出现缓存未命中的问题，日后需要优化。
+        for (auto j = 0; j < currentBlockSize; ++j)
+        {
+            for (auto k = 0; k < masterTrackAudioBufferViews.size(); ++k)
+            {
+                if(!trackMute_[i])
+                {
+                    if(trackInvertPhase_[i])
+                    {
+                        masterTrackAudioBufferViews[k][j] -= audioBufferViews[k][j];
+                    }
+                    else
+                    {
+                        masterTrackAudioBufferViews[k][j] += audioBufferViews[k][j];
+                    }
+                }
+            }
+        }
+    }
+    // ll. 239-240
+    for (auto j = 0; j < currentBlockSize; ++j)
+    {
         for (auto i = 0; i < masterTrackAudioBufferViews.size(); ++i)
         {
-            for (auto j = 0; j < currentBlockSize; ++j)
+            if(masterTrackMute())
             {
-                masterTrackAudioBufferViews[i][j] += audioBufferViews[i][j];
+                masterTrackAudioBufferViews[i][j] = 0.0;
+            }
+            else
+            {
+                if(masterTrackInvertPhase())
+                {
+                    masterTrackAudioBufferViews[i][j] *= -1;
+                }
             }
         }
     }
@@ -255,5 +296,25 @@ void Project::clear()
     trackInvertPhase_.clear();
     trackArmRecording_.clear();
     pluginAndWindow_.clear();
+}
+
+std::bitset<4>::reference Project::masterTrackMute()
+{
+    return masterTrackControls_[0];
+}
+
+std::bitset<4>::reference Project::masterTrackSolo()
+{
+    return masterTrackControls_[1];
+}
+
+std::bitset<4>::reference Project::masterTrackInvertPhase()
+{
+    return masterTrackControls_[2];
+}
+
+std::bitset<4>::reference Project::masterTrackArmRecording()
+{
+    return masterTrackControls_[3];
 }
 }

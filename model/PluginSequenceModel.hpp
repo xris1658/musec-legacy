@@ -36,8 +36,10 @@ public:
     };
 public:
     explicit PluginSequenceModel(int trackIndex, QObject* parent = nullptr);
+    explicit PluginSequenceModel();
     virtual ~PluginSequenceModel();
 public:
+    void initRoleNames();
     Q_INVOKABLE int itemCount() const;
     static constexpr int columnSize();
 public:
@@ -49,8 +51,8 @@ public:
 protected:
     RoleNamesType roleNames() const override;
 private:
-    std::shared_ptr<Musec::Audio::Track::InstrumentTrack> instrumentTrack_;
-    std::shared_ptr<Musec::Audio::Track::AudioTrack> audioTrack_;
+    Musec::Audio::Track::InstrumentTrack* instrumentTrack_ = nullptr;
+    Musec::Audio::Track::AudioTrack* audioTrack_ = nullptr;
     RoleNamesType roleNames_;
 };
 }

@@ -21,6 +21,7 @@ ModelInitializer::ModelInitializer()
     QML_REGISTER_TYPE(FileListModel, Musec.Models, 1, 0);
     QML_REGISTER_TYPE(FolderListModel, Musec.Models, 1, 0);
     QML_REGISTER_TYPE(PluginListModel, Musec.Models, 1, 0);
+    QML_REGISTER_TYPE(PluginSequenceModel, Musec.Models, 1, 0);
     QML_REGISTER_TYPE(TrackListModel, Musec.Models, 1, 0);
 }
 

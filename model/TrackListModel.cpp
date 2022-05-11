@@ -14,8 +14,44 @@
 
 #include <memory>
 
+namespace Musec::Model
+{
 namespace Impl
 {
+std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> pluginFromPathAndSubId(const QString& path, int pluginSubId, int format)
+{
+    if(format == Musec::Base::PluginFormat::FormatVST2)
+    {
+        return std::make_shared<Musec::Audio::Plugin::VST2Plugin<float>>(path, false, pluginSubId);
+    }
+    else if(format == Musec::Base::PluginFormat::FormatVST3)
+    {
+        return std::make_shared<Musec::Audio::Plugin::VST3Plugin<float>>(path, pluginSubId);
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
+std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> startPluginFromPathAndSubId(const QString& path, int pluginSubId, int format)
+{
+    auto plugin = pluginFromPathAndSubId(path, pluginSubId, format);
+    if(!plugin)
+    {
+        return plugin;
+    }
+    plugin->initialize(Musec::Controller::AudioEngineController::getCurrentSampleRate(),
+        Musec::Controller::AudioEngineController::getMaxBlockSize());
+    if(plugin->hasUI())
+    {
+        Musec::UI::createNewPluginWindow(plugin);
+    }
+    plugin->activate();
+    plugin->startProcessing();
+    return plugin;
+}
+
 Musec::Entities::Plugin getPlugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin = nullptr)
 {
     if(plugin)
@@ -29,9 +65,11 @@ Musec::Entities::Plugin getPlugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<
 }
 }
 
-Musec::Model::TrackListModel::TrackListModel(QObject* parent):
+TrackListModel::TrackListModel(QObject* parent):
     QAbstractListModel(parent),
-    project_(Musec::Controller::AudioEngineController::AppProject())
+    project_(Musec::Controller::AudioEngineController::AppProject()),
+    projectMasterTrackRef_(project_.masterTrackRef()),
+    masterPluginSequences_()
 {
     roleNames_.reserve(columnSize());
     roleNames_[RoleNames::NameRole] = "trackname";
@@ -46,32 +84,32 @@ Musec::Model::TrackListModel::TrackListModel(QObject* parent):
     roleNames_[RoleNames::PluginListRole] = "plugin_list";
 }
 
-Musec::Model::TrackListModel::~TrackListModel()
+TrackListModel::~TrackListModel()
 {
 
 }
 
-constexpr int Musec::Model::TrackListModel::columnSize()
+constexpr int TrackListModel::columnSize()
 {
     return RoleNames::kRoleNamesCount - Qt::UserRole;
 }
 
-int Musec::Model::TrackListModel::trackCount() const noexcept
+int TrackListModel::trackCount() const noexcept
 {
     return project_.trackCount();
 }
 
-int Musec::Model::TrackListModel::rowCount(const QModelIndex&) const
+int TrackListModel::rowCount(const QModelIndex&) const
 {
     return project_.trackCount();
 }
 
-int Musec::Model::TrackListModel::columnCount(const QModelIndex&) const
+int TrackListModel::columnCount(const QModelIndex&) const
 {
     return columnSize();
 }
 
-QVariant Musec::Model::TrackListModel::data(const QModelIndex& index, int role) const
+QVariant TrackListModel::data(const QModelIndex& index, int role) const
 {
     int row = index.row();
     if(row < 0 || row >= trackCount())
@@ -124,7 +162,7 @@ QVariant Musec::Model::TrackListModel::data(const QModelIndex& index, int role) 
     }
 }
 
-bool Musec::Model::TrackListModel::setData(const QModelIndex& index, const QVariant& value, int role)
+bool TrackListModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     bool ret = false;
     int row = index.row();
@@ -181,7 +219,12 @@ bool Musec::Model::TrackListModel::setData(const QModelIndex& index, const QVari
     return ret;
 }
 
-void Musec::Model::TrackListModel::insertTrack(int index, const Musec::Entities::CompleteTrack& track)
+Musec::Model::PluginSequenceModel& TrackListModel::masterTrackPluginSequenceModel()
+{
+    return masterPluginSequences_;
+}
+
+void TrackListModel::insertTrack(int index, const Musec::Entities::CompleteTrack& track)
 {
     emit beginInsertRows(QModelIndex(), index, index);
     project_.insertTrack(index, track);
@@ -191,17 +234,17 @@ void Musec::Model::TrackListModel::insertTrack(int index, const Musec::Entities:
     );
     pluginSequences_.insert(
         pluginSequences_.begin() + index,
-        std::make_unique<Musec::Model::PluginSequenceModel>(index)
+        std::make_unique<PluginSequenceModel>(index)
     );
     emit endInsertRows();
 }
 
-void Musec::Model::TrackListModel::appendTrack(const Musec::Entities::CompleteTrack& track)
+void TrackListModel::appendTrack(const Musec::Entities::CompleteTrack& track)
 {
     insertTrack(trackCount(), track);
 }
 
-void Musec::Model::TrackListModel::removeTrack(int index)
+void TrackListModel::removeTrack(int index)
 {
     if(index < 0 || index >= trackCount())
     {
@@ -214,7 +257,7 @@ void Musec::Model::TrackListModel::removeTrack(int index)
     emit endRemoveRows();
 }
 
-void Musec::Model::TrackListModel::loadInstrument(int trackIndex, int pluginFormat, const QString& path, int pluginSubId)
+void TrackListModel::loadInstrument(int trackIndex, int pluginFormat, const QString& path, int pluginSubId)
 {
     auto track = project_[trackIndex];
     if(track.track->trackType() != Musec::Audio::Track::TrackType::kInstrumentTrack)
@@ -222,38 +265,17 @@ void Musec::Model::TrackListModel::loadInstrument(int trackIndex, int pluginForm
         return;
     }
     auto instrumentTrack = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(project_[trackIndex].track);
-    std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> instrument = nullptr;
-    if(pluginFormat == Musec::Base::PluginFormat::FormatVST3)
-    {
-        instrument = std::make_shared<Musec::Audio::Plugin::VST3Plugin<float>>(
-            path, pluginSubId
-        );
-    }
-    else if(pluginFormat == Musec::Base::PluginFormat::FormatVST2)
-    {
-        instrument = std::make_shared<Musec::Audio::Plugin::VST2Plugin<float>>(
-            path, false, pluginSubId
-        );
-    }
-    else
+    auto instrument = Impl::startPluginFromPathAndSubId(path, pluginSubId, pluginFormat);
+    if(!instrument)
     {
         return;
     }
-    instrument->initialize(Musec::Controller::AudioEngineController::getCurrentSampleRate(),
-                           Musec::Controller::AudioEngineController::getMaxBlockSize());
-    instrumentTrack->setInstrument(nullptr);
-    if (instrument->hasUI())
-    {
-        Musec::UI::createNewPluginWindow(instrument);
-    }
-    instrument->activate();
-    instrument->startProcessing();
     instrumentTrack->setInstrument(instrument);
     instruments_[trackIndex] = std::make_unique<Musec::Entities::Plugin>(Impl::getPlugin(instrument));
     dataChanged(index(trackIndex), index(trackIndex), QVector<int>(1, RoleNames::InstrumentRole));
 }
 
-void Musec::Model::TrackListModel::insertEffect(int trackIndex, int pluginFormat, const QString& path, int pluginSubId,
+void TrackListModel::insertEffect(int trackIndex, int pluginFormat, const QString& path, int pluginSubId,
     int pluginIndex)
 {
     auto track = project_[trackIndex];
@@ -262,31 +284,11 @@ void Musec::Model::TrackListModel::insertEffect(int trackIndex, int pluginFormat
     {
         return;
     }
-    std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin(nullptr);
-    if(pluginFormat == Musec::Base::PluginFormat::FormatVST2)
+    auto plugin = Impl::startPluginFromPathAndSubId(path, pluginSubId, pluginFormat);
+    if(!plugin)
     {
-        auto effect = std::make_shared<Musec::Audio::Plugin::VST2Plugin<float>>(path, false, pluginSubId);
-        plugin = std::static_pointer_cast<Musec::Audio::Plugin::IPlugin<float>>(effect);
-    }
-    else if(pluginFormat == Musec::Base::PluginFormat::FormatVST3)
-    {
-        auto effect = std::make_shared<Musec::Audio::Plugin::VST3Plugin<float>>(path, pluginSubId);
-        plugin = std::static_pointer_cast<Musec::Audio::Plugin::IPlugin<float>>(effect);
-    }
-    auto pluginInitResult =
-        plugin->initialize(Musec::Controller::AudioEngineController::getCurrentSampleRate(),
-            Musec::Controller::AudioEngineController::getMaxBlockSize());
-    if(!pluginInitResult)
-    {
-        plugin.reset();
         return;
     }
-    if(plugin->hasUI())
-    {
-        Musec::UI::createNewPluginWindow(plugin);
-    }
-    plugin->activate();
-    plugin->startProcessing();
     auto& pluginSequenceModel = pluginSequences_[trackIndex];
     if(trackType == Musec::Audio::Track::TrackType::kInstrumentTrack)
     {
@@ -310,7 +312,7 @@ void Musec::Model::TrackListModel::insertEffect(int trackIndex, int pluginFormat
     dataChanged(index(trackIndex), index(trackIndex), QVector<int>(1, RoleNames::PluginListRole));
 }
 
-void Musec::Model::TrackListModel::replaceEffect(int trackIndex, int pluginFormat, const QString& path, int pluginSubId,
+void TrackListModel::replaceEffect(int trackIndex, int pluginFormat, const QString& path, int pluginSubId,
     int pluginIndex)
 {
     auto track = project_[trackIndex];
@@ -319,28 +321,10 @@ void Musec::Model::TrackListModel::replaceEffect(int trackIndex, int pluginForma
     {
         return;
     }
-    std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin(nullptr);
-    if(pluginFormat == Musec::Base::PluginFormat::FormatVST2)
+    auto plugin = Impl::startPluginFromPathAndSubId(path, pluginSubId, pluginFormat);
+    if(!plugin)
     {
-        auto effect = std::make_shared<Musec::Audio::Plugin::VST2Plugin<float>>(path, false, pluginSubId);
-        plugin = std::static_pointer_cast<Musec::Audio::Plugin::IPlugin<float>>(effect);
-    }
-    else if(pluginFormat == Musec::Base::PluginFormat::FormatVST3)
-    {
-        auto effect = std::make_shared<Musec::Audio::Plugin::VST3Plugin<float>>(path, pluginSubId);
-        plugin = std::static_pointer_cast<Musec::Audio::Plugin::IPlugin<float>>(effect);
-    }
-    auto pluginInitResult =
-        plugin->initialize(Musec::Controller::AudioEngineController::getCurrentSampleRate(),
-                           Musec::Controller::AudioEngineController::getMaxBlockSize());
-    if(!pluginInitResult)
-    {
-        plugin.reset();
         return;
-    }
-    if(plugin->hasUI())
-    {
-        Musec::UI::createNewPluginWindow(plugin);
     }
     auto& pluginSequenceModel = pluginSequences_[trackIndex];
     if(trackType == Musec::Audio::Track::TrackType::kInstrumentTrack)
@@ -363,7 +347,7 @@ void Musec::Model::TrackListModel::replaceEffect(int trackIndex, int pluginForma
     dataChanged(index(trackIndex), index(trackIndex), QVector<int>(1, RoleNames::PluginListRole));
 }
 
-void Musec::Model::TrackListModel::removeInstrument(int trackIndex)
+void TrackListModel::removeInstrument(int trackIndex)
 {
     if(trackIndex < 0 || trackIndex >= trackCount())
     {
@@ -379,7 +363,7 @@ void Musec::Model::TrackListModel::removeInstrument(int trackIndex)
     }
 }
 
-void Musec::Model::TrackListModel::removeEffect(int trackIndex, int pluginIndex)
+void TrackListModel::removeEffect(int trackIndex, int pluginIndex)
 {
     if(trackIndex < 0 || trackIndex >= trackCount())
     {
@@ -407,34 +391,144 @@ void Musec::Model::TrackListModel::removeEffect(int trackIndex, int pluginIndex)
     }
 }
 
-void Musec::Model::TrackListModel::copyInstrument(int fromTrackIndex, int toTrackIndex)
+void TrackListModel::copyInstrument(int fromTrackIndex, int toTrackIndex)
 {
 
 }
 
-void Musec::Model::TrackListModel::copyEffect(
+void TrackListModel::copyEffect(
     int fromTrackIndex, int fromPluginIndex, int toTrackIndex, int toPluginIndex)
 {
 
 }
 
-void Musec::Model::TrackListModel::moveInstrument(int fromTrackIndex, int toTrackIndex)
+void TrackListModel::moveInstrument(int fromTrackIndex, int toTrackIndex)
 {
 
 }
 
-void Musec::Model::TrackListModel::moveEffect(
+void TrackListModel::moveEffect(
     int fromTrackIndex, int fromPluginIndex, int toTrackIndex, int toPluginIndex)
 {
 
 }
 
-Musec::Model::RoleNamesType Musec::Model::TrackListModel::roleNames() const
+void TrackListModel::insertEffectMasterTrack(int pluginFormat, const QString& path, int pluginSubId, int pluginIndex)
+{
+    auto& track = projectMasterTrackRef_.masterTrack;
+    auto plugin = Impl::startPluginFromPathAndSubId(path, pluginSubId, pluginFormat);
+    if(!plugin)
+    {
+        return;
+    }
+    auto& masterTrackPluginSequenceModel = this->masterTrackPluginSequenceModel();
+    masterTrackPluginSequenceModel.beginInsertRows(QModelIndex(), pluginIndex, pluginIndex);
+    auto masterTrackPluginSequences = track.getPluginSequences();
+    masterTrackPluginSequences[0].insert(masterTrackPluginSequences[0].begin() + pluginIndex, plugin);
+    track.setPluginSequences(masterTrackPluginSequences);
+    masterTrackPluginSequenceModel.endInsertRows();
+}
+
+void TrackListModel::replaceEffectMasterTrack(int pluginFormat, const QString& path, int pluginSubId, int pluginIndex)
+{
+    auto& track = projectMasterTrackRef_.masterTrack;
+    auto plugin = Impl::startPluginFromPathAndSubId(path, pluginSubId, pluginFormat);
+    if(!plugin)
+    {
+        return;
+    }
+    auto& masterTrackPluginSequenceModel = this->masterTrackPluginSequenceModel();
+    masterTrackPluginSequenceModel.beginInsertRows(QModelIndex(), pluginIndex, pluginIndex);
+    auto masterTrackPluginSequences = track.getPluginSequences();
+    masterTrackPluginSequences[0][pluginIndex].reset();
+    masterTrackPluginSequences[0][pluginIndex] = std::move(plugin);
+    track.setPluginSequences(std::move(masterTrackPluginSequences));
+    masterTrackPluginSequenceModel.dataChanged(index(pluginIndex), index(pluginIndex), {});
+}
+
+void TrackListModel::removeEffectMasterTrack(int pluginIndex)
+{
+    auto& track = projectMasterTrackRef_.masterTrack;
+    auto& masterTrackPluginSequenceModel = this->masterTrackPluginSequenceModel();
+    masterTrackPluginSequenceModel.beginRemoveRows(QModelIndex(), pluginIndex, pluginIndex);
+    auto masterTrackPluginSequences = track.getPluginSequences();
+    masterTrackPluginSequences[0].erase(masterTrackPluginSequences[0].begin() + pluginIndex);
+    masterTrackPluginSequenceModel.endRemoveRows();
+}
+
+RoleNamesType TrackListModel::roleNames() const
 {
     return roleNames_;
 }
 
-Qt::ItemFlags Musec::Model::TrackListModel::flags(const QModelIndex& index) const
+Qt::ItemFlags TrackListModel::flags(const QModelIndex& index) const
 {
     return QAbstractListModel::flags(index) | Qt::ItemFlag::ItemIsEditable;
+}
+
+double TrackListModel::getMasterTrackGain() const
+{
+    return project_.masterTrackRef().gain;
+}
+
+void TrackListModel::setMasterTrackGain(double gain)
+{
+    projectMasterTrackRef_.gain = gain;
+    masterTrackGainChanged();
+}
+
+double TrackListModel::getMasterTrackPanning() const
+{
+    return 0;
+}
+
+void TrackListModel::setMasterTrackPanning(double panning)
+{
+    projectMasterTrackRef_.panning = panning;
+    masterTrackPanningChanged();
+}
+
+bool TrackListModel::getMasterTrackMute() const
+{
+    return projectMasterTrackRef_.trackMute;
+}
+
+void TrackListModel::setMasterTrackMute(bool mute)
+{
+    projectMasterTrackRef_.trackMute = mute;
+    masterTrackMuteChanged();
+}
+
+bool TrackListModel::getMasterTrackSolo() const
+{
+    return projectMasterTrackRef_.trackSolo;
+}
+
+void TrackListModel::setMasterTrackSolo(bool solo)
+{
+    projectMasterTrackRef_.trackSolo = solo;
+    masterTrackSoloChanged();
+}
+
+bool TrackListModel::getMasterTrackInvertPhase() const
+{
+    return projectMasterTrackRef_.trackInvertPhase;
+}
+
+void TrackListModel::setMasterTrackInvertPhase(bool invertPhase)
+{
+    projectMasterTrackRef_.trackInvertPhase = invertPhase;
+    masterTrackInvertPhaseChanged();
+}
+
+bool TrackListModel::getMasterTrackArmRecording() const
+{
+    return projectMasterTrackRef_.trackArmRecording;
+}
+
+void TrackListModel::setMasterTrackArmRecording(bool armRecording)
+{
+    projectMasterTrackRef_.trackArmRecording = armRecording;
+    masterTrackArmRecordingChanged();
+}
 }

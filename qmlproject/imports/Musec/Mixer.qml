@@ -9,6 +9,7 @@ Rectangle {
     id: root
     color: Constants.backgroundColor2
     property MModel.TrackListModel tracks
+    property MModel.PluginSequenceModel masterTrackPluginSequence
     property bool effectVisible: true
     property bool gainAndMeterVisible: true
     clip: true
@@ -135,6 +136,8 @@ Rectangle {
         color: Constants.backgroundColor2
         MixerChannel {
             id: masterChannel
+            z: 2
+            effectListModel: root.masterTrackPluginSequence
             channelName: qsTr("Master")
             channelColor: Constants.backgroundColor2
             channelNumber: 0
@@ -142,6 +145,36 @@ Rectangle {
             height: root.height - scroll.height
             effectVisible: root.effectVisible
             gainAndMeterVisible: root.gainAndMeterVisible
+            gain: root.tracks.masterTrackGain
+            panning: root.tracks.masterTrackPanning
+            channelMuted: root.tracks.masterTrackMute
+            channelSolo: root.tracks.masterTrackSolo
+            channelInverted: root.tracks.masterTrackInvertPhase
+            channelArmRecording: root.tracks.masterTrackArmRecording
+            onSetMute: {
+                root.tracks.masterTrackMute = newMute;
+            }
+            onSetSolo: {
+                root.tracks.masterTrackSolo = newSolo;
+            }
+            onSetInvertPhase: {
+                root.tracks.masterTrackInvertPhase = newInvertPhase;
+            }
+            onSetArmRecording: {
+                root.tracks.masterTrackArmRecording = newArmRecording;
+            }
+            onInsertEffect: {
+                root.tracks.insertEffectMasterTrack(pluginFormat, pluginPath, pluginSubId, effectIndex);
+            }
+            onReplaceEffect: {
+                root.tracks.replaceEffectMasterTrack(pluginFormat, pluginPath, pluginSubId, effectIndex);
+            }
+            onAudioEffectSlotVisibleToggled: {
+                masterTrackPluginSequence.setWindowVisible(effectIndex, audioEffectWindowVisible);s
+            }
+            onAudioSlotRightClicked: {
+                //
+            }
         }
         Rectangle {
             id: masterChannelRightBorder
@@ -150,7 +183,6 @@ Rectangle {
             width: 1
             height: parent.height
             color: Constants.borderColor
-            z: 2
         }
         ListView {
             id: trackChannelList

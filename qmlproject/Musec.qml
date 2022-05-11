@@ -20,6 +20,7 @@ ApplicationWindow {
     property alias instrumentList: musecList.instrumentlist
     property alias audioEffectList: musecList.audioEffectList
     property alias trackList: musecList.trackList
+    property alias masterTrackPluginSequence: mixer.masterTrackPluginSequence
     property alias pluginDirectoryList: optionsWindow.pluginDirectoryList
     property alias driverList: optionsWindow.driverList
     property alias currentDriver: optionsWindow.currentDriver
@@ -732,6 +733,7 @@ ApplicationWindow {
                         id: mixerFunctionArea
                         title: qsTr("混音器")
                         Mixer {
+                            id: mixer
                             parent: mixerFunctionArea.contentArea
                             anchors.fill: parent
                             anchors.margins: 1

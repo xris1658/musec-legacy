@@ -195,7 +195,7 @@ set(PROJECT_SOURCES
     util/Literal.cpp
     util/Literal.hpp
     ui/PluginWindow.cpp
-    ui/PluginWindow.hpp)
+    ui/PluginWindow.hpp audio/driver/Literals.hpp audio/driver/Literals.cpp)
 
 set(TEST_COMMON_SOURCES
     test/common/PluginWindowThread.cpp

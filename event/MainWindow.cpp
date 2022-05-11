@@ -44,6 +44,7 @@ void MainWindow::openMainWindow()
     updateAssetDirectoryList();
     updatePluginList();
     mainWindow->setProperty("trackList", QVariant::fromValue(&Musec::Controller::AudioEngineController::AppTrackListModel()));
+    mainWindow->setProperty("masterTrackPluginSequence", QVariant::fromValue(&Musec::Controller::AudioEngineController::AppTrackListModel().masterTrackPluginSequenceModel()));
     Musec::Controller::MIDIClockController::AppMIDIClock();
     openMainWindowComplete();
 }
