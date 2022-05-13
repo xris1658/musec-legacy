@@ -9,6 +9,8 @@ namespace Audio
 {
 namespace Driver
 {
+extern bool driverSupportsOutputReady;
+
 void onASIOBufferSwitch(long doubleBufferIndex,
                         ASIOBool directProcess);
 

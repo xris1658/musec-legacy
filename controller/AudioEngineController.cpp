@@ -44,7 +44,7 @@ double getCurrentSampleRate()
     double ret;
     if(Musec::Audio::Driver::AppASIODriver())
     {
-        return Musec::Audio::Driver::getASIODriverStreamInfo().sampleRate;
+        return Musec::Audio::Driver::getSampleRate();
     }
     return 44100.0;
 }
@@ -53,7 +53,7 @@ long getMaxBlockSize()
 {
     if(Musec::Audio::Driver::AppASIODriver())
     {
-        auto ret = Musec::Audio::Driver::getASIODriverStreamInfo().maximumBufferSize;
+        auto ret = Musec::Audio::Driver::getBufferSize().maximumBufferSize;
         if(ret != 0xcccccccc && ret != 0)
         return ret;
     }
@@ -64,14 +64,14 @@ long getCurrentBlockSize()
 {
     if(Musec::Audio::Driver::AppASIODriver())
     {
-        auto ret = Musec::Audio::Driver::getASIODriverStreamInfo().preferredBufferSize;
+        auto ret = Musec::Audio::Driver::getBufferSize().preferredBufferSize;
         if(ret != 0)
         {
             return ret;
         }
         else
         {
-            return Musec::Audio::Driver::getASIODriverStreamInfo().maximumBufferSize;
+            return Musec::Audio::Driver::getBufferSize().maximumBufferSize;
         }
     }
     return 512;
@@ -81,7 +81,7 @@ long getInputLatency()
 {
     if(Musec::Audio::Driver::AppASIODriver())
     {
-        return Musec::Audio::Driver::getASIODriverStreamInfo().inputLatencyInSamples;
+        return Musec::Audio::Driver::getLatency().inputLatency;
     }
     return getCurrentBlockSize();
 }
@@ -90,7 +90,7 @@ long getOutputLatency()
 {
     if(Musec::Audio::Driver::AppASIODriver())
     {
-        return Musec::Audio::Driver::getASIODriverStreamInfo().outputLatencyInSamples;
+        return Musec::Audio::Driver::getLatency().outputLatency;
     }
     return getCurrentBlockSize();
 }

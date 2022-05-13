@@ -77,8 +77,8 @@ void loadASIODriver()
         appConfig["musec"]["options"]["audio-hardware"]["sample-rate"] = 44100.0;
         ConfigController::saveAppConfig();
     }
-    auto info = getASIODriverStreamInfo(driver);
-    if(info.outputChannelCount == 0)
+    auto info = Musec::Audio::Driver::getChannelCount(driver);
+    if(info.outputCount == 0)
     {
         auto name = std::get<Musec::Audio::Driver::ASIODriverField::NameField>(driver.driverInfo());
         Musec::UI::MessageDialog::messageDialog(QString("当前加载的 ASIO 驱动程序 (%1) 没有输出。").arg(name),
@@ -88,22 +88,22 @@ void loadASIODriver()
     constexpr int inputBufferCount = Musec::Audio::Driver::inputChannelCount;
     constexpr int outputBufferCount = Musec::Audio::Driver::outputChannelCount;
     auto& bufferInfo = getASIOBufferInfoList();
-    for(int i = 0; i < info.inputChannelCount; ++i)
+    for(int i = 0; i < info.inputCount; ++i)
     {
         bufferInfo[i].isInput = ASIOTrue;
         bufferInfo[i].channelNum = i;
         bufferInfo[i].buffers[0] = bufferInfo[i].buffers[1] = nullptr;
     }
-    for(int i = info.inputChannelCount; i < info.inputChannelCount + info.outputChannelCount; ++i)
+    for(int i = info.inputCount; i < info.inputCount + info.outputCount; ++i)
     {
         bufferInfo[i].isInput = ASIOFalse;
-        bufferInfo[i].channelNum = i - info.inputChannelCount;
+        bufferInfo[i].channelNum = i - info.inputCount;
         bufferInfo[i].buffers[0] = bufferInfo[i].buffers[1] = nullptr;
     }
     //
     auto createBuffersResult = driver->createBuffers(bufferInfo.data(),
-                                                     inputBufferCount + outputBufferCount,
-                                                     info.preferredBufferSize,
+                                                     info.inputCount + info.outputCount,
+                                                     Musec::Audio::Driver::getBufferSize(driver).preferredBufferSize,
                                                      &getCallbacks());
     if(createBuffersResult != ASE_OK)
     {
@@ -111,17 +111,22 @@ void loadASIODriver()
         return;
     }
     auto& channelInfoList = getASIOChannelInfoList();
-    for(int i = 0; i < info.inputChannelCount + info.outputChannelCount; ++i)
+    for(int i = 0; i < info.inputCount + info.outputCount; ++i)
     {
         channelInfoList[i].channel = bufferInfo[i].channelNum;
         channelInfoList[i].isInput = bufferInfo[i].isInput;
-        auto result = driver->getChannelInfo(&(channelInfoList[i]));
-        if(result != ASE_OK)
+        auto getChannelInfoResult = driver->getChannelInfo(&(channelInfoList[i]));
+        if(getChannelInfoResult != ASE_OK)
         {
-            //
+            Impl::showASIOErrorMessageDialog(driver, getChannelInfoResult);
         }
     }
-    driver->start();
+    Musec::Audio::Driver::driverSupportsOutputReady = (driver->outputReady() == ASE_OK);
+    auto startResult = driver->start();
+    if(startResult != ASE_OK)
+    {
+        Impl::showASIOErrorMessageDialog(driver, startResult);
+    }
     updateCurrentASIODriverInfo();
 }
 

@@ -10,6 +10,8 @@
 
 namespace Musec::Audio::Driver
 {
+bool driverSupportsOutputReady;
+
 namespace Impl
 {
 constexpr Musec::Util::Endian endian()
@@ -19,52 +21,21 @@ constexpr Musec::Util::Endian endian()
            Musec::Util::Endian::UnknownEndian;
 }
 }
-std::int8_t bufferIndex = 0;
-void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
-{
-    ASIOTime timeInfo;
-    Musec::Base::memoryReset(&timeInfo);
-    auto& driver = AppASIODriver();
-    // 以下代码可能在 ASIO 驱动被卸载后执行，因此需要额外的检验。
-    // 加锁表面上更好，但此函数可能在中断时刻调用，因此上锁可能会影响效率。
-    if(driver)
-    {
-        if(driver->getSamplePosition(&(timeInfo.timeInfo.samplePosition),
-                                     &(timeInfo.timeInfo.systemTime))
-           == ASE_OK)
-        {
-            timeInfo.timeInfo.flags = AsioTimeInfoFlags::kSystemTimeValid
-                                    | AsioTimeInfoFlags::kSamplePositionValid;
-        }
-        onASIOBufferSwitchTimeInfo(&timeInfo, doubleBufferIndex, directProcess);
-    }
-}
 
-ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
-                                     long doubleBufferIndex,
-                                     ASIOBool directProcess)
+void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
 {
     if(*AppASIODriver())
     {
         std::array<Musec::Audio::Base::AudioBufferView<float>, 2> masterTrackAudioBufferView = {};
-        auto bufferSize = getASIODriverStreamInfo(AppASIODriver()).preferredBufferSize;
+        auto bufferSize = Musec::Audio::Driver::getBufferSize().preferredBufferSize;
         masterTrackAudioBufferView[0] = Musec::Audio::Base::AudioBufferView<float>(
-            reinterpret_cast<float*>(Musec::Controller::AudioEngineController::AppProject().masterTrackAudioBuffer().data()),
-            bufferSize
+                reinterpret_cast<float*>(Musec::Controller::AudioEngineController::AppProject().masterTrackAudioBuffer().data()),
+                bufferSize
         );
         masterTrackAudioBufferView[1] = Musec::Audio::Base::AudioBufferView<float>(
-            reinterpret_cast<float*>(Musec::Controller::AudioEngineController::AppProject().masterTrackAudioBuffer().data()) + bufferSize,
-            bufferSize
+                reinterpret_cast<float*>(Musec::Controller::AudioEngineController::AppProject().masterTrackAudioBuffer().data()) + bufferSize,
+                bufferSize
         );
-        auto currentBufferIndex = bufferIndex;
-        if(bufferIndex == 1)
-        {
-            bufferIndex = 0;
-        }
-        else
-        {
-            bufferIndex = 1;
-        }
         std::array<int, Musec::Audio::Driver::inputChannelCount> inputs = {0};
         std::array<int, Musec::Audio::Driver::outputChannelCount> outputs = {0};
         int inputCount = 0;
@@ -144,11 +115,11 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
         for(int i = 0; i < 2; ++i)
         {
             using int24_t = std::int8_t[3];
-            auto buffer = bufferInfoList[outputs[i]].buffers[currentBufferIndex];
+            auto buffer = bufferInfoList[outputs[i]].buffers[doubleBufferIndex];
             // buffer[0] 和 buffer[1] 是 ASIO 的双缓冲区地址
             // 有些驱动程序 (e.g. ASIO4ALL）不使用双缓冲，两个地址相同
             // 多数驱动程序（FlexASIO）使用双缓冲，两个地址不同
-            switch(channelInfoList[i].type)
+            switch(channelInfoList[outputs[i]].type)
             {
             // MSB
             case ASIOSTInt16MSB:
@@ -407,8 +378,18 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
                 break;
             }
         }
-        return nullptr;
+        if(AppASIODriver() && driverSupportsOutputReady)
+        {
+            AppASIODriver()->outputReady();
+        }
     }
+}
+
+ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
+                                     long doubleBufferIndex,
+                                     ASIOBool directProcess)
+{
+    onASIOBufferSwitch(doubleBufferIndex, directProcess);
     return nullptr;
 }
 
@@ -425,37 +406,14 @@ long onASIOMessage(long selector,
     long ret = 0;
     switch(selector)
     {
-        case kAsioSelectorSupported:
-            if(value == kAsioResetRequest
-            || value == kAsioEngineVersion
-            || value == kAsioResyncRequest
-            || value == kAsioLatenciesChanged
-            || value == kAsioSupportsTimeInfo
-            || value == kAsioSupportsTimeCode
-            || value == kAsioSupportsInputMonitor)
-                ret = 1L;
-            break;
-        case kAsioResetRequest:
-            ret = 1L;
-            break;
-        case kAsioResyncRequest:
-            ret = 1L;
-            break;
-        case kAsioLatenciesChanged:
-            ret = 1L;
-            break;
         case kAsioEngineVersion:
             ret = 2L;
             break;
-        case kAsioSupportsTimeInfo:
-            ret = 1;
-            break;
-        case kAsioSupportsTimeCode:
-            ret = 0;
-            break;
-        default:
-            ret = 0;
-            break;
+    case kAsioSupportsTimeInfo:
+        break;
+    default:
+        ret = 1L;
+        break;
     }
     return ret;
 }

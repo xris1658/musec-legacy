@@ -44,6 +44,7 @@ QList<ASIODriverBasicInfo> enumerateDrivers()
     }
     if(numSubKey > 0)
     {
+        ret.reserve(numSubKey);
         for(decltype(numSubKey) i = 0; i < numSubKey; ++i)
         {
             DWORD driverNameLength = driverNameSize;
@@ -88,7 +89,6 @@ QList<ASIODriverBasicInfo> enumerateDrivers()
                 }
             }
         }
-        assert(ret.size() <= numSubKey);
     }
     return ret;
 }
@@ -181,14 +181,43 @@ ASIODriver& AppASIODriver()
     return ret;
 }
 
+ASIOChannelCount getChannelCount(const ASIODriver& driver)
+{
+    ASIOChannelCount ret;
+    driver->getChannels(&ret.inputCount, &ret.outputCount);
+    return ret;
+}
+
+ASIOLatencyInSamples getLatency(const ASIODriver& driver)
+{
+    ASIOLatencyInSamples ret;
+    driver->getLatencies(&ret.inputLatency, &ret.outputLatency);
+    return ret;
+}
+
+ASIOBufferSize getBufferSize(const ASIODriver& driver)
+{
+    ASIOBufferSize ret;
+    driver->getBufferSize(&ret.minimumBufferSize,
+        &ret.maximumBufferSize,
+        &ret.preferredBufferSize,
+        &ret.bufferSizeGranularity);
+    return ret;
+}
+
+ASIOSampleRate getSampleRate(const ASIODriver& driver)
+{
+    ASIOSampleRate ret;
+    driver->getSampleRate(&ret);
+    return ret;
+}
+
 ASIODriverStreamInfo getASIODriverStreamInfo(const ASIODriver& driver)
 {
-    std::array<char, 64> name = {0};
+    ASIODriverStreamInfo ret {};
     if(*driver)
     {
-        driver->getDriverName(name.data());
         // auto version = driver->getDriverVersion();
-        ASIODriverStreamInfo ret;
         driver->getChannels(&ret.inputChannelCount,
                             &ret.outputChannelCount);
         driver->getLatencies(&ret.inputLatencyInSamples,
@@ -198,8 +227,8 @@ ASIODriverStreamInfo getASIODriverStreamInfo(const ASIODriver& driver)
                               &ret.preferredBufferSize,
                               &ret.bufferSizeGranularity);
         driver->getSampleRate(&ret.sampleRate);
-        return ret;
     }
+    return ret;
 }
 }
 

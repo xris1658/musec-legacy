@@ -21,8 +21,8 @@ using ASIODriverBasicInfo = std::tuple<QString, QString>;
 // CLSID 字符串的长度（32 位数据 + 4 个横杠 + 2 个花括号，不包含 NULL 终止符）
 constexpr auto CLSIDStringLength = 38;
 
-constexpr int inputChannelCount = 64;
-constexpr int outputChannelCount = 64;
+constexpr int inputChannelCount = 16;
+constexpr int outputChannelCount = 16;
 constexpr int channelCount = inputChannelCount + outputChannelCount;
 using ASIOBufferInfoList = std::array<ASIOBufferInfo, channelCount>;
 using ASIOChannelInfoList = std::array<ASIOChannelInfo, channelCount>;
@@ -38,6 +38,26 @@ enum ASIODriverField
 };
 
 QList<ASIODriverBasicInfo> enumerateDrivers();
+
+struct ASIOChannelCount
+{
+    long inputCount;
+    long outputCount;
+};
+
+struct ASIOLatencyInSamples
+{
+    long inputLatency;
+    long outputLatency;
+};
+
+struct ASIOBufferSize
+{
+    long minimumBufferSize;
+    long maximumBufferSize;
+    long preferredBufferSize;
+    long bufferSizeGranularity;
+};
 
 class ASIODriver
 {
@@ -68,6 +88,14 @@ private:
 // 让 IASIO 正常退出，然后再关闭主窗口。否则主窗口比 ASIO 销毁早，从而导致 ASIO
 // 退出时出现问题，有可能导致程序无法退出，或者程序崩溃。
 ASIODriver& AppASIODriver();
+
+ASIOChannelCount getChannelCount(const ASIODriver& driver = AppASIODriver());
+
+ASIOLatencyInSamples getLatency(const ASIODriver& driver = AppASIODriver());
+
+ASIOBufferSize getBufferSize(const ASIODriver& driver = AppASIODriver());
+
+ASIOSampleRate getSampleRate(const ASIODriver& driver = AppASIODriver());
 
 ASIODriverStreamInfo getASIODriverStreamInfo(const ASIODriver& driver = AppASIODriver());
 }
