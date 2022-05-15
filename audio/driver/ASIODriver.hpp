@@ -21,9 +21,9 @@ using ASIODriverBasicInfo = std::tuple<QString, QString>;
 // CLSID 字符串的长度（32 位数据 + 4 个横杠 + 2 个花括号，不包含 NULL 终止符）
 constexpr auto CLSIDStringLength = 38;
 
-constexpr int inputChannelCount = 16;
-constexpr int outputChannelCount = 16;
-constexpr int channelCount = inputChannelCount + outputChannelCount;
+constexpr int maxInputChannelCount = 16;
+constexpr int maxOutputChannelCount = 16;
+constexpr int channelCount = maxInputChannelCount + maxOutputChannelCount;
 using ASIOBufferInfoList = std::array<ASIOBufferInfo, channelCount>;
 using ASIOChannelInfoList = std::array<ASIOChannelInfo, channelCount>;
 

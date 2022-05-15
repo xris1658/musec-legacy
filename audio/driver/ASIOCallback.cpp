@@ -36,8 +36,8 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
                 reinterpret_cast<float*>(Musec::Controller::AudioEngineController::AppProject().masterTrackAudioBuffer().data()) + bufferSize,
                 bufferSize
         );
-        std::array<int, Musec::Audio::Driver::inputChannelCount> inputs = {0};
-        std::array<int, Musec::Audio::Driver::outputChannelCount> outputs = {0};
+        std::array<int, Musec::Audio::Driver::maxInputChannelCount> inputs = {0};
+        std::array<int, Musec::Audio::Driver::maxOutputChannelCount> outputs = {0};
         int inputCount = 0;
         int outputCount = 0;
         auto& bufferInfoList = getASIOBufferInfoList();

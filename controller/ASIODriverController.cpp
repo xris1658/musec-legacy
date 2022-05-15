@@ -85,8 +85,6 @@ void loadASIODriver()
                                              "Musec - 驱动程序警告",
                                              Musec::UI::MessageDialog::IconType::Warning);
     }
-    constexpr int inputBufferCount = Musec::Audio::Driver::inputChannelCount;
-    constexpr int outputBufferCount = Musec::Audio::Driver::outputChannelCount;
     auto& bufferInfo = getASIOBufferInfoList();
     for(int i = 0; i < info.inputCount; ++i)
     {
