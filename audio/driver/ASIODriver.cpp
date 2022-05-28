@@ -177,7 +177,7 @@ void ASIODriver::swap(ASIODriver& rhs)
 
 ASIODriver& AppASIODriver()
 {
-    static Musec::Audio::Driver::ASIODriver ret;
+    static ASIODriver ret;
     return ret;
 }
 

@@ -58,6 +58,7 @@ HEADERS += \
     audio/driver/ASIODriver.hpp \
     audio/driver/ASIODriverForward.hpp \
     audio/driver/ASIODriverStreamInfo.hpp \
+    audio/driver/Literals.hpp \
     audio/engine/Graph.hpp \
     audio/engine/MIDIClock.hpp \
     audio/engine/Project.hpp \
@@ -139,6 +140,7 @@ SOURCES += \
     audio/base/TimeSignature.cpp \
     audio/driver/ASIOCallback.cpp \
     audio/driver/ASIODriver.cpp \
+    audio/driver/Literals.cpp \
     audio/engine/MIDIClock.cpp \
     audio/engine/Project.cpp \
     audio/host/MusecVST3Host.cpp \
@@ -206,8 +208,6 @@ SOURCES += \
     util/Literal.cpp
 
 RESOURCES += \
-    $$files(qmlproject/*) \
-#    $$files(qmlproject/imports/Musec) \
     Musec.qrc
 
 LIBS += \
@@ -264,9 +264,6 @@ QML_DESIGNER_IMPORT_PATH = qmlproject/imports
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-DISTFILES += \
-    $$files(qmlproject/*)
 
 #msvc:QMAKE_CXXFLAGS += -execution-charset:utf-8
 #msvc:QMAKE_CXXFLAGS += -source-charset:utf-8
