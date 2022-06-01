@@ -13,6 +13,7 @@
 
 #include <QString>
 #include <QWindow>
+#include <public.sdk/source/vst/hosting/parameterchanges.h>
 
 namespace Musec
 {
@@ -112,11 +113,13 @@ private:
     Steinberg::PClassInfo classInfo_;
     Steinberg::IPluginFactory* factory_ = nullptr;
     Steinberg::Vst::IComponent* component_ = nullptr;
-    Steinberg::Vst::IAudioProcessor* effect_ = nullptr;
+    Steinberg::Vst::IAudioProcessor* audioProcessor_ = nullptr;
     Steinberg::Vst::IEditController* editController_ = nullptr;
     Steinberg::Vst::IConnectionPoint* componentPoint_ = nullptr;
     Steinberg::Vst::IConnectionPoint* editControllerPoint_ = nullptr;
     Steinberg::IPlugView* view_ = nullptr;
+    // 输入参数改变
+    Steinberg::Vst::ParameterChanges paramChanges_;
     // IAudioProcessor::process 函数调用的实参
     Steinberg::Vst::ProcessData processData_;
     // 调用 process 函数时将 data 赋值给 processData_

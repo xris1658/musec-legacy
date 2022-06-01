@@ -18,7 +18,7 @@ template<typename SampleType>
 VST3Plugin<SampleType>::VST3Plugin():
     VST3Plugin::Base(), VST3Plugin::IPluginInterface()
 {
-    //
+    processData_.inputParameterChanges = &paramChanges_;
 }
 
 template<typename SampleType>
@@ -108,7 +108,7 @@ VST3Plugin<SampleType>::~VST3Plugin()
 template<typename SampleType>
 Steinberg::Vst::IAudioProcessor* VST3Plugin<SampleType>::effect() const
 {
-    return effect_;
+    return audioProcessor_;
 }
 
 template<typename SampleType>
@@ -154,20 +154,17 @@ void VST3Plugin<SampleType>::process(const Musec::Audio::Base::AudioBufferViews<
 {
     auto inputsSize = inputs.size();
     auto outputsSize = outputs.size();
+    processData_.numSamples = outputs[0].size();
     for (int i = 0; i < inputsSize; ++i)
     {
         inputRaw_[i] = inputs[i].getSamples();
-        if(inputRaw_.size() > inputs.size())
-        {
-            inputRaw_[i + inputs.size()] = inputs[i].getSamples();
-        }
     }
     for (int i = 0; i < outputsSize; ++i)
     {
         outputRaw_[i] = outputs[i].getSamples();
     }
     rawToProcessData();
-    effect_->process(processData_);
+    audioProcessor_->process(processData_);
 }
 
 // ------------------------------------------------------------------------------------------
@@ -185,7 +182,7 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
     }
     auto queryAudioProcessorResult = component_->queryInterface(
         Steinberg::Vst::IAudioProcessor_iid,
-        reinterpret_cast<void**>(&effect_));
+        reinterpret_cast<void**>(&audioProcessor_));
     if(queryAudioProcessorResult != Steinberg::kResultOk)
     {
         throw std::runtime_error("Error creating VST3 audio processor!");
@@ -193,14 +190,14 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
     audioProcessorStatus_ = VST3AudioProcessorStatus::Initialized;
     if constexpr(std::is_same_v<SampleType, float>)
     {
-        if(effect_->canProcessSampleSize(Steinberg::Vst::SymbolicSampleSizes::kSample32) == Steinberg::kResultFalse)
+        if(audioProcessor_->canProcessSampleSize(Steinberg::Vst::SymbolicSampleSizes::kSample32) == Steinberg::kResultFalse)
         {
             throw std::runtime_error("The plugin cannot process 32-bit float!");
         }
     }
     if constexpr(std::is_same_v<SampleType, double>)
     {
-        if(effect_->canProcessSampleSize(Steinberg::Vst::SymbolicSampleSizes::kSample64) == Steinberg::kResultFalse)
+        if(audioProcessor_->canProcessSampleSize(Steinberg::Vst::SymbolicSampleSizes::kSample64) == Steinberg::kResultFalse)
         {
             throw std::runtime_error("The plugin cannot process 64-bit float!");
         }
@@ -224,31 +221,42 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
     processData_.processMode = setup.processMode;
     processData_.symbolicSampleSize = setup.symbolicSampleSize;
     auto inputBusCount = component_->getBusCount(Steinberg::Vst::MediaTypes::kAudio,
-                                                 Steinberg::Vst::BusDirections::kInput);
+        Steinberg::Vst::BusDirections::kInput);
     auto outputBusCount = component_->getBusCount(Steinberg::Vst::MediaTypes::kAudio,
-                                                  Steinberg::Vst::BusDirections::kOutput);
-    inputs_ = decltype(inputs_)(inputBusCount);
-    outputs_ = decltype(outputs_)(outputBusCount);
+        Steinberg::Vst::BusDirections::kOutput);
     inputSpeakerArrangements_ = decltype(inputSpeakerArrangements_)(inputBusCount, Steinberg::Vst::SpeakerArr::kStereo);
     outputSpeakerArrangements_ = decltype(outputSpeakerArrangements_)(outputBusCount, Steinberg::Vst::SpeakerArr::kStereo);
     Steinberg::Vst::BusInfo busInfo;
+    int audioInputBusIndex = -1;
+    int audioOutputBusIndex = -1;
+    int midiInputBusIndex = -1;
     for(decltype(inputBusCount) i = 0; i < inputBusCount; ++i)
     {
         component_->getBusInfo(Steinberg::Vst::MediaTypes::kAudio, Steinberg::Vst::BusDirections::kInput,
                                i, busInfo);
-        auto channelCount = busInfo.channelCount;
-        //effect_->getBusArrangement(Steinberg::Vst::BusDirections::kInput, i, inputSpeakerArrangements_[i]);
+        if(busInfo.busType == Steinberg::Vst::BusTypes::kMain)
+        {
+            audioInputBusIndex = i;
+            processData_.numInputs = 1;
+            break;
+        }
     }
     for(decltype(outputBusCount) i = 0; i < outputBusCount; ++i)
     {
         component_->getBusInfo(Steinberg::Vst::MediaTypes::kAudio, Steinberg::Vst::BusDirections::kOutput,
                                i, busInfo);
-        auto channelCount = busInfo.channelCount;
-        //effect_->getBusArrangement(Steinberg::Vst::BusDirections::kOutput, i, outputSpeakerArrangements_[i]);
+        if(busInfo.busType == Steinberg::Vst::BusTypes::kMain)
+        {
+            audioOutputBusIndex = i;
+            processData_.numOutputs = 1;
+            break;
+        }
     }
-    auto setBusArrangementsResult = effect_->setBusArrangements(
-        inputSpeakerArrangements_.data(), inputBusCount,
-        outputSpeakerArrangements_.data(), outputBusCount);
+    inputs_ = decltype(inputs_)(processData_.numInputs);
+    outputs_ = decltype(outputs_)(processData_.numOutputs);
+    auto setBusArrangementsResult = audioProcessor_->setBusArrangements(
+        inputSpeakerArrangements_.data(), processData_.numInputs,
+        outputSpeakerArrangements_.data(), processData_.numOutputs);
     if (setBusArrangementsResult != Steinberg::kResultOk)
     {
         // 再次调用 getBusArrangement，用于宿主程序与插件之间协商总线布局
@@ -257,37 +265,39 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
         // https://developer.steinberg.help/display/VST/Bus+Arrangement+Setting+Sequences
         for (decltype(outputBusCount) i = 0; i < outputBusCount; ++i)
         {
-            effect_->getBusArrangement(Steinberg::Vst::BusDirections::kOutput, i, outputSpeakerArrangements_[i]);
+            audioProcessor_->getBusArrangement(Steinberg::Vst::BusDirections::kOutput, i, outputSpeakerArrangements_[i]);
         }
         for (decltype(inputBusCount) i = 0; i < inputBusCount; ++i)
         {
-            // Youlean Loudness Meter 2 会在此处抛出 std::out_of_range
-            effect_->getBusArrangement(Steinberg::Vst::BusDirections::kInput, i, inputSpeakerArrangements_[i]);
+            audioProcessor_->getBusArrangement(Steinberg::Vst::BusDirections::kInput, i, inputSpeakerArrangements_[i]);
         }
-        setBusArrangementsResult = effect_->setBusArrangements(
+        setBusArrangementsResult = audioProcessor_->setBusArrangements(
             inputSpeakerArrangements_.data(), inputSpeakerArrangements_.size(),
             outputSpeakerArrangements_.data(), outputSpeakerArrangements_.size());
-        // 不检查此处的结果。因为有些插件本身第一次就成功，结果两次 setBusArrangement 返回的结果均为 kResultFalse
-        // (e.g. FabFilter 插件)
+        if(setBusArrangementsResult != Steinberg::kResultOk)
+        {
+            return false;
+        }
     }
-    for (decltype(inputBusCount) i = 0; i < inputBusCount; ++i)
+    for (decltype(inputBusCount) i = 0; i < processData_.numInputs; ++i)
     {
-        effect_->getBusArrangement(Steinberg::Vst::BusDirections::kInput, i, inputSpeakerArrangements_[i]);
+        audioProcessor_->getBusArrangement(Steinberg::Vst::BusDirections::kInput, i, inputSpeakerArrangements_[i]);
         inputs_[i].numChannels = Steinberg::Vst::SpeakerArr::getChannelCount(inputSpeakerArrangements_[i]);
     }
-    for (decltype(outputBusCount) i = 0; i < outputBusCount; ++i)
+    for (decltype(outputBusCount) i = 0; i < processData_.numOutputs; ++i)
     {
-        effect_->getBusArrangement(Steinberg::Vst::BusDirections::kOutput, i, outputSpeakerArrangements_[i]);
+        audioProcessor_->getBusArrangement(Steinberg::Vst::BusDirections::kOutput, i, outputSpeakerArrangements_[i]);
         outputs_[i].numChannels = Steinberg::Vst::SpeakerArr::getChannelCount(outputSpeakerArrangements_[i]);
     }
-    // ProcessData ---------------------------------------------------------------------------------
     inputRaw_ = std::vector<SampleType*>(inputCount(), nullptr);
     outputRaw_ = std::vector<SampleType*>(outputCount(), nullptr);
-    auto setupProcessingResult = effect_->setupProcessing(setup);
+    auto setupProcessingResult = audioProcessor_->setupProcessing(setup);
     if (setupProcessingResult != Steinberg::kResultOk)
     {
         throw std::runtime_error("");
     }
+    component_->activateBus(Steinberg::Vst::MediaTypes::kAudio, Steinberg::Vst::BusDirections::kInput, audioInputBusIndex, true);
+    component_->activateBus(Steinberg::Vst::MediaTypes::kAudio, Steinberg::Vst::BusDirections::kOutput, audioOutputBusIndex, true);
     audioProcessorStatus_ = VST3AudioProcessorStatus::SetupDone;
     return true;
 }
@@ -300,7 +310,7 @@ bool VST3Plugin<SampleType>::uninitialize()
         uninitializeEditor();
     }
     audioProcessorStatus_ = VST3AudioProcessorStatus::Initialized;
-    effect_->release();
+    audioProcessor_->release();
     auto terminateComponentResult = component_->terminate();
     if(terminateComponentResult != Steinberg::kResultOk)
     {
@@ -430,7 +440,7 @@ bool VST3Plugin<SampleType>::startProcessing()
 {
     if(audioProcessorStatus_ == VST3AudioProcessorStatus::Activated)
     {
-        auto ret = effect_->setProcessing(true) == Steinberg::kResultOk;
+        auto ret = audioProcessor_->setProcessing(true) == Steinberg::kResultOk;
         if(ret)
         {
             audioProcessorStatus_ = VST3AudioProcessorStatus::Processing;
@@ -446,7 +456,7 @@ bool VST3Plugin<SampleType>::stopProcessing()
 {
     if(audioProcessorStatus_ == VST3AudioProcessorStatus::Processing)
     {
-        auto ret = effect_->setProcessing(false) == Steinberg::kResultOk;
+        auto ret = audioProcessor_->setProcessing(false) == Steinberg::kResultOk;
         if(ret)
         {
             audioProcessorStatus_ = VST3AudioProcessorStatus::Activated;
@@ -494,19 +504,19 @@ template<typename SampleType>
 void VST3Plugin<SampleType>::rawToProcessData()
 {
     int rawIt = 0;
-    auto inputBusSize = inputs_.size();
-    auto outputBusSize = outputs_.size();
+    auto& inputBusSize = processData_.numInputs;
+    auto& outputBusSize = processData_.numOutputs;
     if constexpr(std::is_same_v<SampleType, float>)
     {
         for (int i = 0; i < inputBusSize; ++i)
         {
-            inputs_[i].channelBuffers32 = &(inputRaw_[rawIt]);
+            inputs_[i].channelBuffers32 = inputRaw_.data() + rawIt;
             rawIt += inputs_[i].numChannels;
         }
         rawIt = 0;
         for (int i = 0; i < outputBusSize; ++i)
         {
-            outputs_[i].channelBuffers32 = &(outputRaw_[rawIt]);
+            outputs_[i].channelBuffers32 = outputRaw_.data() + rawIt;
             rawIt += outputs_[i].numChannels;
         }
     }
@@ -514,16 +524,18 @@ void VST3Plugin<SampleType>::rawToProcessData()
     {
         for (int i = 0; i < inputBusSize; ++i)
         {
-            inputs_[i].channelBuffers64 = &(inputRaw_[rawIt]);
+            inputs_[i].channelBuffers64 = inputRaw_.data() + rawIt;
             rawIt += inputs_[i].numChannels;
         }
         rawIt = 0;
         for (int i = 0; i < outputBusSize; ++i)
         {
-            outputs_[i].channelBuffers64 = &(outputRaw_[rawIt]);
+            outputs_[i].channelBuffers64 = outputRaw_.data() + rawIt;
             rawIt += outputs_[i].numChannels;
         }
     }
+    processData_.inputs = inputs_.data();
+    processData_.outputs = outputs_.data();
 }
 
 template<typename SampleType>
@@ -551,7 +563,7 @@ bool VST3Plugin<SampleType>::attachToWindow(QWindow* window)
         window_->setHeight(viewRect.getHeight());
         window_->setTitle(classInfo_.name);
         view_->attached(reinterpret_cast<HWND>(window_->winId()), Steinberg::kPlatformTypeHWND);
-        Musec::Controller::AudioEngineController::AppProject().addPluginWindowMapping(effect_, window_);
+        Musec::Controller::AudioEngineController::AppProject().addPluginWindowMapping(audioProcessor_, window_);
         QObject::connect(window_, &QWindow::widthChanged,
             [this](int) { onWindowSizeChanged(); });
         QObject::connect(window_, &QWindow::heightChanged,
@@ -571,7 +583,7 @@ bool VST3Plugin<SampleType>::detachWithWindow()
     if(view_)
     {
         view_->removed();
-        Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(effect_);
+        Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(audioProcessor_);
         window_ = nullptr;
         return true;
     }
@@ -638,6 +650,7 @@ template<typename SampleType> QWindow* VST3Plugin<SampleType>::window()
 {
     return window_;
 }
+
 template<typename SampleType> bool VST3Plugin<SampleType>::hasUI()
 {
     return view_;
