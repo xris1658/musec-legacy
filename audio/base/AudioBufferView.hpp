@@ -15,6 +15,7 @@ namespace Base
 template<typename SampleType>
 class AudioBufferView
 {
+    static_assert(std::is_arithmetic_v<SampleType>);
     using Self = AudioBufferView<SampleType>;
 public:
     AudioBufferView(SampleType* samples, size_t size):
@@ -82,6 +83,19 @@ void clip(AudioBufferView<float>& bufferView);
 void clip(AudioBufferView<double>& bufferView);
 
 void clip(AudioBufferView<long double>& bufferView);
+
+template<typename SampleType>
+bool blank(const AudioBufferView<SampleType>& bufferView)
+{
+    for(decltype(bufferView.size()) i = 0; i < bufferView.size(); ++i)
+    {
+        if(bufferView[i] != SampleType(0))
+        {
+            return false;
+        }
+    }
+    return true;
+}
 }
 }
 }
