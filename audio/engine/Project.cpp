@@ -13,6 +13,7 @@
 namespace Musec::Audio::Engine
 {
 Project::Project(int reserveTrackCount):
+    mutex_(),
     audioBufferPool_(
         sizeof(float) * Musec::Controller::AudioEngineController::getMaxBlockSize() * 2, reserveTrackCount
     ),
@@ -39,10 +40,7 @@ Project::Project(int reserveTrackCount):
 
 Project::~Project()
 {
-    pluginGraph_.clear();
-    tracks_.clear();
-    masterTrack_.setPluginSequences({});
-    pluginAndWindow_.clear();
+    this->clear();
 }
 
 std::size_t Project::trackCount() const noexcept
@@ -94,6 +92,7 @@ Project::MasterTrackRef Project::masterTrackRef()
 
 void Project::insertTrack(std::size_t index, const Musec::Entities::CompleteTrack& track)
 {
+    std::lock_guard<std::mutex> lg(mutex_);
     std::shared_ptr<Musec::Audio::Track::ITrack> trackPointer = nullptr;
     switch(track.getTrackType())
     {
@@ -147,6 +146,7 @@ void Project::insertTrack(std::size_t index, const Musec::Entities::CompleteTrac
 
 void Project::eraseTrack(std::size_t index)
 {
+    std::lock_guard<std::mutex> lg(mutex_);
     audioBuffer_.erase(audioBuffer_.begin() + index);
     tracks_.erase(tracks_.begin() + index);
     gain_.erase(gain_.begin() + index);
@@ -190,6 +190,7 @@ const Musec::Base::FixedSizeMemoryBlock& Project::masterTrackAudioBuffer() const
 
 void Project::process()
 {
+    std::lock_guard<std::mutex> lg(mutex_);
     masterTrackAudioBuffer_.init();
     std::size_t currentBlockSize = Musec::Controller::AudioEngineController::getCurrentBlockSize();
     Musec::Audio::Base::AudioBufferViews<float> audioBufferViews(
@@ -285,6 +286,7 @@ void Project::process()
 
 void Project::clear()
 {
+    std::lock_guard<std::mutex> lg(mutex_);
     pluginGraph_.clear();
     audioBuffer_.clear();
     tracks_.clear();

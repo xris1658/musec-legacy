@@ -35,10 +35,11 @@ public:
     virtual QWindow* window() = 0;
     virtual bool activate() = 0;
     virtual bool deactivate() = 0;
+    virtual bool activated() = 0;
     virtual bool startProcessing() = 0;
     virtual bool stopProcessing() = 0;
     virtual bool hasUI() = 0;
-    virtual bool setBypass(bool bypass)
+    bool setBypass(bool bypass)
     {
         return bypass? stopProcessing(): startProcessing();
     }

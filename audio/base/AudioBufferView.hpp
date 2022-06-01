@@ -76,6 +76,12 @@ private:
 
 template<typename SampleType>
 using AudioBufferViews = std::vector<AudioBufferView<SampleType>>;
+
+void clip(AudioBufferView<float>& bufferView);
+
+void clip(AudioBufferView<double>& bufferView);
+
+void clip(AudioBufferView<long double>& bufferView);
 }
 }
 }

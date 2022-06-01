@@ -14,6 +14,7 @@
 #include <bitset>
 #include <map>
 #include <memory>
+#include <mutex>
 #include <variant>
 #include <vector>
 
@@ -50,7 +51,7 @@ public:
 public:
     Project(int reserveTrackCount = initialReserveTrackCount);
     Project(const Project&) = delete;
-    Project(Project&&) = default;
+    Project(Project&&) = delete;
     ~Project();
 public:
     std::size_t trackCount() const noexcept;
@@ -74,6 +75,7 @@ private:
     std::bitset<4>::reference masterTrackInvertPhase();
     std::bitset<4>::reference masterTrackArmRecording();
 private:
+    std::mutex mutex_;
     Musec::Base::FixedSizeMemoryPool audioBufferPool_;
     std::vector<std::shared_ptr<float>> audioBuffer_;
     Musec::Base::FixedSizeMemoryBlock masterTrackAudioBuffer_;

@@ -137,6 +137,7 @@ HEADERS += \
     util/Literal.hpp
 
 SOURCES += \
+    audio/base/AudioBufferView.cpp \
     audio/base/TimeSignature.cpp \
     audio/driver/ASIOCallback.cpp \
     audio/driver/ASIODriver.cpp \

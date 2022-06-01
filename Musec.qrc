@@ -55,7 +55,9 @@
         <file>qmlproject/imports/Musec/Controls/SplitView.qml</file>
         <file>qmlproject/imports/Musec/Controls/Tab.qml</file>
         <file>qmlproject/imports/Musec/Controls/ToolTip.qml</file>
+        <file>qmlproject/imports/Musec/Controls/qmldir</file>
         <file>qmlproject/imports/Musec/Dialogs/MessageDialog.qml</file>
+        <file>qmlproject/imports/Musec/Dialogs/qmldir</file>
         <file>qmlproject/imports/Musec/DirectoryFontLoader.qml</file>
         <file>qmlproject/imports/Musec/DynamicContentArea.qml</file>
         <file>qmlproject/imports/Musec/FileInfo.qml</file>
@@ -74,5 +76,8 @@
         <file>qmlproject/imports/Musec/Timeline.qml</file>
         <file>qmlproject/imports/Musec/TrackHeader.qml</file>
         <file>qmlproject/imports/Musec/Views/ExplorerView.qml</file>
+        <file>qmlproject/imports/Musec/Views/qmldir</file>
+        <file>qmlproject/imports/Musec/qmldir</file>
+        <file>qmlproject/qmldir</file>
     </qresource>
 </RCC>

@@ -124,6 +124,7 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
             // MSB
             case ASIOSTInt16MSB:
             {
+                Musec::Audio::Base::clip(masterTrackAudioBufferView[i]);
                 std::int16_t* int16Buffer = reinterpret_cast<std::int16_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
@@ -137,6 +138,7 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
             }
             case ASIOSTInt24MSB:
             {
+                Musec::Audio::Base::clip(masterTrackAudioBufferView[i]);
                 int24_t* int24Buffer = reinterpret_cast<int24_t*>(buffer);
                 std::int32_t temp;
                 for(int j = 0; j < bufferSize; ++j)
@@ -155,6 +157,7 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
             }
             case ASIOSTInt32MSB:
             {
+                Musec::Audio::Base::clip(masterTrackAudioBufferView[i]);
                 std::int32_t* int32Buffer = reinterpret_cast<std::int32_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
@@ -193,6 +196,7 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
             }
             case ASIOSTInt32MSB16:
             {
+                Musec::Audio::Base::clip(masterTrackAudioBufferView[i]);
                 std::int32_t* int32Buffer = reinterpret_cast<std::int32_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
@@ -206,6 +210,7 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
             }
             case ASIOSTInt32MSB18:
             {
+                Musec::Audio::Base::clip(masterTrackAudioBufferView[i]);
                 std::int32_t* int32Buffer = reinterpret_cast<std::int32_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
@@ -219,6 +224,7 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
             }
             case ASIOSTInt32MSB20:
             {
+                Musec::Audio::Base::clip(masterTrackAudioBufferView[i]);
                 std::int32_t* int32Buffer = reinterpret_cast<std::int32_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
@@ -232,6 +238,7 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
             }
             case ASIOSTInt32MSB24:
             {
+                Musec::Audio::Base::clip(masterTrackAudioBufferView[i]);
                 std::int32_t* int32Buffer = reinterpret_cast<std::int32_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
@@ -246,6 +253,7 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
             // LSB
             case ASIOSTInt16LSB:
             {
+                Musec::Audio::Base::clip(masterTrackAudioBufferView[i]);
                 std::int16_t* int16Buffer = reinterpret_cast<std::int16_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
@@ -259,6 +267,7 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
             }
             case ASIOSTInt24LSB:
             {
+                Musec::Audio::Base::clip(masterTrackAudioBufferView[i]);
                 int24_t* int24Buffer = reinterpret_cast<int24_t*>(buffer);
                 std::int32_t temp;
                 for(int j = 0; j < bufferSize; ++j)
@@ -277,6 +286,7 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
             }
             case ASIOSTInt32LSB:
             {
+                Musec::Audio::Base::clip(masterTrackAudioBufferView[i]);
                 std::int32_t* int32Buffer = reinterpret_cast<std::int32_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
@@ -315,6 +325,7 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
             }
             case ASIOSTInt32LSB16:
             {
+                Musec::Audio::Base::clip(masterTrackAudioBufferView[i]);
                 std::int32_t* int32Buffer = reinterpret_cast<std::int32_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
@@ -328,6 +339,7 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
             }
             case ASIOSTInt32LSB18:
             {
+                Musec::Audio::Base::clip(masterTrackAudioBufferView[i]);
                 std::int32_t* int32Buffer = reinterpret_cast<std::int32_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
@@ -341,6 +353,7 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
             }
             case ASIOSTInt32LSB20:
             {
+                Musec::Audio::Base::clip(masterTrackAudioBufferView[i]);
                 std::int32_t* int32Buffer = reinterpret_cast<std::int32_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
@@ -354,6 +367,7 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
             }
             case ASIOSTInt32LSB24:
             {
+                Musec::Audio::Base::clip(masterTrackAudioBufferView[i]);
                 std::int32_t* int32Buffer = reinterpret_cast<std::int32_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {

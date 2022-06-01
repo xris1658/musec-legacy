@@ -69,6 +69,7 @@ public:
     QWindow* window() override;
     bool activate() override;
     bool deactivate() override;
+    bool activated() override;
     bool startProcessing() override;
     bool stopProcessing() override;
     bool getBypass() const override;
@@ -82,6 +83,7 @@ private:
     std::vector<SampleType*> inputsRaw_;
     std::vector<SampleType*> outputsRaw_;
     bool bypass_ = true;
+    bool activated_ = false;
     QWindow* window_ = nullptr;
 };
 

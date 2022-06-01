@@ -104,6 +104,7 @@ public: // IPluginFrame interfaces
 public:
     const SpeakerArrangements& inputSpeakerArrangements();
     const SpeakerArrangements& outputSpeakerArrangements();
+    bool activated() override;
 private:
     void rawToProcessData();
     void onWindowSizeChanged();

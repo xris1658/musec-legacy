@@ -41,6 +41,7 @@ set(PROJECT_SOURCES
     audio/arrangement/ClipInTrack.hpp
     audio/arrangement/TrackSequence.hpp
     audio/base/AudioBufferView.hpp
+    audio/base/AudioBufferView.cpp
     audio/base/Automation.hpp
     audio/base/Chrono.hpp
     audio/base/Constants.hpp
@@ -56,6 +57,8 @@ set(PROJECT_SOURCES
     audio/driver/ASIODriver.hpp
     audio/driver/ASIODriverForward.hpp
     audio/driver/ASIODriverStreamInfo.hpp
+    audio/driver/Literals.hpp
+    audio/driver/Literals.cpp
     audio/engine/Graph.hpp
     audio/engine/MIDIClock.cpp
     audio/engine/MIDIClock.hpp
@@ -195,7 +198,7 @@ set(PROJECT_SOURCES
     util/Literal.cpp
     util/Literal.hpp
     ui/PluginWindow.cpp
-    ui/PluginWindow.hpp audio/driver/Literals.hpp audio/driver/Literals.cpp)
+    ui/PluginWindow.hpp)
 
 set(TEST_COMMON_SOURCES
     test/common/PluginWindowThread.cpp

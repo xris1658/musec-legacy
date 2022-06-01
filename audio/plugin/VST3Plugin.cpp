@@ -649,6 +649,12 @@ Musec::Base::PluginFormat VST3Plugin<SampleType>::pluginFormat()
     return Musec::Base::PluginFormat::FormatVST3;
 }
 
+template<typename SampleType>
+bool VST3Plugin<SampleType>::activated()
+{
+    return audioProcessorStatus_ >= VST3AudioProcessorStatus::Activated;
+}
+
 template class VST3Plugin<float>;
 template class VST3Plugin<double>;
 }

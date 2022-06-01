@@ -377,6 +377,7 @@ template<typename SampleType>
 bool VST2Plugin<SampleType>::activate()
 {
     effect_->dispatcher(effect_, AEffectOpcodes::effMainsChanged,  0, 1, nullptr, 0);
+    activated_ = true;
     return true;
 }
 
@@ -384,6 +385,7 @@ template<typename SampleType>
 bool VST2Plugin<SampleType>::deactivate()
 {
     effect_->dispatcher(effect_, AEffectOpcodes::effMainsChanged, 0, 0, nullptr, 0);
+    activated_ = false;
     return true;
 }
 
@@ -516,7 +518,13 @@ Musec::Base::PluginFormat VST2Plugin<SampleType>::pluginFormat()
     return Musec::Base::PluginFormat::FormatVST2;
 }
 
-template class VST2Plugin<float>;
+template<typename SampleType>
+bool VST2Plugin<SampleType>::activated()
+{
+    return activated_;
+}
+
+    template class VST2Plugin<float>;
 template class VST2Plugin<double>;
 // ------------------------------------------------------------------------------------------
 }

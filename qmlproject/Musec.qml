@@ -102,7 +102,6 @@ ApplicationWindow {
             var window = component.createObject(mainWindow);
             mainWindow.windowForPlugin = window;
             eventBridge.newPluginWindowReady();
-            // TODO: 将插件窗口传给后台
         }
         else {
             console.log(component.errorString());
