@@ -41,14 +41,25 @@ std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> startPluginFromPathAndSubI
     {
         return plugin;
     }
-    plugin->initialize(Musec::Controller::AudioEngineController::getCurrentSampleRate(),
-        Musec::Controller::AudioEngineController::getMaxBlockSize());
+    if(!plugin->initialize(Musec::Controller::AudioEngineController::getCurrentSampleRate(),
+        Musec::Controller::AudioEngineController::getMaxBlockSize()))
+    {
+        plugin.reset();
+        return plugin;
+    }
     if(plugin->hasUI())
     {
         Musec::UI::createNewPluginWindow(plugin);
     }
-    plugin->activate();
-    plugin->startProcessing();
+    if(!plugin->activate())
+    {
+        plugin.reset();
+        return plugin;
+    }
+    if(!plugin->startProcessing())
+    {
+        plugin.reset();
+    }
     return plugin;
 }
 }

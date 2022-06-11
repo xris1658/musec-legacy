@@ -191,7 +191,7 @@ void updateCurrentASIODriverInfo()
     if(optionsWindow)
     {
         // 获取驱动信息
-        auto driverStreamInfo = getASIODriverStreamInfo(AppASIODriver());
+        const auto& driverStreamInfo = getASIODriverStreamInfo(AppASIODriver());
         optionsWindow->setProperty("bufferSize",
                                    QVariant::fromValue<int>(driverStreamInfo.preferredBufferSize));
         optionsWindow->setProperty("inputLatencyInSamples",

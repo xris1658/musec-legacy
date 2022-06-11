@@ -40,15 +40,15 @@ VstIntPtr pluginVST2Callback(AEffect* effect, VstInt32 opcode, VstInt32 index, V
     {
         // AudioMasterOpcodes (aeffect.h)
 
-        // 插件的参数通过 MIDI 和 GUI 发生了更改
-        // index: 参数编号; opt: 参数值
+    // 插件的参数通过 MIDI 和 GUI 发生了更改
+    // index: 参数编号; opt: 参数值
     case audioMasterAutomate:
         break;
-        // 宿主程序使用的 VST 版本
+    // 宿主程序使用的 VST 版本
     case audioMasterVersion:
         ret = kVstVersion; // VST2.4
         break;
-        // 加载 VST2 Shell 插件时，用于指定子插件
+    // 加载 VST2 Shell 插件时，用于指定子插件
     case audioMasterCurrentId:
         ret = (ShellPluginId::instance().getId() == 0) && (!(ShellPluginId::instance().idShouldBeZero()))?
             effect->uniqueID:
@@ -65,12 +65,12 @@ VstIntPtr pluginVST2Callback(AEffect* effect, VstInt32 opcode, VstInt32 index, V
         case audioMasterWantMidi:
             break;
 #endif
-        // 返回值: VstTimeInfo*
+    // 返回值: VstTimeInfo*
     case audioMasterGetTime:
         // TODO
         ret = NULL;
         break;
-        // ptr: 指向 VstEvents 的指针
+    // ptr: 指向 VstEvents 的指针
     case audioMasterProcessEvents:
     {
         // auto events = reinterpret_cast<VstEvents*>(ptr);
@@ -87,7 +87,7 @@ VstIntPtr pluginVST2Callback(AEffect* effect, VstInt32 opcode, VstInt32 index, V
         case audioMasterGetParameterQuantization:
             break;
 #endif
-        // 返回值: 若支持则返回 1
+    // 返回值: 若支持则返回 1
     case audioMasterIOChanged:
         ret = 1;
         break;
@@ -95,24 +95,24 @@ VstIntPtr pluginVST2Callback(AEffect* effect, VstInt32 opcode, VstInt32 index, V
         case audioMasterNeedIdle:
             break;
 #endif
-        // index: 宽; value: 高; 返回值: 若支持则返回 1
+    // index: 宽; value: 高; 返回值: 若支持则返回 1
     case audioMasterSizeWindow:
         Musec::Controller::AudioEngineController::AppProject().setPluginWindowSize(effect, index, value);
         ret = 1;
         break;
-        // 获取当前采样率
+    // 获取当前采样率
     case audioMasterGetSampleRate:
         ret = Musec::Controller::AudioEngineController::getCurrentSampleRate();
         break;
-        // 获取缓冲区大小
+    // 获取缓冲区大小
     case audioMasterGetBlockSize:
         ret = Musec::Controller::AudioEngineController::getCurrentBlockSize();
         break;
-        // 获取输入延迟
+    // 获取输入延迟
     case audioMasterGetInputLatency:
         ret = Musec::Controller::AudioEngineController::getInputLatency();
         break;
-        // 获取输出延迟
+    // 获取输出延迟
     case audioMasterGetOutputLatency:
         ret = Musec::Controller::AudioEngineController::getOutputLatency();
         break;
@@ -124,12 +124,12 @@ VstIntPtr pluginVST2Callback(AEffect* effect, VstInt32 opcode, VstInt32 index, V
         case audioMasterWillReplaceOrAccumulate:
             break;
 #endif
-        // 返回值: VstProcessLevels
+    // 返回值: VstProcessLevels
     case audioMasterGetCurrentProcessLevel:
         // TODO
         ret = VstProcessLevels::kVstProcessLevelUnknown;
         break;
-        // 返回值: VstAutomationStates
+    // 返回值: VstAutomationStates
     case audioMasterGetAutomationState:
         // TODO
         ret = VstAutomationStates::kVstAutomationUnsupported;
@@ -150,14 +150,14 @@ VstIntPtr pluginVST2Callback(AEffect* effect, VstInt32 opcode, VstInt32 index, V
         case audioMasterGetOutputSpeakerArrangement:
             break;
 #endif
-        // ptr: 字符串缓冲区, 填入软件厂商的名称
+    // ptr: 字符串缓冲区, 填入软件厂商的名称
     case audioMasterGetVendorString:
     {
         constexpr int vendorNameLength = sizeof(Musec::Base::CompanyName) + 1;
         std::strncpy(reinterpret_cast<char*>(ptr), Musec::Base::CompanyName, vendorNameLength);
         break;
     }
-        // ptr: 字符串缓冲区, 填入软件产品的名称
+    // ptr: 字符串缓冲区, 填入软件产品的名称
     case audioMasterGetProductString:
     {
         constexpr int productNameLength = sizeof(Musec::Base::ProductName) + 1;
@@ -173,7 +173,7 @@ VstIntPtr pluginVST2Callback(AEffect* effect, VstInt32 opcode, VstInt32 index, V
         case audioMasterSetIcon:
             break;
 #endif
-        // 此处与 HostCanDos 中的字符串进行比较
+    // 此处与 HostCanDos 中的字符串进行比较
     case audioMasterCanDo:
     {
         using namespace VST2AudioEffectX::HostCanDos;
@@ -250,7 +250,7 @@ VstIntPtr pluginVST2Callback(AEffect* effect, VstInt32 opcode, VstInt32 index, V
     case audioMasterCloseWindow:
         break;
 #endif
-        // 返回插件所在目录
+    // 返回插件所在目录
     case audioMasterGetDirectory:
         break;
     case audioMasterUpdateDisplay:
@@ -417,12 +417,17 @@ void VST2Plugin<SampleType>::process(const Musec::Audio::Base::AudioBufferViews<
             inputsRaw_[i + inputs.size()] = inputs[i].getSamples();
         }
     }
-    for(int i = 0; i < outputs.size(); ++i)
+    auto outputSize = outputs.size();
+    for(int i = 0; i < outputSize; ++i)
     {
         outputsRaw_[i] = outputs[i].getSamples();
     }
+    for(int i = outputSize; i < effect_->numOutputs; ++i)
+    {
+        outputsRaw_[i] = Musec::Controller::AudioEngineController::dummyBufferView<SampleType>().getSamples();
+    }
     // 获取采样数的方式可能不对
-    std::int32_t sampleCount = outputs[0].size();
+    std::int32_t sampleCount = Musec::Controller::AudioEngineController::getCurrentBlockSize();
     if constexpr(std::is_same_v<SampleType, float>)
     {
         effect_->processReplacing(effect_, inputsRaw_.data(), outputsRaw_.data(), sampleCount);

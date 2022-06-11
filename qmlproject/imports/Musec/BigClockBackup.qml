@@ -12,7 +12,7 @@ Item {
     property int cpu: 20
     property int currentKey: 10
     property int currentNoteName: Constants.NoteName.Sharp
-    property double bpm: 128
+    property double bpm: 128.0
     property bool major: true
 
     function getFloorWithWidth(bpm_: double) {

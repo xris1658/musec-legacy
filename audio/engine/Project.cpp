@@ -1,10 +1,11 @@
 #include "Project.hpp"
 
-#include "controller/AudioEngineController.hpp"
+#include "audio/host/MusecVST3Host.hpp"
 #include "audio/plugin/VST2Plugin.hpp"
 #include "audio/track/AudioTrack.hpp"
 #include "audio/track/InstrumentTrack.hpp"
 #include "audio/track/MIDITrack.hpp"
+#include "controller/AudioEngineController.hpp"
 #include "ui/PluginWindow.hpp"
 
 #include <future>
@@ -191,6 +192,8 @@ const Musec::Base::FixedSizeMemoryBlock& Project::masterTrackAudioBuffer() const
 void Project::process()
 {
     std::lock_guard<std::mutex> lg(mutex_);
+    auto& processContext = Musec::Audio::Host::MusecVST3Host::AppProcessContext();
+    Musec::Controller::AudioEngineController::fillProcessContext(processContext);
     masterTrackAudioBuffer_.init();
     std::size_t currentBlockSize = Musec::Controller::AudioEngineController::getCurrentBlockSize();
     Musec::Audio::Base::AudioBufferViews<float> audioBufferViews(

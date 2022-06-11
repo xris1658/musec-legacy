@@ -3,6 +3,7 @@
 
 #include <pluginterfaces/base/funknown.h>
 #include <pluginterfaces/vst/ivsthostapplication.h>
+#include <pluginterfaces/vst/ivstprocesscontext.h>
 
 namespace Musec
 {
@@ -16,17 +17,18 @@ using namespace Steinberg::Vst;
 class MusecVST3Host: public IHostApplication
 {
 private:
-    MusecVST3Host();
+    MusecVST3Host() = default;
 public:
     MusecVST3Host(const MusecVST3Host&) = delete;
-    virtual ~MusecVST3Host();
-public:
-    static MusecVST3Host& instance();
+    virtual ~MusecVST3Host() = default;
 public:
     DECLARE_FUNKNOWN_METHODS
 public:
     tresult PLUGIN_API getName(String128 name) override;
-    tresult PLUGIN_API createInstance(TUID cid, TUID _iid, void** obj) override;
+    tresult PLUGIN_API createInstance(TUID cid, TUID iid, void** obj) override;
+public:
+    static MusecVST3Host& instance();
+    static ProcessContext& AppProcessContext();
 };
 }
 }

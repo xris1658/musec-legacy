@@ -1,6 +1,8 @@
 #include "AudioEngineController.hpp"
 
 #include "audio/driver/ASIODriver.hpp"
+#include "controller/MIDIClockController.hpp"
+#include "native/Native.hpp"
 
 namespace Musec::Controller::AudioEngineController
 {
@@ -93,5 +95,23 @@ long getOutputLatency()
         return Musec::Audio::Driver::getLatency().outputLatency;
     }
     return getCurrentBlockSize();
+}
+
+double getCurrentTempo()
+{
+    auto& midiClock = Musec::Controller::MIDIClockController::AppMIDIClock();
+    return midiClock.tempoAutomation()(midiClock.getPosition());
+}
+
+void fillProcessContext(Steinberg::Vst::ProcessContext& processContext)
+{
+    using namespace Steinberg;
+    using namespace Steinberg::Vst;
+    processContext.state =
+        ProcessContext::StatesAndFlags::kSystemTimeValid
+        | ProcessContext::StatesAndFlags::kTempoValid;
+    processContext.sampleRate = getCurrentSampleRate();
+    processContext.systemTime = Musec::Native::currentTimeInNanosecond();
+    processContext.tempo = getCurrentTempo();
 }
 }

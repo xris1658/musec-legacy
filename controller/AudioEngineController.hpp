@@ -1,10 +1,13 @@
 #ifndef MUSEC_CONTROLLER_AUDIOENGINECONTROLLER
 #define MUSEC_CONTROLLER_AUDIOENGINECONTROLLER
 
+#include "audio/base/AudioBufferView.hpp"
 #include "audio/engine/Project.hpp"
 #include "audio/host/VST3ComponentHandler.hpp"
 #include "entities/CompleteTrack.hpp"
 #include "model/TrackListModel.hpp"
+
+#include <pluginterfaces/vst/ivstprocesscontext.h>
 
 namespace Musec
 {
@@ -23,6 +26,15 @@ long getMaxBlockSize();
 long getCurrentBlockSize();
 long getInputLatency();
 long getOutputLatency();
+double getCurrentTempo();
+void fillProcessContext(Steinberg::Vst::ProcessContext& processContext);
+
+template<typename SampleType>
+Musec::Audio::Base::AudioBufferView<SampleType> dummyBufferView()
+{
+    static std::vector<SampleType> dummyBuffer(getMaxBlockSize());
+    return Musec::Audio::Base::AudioBufferView<SampleType>(dummyBuffer.data(), dummyBuffer.size());
+}
 }
 }
 }

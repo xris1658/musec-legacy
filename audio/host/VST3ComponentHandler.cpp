@@ -2,45 +2,43 @@
 
 namespace Musec::Audio::Host
 {
-Steinberg::tresult VST3ComponentHandler::queryInterface(const Steinberg::int8* _iid, void** obj)
+tresult PLUGIN_API VST3ComponentHandler::queryInterface(const int8* iid, void** obj)
 {
-    if(_iid == Steinberg::Vst::IComponentHandler_iid)
-    {
-        *obj = this;
-        return Steinberg::kResultOk;
-    }
-    return Steinberg::kNoInterface;
+    QUERY_INTERFACE(iid, obj, FUnknown::iid, VST3ComponentHandler)
+    QUERY_INTERFACE(iid, obj, IComponentHandler::iid, VST3ComponentHandler)
+    return kNoInterface;
 }
 
-Steinberg::uint32 VST3ComponentHandler::addRef()
+// 使用 magic static，且使用此类的插件均在此类析构之前销毁。因此直接返回 1 即可。
+uint32 PLUGIN_API VST3ComponentHandler::addRef()
 {
-    return 1;
+    return 1U;
 }
 
-Steinberg::uint32 VST3ComponentHandler::release()
+// 同上
+uint32 PLUGIN_API VST3ComponentHandler::release()
 {
-    return 0;
+    return 1U;
 }
 
-Steinberg::tresult VST3ComponentHandler::beginEdit(Steinberg::Vst::ParamID id)
+tresult PLUGIN_API VST3ComponentHandler::beginEdit(ParamID id)
 {
-    return Steinberg::kResultOk;
+    return kResultOk;
 }
 
-Steinberg::tresult VST3ComponentHandler::performEdit(Steinberg::Vst::ParamID id,
-    Steinberg::Vst::ParamValue valueNormalized)
+tresult PLUGIN_API VST3ComponentHandler::performEdit(ParamID id, ParamValue valueNormalized)
 {
-    return Steinberg::kResultOk;
+    return kResultOk;
 }
 
-Steinberg::tresult VST3ComponentHandler::endEdit(Steinberg::Vst::ParamID id)
+tresult PLUGIN_API VST3ComponentHandler::endEdit(ParamID id)
 {
-    return Steinberg::kResultOk;
+    return kResultOk;
 }
 
-Steinberg::tresult VST3ComponentHandler::restartComponent(Steinberg::int32 flags)
+tresult PLUGIN_API VST3ComponentHandler::restartComponent(int32 flags)
 {
-    return Steinberg::kResultOk;
+    return kResultOk;
 }
 
 VST3ComponentHandler& VST3ComponentHandler::instance()

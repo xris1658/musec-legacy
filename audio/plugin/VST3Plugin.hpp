@@ -97,7 +97,7 @@ public:
     bool hasUI() override;
     Musec::Base::PluginFormat pluginFormat() override;
 public: // FUnknown interfaces
-    Steinberg::tresult queryInterface(const Steinberg::TUID _iid, void** obj) override;
+    Steinberg::tresult queryInterface(const Steinberg::TUID iid, void** obj) override;
     Steinberg::uint32 addRef() override;
     Steinberg::uint32 release() override;
 public: // IPluginFrame interfaces
@@ -107,7 +107,6 @@ public:
     const SpeakerArrangements& outputSpeakerArrangements();
     bool activated() override;
 private:
-    void rawToProcessData();
     void onWindowSizeChanged();
 private:
     Steinberg::PClassInfo classInfo_;
@@ -118,6 +117,8 @@ private:
     Steinberg::Vst::IConnectionPoint* componentPoint_ = nullptr;
     Steinberg::Vst::IConnectionPoint* editControllerPoint_ = nullptr;
     Steinberg::IPlugView* view_ = nullptr;
+    int audioInputBusIndex = -1;
+    int audioOutputBusIndex = -1;
     // 输入参数改变
     Steinberg::Vst::ParameterChanges paramChanges_;
     // IAudioProcessor::process 函数调用的实参
@@ -127,9 +128,9 @@ private:
     // 调用 process 函数时将 data 赋值给 processData_
     std::vector<Steinberg::Vst::AudioBusBuffers> outputs_;
     // 输入音频缓冲区的原始数组
-    std::vector<SampleType*> inputRaw_;
+    std::vector<std::vector<SampleType*>> inputRaws_;
     // 输出音频缓冲区的原始数组
-    std::vector<SampleType*> outputRaw_;
+    std::vector<std::vector<SampleType*>> outputRaws_;
     // 各个总线的输入的扬声器布局
     SpeakerArrangements inputSpeakerArrangements_;
     // 各个总线输出的扬声器布局

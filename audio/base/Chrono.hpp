@@ -18,7 +18,7 @@ class TimePoint
 {
     static_assert(PPQ % 24 == 0);
 public:
-    explicit TimePoint(std::int64_t pulse = 0U): pulse_(pulse) {}
+    TimePoint(std::int64_t pulse = 0U): pulse_(pulse) {}
     TimePoint(const TimePoint<PPQ>&) = default;
     TimePoint& operator=(const TimePoint<PPQ>&) = default;
     TimePoint(TimePoint<PPQ>&&) noexcept = default;
@@ -76,7 +76,7 @@ template<std::size_t PPQ>
 class Duration
 {
 public:
-    explicit Duration(std::int64_t duration): duration_(duration) {}
+    Duration(std::int64_t duration): duration_(duration) {}
     Duration(const Duration<PPQ>&) = default;
     Duration& operator=(const Duration<PPQ>&)= default;
     Duration(Duration<PPQ>&&) noexcept = default;

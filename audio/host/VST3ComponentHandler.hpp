@@ -9,21 +9,24 @@ namespace Audio
 {
 namespace Host
 {
-class VST3ComponentHandler: public Steinberg::Vst::IComponentHandler
+using namespace Steinberg;
+using namespace Steinberg::Vst;
+
+class VST3ComponentHandler: public IComponentHandler
 {
+private:
+    VST3ComponentHandler() = default;
 public:
     ~VST3ComponentHandler() = default;
 public:
+    DECLARE_FUNKNOWN_METHODS
+public:
+    tresult PLUGIN_API beginEdit(ParamID id) override;
+    tresult PLUGIN_API performEdit(ParamID id, ParamValue valueNormalized) override;
+    tresult PLUGIN_API endEdit(ParamID id) override;
+    tresult PLUGIN_API restartComponent(int32 flags) override;
+public:
     static VST3ComponentHandler& instance();
-public:
-    Steinberg::tresult queryInterface(const Steinberg::int8* _iid, void** obj) override;
-    Steinberg::uint32 addRef() override;
-    Steinberg::uint32 release() override;
-public:
-    Steinberg::tresult beginEdit(Steinberg::Vst::ParamID id) override;
-    Steinberg::tresult performEdit(Steinberg::Vst::ParamID id, Steinberg::Vst::ParamValue valueNormalized) override;
-    Steinberg::tresult endEdit(Steinberg::Vst::ParamID id) override;
-    Steinberg::tresult restartComponent(Steinberg::int32 flags) override;
 };
 }
 }

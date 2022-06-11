@@ -45,7 +45,9 @@ void MainWindow::openMainWindow()
     updatePluginList();
     mainWindow->setProperty("trackList", QVariant::fromValue(&Musec::Controller::AudioEngineController::AppTrackListModel()));
     mainWindow->setProperty("masterTrackPluginSequence", QVariant::fromValue(&Musec::Controller::AudioEngineController::AppTrackListModel().masterTrackPluginSequenceModel()));
-    Musec::Controller::MIDIClockController::AppMIDIClock();
+    auto& midiClock = Musec::Controller::MIDIClockController::AppMIDIClock();
+    midiClock.tempoAutomation().insertPoint({{0U}, 128.0, 1.0});
+    mainWindow->setProperty("bpm", QVariant::fromValue(Musec::Controller::AudioEngineController::getCurrentTempo())); // FIXME
     openMainWindowComplete();
 }
 
