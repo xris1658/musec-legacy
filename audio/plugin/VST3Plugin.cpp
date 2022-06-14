@@ -434,7 +434,7 @@ bool VST3Plugin<SampleType>::initializeEditor()
     {
         if(effectAndEditorUnified_ != EffectAndEditorUnified::Unified)
         {
-            auto initEditControllerResult = editController_->initialize(nullptr);
+            auto initEditControllerResult = editController_->initialize(&Musec::Audio::Host::MusecVST3Host::instance());
             if(initEditControllerResult != Steinberg::kResultOk)
             {
                 throw std::runtime_error("");
