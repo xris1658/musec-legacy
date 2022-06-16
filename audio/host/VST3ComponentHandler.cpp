@@ -6,6 +6,9 @@ tresult PLUGIN_API VST3ComponentHandler::queryInterface(const int8* iid, void** 
 {
     QUERY_INTERFACE(iid, obj, FUnknown::iid, VST3ComponentHandler)
     QUERY_INTERFACE(iid, obj, IComponentHandler::iid, VST3ComponentHandler)
+    QUERY_INTERFACE(iid, obj, IComponentHandler2::iid, VST3ComponentHandler)
+    QUERY_INTERFACE(iid, obj, IUnitHandler::iid, VST3ComponentHandler)
+    QUERY_INTERFACE(iid, obj, IUnitHandler2::iid, VST3ComponentHandler)
     return kNoInterface;
 }
 
@@ -38,7 +41,90 @@ tresult PLUGIN_API VST3ComponentHandler::endEdit(ParamID id)
 
 tresult PLUGIN_API VST3ComponentHandler::restartComponent(int32 flags)
 {
+    if(flags == 0)
+    {
+        return kResultOk;
+    }
+    if(flags & RestartFlags::kReloadComponent)
+    {
+        flags -= RestartFlags::kReloadComponent;
+    }
+    if(flags & RestartFlags::kIoChanged)
+    {
+        flags -= RestartFlags::kIoChanged;
+    }
+    if(flags & RestartFlags::kParamValuesChanged)
+    {
+        flags -= RestartFlags::kParamValuesChanged;
+    }
+    if(flags & RestartFlags::kLatencyChanged)
+    {
+        flags -= RestartFlags::kLatencyChanged;
+    }
+    if(flags & RestartFlags::kParamTitlesChanged)
+    {
+        flags -= RestartFlags::kParamTitlesChanged;
+    }
+    if(flags & RestartFlags::kMidiCCAssignmentChanged)
+    {
+        flags -= RestartFlags::kMidiCCAssignmentChanged;
+    }
+    if(flags & RestartFlags::kNoteExpressionChanged)
+    {
+        flags -= RestartFlags::kNoteExpressionChanged;
+    }
+    if(flags & RestartFlags::kIoTitlesChanged)
+    {
+        flags -= RestartFlags::kIoTitlesChanged;
+    }
+    if(flags & RestartFlags::kPrefetchableSupportChanged)
+    {
+        flags -= RestartFlags::kPrefetchableSupportChanged;
+    }
+    if(flags & RestartFlags::kRoutingInfoChanged)
+    {
+        flags -= RestartFlags::kRoutingInfoChanged;
+    }
+    if(flags & kKeyswitchChanged)
+    {
+        flags -= RestartFlags::kKeyswitchChanged;
+    }
     return kResultOk;
+}
+
+tresult VST3ComponentHandler::setDirty(TBool state)
+{
+    return kResultOk;
+}
+
+tresult VST3ComponentHandler::requestOpenEditor(FIDString name)
+{
+    return kNotImplemented;
+}
+
+tresult VST3ComponentHandler::startGroupEdit()
+{
+    return kNotImplemented;
+}
+
+tresult VST3ComponentHandler::finishGroupEdit()
+{
+    return kNotImplemented;
+}
+
+tresult VST3ComponentHandler::notifyUnitSelection(UnitID unitId)
+{
+    return kNotImplemented;
+}
+
+tresult VST3ComponentHandler::notifyProgramListChange(ProgramListID listId, int32 programIndex)
+{
+    return kNotImplemented;
+}
+
+tresult VST3ComponentHandler::notifyUnitByBusChange()
+{
+    return kNotImplemented;
 }
 
 VST3ComponentHandler& VST3ComponentHandler::instance()

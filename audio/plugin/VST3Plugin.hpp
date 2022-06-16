@@ -10,6 +10,8 @@
 #include <pluginterfaces/vst/ivstaudioprocessor.h>
 #include <pluginterfaces/vst/ivsteditcontroller.h>
 #include <pluginterfaces/vst/ivstmessage.h>
+#include <pluginterfaces/vst/ivstnoteexpression.h>
+#include <pluginterfaces/vst/ivstrepresentation.h>
 
 #include <QString>
 #include <QWindow>
@@ -53,6 +55,13 @@ enum class EffectAndEditorUnified: std::int8_t
 };
 
 using SpeakerArrangements = std::vector<Steinberg::Vst::SpeakerArrangement>;
+
+constexpr Steinberg::uint32 BasicProcessContextRequirement =
+    Steinberg::Vst::IProcessContextRequirements::Flags::kNeedTransportState
+    | Steinberg::Vst::IProcessContextRequirements::Flags::kNeedTempo
+    | Steinberg::Vst::IProcessContextRequirements::Flags::kNeedSystemTime
+    | Steinberg::Vst::IProcessContextRequirements::Flags::kNeedTimeSignature;
+
 template<typename SampleType>
 class VST3Plugin:
     public Musec::Native::WindowsLibraryRAII,
@@ -112,8 +121,20 @@ private:
     Steinberg::PClassInfo classInfo_;
     Steinberg::IPluginFactory* factory_ = nullptr;
     Steinberg::Vst::IComponent* component_ = nullptr;
+    // IAudioProcessor 和扩展接口
     Steinberg::Vst::IAudioProcessor* audioProcessor_ = nullptr;
+    Steinberg::Vst::IAudioPresentationLatency* audioPresentationLatency_ = nullptr;
+    Steinberg::Vst::IProcessContextRequirements* processContextRequirements_ = nullptr;
+    Steinberg::uint32 processContextRequirement_ = BasicProcessContextRequirement;
+    // IEditController 和扩展接口
     Steinberg::Vst::IEditController* editController_ = nullptr;
+    Steinberg::Vst::IEditController2* editController2_ = nullptr;
+    Steinberg::Vst::IMidiMapping* midiMapping_ = nullptr;
+    Steinberg::Vst::IEditControllerHostEditing* editControllerHostEditing_ = nullptr;
+    Steinberg::Vst::INoteExpressionController* noteExpressionController_ = nullptr;
+    Steinberg::Vst::IKeyswitchController* keyswitchController_ = nullptr;
+    Steinberg::Vst::IXmlRepresentationController* xmlRepresentationController_ = nullptr;
+
     Steinberg::Vst::IConnectionPoint* componentPoint_ = nullptr;
     Steinberg::Vst::IConnectionPoint* editControllerPoint_ = nullptr;
     Steinberg::IPlugView* view_ = nullptr;

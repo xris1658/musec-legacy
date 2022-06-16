@@ -12,6 +12,8 @@ Rectangle {
     height: 500
     clip: true
     color: Constants.backgroundColor
+    property int firstColumnWidth: 150
+    property int secondColumnWidth: 320
     Grid {
         columns: 2
         columnSpacing: 10
@@ -19,9 +21,9 @@ Rectangle {
         verticalItemAlignment: Grid.AlignVCenter
         horizontalItemAlignment: Grid.AlignLeft
         Text {
-            width: 100
+            width: firstColumnWidth
             height: 20
-            text: qsTr("区域")
+            text: qsTr("Region")
             font.family: Constants.font
             color: Constants.contentColor2
             horizontalAlignment: Text.AlignLeft
@@ -29,12 +31,12 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
         }
         Item {
-            width: 320
+            width: secondColumnWidth
             height: 20
         }
         Text {
-            width: 100
-            text: qsTr("语言")
+            width: firstColumnWidth
+            text: qsTr("Language")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -44,12 +46,12 @@ Rectangle {
             id: comboBoxLanguage
             model: ["简体中文", "繁體中文", "English"]
             font.family: Constants.font
-            width: 100
+            width: firstColumnWidth
         }
         Text {
-            width: 100
+            width: firstColumnWidth
             height: 20
-            text: qsTr("外观和交互")
+            text: qsTr("Appearance")
             font.family: Constants.font
             color: Constants.contentColor2
             horizontalAlignment: Text.AlignLeft
@@ -57,12 +59,12 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
         }
         Item {
-            width: 320
+            width: secondColumnWidth
             height: 20
         }
         Text {
-            width: 100
-            text: qsTr("颜色")
+            width: firstColumnWidth
+            text: qsTr("Color")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -70,13 +72,13 @@ Rectangle {
         }
         MCtrl.ComboBox {
             id: comboBoxColor
-            model: ["深色", "浅色"]
+            model: ["Dark", "Light"]
             font.family: Constants.font
-            width: 100
+            width: firstColumnWidth
         }
         Text {
-            width: 100
-            text: qsTr("缩放比例")
+            width: firstColumnWidth
+            text: qsTr("Zoom")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -87,11 +89,11 @@ Rectangle {
             model: ["50%", "75%", "100%", "125%", "150%", "175%", "200%"]
             currentIndex: 2
             font.family: Constants.font
-            width: 100
+            width: firstColumnWidth
         }
         Text {
-            width: 100
-            text: qsTr("触控")
+            width: firstColumnWidth
+            text: qsTr("Touch")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -105,8 +107,8 @@ Rectangle {
             checked: false
         }
         Text {
-            width: 100
-            text: qsTr("单实例模式")
+            width: firstColumnWidth
+            text: qsTr("Single instance")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -120,8 +122,8 @@ Rectangle {
             checked: true
         }
         Text {
-            width: 100
-            text: qsTr("使用系统文字渲染")
+            width: firstColumnWidth
+            text: qsTr("Use system font rendering")
             font.family: Constants.font
             font.italic: true
             color: Constants.contentColor1
@@ -163,7 +165,7 @@ Rectangle {
                 }
                 MCtrl.ToolTip {
                     id: systemTextRenderingInfoToolTip
-                    text: qsTr("如果您的计算机上安装了 MacType 等改善系统文字渲染的程序，\n请勾选此项。否则通常不建议勾选。")
+                    text: qsTr("If applications that improves your font rendering (e.g. MacType),\nplease check this. Otherwise this is not recommended to check.")
 //                    visible: systemTextRenderingInfoMouseArea.containsMouse
                     visible: systemTextRenderingInfoButton.hovered | systemTextRenderingInfoButton.activeFocus
                 }
@@ -179,7 +181,7 @@ Rectangle {
         Text {
             id: experimentalFunctionText
             anchors.left: parent.left
-            text: qsTr("<i>斜体字</i>设置项为实验性功能。")
+            text: qsTr("<i>Italic</i> items are experimental features.")
             font.family: Constants.font
             color: Constants.contentColor2
             horizontalAlignment: Text.AlignRight

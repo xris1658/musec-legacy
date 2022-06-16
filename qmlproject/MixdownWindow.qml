@@ -10,9 +10,11 @@ Window {
     property bool exporting: false
     flags: Qt.Dialog
     id: root
-    title: qsTr("导出并轨")
-    width: 450
+    title: qsTr("Bounce")
+    width: 520
     height: 600
+    property int firstColumnWidth: 150
+    property int secondColumnWidth: 350
     color: Constants.backgroundColor
     modality: Qt.WindowModal
     visible: true
@@ -31,9 +33,9 @@ Window {
                     verticalItemAlignment: Grid.AlignVCenter
                     horizontalItemAlignment: Grid.AlignLeft
                     Text {
-                        width: 100
+                        width: firstColumnWidth
                         height: 20
-                        text: qsTr("文件")
+                        text: qsTr("File")
                         font.family: Constants.font
                         color: Constants.contentColor2
                         horizontalAlignment: Text.AlignLeft
@@ -41,22 +43,22 @@ Window {
                         verticalAlignment: Text.AlignVCenter
                     }
                     Item {
-                        width: 320
+                        width: secondColumnWidth
                         height: 20
                     }
                     Text {
-                        width: 100
-                        text: qsTr("文件名:")
+                        width: firstColumnWidth
+                        text: qsTr("File Name:")
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
                     }
                     TextField {
-                        width: 320
+                        width: secondColumnWidth
                         height: 20
                         color: Constants.contentColor1
-                        placeholderText: qsTr("键入文件名")
+                        placeholderText: qsTr("Type file name")
                         placeholderTextColor: Constants.currentElementColor
                         topPadding: 0
                         bottomPadding: 0
@@ -72,8 +74,8 @@ Window {
                         }
                     }
                     Text {
-                        width: 100
-                        text: qsTr("目录:")
+                        width: firstColumnWidth
+                        text: qsTr("Path:")
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -81,7 +83,7 @@ Window {
                     }
                     Item {
                         id: filePathSelector
-                        width: 320
+                        width: secondColumnWidth
                         height: 20
                         Row {
                             id: filePathSelectorRow
@@ -91,7 +93,7 @@ Window {
                                 width: filePathSelector.width - browseButton.width - filePathSelectorRow.spacing
                                 height: 20
                                 color: Constants.contentColor1
-                                placeholderText: qsTr("键入路径或选择目录")
+                                placeholderText: qsTr("Type path or select a directory")
                                 placeholderTextColor: Constants.currentElementColor
                                 topPadding: 0
                                 bottomPadding: 0
@@ -110,7 +112,7 @@ Window {
                                 id: browseButton
                                 width: 75
                                 height: 20
-                                text: qsTr("浏览(&B)...")
+                                text: qsTr("&Browse...")
                                 font.family: Constants.font
                                 FolderDialog {
                                     id: folderDialog
@@ -126,9 +128,9 @@ Window {
 
                     }
                     Text {
-                        width: 100
+                        width: firstColumnWidth
                         height: 20
-                        text: qsTr("导出无损音频")
+                        text: qsTr("Export Lossless Audio File")
                         font.family: Constants.font
                         color: Constants.contentColor2
                         horizontalAlignment: Text.AlignLeft
@@ -136,27 +138,27 @@ Window {
                         verticalAlignment: Text.AlignVCenter
                     }
                     Item {
-                        width: 320
+                        width: secondColumnWidth
                         height: 20
                     }
                     Text {
-                        width: 100
-                        text: qsTr("格式: ")
+                        width: firstColumnWidth
+                        text: qsTr("Format: ")
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
                     }
                     MCtrl.ComboBox {
-                        width: 100
+                        width: firstColumnWidth
                         height: 20
                         model: ["WAV", "FLAC", "AIFF"]
                         currentIndex: 0
                         font.family: Constants.font
                     }
                     Text {
-                        width: 100
-                        text: qsTr("采样率:")
+                        width: firstColumnWidth
+                        text: qsTr("Sample Rate:")
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -165,7 +167,7 @@ Window {
                     Row {
                         spacing: 5
                         MCtrl.ComboBox {
-                            width: 100
+                            width: firstColumnWidth
                             height: 20
                             model: ["44100", "48000", "88200", "96000", "176400", "192000"]
                             currentIndex: 0
@@ -178,17 +180,17 @@ Window {
                         }
                     }
                     Text {
-                        width: 100
-                        text: qsTr("位深度:")
+                        width: firstColumnWidth
+                        text: qsTr("Bit Depth:")
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
                     }
                     MCtrl.ComboBox {
-                        width: 100
+                        width: firstColumnWidth
                         height: 20
-                        model: ["16位整型", "24位整型", "32位浮点", "64位浮点"]
+                        model: [qsTr("16-Bit Integer"), qsTr("24-Bit Integer"), qsTr("32-Bit Float"), qsTr("64-Bit Integer")]
                         currentIndex: 0
                         font.family: Constants.font
                         onCurrentIndexChanged: {
@@ -199,8 +201,8 @@ Window {
                         }
                     }
                     Text {
-                        width: 100
-                        text: qsTr("抖动:")
+                        width: firstColumnWidth
+                        text: qsTr("Dithering:")
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -214,19 +216,19 @@ Window {
                             checked: false
                         }
                         MCtrl.ComboBox {
-                            width: 100 - checkBoxDithering.width - rowDithering.spacing
+                            width: firstColumnWidth - checkBoxDithering.width - rowDithering.spacing
                             height: 20
                             enabled: checkBoxDithering.checked
-                            model: ["POW-r 1", "POW-r 2", "POW-r 3", "方波", "三角波"]
+                            model: ["POW-r 1", "POW-r 2", "POW-r 3", qsTr("Square"), qsTr("Triangular")]
                             currentIndex: 0
                             font.family: Constants.font
                         }
                     }
                     Text {
                         opacity: checkBoxDithering.checked? 1: 0
-                        width: 100
+                        width: firstColumnWidth
                         height: checkBoxDithering.checked? 40: 0
-                        text: qsTr("警告:")
+                        text: qsTr("Warning:")
                         font.family: Constants.font
                         color: Constants.warningTextColor
                         horizontalAlignment: Text.AlignRight
@@ -234,18 +236,18 @@ Window {
                     }
                     Text {
                         opacity: checkBoxDithering.checked? 1: 0
-                        width: 320
+                        width: secondColumnWidth
                         height: checkBoxDithering.checked? 40: 0
-                        text: qsTr("抖动操作只应在不对文件进行后续操作时使用。\n如果总线已经添加了抖动操作，请取消勾选此选项。")
+                        text: qsTr("Use dithering only when the audio file won't be processed afterwards. \nIf you add dithering devices on the master track, please uncheck this option.")
                         font.family: Constants.font
                         color: Constants.warningTextColor
                         wrapMode: Text.Wrap
                     }
 
                     Text {
-                        width: 100
+                        width: firstColumnWidth
                         height: 20
-                        text: qsTr("高级设置")
+                        text: qsTr("Advanced")
                         font.family: Constants.font
                         color: Constants.contentColor2
                         horizontalAlignment: Text.AlignLeft
@@ -253,12 +255,12 @@ Window {
                         verticalAlignment: Text.AlignVCenter
                     }
                     Item {
-                        width: 320
+                        width: secondColumnWidth
                         height: 20
                     }
                     Text {
-                        width: 100
-                        text: qsTr("导出为单声道:")
+                        width: firstColumnWidth
+                        text: qsTr("Export as Mono:")
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -268,7 +270,7 @@ Window {
                         checked: false
                     }
                     Text {
-                        width: 100
+                        width: firstColumnWidth
                         text: qsTr("标准化:")
                         font.family: Constants.font
                         color: Constants.contentColor1
@@ -276,31 +278,31 @@ Window {
                         verticalAlignment: Text.AlignVCenter
                     }
                     MCtrl.ComboBox {
-                        width: 100
+                        width: firstColumnWidth
                         height: 20
-                        model: ["无", "0dB", "-0.1dB", "-3dB"]
+                        model: [qsTr("N/A"), "0dB", "-0.1dB", "-3dB"]
                         currentIndex: 0
                         font.family: Constants.font
                     }
                     Text {
-                        width: 100
-                        text: qsTr("尾部处理方式:")
+                        width: firstColumnWidth
+                        text: qsTr("Tails:")
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
                     }
                     MCtrl.ComboBox {
-                        width: 100
+                        width: firstColumnWidth
                         height: 20
-                        model: ["不保留", "置于末尾", "置于开头"]
+                        model: [qsTr("Cut"), qsTr("Leave"), qsTr("Wrap")]
                         currentIndex: 0
                         font.family: Constants.font
                     }
                     Text {
-                        width: 100
+                        width: firstColumnWidth
                         height: 20
-                        text: qsTr("导出有损压缩音频")
+                        text: qsTr("Export Lossy Audio File")
                         font.family: Constants.font
                         color: Constants.contentColor2
                         horizontalAlignment: Text.AlignLeft
@@ -308,28 +310,28 @@ Window {
                         verticalAlignment: Text.AlignVCenter
                     }
                     Item {
-                        width: 320
+                        width: secondColumnWidth
                         height: 20
                     }
                     Text {
-                        width: 100
-                        text: qsTr("文件格式:")
+                        width: firstColumnWidth
+                        text: qsTr("File Format:")
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
                     }
                     MCtrl.ComboBox {
-                        width: 100
+                        width: firstColumnWidth
                         height: 20
                         model: ["AAC", "MP3", "M4A", "OGG", "WMA"]
                         currentIndex: 0
                         font.family: Constants.font
                     }
                     Text {
-                        width: 100
+                        width: firstColumnWidth
                         height: 20
-                        text: qsTr("导出完成后操作")
+                        text: qsTr("After Exporting")
                         font.family: Constants.font
                         color: Constants.contentColor2
                         horizontalAlignment: Text.AlignLeft
@@ -337,12 +339,12 @@ Window {
                         verticalAlignment: Text.AlignVCenter
                     }
                     Item {
-                        width: 320
+                        width: secondColumnWidth
                         height: 20
                     }
                     Text {
-                        width: 100
-                        text: qsTr("关闭此窗口:")
+                        width: firstColumnWidth
+                        text: qsTr("Close This Window:")
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -352,8 +354,8 @@ Window {
                         checked: false
                     }
                     Text {
-                        width: 100
-                        text: qsTr("打开导出目录:")
+                        width: firstColumnWidth
+                        text: qsTr("Open Export Directory:")
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -363,18 +365,18 @@ Window {
                         checked: false
                     }
                     Text {
-                        width: 100
-                        text: qsTr("执行命令:")
+                        width: firstColumnWidth
+                        text: qsTr("Execute a Command:")
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
                     }
                     TextField {
-                        width: 320
+                        width: secondColumnWidth
                         height: 20
                         color: Constants.contentColor1
-                        placeholderText: qsTr("键入命令")
+                        placeholderText: qsTr("Type command")
                         placeholderTextColor: Constants.currentElementColor
                         topPadding: 0
                         bottomPadding: 0
@@ -390,19 +392,19 @@ Window {
                         }
                     }
                     Text {
-                        width: 100
+                        width: firstColumnWidth
                         height: 80
-                        text: qsTr("提示:")
+                        text: qsTr("Tip:")
                         font.family: Constants.font
                         color: Constants.contentColor2
                         verticalAlignment: Text.AlignTop
                         horizontalAlignment: Text.AlignRight
                     }
                     Text {
-                        width: 320
+                        width: secondColumnWidth
                         height: 80
                         textFormat: Text.RichText
-                        text: qsTr("用%path作为导出位置；用%filename作为文件名（不含扩展名），用%format作为无损音频文件的扩展名。<br>例：导出的无损音频文件的完整路径为<br>%path\\%filename.%format")
+                        text: qsTr("Use %path as export directory; use %filename as file name without the extension，use %format as extension of the lossless audio file.<br>e.g. the complete path of the exported lossless audio file is <br>%path\\%filename.%format")
                         font.family: Constants.font
                         color: Constants.contentColor2
                         wrapMode: Text.Wrap
@@ -452,7 +454,7 @@ Window {
                 verticalItemAlignment: Grid.AlignVCenter
                 MCtrl.Button {
                     id: buttonOK
-                    text: qsTr("导出(&E)")
+                    text: qsTr("&Export")
                     width: 75
                     height: 30
                     font.family: Constants.font
@@ -464,7 +466,7 @@ Window {
                 }
                 MCtrl.Button {
                     id: buttonCancel
-                    text: qsTr("取消(&C)")
+                    text: Constants.cancelTextWithMnemonic
                     width: 75
                     height: 30
                     font.family: Constants.font
@@ -475,6 +477,5 @@ Window {
                 }
             }
         }
-
     }
 }

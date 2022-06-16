@@ -14,7 +14,7 @@ Window {
 
     // 内置属性
     flags: Qt.Dialog
-    title: qsTr("项目属性")
+    title: qsTr("Project Properties")
     width: 450
     height: 600
     color: Constants.backgroundColor
@@ -38,7 +38,7 @@ Window {
                     Text {
                         width: 100
                         height: 20
-                        text: qsTr("文件")
+                        text: qsTr("File")
                         font.family: Constants.font
                         color: Constants.contentColor2
                         horizontalAlignment: Text.AlignLeft
@@ -51,7 +51,7 @@ Window {
                     }
                     Text {
                         width: 100
-                        text: qsTr("文件名:")
+                        text: qsTr("File Name:")
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -69,7 +69,7 @@ Window {
                     }
                     Text {
                         width: 100
-                        text: qsTr("路径:")
+                        text: qsTr("Path:")
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -92,13 +92,13 @@ Window {
                     Row {
                         spacing: 5
                         MCtrl.Button {
-                            text: qsTr("复制路径(&P)")
+                            text: qsTr("&Copy Path")
                             font.family: Constants.font
                             height: 20
                             enabled: !newProject
                         }
                         MCtrl.Button {
-                            text: qsTr("打开文件位置(&I)")
+                            text: qsTr("&Show in Explorer")
                             font.family: Constants.font
                             height: 20
                             enabled: !newProject
@@ -107,7 +107,7 @@ Window {
                     Text {
                         width: 100
                         height: 20
-                        text: qsTr("元数据")
+                        text: qsTr("&Metadata")
                         font.family: Constants.font
                         color: Constants.contentColor2
                         horizontalAlignment: Text.AlignLeft
@@ -120,7 +120,7 @@ Window {
                     }
                     Text {
                         width: 100
-                        text: qsTr("项目标题:")
+                        text: qsTr("Title:")
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -130,7 +130,7 @@ Window {
                         width: 320
                         height: 20
                         color: Constants.contentColor1
-                        placeholderText: qsTr("键入项目标题")
+                        placeholderText: qsTr("Type Project Title")
                         placeholderTextColor: Constants.currentElementColor
                         topPadding: 0
                         bottomPadding: 0
@@ -148,7 +148,7 @@ Window {
                     }
                     Text {
                         width: 100
-                        text: qsTr("作者:")
+                        text: qsTr("Author:")
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -158,7 +158,7 @@ Window {
                         width: 320
                         height: 20
                         color: Constants.contentColor1
-                        placeholderText: qsTr("键入项目作者")
+                        placeholderText: qsTr("Type author")
                         placeholderTextColor: Constants.currentElementColor
                         topPadding: 0
                         bottomPadding: 0
@@ -176,7 +176,7 @@ Window {
                     }
                     Text {
                         width: 100
-                        text: qsTr("公司或组织:")
+                        text: qsTr("Company:")
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -186,7 +186,7 @@ Window {
                         width: 320
                         height: 20
                         color: Constants.contentColor1
-                        placeholderText: qsTr("键入公司或组织")
+                        placeholderText: qsTr("Type company or organization")
                         placeholderTextColor: Constants.currentElementColor
                         topPadding: 0
                         bottomPadding: 0
@@ -204,7 +204,7 @@ Window {
                     }
                     Text {
                         width: 100
-                        text: qsTr("流派:")
+                        text: qsTr("Genre:")
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -218,7 +218,7 @@ Window {
                             width: parent.width - parent.height
                             height: parent.height
                             color: Constants.contentColor1
-                            placeholderText: qsTr("键入或选择流派")
+                            placeholderText: qsTr("Type or select genre")
                             placeholderTextColor: Constants.currentElementColor
                             topPadding: 0
                             bottomPadding: 0
@@ -252,7 +252,7 @@ Window {
                             Text {
                                 anchors.right: parent.right
                                 anchors.top: parent.top
-                            text: qsTr("备注:")
+                            text: qsTr("Remarks:")
                             font.family: Constants.font
                             color: Constants.contentColor1
                             horizontalAlignment: Text.AlignRight
@@ -264,7 +264,7 @@ Window {
                         TextArea {
                             width: parent.width
                             color: Constants.contentColor1
-                            placeholderText: qsTr("键入其他信息...")
+                            placeholderText: qsTr("Type other info...")
                             placeholderTextColor: Constants.currentElementColor
                             wrapMode: TextEdit.Wrap
                             font.family: Constants.font
@@ -284,7 +284,7 @@ Window {
                     Text {
                         width: 100
                         height: 20
-                        text: qsTr("混音器")
+                        text: qsTr("Mixer")
                         font.family: Constants.font
                         color: Constants.contentColor2
                         horizontalAlignment: Text.AlignLeft
@@ -297,7 +297,7 @@ Window {
                     }
                     Text {
                         width: 100
-                        text: qsTr("声像补偿:")
+                        text: qsTr("Panning comp.:")
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -328,7 +328,7 @@ Window {
                 horizontalItemAlignment: Grid.AlignLeft
                 verticalItemAlignment: Grid.AlignVCenter
                 MCtrl.Button {
-                    text: qsTr("复位(&R)")
+                    text: qsTr("&Reset")
                     width: 75
                     height: 30
                     font.family: Constants.font
@@ -344,7 +344,7 @@ Window {
                 verticalItemAlignment: Grid.AlignVCenter
                 MCtrl.Button {
                     id: buttonOK
-                    text: qsTr("确定(&O)")
+                    text: Constants.okTextWithMnemonic
                     width: 75
                     height: 30
                     font.family: Constants.font
@@ -355,7 +355,7 @@ Window {
                 }
                 MCtrl.Button {
                     id: buttonCancel
-                    text: qsTr("取消(&C)")
+                    text: Constants.cancelTextWithMnemonic
                     width: 75
                     height: 30
                     font.family: Constants.font

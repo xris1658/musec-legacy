@@ -85,7 +85,7 @@ QQC2.ComboBox {
         height: width
         Text {
             anchors.centerIn: parent
-            text: qsTr("\u25BC")
+            text: "\u25BC"
             font.pixelSize: parent.height * 0.4
             color: Constants.contentColor1
         }

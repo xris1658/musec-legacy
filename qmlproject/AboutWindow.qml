@@ -7,7 +7,7 @@ import Musec.Controls 1.0 as MCtrl
 Window {
     flags: Qt.Dialog
     id: root
-    title: qsTr("关于 Musec")
+    title: qsTr("About Musec")
     color: Constants.backgroundColor
     modality: Qt.WindowModal
     visible: true
@@ -52,13 +52,13 @@ Window {
                     bottomPadding: 10
                     spacing: 5
                     Text {
-                        text: qsTr("Musec")
+                        text: "Musec"
                         color: Constants.contentColor1
                         font.family: "Noto Sans CJK SC Bold"
                         font.pixelSize: 20
                     }
                     Text {
-                        text: qsTr("版本 0.0.1 Alpha")
+                        text: qsTr("Version 0.0.1 Alpha")
                         color: Constants.contentColor1
                         font.family: Constants.font
                     }
@@ -68,7 +68,7 @@ Window {
                         font.family: Constants.font
                     }
                     Text {
-                        text: qsTr("Musec 是一款开发中的数字音频工作站软件。")
+                        text: qsTr("Musec is a digital audio workstation (DAW) software under development.")
                         color: Constants.contentColor1
                         font.family: Constants.font
                     }
@@ -90,7 +90,7 @@ Window {
                 verticalItemAlignment: Grid.AlignVCenter
                 MCtrl.Button {
                     id: buttonOK
-                    text: qsTr("确定(&O)")
+                    text: Constants.okTextWithMnemonic
                     width: 75
                     height: 30
                     font.family: Constants.font
@@ -100,7 +100,7 @@ Window {
                 }
                 MCtrl.Button {
                     id: buttonTechnicalSupport
-                    text: qsTr("第三方软件(&T)")
+                    text: qsTr("&Third Party Software")
                     height: 30
                     font.family: Constants.font
                     onClicked: {

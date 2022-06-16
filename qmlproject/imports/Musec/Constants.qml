@@ -95,6 +95,37 @@ QtObject {
     readonly property color listHighlightBackColor:        Constants.currentElementColor
     readonly property color listHighlightContentColor:     "#000000"
 
+    readonly property string okText:                    qsTr("OK")
+    readonly property string okTextWithMnemonic:        qsTr("&OK")
+    readonly property string cancelText:                qsTr("Cancel")
+    readonly property string cancelTextWithMnemonic:    qsTr("&Cancel")
+    readonly property string yesText:                   qsTr("Yes")
+    readonly property string yesTextWithMnemonic:       qsTr("&Yes")
+    readonly property string noText:                    qsTr("No")
+    readonly property string noTextWithMnemonic:        qsTr("&No")
+    readonly property string yesToAll:                  qsTr("Yes to All")
+    readonly property string yesToAllWithMnemonic:      qsTr("Yes to &All")
+    readonly property string noToAll:                   qsTr("No to All")
+    readonly property string noToAllWithMnemonic:       qsTr("N&o to All")
+    readonly property string undoText:                  qsTr("Undo")
+    readonly property string undoTextWithMnemonic:      qsTr("&Undo")
+    readonly property string redoText:                  qsTr("Redo")
+    readonly property string redoTextWithMnemonic:      qsTr("&Redo")
+    readonly property string cutText:                   qsTr("Cut")
+    readonly property string cutTextWithMnemonic:       qsTr("Cu&t")
+    readonly property string copyText:                  qsTr("Copy")
+    readonly property string copyTextWithMnemonic:      qsTr("&Copy")
+    readonly property string pasteText:                 qsTr("Paste")
+    readonly property string pasteTextWithMnemonic:     qsTr("&Paste")
+    readonly property string deleteText:                qsTr("Delete")
+    readonly property string deleteTextWithMnemonic:    qsTr("&Delete")
+    readonly property string selectAllText:             qsTr("Select All")
+    readonly property string selectAllTextWithMnemonic: qsTr("Select &All")
+    readonly property string duplicateText:             qsTr("Duplicate")
+    readonly property string duplicateTextWithMnemonic: qsTr("&Duplicate")
+    readonly property string renameText:                qsTr("Rename")
+    readonly property string renameTextWithMnemonic:    qsTr("Rename")
+
     readonly property ListModel dynamicKeyName: ListModel {
         ListElement {
             flat: "C"
@@ -150,67 +181,67 @@ QtObject {
         ListElement {
             name: "ASIO"
             homepage: "https://www.steinberg.net/developers/"
-            description: qsTr("低延迟的音频驱动")
+            description: qsTr("Low latency audio driver")
         }
         ListElement {
             name: "FFmpeg"
             homepage: "https://www.ffmpeg.org/"
-            description: qsTr("用于操作多媒体文件的跨平台库")
+            description: qsTr("Library for manipulating multimedia files")
         }
         ListElement {
             name: "Avcpp"
             homepage: "https://github.com/h4tr3d/avcpp"
-            description: qsTr("FFmpeg 的 C++ 封装")
+            description: qsTr("C++ wrapper of FFmpeg")
         }
         ListElement {
             name: "Inno Setup"
             homepage: "https://jrsoftware.org/isinfo.php"
-            description: qsTr("安装程序框架")
+            description: qsTr("Installer framework")
         }
         ListElement {
             name: "LAME"
             homepage: "https://lame.sourceforge.io/"
-            description: qsTr("MP3 音频编码器")
+            description: qsTr("MP3 audio encoder")
         }
         ListElement {
             name: "Qt"
             homepage: "https://www.qt.io/"
-            description: qsTr("跨平台应用开发工具")
+            description: qsTr("Cross-platform application development toolkit")
         }
         ListElement {
             name: "The SoX Resampler library"
             homepage: "https://sourceforge.net/p/soxr/wiki/Home/"
-            description: qsTr("音频重采样工具")
+            description: qsTr("Audio resampler")
         }
         ListElement {
             name: "spdlog"
             homepage: "https://github.com/gabime/spdlog"
-            description: qsTr("日志记录工具")
+            description: qsTr("Logger")
         }
         ListElement {
             name: "{fmt}"
             homepage: "https://fmt.dev"
-            description: qsTr("格式化文本工具，spdlog 的依赖")
+            description: qsTr("Library for text formatting, dependency of spdlog")
         }
         ListElement {
             name: "SQLite"
             homepage: "https://www.sqlite.org/index.html"
-            description: qsTr("轻量，高效的数据库引擎")
+            description: qsTr("Light-weight, efficient database engine")
         }
         ListElement {
             name: "sqlite-modern-cpp"
             homepage: "https://github.com/aminroosta/sqlite_modern_cpp"
-            description: qsTr("SQLite 的现代 C++ 封装")
+            description: qsTr("Modern C++ wrapper of SQLite")
         }
         ListElement {
             name: "VST"
             homepage: "https://www.steinberg.net/developers/"
-            description: qsTr("广泛使用的音频插件架构")
+            description: qsTr("Widely used audio plugin framework")
         }
         ListElement {
             name: "yaml-cpp"
             homepage: "https://github.com/jbeder/yaml-cpp/"
-            description: qsTr("YAML 解析与生成工具")
+            description: qsTr("YAML parser and emitter")
         }
     }
 

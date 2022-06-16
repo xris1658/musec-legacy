@@ -89,8 +89,8 @@ QQC2.MenuItem {
             leftPadding: menuItemDelegate.indicator.width - 5
             rightPadding: menuItemDelegate.arrow.width
             anchors.verticalCenter: parent.verticalCenter
-            text: menuItemDelegate.text.indexOf('&')>=0?
-                      menuItemDelegate.text.split('&')[0] + menuItemDelegate.text.split('&')[1].substring(0, 1) + menuItemDelegate.text.split('&')[1].substring(1, menuItemDelegate.text.split('&')[1].length)
+            text: menuItemDelegate.text.indexOf('&') >= 0?
+                      menuItemDelegate.text.split('&')[0] + "<u>" + menuItemDelegate.text.split('&')[1].substring(0, 1) + "</u>" + menuItemDelegate.text.split('&')[1].substring(1, menuItemDelegate.text.split('&')[1].length)
                     : menuItemDelegate.text
             font: menuItemDelegate.font
             opacity: enabled? 1.0 : 0.3

@@ -13,7 +13,7 @@ Item {
         height: minimumHeight
         color: root.color
         Text {
-            text: name.length? name: qsTr("未命名片段")
+            text: name.length? name: qsTr("Untitled Clip")
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             width: parent.width

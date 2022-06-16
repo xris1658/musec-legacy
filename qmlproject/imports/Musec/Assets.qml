@@ -117,7 +117,7 @@ Rectangle {
             focus: true
             anchors.fill: parent
             color: Constants.contentColor1
-            placeholderText: qsTr("键入文件夹名称")
+            placeholderText: qsTr("Type name")
             placeholderTextColor: Constants.currentElementColor
             selectionColor: Constants.currentElementColor
             selectedTextColor: Constants.backgroundColor
@@ -140,13 +140,13 @@ Rectangle {
 
     MCtrl.Menu {
         id: assetDirectoryOptions
-        title: qsTr("素材文件夹操作")
+        title: qsTr("Asset folder options")
         delegate: MCtrl.MenuItem {}
         width: 200
         implicitHeight: 20
         height: contentHeight
         MCtrl.Action {
-            text: qsTr("在文件资源管理器中打开(&O)")
+            text: qsTr("&Open in Explorer")
             onTriggered: {
                 let path = String(assetDirectoryOptions.parent._path);
                 let url = Constants.urlFromDirectory(path.toString());
@@ -154,7 +154,7 @@ Rectangle {
             }
         }
         MCtrl.Action {
-            text: qsTr("重命名(&R)")
+            text: qsTr("&Rename")
             onTriggered: {
                 assetDirectoryNameEditPopup.parent = assetDirectoryOptions.parent;
                 assetDirectoryNameEditPopup.visible = true;
@@ -164,7 +164,7 @@ Rectangle {
             }
         }
         MCtrl.Action {
-            text: qsTr("从位置中移除(&D)")
+            text: qsTr("Remove from &Directories")
             onTriggered: {
                 removeAssetDirectory(assetDirectoryOptions.parent._id);
             }
@@ -197,7 +197,7 @@ Rectangle {
             id: assetsAreaSearchBoxTextHint
             anchors.left: parent.left
             anchors.leftMargin: 5
-            text: qsTr("搜索 (Ctrl+F)")
+            text: qsTr("Search (Ctrl+F)")
             font.family: Constants.font
             font.italic: true
             color: Constants.currentElementColor
@@ -259,36 +259,36 @@ Rectangle {
             }
             MCtrl.Menu {
                 id: contextMenu
-                title: qsTr("素材搜索框选项")
+                title: qsTr("Search Box Options")
                 MCtrl.Action {
-                    text: qsTr("撤销(&U)")
+                    text: qsTr("&Undo")
                     shortcut: "Ctrl+Z"
                 }
                 MCtrl.MenuSeparator {}
                 MCtrl.Action {
-                    text: qsTr("剪切(&T)")
+                    text: qsTr("Cu&t")
                     shortcut: "Ctrl+X"
                 }
                 MCtrl.Action {
-                    text: qsTr("复制(&C)")
+                    text: qsTr("&Copy")
                     shortcut: "Ctrl+C"
                 }
                 MCtrl.Action {
-                    text: qsTr("粘贴(&P)")
+                    text: qsTr("&Paste")
                     shortcut: "Ctrl+V"
                 }
                 MCtrl.Action {
-                    text: qsTr("删除(&D)")
+                    text: qsTr("&Delete")
                     shortcut: "Delete"
                 }
                 MCtrl.MenuSeparator {}
                 MCtrl.Action {
-                    text: qsTr("全选(&A)")
+                    text: qsTr("Select &All")
                     shortcut: "Ctrl+A"
                 }
                 MCtrl.MenuSeparator {}
                 MCtrl.Action {
-                    text: qsTr("输入特殊字符(&M)...")
+                    text: qsTr("Input &More Characters...")
                     onTriggered: {
                         openSpecialCharacterInput();
                     }
@@ -358,7 +358,7 @@ Rectangle {
                     spacing: 20
                     Column {
                         Text {
-                            text: qsTr("位置")
+                            text: qsTr("Directories")
                             font.family: Constants.font
                             color: Constants.contentColor2
                             Component.onCompleted: {
@@ -450,7 +450,7 @@ Rectangle {
                                     }
                                 }
                                 Text {
-                                    text: qsTr("添加位置...")
+                                    text: qsTr("Add Directories...")
                                     font.family: Constants.font
                                     color: Constants.contentColor1
                                 }
@@ -463,7 +463,7 @@ Rectangle {
                     }
                     Column {
                         Text {
-                            text: qsTr("分类")
+                            text: qsTr("Caterories")
                             font.family: Constants.font
                             color: Constants.contentColor2
                             Component.onCompleted: {
@@ -476,19 +476,19 @@ Rectangle {
                             interactive: false
                             model: ListModel {
                                 ListElement {
-                                    name: "插件"
+                                    name: qsTr("Plugins")
                                     iconPath: "../../images/plugin.svg"
                                 }
                                 ListElement {
-                                    name: "MIDI 效果器"
+                                    name: qsTr("MIDI Effects")
                                     iconPath: "../../images/midieffect.svg"
                                 }
                                 ListElement {
-                                    name: "乐器"
+                                    name: qsTr("Instruments")
                                     iconPath: "../../images/instrument.svg"
                                 }
                                 ListElement {
-                                    name: "音频效果器"
+                                    name: qsTr("Audio Effects")
                                     iconPath: "../../images/audioeffect.svg"
                                 }
                             }

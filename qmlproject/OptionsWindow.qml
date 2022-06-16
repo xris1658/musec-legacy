@@ -8,7 +8,7 @@ import Musec.Controls 1.0 as MCtrl
 Window {
     id: root
     flags: Qt.Tool
-    title: qsTr("选项")
+    title: qsTr("Preferences")
     width: 600
     height: 600
     color: Constants.backgroundColor
@@ -51,7 +51,7 @@ Window {
                     interactive: false
                     highlightMoveDuration: 0
                     highlightResizeDuration: 0
-                    model: ["常规", "音频硬件", "插件"]
+                    model: [qsTr("General"), qsTr("Audio Hardware"), qsTr("Plugins")]
                     delegate: Item {
                         id: itemDelegate
                         width: parent.width

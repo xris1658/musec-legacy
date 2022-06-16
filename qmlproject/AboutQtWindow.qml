@@ -7,7 +7,7 @@ import Musec.Controls 1.0 as MCtrl
 Window {
     flags: Qt.Dialog
     id: root
-    title: qsTr("关于 Qt")
+    title: qsTr("About Qt")
     color: Constants.backgroundColor
     modality: Qt.WindowModal
     visible: true
@@ -52,7 +52,7 @@ Window {
                     bottomPadding: 10
                     spacing: 5
                     Text {
-                        text: qsTr("关于 Qt")
+                        text: qsTr("About Qt")
                         color: Constants.contentColor1
                         font.family: "Noto Sans CJK SC Bold"
                         font.pixelSize: 20
@@ -104,7 +104,7 @@ Window {
                 verticalItemAlignment: Grid.AlignVCenter
                 MCtrl.Button {
                     id: buttonOK
-                    text: qsTr("确定(&O)")
+                    text: Constants.okTextWithMnemonic
                     width: 75
                     height: 30
                     font.family: Constants.font

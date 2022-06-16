@@ -34,14 +34,14 @@ Item {
 
     MCtrl.Menu {
         id: folderOptions
-        title: qsTr("文件夹操作")
+        title: qsTr("Folder Options")
         property string path
         delegate: MCtrl.MenuItem {}
         width: 300
         implicitHeight: 20
         height: contentHeight
         MCtrl.Action {
-            text: qsTr("在文件资源管理器中打开(&O)")
+            text: qsTr("&Open in Explorer")
             shortcut: "Alt+Shift+R"
             onTriggered: {
                 Qt.openUrlExternally(Constants.urlFromDirectory(folderOptions.path));
@@ -51,14 +51,14 @@ Item {
 
     MCtrl.Menu {
         id: fileOptions
-        title: qsTr("文件操作")
+        title: qsTr("File Options")
         property string path
         delegate: MCtrl.MenuItem {}
         width: 300
         implicitHeight: 20
         height: contentHeight
         MCtrl.Action {
-            text: qsTr("在文件资源管理器中显示(&O)")
+            text: qsTr("Sh&ow in Explorer")
             shortcut: "Alt+Shift+R"
             onTriggered: {
                 console.log("Show file in a explorer is yet to be implemented.");

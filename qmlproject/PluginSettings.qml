@@ -26,7 +26,7 @@ Rectangle {
         Text {
             width: 100
             height: 20
-            text: qsTr("插件列表")
+            text: qsTr("Plugin List")
             font.family: Constants.font
             color: Constants.contentColor2
             horizontalAlignment: Text.AlignLeft
@@ -40,7 +40,7 @@ Rectangle {
         Text {
             width: 100
             height: 100
-            text: qsTr("插件扫描目录")
+            text: qsTr("Scan olugins from these directories:")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -98,7 +98,7 @@ Rectangle {
                 verticalItemAlignment: Grid.AlignVCenter
                 MCtrl.Button {
                     id: buttonAddPath
-                    text: qsTr("+ 添加目录...")
+                    text: qsTr("+ Add a directory...")
                     width: 100
                     height: 20
                     font.family: Constants.font
@@ -120,7 +120,7 @@ Rectangle {
                 }
                 MCtrl.Button {
                     id: buttonDelPath
-                    text: qsTr("- 移除选中目录")
+                    text: qsTr("- Remove selected directories")
                     width: 120
                     height: 20
                     font.family: Constants.font
@@ -158,7 +158,7 @@ Rectangle {
                 verticalItemAlignment: Grid.AlignTop
                 MCtrl.Button {
                     id: buttonRescan
-                    text: scanning? qsTr("正在扫描插件..."): qsTr("扫描插件")
+                    text: scanning? qsTr("Scanning plugins..."): qsTr("Scan Plugins")
                     width: 225
                     height: 20
                     font.family: Constants.font
@@ -173,7 +173,7 @@ Rectangle {
         Text {
             width: 100
             height: 20
-            text: qsTr("其他")
+            text: qsTr("Others")
             font.family: Constants.font
             color: Constants.contentColor2
             horizontalAlignment: Text.AlignLeft
@@ -186,7 +186,7 @@ Rectangle {
         }
         Text {
             width: 100
-            text: qsTr("扫描快捷方式")
+            text: qsTr("Scan Shortcuts")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -200,7 +200,7 @@ Rectangle {
         }
         Text {
             width: 100
-            text: qsTr("插件格式优先级")
+            text: qsTr("Plugin Format Priority")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -208,7 +208,7 @@ Rectangle {
         }
         MCtrl.ComboBox {
             id: comboBoxPluginPriority
-            model: ["VST2优先", "VST3优先"]
+            model: ["VST2 Prior", "VST3 Prior"]
             font.family: Constants.font
             width: 100
         }

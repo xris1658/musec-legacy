@@ -8,7 +8,7 @@ import Musec.Controls 1.0 as MCtrl
 Window {
     flags: Qt.Dialog
     id: root
-    title: qsTr("Musec 使用的第三方软件和技术")
+    title: qsTr("Third-party applications used by Musec")
     color: Constants.backgroundColor
     modality: Qt.WindowModal
     visible: true
@@ -57,7 +57,7 @@ Window {
                                 anchors.verticalCenter: parent.verticalCenter
                             }
                             MCtrl.ToolTip {
-                                text: "<p><b>单击访问以下链接:</b></p>%1"
+                                text: qsTr("<p><b>Click to visit the following link:</b></p>%1")
                                        .arg(homepage)
                                 visible: hover.hovered
                             }
@@ -94,7 +94,7 @@ Window {
             verticalItemAlignment: Grid.AlignVCenter
             MCtrl.Button {
                 id: buttonOK
-                text: qsTr("确定(&O)")
+                text: Constants.okTextWithMnemonic
                 width: 75
                 height: 30
                 font.family: Constants.font

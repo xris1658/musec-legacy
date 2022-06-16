@@ -98,8 +98,10 @@ ASIODriver::ASIODriver(): driverInfo_(std::tuple<QString, QString>("", "")), dri
 ASIODriver::ASIODriver(const ASIODriverBasicInfo& info): driverInfo_(info), driver_(nullptr)
 {
     CoInitialize(NULL);
-    std::array<wchar_t, CLSIDStringLength + 1> clsidBuffer = {0};
-    std::get<ASIODriverField::CLSIDField>(info).toWCharArray(clsidBuffer.data());
+    std::array<wchar_t, CLSIDStringLength + 1> clsidBuffer;
+    const auto& string = std::get<ASIODriverField::CLSIDField>(info);
+    clsidBuffer[string.size()] = L'\0';
+    string.toWCharArray(clsidBuffer.data());
     CLSID clsid;
     auto convertToCLSIDResult = CLSIDFromString(clsidBuffer.data(), &clsid);
     if(convertToCLSIDResult != NOERROR)

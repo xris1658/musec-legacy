@@ -37,7 +37,7 @@ Item {
     property Labs.ColorDialog colorDialog: Labs.ColorDialog {
         property TrackHeader colorDest1
         color: Constants.backgroundColor
-        title: qsTr("选择颜色")
+        title: qsTr("Select Color")
         modality: Qt.WindowModal
         onAccepted: {
             colorDest1.setColor(this.currentColor);
@@ -54,28 +54,28 @@ Item {
         id: trackOptions
         property int trackIndex
         property TrackHeader trackHeader
-        title: qsTr("轨道操作")
+        title: qsTr("Track Options")
         delegate: MCtrl.MenuItem {}
         width: 200
         height: contentHeight
         MCtrl.Action {
-            text: qsTr("剪切(&T)")
+            text: Constants.cutTextWithMnemonic
             shortcut: "Ctrl+X"
         }
         MCtrl.Action {
-            text: qsTr("复制(&C)")
+            text: Constants.copyTextWithMnemonic
             shortcut: "Ctrl+C"
         }
         MCtrl.Action {
-            text: qsTr("创建副本(&L)")
+            text: Constants.duplicateTextWithMnemonic
             shortcut: "Ctrl+D"
         }
         MCtrl.Action {
-            text: qsTr("粘贴(&P)")
+            text: Constants.pasteTextWithMnemonic
             shortcut: "Ctrl+V"
         }
         MCtrl.Action {
-            text: qsTr("删除(&D)")
+            text: Constants.deleteTextWithMnemonic
             shortcut: "Delete"
             onTriggered: {
                 trackOptions.trackHeader.remove();
@@ -83,38 +83,38 @@ Item {
         }
         MCtrl.MenuSeparator {}
         MCtrl.Action {
-            text: qsTr("重命名(&R)")
+            text: Constants.renameTextWithMnemonic
             shortcut: "F2"
             onTriggered: {
                 trackOptions.trackHeader.rename();
             }
         }
         MCtrl.Action {
-            text: qsTr("颜色(&L)")
+            text: qsTr("Co&lor...")
             onTriggered: {
                 colorDialog.open();
             }
         }
         MCtrl.MenuSeparator {}
         MCtrl.Action {
-            text: qsTr("在上方插入乐器轨道(&I)")
+            text: qsTr("Insert &Instrument Track Above")
             onTriggered: {
                 let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
                     root, null);
                 completeTrack.trackColor = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
-                completeTrack.trackName = qsTr("乐器");
+                completeTrack.trackName = qsTr("Instrument");
                 completeTrack.trackType = CompleteTrack.InstrumentTrack;
                 completeTrack.height = 60;
                 insertTrack(completeTrack, trackOptions.trackIndex - 1);
             }
         }
         MCtrl.Action {
-            text: qsTr("在上方插入音频轨道(&A)")
+            text: qsTr("Insert &Audio Track Above")
             onTriggered: {
                 let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
                     root, null);
                 completeTrack.trackColor = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
-                completeTrack.trackName = qsTr("音频");
+                completeTrack.trackName = qsTr("Audio");
                 completeTrack.trackType = CompleteTrack.AudioTrack;
                 completeTrack.height = 60;
                 insertTrack(completeTrack, trackOptions.trackIndex - 1);
@@ -169,7 +169,7 @@ Item {
                     z: 1
                     MCtrl.ToolTip {
                         visible: parent.hovered
-                        text: qsTr("对齐单位")
+                        text: qsTr("Snap Unit")
                     }
                 }
                 MCtrl.Button {
@@ -229,7 +229,7 @@ Item {
                     z: 1
                     MCtrl.ToolTip {
                         visible: parent.hovered
-                        text: qsTr("自动化包络: ") + (automationButton.automationEnabled? qsTr("显示"): qsTr("隐藏"))
+                        text: qsTr("Automation") +": " + (automationButton.automationEnabled? qsTr("Show"): qsTr("Hide"))
                     }
                     onClicked:  {
                         automationEnabled = !automationEnabled;
@@ -241,11 +241,11 @@ Item {
                     height: editorSnapUnit.height
                     anchors.left: automationButton.right
                     anchors.top: automationButton.top
-                    model: ["不显示", "上方", "下方"]
+                    model: ["Hide", "Show at Top", "Show at Bottom"]
                     currentIndex: showMasterTrack
                     MCtrl.ToolTip {
                         visible: parent.hovered
-                        text: qsTr("显示主轨道")
+                        text: qsTr("Show Master Track")
                     }
                 }
             }
@@ -259,18 +259,18 @@ Item {
                 clip: true
                 MCtrl.Menu {
                     id: arrangementOptions
-                    title: qsTr("编排视图操作")
+                    title: qsTr("Arrangement Options")
                     delegate: MCtrl.MenuItem {}
                     width: 200
                     height: contentHeight
                     MCtrl.Action {
                         id: insertInstrumentTrack
-                        text: qsTr("添加乐器轨道(&I)")
+                        text: qsTr("Append an &Instrument Track")
                         onTriggered: {
                             let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
                                 root, null);
                             completeTrack.trackColor = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
-                            completeTrack.trackName = qsTr("乐器");
+                            completeTrack.trackName = qsTr("Instrument");
                             completeTrack.trackType = CompleteTrack.InstrumentTrack;
                             completeTrack.height = 60;
                             appendTrack(completeTrack);
@@ -278,12 +278,12 @@ Item {
                     }
                     MCtrl.Action {
                         id: insertAudioTrack
-                        text: qsTr("添加音频轨道(&A)")
+                        text: qsTr("Append an &Audio Track")
                         onTriggered: {
                             let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
                                 root, null);
                             completeTrack.trackColor = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
-                            completeTrack.trackName = qsTr("音频");
+                            completeTrack.trackName = qsTr("Audio");
                             completeTrack.trackType = CompleteTrack.AudioTrack;
                             completeTrack.height = 60;
                             appendTrack(completeTrack);
@@ -291,7 +291,7 @@ Item {
                     }
                     MCtrl.MenuSeparator {}
                     MCtrl.Action {
-                        text: qsTr("粘贴(&P)")
+                        text: Constants.pasteTextWithMnemonic
                         enabled: trackClipboard && (trackClipboard.count != 0)
                     }
                 }
@@ -553,7 +553,7 @@ Item {
                                     trackOptions.trackIndex = trackHeader.trackIndex;
                                     trackOptions.trackHeader = trackHeader;
                                     colorDialog.colorDest1 = trackHeader;
-                                    colorDialog.title = "选择颜色 - 轨道 " + trackHeader.trackIndex + ": " + trackHeader.trackName
+                                    colorDialog.title = qsTr("Select Color") + " - " + qsTr("Track") + trackHeader.trackIndex + ": " + trackHeader.trackName
                                     colorDialog.color = trackHeader.trackColor;
                                     trackOptions.x = mouseX;
                                     trackOptions.y = mouseY;
@@ -821,22 +821,22 @@ Item {
                         property int menuAtTrackIndex
                         MCtrl.Menu {
                             id: midiTrackContentOptions
-                            title: qsTr("MIDI 轨道操作")
+                            title: qsTr("MIDI Track Options")
                             delegate: MCtrl.MenuItem {}
                             width: 200
                             height: contentHeight
                             MCtrl.Action {
-                                text: qsTr("添加 MIDI 片段")
+                                text: qsTr("Add MIDI Clip")
                             }
                         }
                         MCtrl.Menu {
                             id: audioTrackContentOptions
-                            title: qsTr("音频轨道操作")
+                            title: qsTr("Audio Track Options")
                             delegate: MCtrl.MenuItem {}
                             width: 200
                             height: contentHeight
                             MCtrl.Action {
-                                text: qsTr("音频轨道操作")
+                                text: qsTr("Audio Track Options")
                                 enabled: false
                             }
                         }
@@ -981,7 +981,7 @@ Item {
                                     width: contentAreaRect.width
                                     height: parent.height
                                     Text {
-                                        text: qsTr("将插件或片段拖动到这里")
+                                        text: qsTr("Drag & Drop plugins or audio clips here")
                                         anchors.centerIn: parent
                                         font: Constants.font
                                         color: Constants.contentColor2
@@ -995,12 +995,6 @@ Item {
                                             opacity: parent.containsDrag? 0.6: 0
                                         }
                                         onEntered: {
-                                            if(drag.getDataAsString("FromWithin")) {
-                                                console.log("This drag event is generated in the application.");
-                                            }
-                                            else {
-                                                console.log("This drag event is generated out of the application.");
-                                            }
                                         }
                                         onDropped: {
                                             if(drop.getDataAsString("itemType") == "plugin") {

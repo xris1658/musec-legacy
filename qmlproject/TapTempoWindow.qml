@@ -8,7 +8,7 @@ Window {
     property double bpm: 127.5
     flags: Qt.Dialog
     id: root
-    title: qsTr("测速")
+    title: qsTr("Tap Tempo")
     width: 200
     height: 260
     color: Constants.backgroundColor
@@ -66,24 +66,29 @@ Window {
                 horizontalAlignment: Text.AlignHCenter
             }
         }
-        Grid {
-//            anchors.horizontalCenter: parent.horizontalCenter
-            rows: 1
-            spacing: 10
-            verticalItemAlignment: Grid.AlignVCenter
-            horizontalItemAlignment: Grid.AlignHCenter
-            MCtrl.Button {
-                text: qsTr("取整(&R)")
-                onClicked: {
-                    bpm = Math.round(bpm);
-                    variables.clickedInterval = 0;
+        Item {
+            width: root.width - 10 * 2
+            height: buttonRound.height
+            Grid {
+                rows: 1
+                spacing: 10
+                anchors.horizontalCenter: parent.horizontalCenter
+                verticalItemAlignment: Grid.AlignVCenter
+                horizontalItemAlignment: Grid.AlignHCenter
+                MCtrl.Button {
+                    id: buttonRound
+                    text: qsTr("&Round")
+                    onClicked: {
+                        bpm = Math.round(bpm);
+                        variables.clickedInterval = 0;
+                    }
                 }
-            }
-            MCtrl.Button {
-                text: qsTr("应用速度并关闭(&A)")
-                onClicked: {
-                    Objects.mainWindow.bpm = root.bpm;
-                    root.close();
+                MCtrl.Button {
+                    text: qsTr("&Apply and Close")
+                    onClicked: {
+                        Objects.mainWindow.bpm = root.bpm;
+                        root.close();
+                    }
                 }
             }
         }

@@ -29,10 +29,10 @@ Window {
     minimumWidth: row.width
     x: (screen.width - width) / 2
     y: (screen.height - height) / 2
-    property string message: qsTr("对话框消息文字")
+    property string message: "对话框消息文字"
     property alias standardButtons: dialogButtonBox.standardButtons
     signal accepted()
-    title: qsTr("对话框示例")
+    title: "对话框示例"
     signal clicked(button: AbstractButton)
     onClicked: {
         //

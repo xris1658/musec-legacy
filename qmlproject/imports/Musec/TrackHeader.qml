@@ -42,7 +42,7 @@ Item {
             anchors.fill: parent
             text: trackName
             color: Constants.contentColor1
-            placeholderText: qsTr("键入轨道名称")
+            placeholderText: qsTr("Type Track Name")
             placeholderTextColor: Constants.currentElementColor
             selectionColor: Constants.currentElementColor
             selectedTextColor: Constants.backgroundColor

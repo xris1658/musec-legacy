@@ -61,9 +61,9 @@ ApplicationWindow {
     }
     // 自定义属性
     property string filePath: ""
-    property string openedFile: qsTr("未命名项目")
+    property string openedFile: qsTr("Untitled project")
     property bool newProject: true
-    property bool changed: false
+    property bool dirty: false
     property bool maximized: true
     property bool _fullscreen: false
     property bool playing: false
@@ -74,7 +74,7 @@ ApplicationWindow {
     color: Constants.backgroundColor2
     visible: true
     visibility: "Maximized"
-    title: "Musec - " + openedFile + (changed? "*": "")
+    title: (dirty? "*": "") + openedFile + " - Musec"
 
     // 函数
     function saveProject() {
@@ -201,10 +201,10 @@ ApplicationWindow {
         id: mainMenuBar
         backgroundColor: "#000000"
         MCtrl.Menu {
-            title: qsTr("&Musec")
+            title: "&Musec"
 
             MCtrl.Action {
-                text: qsTr("关于 Musec(&A)...")
+                text: qsTr("&About Musec...")
                 onTriggered: {
                     var component = Qt.createComponent("AboutWindow.qml");
                     if(component.status == Component.Ready) {
@@ -215,7 +215,7 @@ ApplicationWindow {
                 }
             }
             MCtrl.Action {
-                text: qsTr("关于 Qt(&Q)...")
+                text: qsTr("About &Qt...")
                 onTriggered: {
                     var component = Qt.createComponent("AboutQtWindow.qml");
                     if(component.status == Component.Ready) {
@@ -227,11 +227,11 @@ ApplicationWindow {
             }
 
             MCtrl.MenuSeparator {}
-            MCtrl.Action { text: qsTr("键盘快捷键(&K)...") }
-            MCtrl.Action { text: qsTr("检查更新(&U)...") }
+            MCtrl.Action { text: qsTr("&Keyboard Shortcuts...") }
+            MCtrl.Action { text: qsTr("Check for &Updates...") }
             MCtrl.MenuSeparator {}
             MCtrl.Action {
-                text: qsTr("选项(&P)...")
+                text: qsTr("&Preferences...")
                 shortcut: "Ctrl+,"
                 onTriggered: {
                     EventBridge.setWindowIcon(optionsWindow);
@@ -242,7 +242,7 @@ ApplicationWindow {
             MCtrl.MenuSeparator {}
             MCtrl.Action {
                 id: quitAction
-                text: qsTr("退出(&X)")
+                text: qsTr("E&xit")
                 shortcut: "Ctrl+Q"
                 onTriggered: {
                     EventBridge.prepareToQuit();
@@ -250,31 +250,31 @@ ApplicationWindow {
             }
         }
         MCtrl.Menu {
-            title: qsTr("文件(&F)")
+            title: qsTr("&File")
 
             MCtrl.Action {
-                text: qsTr("新建(&N)")
+                text: qsTr("&New")
                 shortcut: "Ctrl+N"
             }
             MCtrl.Action {
-                text: qsTr("打开(&O)")
+                text: qsTr("&Open")
                 shortcut: "Ctrl+O"
             }
             MCtrl.Menu {
-                title: qsTr("最近打开的文件")
+                title: qsTr("Recent files")
 
                 MCtrl.Action {
-                    text: qsTr("列表为空")
+                    text: qsTr("Empty list")
                     enabled: false
                 }
                 MCtrl.MenuSeparator {}
                 MCtrl.Action {
-                    text: qsTr("清除列表")
+                    text: qsTr("Clear list")
                 }
             }
             MCtrl.MenuSeparator {}
             MCtrl.Action {
-                text: qsTr("保存(&S)")
+                text: qsTr("&Save")
                 shortcut: "Ctrl+S"
                 onTriggered: {
                     if(newProject) {
@@ -287,20 +287,20 @@ ApplicationWindow {
             }
             MCtrl.Action {
                 id: actionSaveAs
-                text: qsTr("另存为(&A)...")
+                text: qsTr("Save &As...")
                 shortcut: "Ctrl+Shift+S"
                 onTriggered: {
-                    fileDialog.title = "保存项目文件";
+                    fileDialog.title = qsTr("Save Project");
                     fileDialog.fileMode = Labs.FileDialog.SaveFile;
                     fileDialog.open();
                 }
             }
             MCtrl.MenuSeparator {}
             MCtrl.Menu {
-                title: qsTr("导出(&E)")
+                title: qsTr("&Export")
 
                 MCtrl.Action {
-                    text: qsTr("并轨(&B)...")
+                    text: qsTr("&Bounce...")
                     shortcut: "Ctrl+Shift+R"
                     onTriggered: {
                         var component = Qt.createComponent("MixdownWindow.qml");
@@ -312,23 +312,23 @@ ApplicationWindow {
                     }
                 }
                 MCtrl.Action {
-                    text: qsTr("选择分轨(&T)...")
+                    text: qsTr("Multiple &Tracks...")
                 }
                 MCtrl.MenuSeparator {}
                 MCtrl.Action {
-                    text: qsTr("打包项目文件(&P)...")
+                    text: qsTr("&Packed Project...")
                 }
                 MCtrl.Action {
-                    text: qsTr("MusicXML(&M)...")
+                    text: qsTr("&MusicXML...")
                 }
                 MCtrl.MenuSeparator {}
                 MCtrl.Action {
-                    text: qsTr("五线谱(&S)...")
+                    text: qsTr("&Score...")
                 }
             }
             MCtrl.MenuSeparator {}
             MCtrl.Action {
-                text: qsTr("项目属性(&P)...")
+                text: qsTr("&Project Properties...")
                 shortcut: "Alt+3"
                 onTriggered: {
                     var component = Qt.createComponent("ProjectPropertiesWindow.qml");
@@ -344,86 +344,86 @@ ApplicationWindow {
             }
             MCtrl.MenuSeparator {}
             MCtrl.Action {
-                text: qsTr("还原至上次保存(&R)...")
+                text: qsTr("&Revert to Last Save...")
                 shortcut: "F12"
             }
         }
         MCtrl.Menu {
-            title: qsTr("编辑(&E)")
+            title: qsTr("&Edit")
 
             MCtrl.Action {
-                text: qsTr("撤销(&U)")
+                text: qsTr("&Undo")
                 shortcut: "Ctrl+Z"
                 enabled: false
             }
             MCtrl.Action {
-                text: qsTr("重做(&R)")
+                text: qsTr("&Redo")
                 shortcut: "Ctrl+Y"
                 enabled: false
             }
             MCtrl.Action {
-                text: qsTr("历史记录(&H)...")
+                text: qsTr("&History...")
                 shortcut: "Ctrl+H"
                 enabled: false
             }
 
             MCtrl.MenuSeparator {}
             MCtrl.Action {
-                text: qsTr("剪切(&T)")
+                text: qsTr("Cu&t")
                 shortcut: "Ctrl+X"
                 onTriggered: {
-                    changed = true;
+                    dirty = true;
                 }
             }
             MCtrl.Action {
-                text: qsTr("复制(&C)")
+                text: qsTr("&Copy")
                 shortcut: "Ctrl+C"
             }
             MCtrl.Action {
-                text: qsTr("粘贴(&P)")
+                text: qsTr("&Paste")
                 shortcut: "Ctrl+V"
             }
             MCtrl.Action {
-                text: qsTr("删除(&D)")
+                text: qsTr("&Delete")
                 shortcut: "Delete"
             }
             MCtrl.MenuSeparator {}
             MCtrl.Action {
-                text: qsTr("全选(&A)")
+                text: qsTr("Select &All")
                 shortcut: "Ctrl+A"
             }
             MCtrl.MenuSeparator {}
             MCtrl.Action {
-                text: qsTr("跳转至起始")
+                text: qsTr("Jump to Start")
                 shortcut: "Home"
             }
             MCtrl.Action {
-                text: qsTr("跳转至结束")
+                text: qsTr("Jump to End")
                 shortcut: "End"
             }
             MCtrl.MenuSeparator {}
             MCtrl.Action {
                 id: actionLoop
-                text: qsTr("循环")
+                text: qsTr("Loop")
                 shortcut: "Ctrl+L"
                 checkable: true
                 checked: false
             }
             MCtrl.Action {
-                text: qsTr("设置入点")
+                text: qsTr("Set Loop In Point")
                 shortcut: "I"
             }
             MCtrl.Action {
-                text: qsTr("设置出点")
+                text: qsTr("Set Loop Out Point")
                 shortcut: "O"
             }
         }
         MCtrl.Menu {
-            title: qsTr("查看(&V)")
+            title: qsTr("&View")
 
             MCtrl.Action {
                 id: actionFullScreen
-                text: qsTr("全屏")
+                text: qsTr("&Fullscreen")
                 shortcut: "F11"
                 checkable: true
                 Binding on checked {
@@ -436,21 +436,21 @@ ApplicationWindow {
             MCtrl.MenuSeparator {}
             MCtrl.Action {
                 id: actionAssetVisible
-                text: qsTr("素材(&A)")
+                text: qsTr("&Assets")
                 shortcut: "F8"
                 checkable: true
                 checked: true
             }
             MCtrl.Action {
                 id: actionMidiEditorVisible
-                text: qsTr("片段编辑器(&C)")
+                text: qsTr("&Clip Editor")
                 shortcut: "F7"
                 checkable: true
                 checked: true
             }
             MCtrl.Action {
                 id: actionMixerVisible
-                text: qsTr("混音器(&M)")
+                text: qsTr("&Mixer")
                 shortcut: "F9"
                 checkable: true
                 checked: true
@@ -458,14 +458,14 @@ ApplicationWindow {
             MCtrl.MenuSeparator {}
             MCtrl.Action {
                 id: actionFollow
-                text: qsTr("跟随(&F)")
+                text: qsTr("&Follow")
                 shortcut: "Ctrl+Shift+F"
                 checkable: true
                 checked: false
             }
             MCtrl.Action {
                 id: actionShowKeyScale
-                text: qsTr("显示音阶(&K)")
+                text: qsTr("Show &Key Scale")
                 checkable: true
                 checked: midiEditor.showKeyScale
                 onTriggered: {
@@ -475,14 +475,14 @@ ApplicationWindow {
             MCtrl.MenuSeparator {}
             MCtrl.Action {
                 id: actionSnap
-                text: qsTr("对齐(&S)")
+                text: qsTr("&Snap")
                 checkable: true
                 checked: false
             }
             MCtrl.MenuSeparator {}
             MCtrl.Menu {
                 id: menuShowMasterTrack
-                title: qsTr("主轨道")
+                title: qsTr("Master Track")
 
                 Repeater {
                     model: arrangement.showMasterTrackModel
@@ -507,7 +507,7 @@ ApplicationWindow {
                 }
             }
             MCtrl.Menu {
-                title: qsTr("编排视图对齐单位")
+                title: qsTr("Arrangement Snap Unit")
                 Repeater {
                     model: arrangement.arrangementSnapUnit.model
                     MCtrl.MenuItem {
@@ -531,7 +531,7 @@ ApplicationWindow {
                 }
             }
             MCtrl.Menu {
-                title: qsTr("片段编辑器对齐单位")
+                title: qsTr("Editor Snap Unit")
                 Repeater {
                     model: midiEditor.midiEditorSnapUnit.model
                     MCtrl.MenuItem {
@@ -555,7 +555,7 @@ ApplicationWindow {
                 }
                 MCtrl.MenuSeparator {}
                 MCtrl.MenuItem {
-                    text: qsTr("三连音")
+                    text: qsTr("Triplets")
                     checkable: true
                     checked: midiEditor.triplets
                     onTriggered: {
@@ -565,24 +565,24 @@ ApplicationWindow {
             }
         }
         MCtrl.Menu {
-            title: qsTr("工具(&T)")
+            title: qsTr("&Tools")
 
             MCtrl.Action {
                 id: menuItemMetronome
-                text: qsTr("节拍器")
+                text: qsTr("Metronome")
                 shortcut: "Ctrl+M"
                 checkable: true
                 checked: false
             }
             MCtrl.Action {
                 id: actionEnableKeyboard
-                text: qsTr("电脑键盘映射为琴键")
+                text: qsTr("Map Computer Keyboard To Piano Keyboard")
                 checkable: true
                 checked: false
             }
             MCtrl.MenuSeparator {}
             MCtrl.Action {
-                text: qsTr("测速...")
+                text: qsTr("Tap Tempo...")
                 onTriggered: {
                     var component = Qt.createComponent("TapTempoWindow.qml");
                     if(component.status == Component.Ready) {
@@ -595,21 +595,21 @@ ApplicationWindow {
             }
         }
         MCtrl.Menu {
-            title: qsTr("帮助(&H)")
+            title: qsTr("&Help")
 
             MCtrl.Action {
-                text: qsTr("用户指南(&M)")
+                text: qsTr("&Manual")
                 shortcut: "F1"
             }
             MCtrl.Action {
-                text: qsTr("快速教程(&Q)")
+                text: qsTr("&Quick Start")
             }
             MCtrl.MenuSeparator {}
             MCtrl.Action {
-                text: qsTr("注册产品(&R)...")
+                text: qsTr("&Register Product")
             }
             MCtrl.Action {
-                text: qsTr("用户支持(&S)...")
+                text: qsTr("User Support")
             }
         }
     }
@@ -642,7 +642,7 @@ ApplicationWindow {
                 SplitView.minimumHeight: 20
                 FunctionArea {
                     id: assetsFunctionArea
-                    title: qsTr("素材")
+                    title: qsTr("Assets")
                     Assets {
                         id: assets
                         parent: assetsFunctionArea.contentArea
@@ -686,7 +686,7 @@ ApplicationWindow {
                         SplitView.preferredWidth: parent.width * 0.6
                         FunctionArea {
                             id: arrangementFunctionArea
-                            title: qsTr("编排视图")
+                            title: qsTr("Arrangement")
                             Arrangement {
                                 id: arrangement
                                 timelineNumerator: mainBar.numerator
@@ -713,7 +713,7 @@ ApplicationWindow {
                         FunctionArea {
                             id: editorFunctionArea
                             property string clipName: ""
-                            title: qsTr("编辑器")
+                            title: qsTr("Editor")
                             MidiEditor {
                                 id: midiEditor
                                 parent: editorFunctionArea.contentArea
@@ -730,7 +730,7 @@ ApplicationWindow {
                     visible: mixerVisible
                     FunctionArea {
                         id: mixerFunctionArea
-                        title: qsTr("混音器")
+                        title: qsTr("Mixer")
                         Mixer {
                             id: mixer
                             parent: mixerFunctionArea.contentArea
@@ -766,7 +766,7 @@ ApplicationWindow {
             anchors.left: parent.left
             anchors.leftMargin: 5
             anchors.verticalCenter: parent.verticalCenter
-            text: qsTr("就绪")
+            text: qsTr("Ready")
             font.family: Constants.font
             color: Constants.contentColor1
         }

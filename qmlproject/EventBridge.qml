@@ -77,7 +77,7 @@ QtObject {
         var component = Qt.createComponent("./imports/Musec/Dialogs/MessageDialog.qml");
         if(component.status == Component.Ready) {
             var rebootPrompt = component.createObject(eventBridge);
-            rebootPrompt.message = qsTr("您更改的设置已经保存，需要重新启动才能生效。")
+            rebootPrompt.message = qsTr("The option changes is saved. A restart is required to apply.")
             rebootPrompt.title = qsTr("Musec");
             rebootPrompt.standardButtons = DialogButtonBox.Ok;
             rebootPrompt.icon = MDlg.MessageDialog.Icon.Info;

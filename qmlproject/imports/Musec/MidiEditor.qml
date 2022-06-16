@@ -48,7 +48,7 @@ Item {
                 currentIndex: 4
                 MCtrl.ToolTip {
                     visible: parent.hovered
-                    text: qsTr("对齐单位")
+                    text: qsTr("Snap Unit")
                 }
             }
             Button {
@@ -73,7 +73,7 @@ Item {
                 }
                 MCtrl.ToolTip {
                     visible: parent.hovered
-                    text: qsTr("三连音")
+                    text: qsTr("Triplet")
                 }
                 onClicked: {
                     triplets = !triplets;
@@ -102,7 +102,7 @@ Item {
                 }
                 MCtrl.ToolTip {
                     visible: parent.hovered
-                    text: qsTr("显示音阶")
+                    text: qsTr("Show Key Scale")
                 }
                 onClicked: {
                     showKeyScaleButton.showKeyScale = !(showKeyScaleButton.showKeyScale);
@@ -124,7 +124,7 @@ Item {
                 border.width: 0
                 width: parent.width
                 height: 20
-                model: ["力度", "声像", "变调"]
+                model: [qsTr("Velocity"), qsTr("Panning"), qsTr("Tuning")]
                 font.family: Constants.font
                 currentIndex: 0
             }

@@ -17,12 +17,12 @@ Rectangle {
     MCtrl.Menu {
         id: instrumentSlotOptions
         property int trackIndex
-        title: qsTr("乐器操作")
+        title: qsTr("Instrument Options")
         delegate: MCtrl.MenuItem {}
         width: 100
         height: contentHeight
         MCtrl.Action {
-            text: qsTr("删除(&D)")
+            text: Constants.deleteTextWithMnemonic
             onTriggered: {
                 instrumentSlotOptions.parent = null;
                 tracks.removeInstrument(instrumentSlotOptions.trackIndex);
@@ -33,12 +33,12 @@ Rectangle {
         id: audioEffectSlotOptions
         property int trackIndex
         property int effectIndex
-        title: qsTr("音频效果器操作")
+        title: qsTr("Audio Effect Options")
         delegate: MCtrl.MenuItem {}
         width: 100
         height: contentHeight
         MCtrl.Action {
-            text: qsTr("删除(&D)")
+            text: Constants.deleteTextWithMnemonic
             onTriggered: {
                 audioEffectSlotOptions.parent = null;
                 if(audioEffectSlotOptions.trackIndex == -1) {
@@ -83,7 +83,7 @@ Rectangle {
             border.width: 0
             color: root.effectVisible? Constants.mouseOverElementColor: Constants.backgroundColor
             Text {
-                text: qsTr("fx")
+                text: "fx"
                 font.family: "Noto Sans Mono"
                 font.styleName: "Condensed"
                 font.italic: true
@@ -92,7 +92,7 @@ Rectangle {
             }
             MCtrl.ToolTip {
                 visible: parent.hovered
-                text: qsTr("显示效果")
+                text: qsTr("Show Effects")
             }
             onClicked: {
                 root.effectVisible  = !root.effectVisible;
@@ -116,7 +116,7 @@ Rectangle {
 
             MCtrl.ToolTip {
                 visible: parent.hovered
-                text: qsTr("显示音量推子和电平表")
+                text: qsTr("Show volume faders and dB meters")
             }
             onClicked: {
                 root.gainAndMeterVisible = !root.gainAndMeterVisible;

@@ -11,7 +11,7 @@ Window {
     height: 400
     color: Constants.backgroundColor
 //    property alias parameterListModel: parameterListView.model
-    property string pluginName: "此处显示插件名称"
+    property string pluginName: "Plugin name here"
     Column {
         Item {
             id: titleAndParamCount
@@ -33,7 +33,7 @@ Window {
                 anchors.right: parent.right
                 anchors.rightMargin: (parent.height - contentHeight) / 2
                 anchors.verticalCenter: parent.verticalCenter
-                text: qsTr("可调参数数量：") + parameterListView.count
+                text: qsTr("# of Adjustable parameters:") + parameterListView.count
                 font.family: Constants.font
                 color: Constants.contentColor1
                 font.pixelSize: parent.height * 0.6

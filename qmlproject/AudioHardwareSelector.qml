@@ -38,7 +38,7 @@ Rectangle {
         Text {
             width: 100
             height: 20
-            text: qsTr("硬件驱动")
+            text: qsTr("Driver")
             font.family: Constants.font
             color: Constants.contentColor2
             horizontalAlignment: Text.AlignLeft
@@ -51,7 +51,7 @@ Rectangle {
         }
         Text {
             width: 100
-            text: qsTr("驱动: ")
+            text: qsTr("Driver: ")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -63,8 +63,8 @@ Rectangle {
             font.family: Constants.font
             textRole: "name"
             valueRole: "clsid"
-            displayText: count == 0? qsTr("无 ASIO 驱动"):
-                         currentIndex == -1? qsTr("未加载驱动"):
+            displayText: count == 0? qsTr("No ASIO driver found"):
+                         currentIndex == -1? qsTr("No ASIO driver loaded"):
                          currentText
             onCurrentValueChanged: {
                 EventBridge.driverASIOSelectionChanged(currentValue);
@@ -72,7 +72,7 @@ Rectangle {
         }
         Text {
             width: 100
-            text: qsTr("采样率: ")
+            text: qsTr("Sample Rate: ")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -104,8 +104,7 @@ Rectangle {
             height: 20
         }
         MCtrl.Button {
-            text: qsTr("打开驱动设置")
-            width: 100
+            text: qsTr("Open Driver Settings")
             height: 20
             enabled: comboBoxDriver.count != 0 && comboBoxDriver.currentIndex != -1
             onClicked: {
@@ -116,7 +115,7 @@ Rectangle {
         Text {
             width: 100
             height: 20
-            text: qsTr("硬件输入/输出")
+            text: qsTr("Hardware I/O")
             font.family: Constants.font
             color: Constants.contentColor2
             horizontalAlignment: Text.AlignLeft
@@ -129,7 +128,7 @@ Rectangle {
         }
         Text {
             width: 100
-            text: qsTr("输入设备: ")
+            text: qsTr("Input Devie: ")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -137,13 +136,13 @@ Rectangle {
         }
         MCtrl.ComboBox {
             id: comboBoxInputDevice
-            model: ["麦克风", "立体声混音"]
+            model: ["Microphone", "Stereo Mix"]
             font.family: Constants.font
             width: 100
         }
         Text {
             width: 100
-            text: qsTr("输出设备: ")
+            text: qsTr("Output Device: ")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -151,14 +150,14 @@ Rectangle {
         }
         MCtrl.ComboBox {
             id: comboBoxOutputDevice
-            model: ["扬声器", "耳机"]
+            model: ["Speaker", "Headphone"]
             font.family: Constants.font
             width: 100
         }
         Text {
             width: 100
             height: 20
-            text: qsTr("状态")
+            text: qsTr("Status")
             font.family: Constants.font
             color: Constants.contentColor2
             horizontalAlignment: Text.AlignLeft
@@ -172,7 +171,7 @@ Rectangle {
         Text {
             width: 100
             height: 20
-            text: qsTr("缓冲区大小: ")
+            text: qsTr("Buffer size: ")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -182,7 +181,7 @@ Rectangle {
         Text {
             width: 100
             height: 20
-            text: bufferSize + qsTr(" 采样")
+            text: bufferSize + qsTr(" sample(s)")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignLeft
@@ -192,7 +191,7 @@ Rectangle {
         Text {
             width: 100
             height: 20
-            text: qsTr("输入延迟: ")
+            text: qsTr("Input latency: ")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -202,7 +201,7 @@ Rectangle {
         Text {
             width: 100
             height: 20
-            text: inputLatencyInSamples + qsTr(" 采样 (") + (inputLatencyInSamples * 1000 / sampleRate).toPrecision(3) + qsTr(" ms)")
+            text: inputLatencyInSamples + qsTr(" samples") + " (" + (inputLatencyInSamples * 1000 / sampleRate).toPrecision(3) + qsTr(" ms)")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignLeft
@@ -212,7 +211,7 @@ Rectangle {
         Text {
             width: 100
             height: 20
-            text: qsTr("输出延迟: ")
+            text: qsTr("Output latency: ")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -222,7 +221,7 @@ Rectangle {
         Text {
             width: 100
             height: 20
-            text: outputLatencyInSamples + qsTr(" 采样 (") + (outputLatencyInSamples * 1000 / sampleRate).toPrecision(3) + qsTr(" ms)")
+            text: outputLatencyInSamples + qsTr(" samples") + " (" + (outputLatencyInSamples * 1000 / sampleRate).toPrecision(3) + qsTr(" ms)")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignLeft
@@ -232,7 +231,7 @@ Rectangle {
         Text {
             width: 100
             height: 20
-            text: qsTr("总延迟: ")
+            text: qsTr("Sum latency: ")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight

@@ -17,13 +17,13 @@ Rectangle {
         spacing: 20
         Column {
             Text {
-                text: qsTr("名称")
+                text: qsTr("Name")
                 font.family: Constants.font
                 font.pointSize: 12
                 color: Constants.contentColor1
             }
             Text {
-                text: qsTr("属性")
+                text: qsTr("Properties")
                 font.family: Constants.font
                 font.pointSize: 10
                 color: Constants.contentColor2
@@ -31,13 +31,13 @@ Rectangle {
         }
         Column {
             Text {
-                text: qsTr("自定义信息")
+                text: qsTr("Custom Text")
                 font.family: Constants.font
                 font.pointSize: 12
                 color: Constants.contentColor1
             }
             Text {
-                text: qsTr("双击此处即可添加自定义信息。")
+                text: qsTr("Double click here to add custom information.")
                 font.family: Constants.font
                 font.pointSize: 10
                 color: Constants.contentColor2
