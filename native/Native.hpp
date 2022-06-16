@@ -50,12 +50,19 @@ std::int64_t currentTimeInNanosecond();
 
 void setThreadPriorityToTimeCritical();
 
-Musec::Util::Endian endian();
+inline constexpr Musec::Util::Endian endian()
+{
+    return Q_BYTE_ORDER == Q_LITTLE_ENDIAN? Musec::Util::Endian::LittleEndian:
+        Q_BYTE_ORDER == Q_BIG_ENDIAN? Musec::Util::Endian::BigEndian:
+            Musec::Util::Endian::UnknownEndian;
+}
 
 // 检测应用自身是否处于调试状态。目前仅用于辅助选择文字渲染。
 bool isDebuggerPresent();
 
 QString errorMessageFromErrorCode(ErrorCodeType errorCode);
+
+QString getProductVersion(const QString& path);
 }
 }
 

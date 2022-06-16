@@ -225,7 +225,8 @@ target_compile_definitions(Musec
 
 target_link_libraries(Musec
                       Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets
-                      base pluginterfaces sdk_common sdk_hosting
+                      version # Windows API
+                      base pluginterfaces sdk_common sdk_hosting # VST3
                       unofficial::sqlite3::sqlite3
                       yaml-cpp
                       fmt::fmt

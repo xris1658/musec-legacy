@@ -2,6 +2,7 @@
 
 #include "base/Base.hpp"
 #include "base/Constants.hpp"
+#include "base/FixedSizeMemoryBlock.hpp"
 
 #include <QtGlobal>
 
@@ -213,13 +214,6 @@ void setThreadPriorityToTimeCritical()
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
 }
 
-Musec::Util::Endian endian()
-{
-    return Q_BYTE_ORDER == Q_LITTLE_ENDIAN? Musec::Util::Endian::LittleEndian:
-        Q_BYTE_ORDER == Q_BIG_ENDIAN? Musec::Util::Endian::BigEndian:
-        Musec::Util::Endian::UnknownEndian;
-}
-
 bool isDebuggerPresent()
 {
     return IsDebuggerPresent();
@@ -246,6 +240,39 @@ QString errorMessageFromErrorCode(ErrorCodeType errorCode)
     }
     LocalFree(rawErrorString);
     return ret;
+}
+
+QString getProductVersion(const QString& path)
+{
+    wchar_t buffer[MAX_PATH];
+    buffer[path.size()] = L'\0';
+    path.toWCharArray(buffer);
+    auto fileVersionInfoSize = GetFileVersionInfoSizeW(buffer, nullptr);
+    if(fileVersionInfoSize)
+    {
+        Musec::Base::FixedSizeMemoryBlock fileInfoBuffer(fileVersionInfoSize);
+        GetFileVersionInfoW(buffer, 0, fileVersionInfoSize,
+            reinterpret_cast<void*>(fileInfoBuffer.data()));
+        const wchar_t* subBlock = L"\\";
+        VS_FIXEDFILEINFO* pFileInfo = nullptr;
+        UINT pFileInfoSize = 0;
+        auto queryValueResult = VerQueryValueW(reinterpret_cast<const void*>(fileInfoBuffer.data()),
+            subBlock, reinterpret_cast<void**>(&pFileInfo), &pFileInfoSize);
+        if (queryValueResult != 0)
+        {
+            QString format("%1.%2.%3.%4");
+            auto versions = reinterpret_cast<std::uint16_t*>(&(pFileInfo->dwProductVersionMS));
+            if constexpr(endian() == Musec::Util::Endian::LittleEndian)
+            {
+                return format.arg(versions[1]).arg(versions[0]).arg(versions[3]).arg(versions[2]);
+            }
+            else if constexpr(endian() == Musec::Util::Endian::BigEndian)
+            {
+                return format.arg(versions[0]).arg(versions[1]).arg(versions[2]).arg(versions[3]);
+            }
+        }
+    }
+    return QString();
 }
 
 }

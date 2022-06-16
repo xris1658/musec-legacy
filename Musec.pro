@@ -212,11 +212,12 @@ RESOURCES += \
     Musec.qrc
 
 LIBS += \
-    sqlite3.lib \ # SQLite 3
-    sndfile.lib \ # libsndfile
+    sqlite3.lib \  # SQLite 3
+    sndfile.lib \  # libsndfile
     AdvAPI32.lib \ # 注册表相关 API
-    Shell32.lib \ # SHGetFolderPathW
+    Shell32.lib \  # SHGetFolderPathW
     ole32.lib \
+    version.lib \  # Musec::Native::getProductVersion
     # VST3 SDK
     sdk.lib \
     base.lib \
