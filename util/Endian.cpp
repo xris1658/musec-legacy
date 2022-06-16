@@ -7,10 +7,6 @@
 
 namespace Musec::Util
 {
-Endian endian()
-{
-    return Musec::Native::endian();
-}
 
 void reverseEndianness(void* data, std::size_t byteCount)
 {

@@ -14,8 +14,6 @@ enum class Endian
     BigEndian
 };
 
-Endian endian();
-
 void reverseEndianness(void* data, std::size_t byteCount);
 
 void reverseEndiannessCopy(void* src, std::size_t byteCount, void* dest);
