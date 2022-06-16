@@ -24,15 +24,15 @@ namespace Musec::Controller
 void initApplication(Musec::Event::SplashScreen* splashScreen)
 {
     using namespace Musec::Event;
-    splashScreen->setBootText("正在启动...");
+    splashScreen->setBootText("Starting...");
     if(Musec::Controller::findAppData())
     {
-        splashScreen->setBootText("正在加载应用设置...");
+        splashScreen->setBootText("Loading application config...");
         Musec::Controller::loadAppData();
     }
     else
     {
-        splashScreen->setBootText("欢迎使用 Musec! 正在初始化应用设置...");
+        splashScreen->setBootText("Welcome to Musec! Initializing application config...");
         Musec::Controller::initAppData();
         // 在这里添加打开初次设置窗口的操作
     }
@@ -45,7 +45,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
         Musec::UI::Render::setSystemRender();
     }
     auto& appConfig = Musec::Controller::ConfigController::appConfig();
-    splashScreen->setBootText("正在寻找音频设备...");
+    splashScreen->setBootText("Looking for audio devices...");
     // 加载 ASIO 驱动列表
     decltype(Musec::Audio::Driver::enumerateDrivers()) driverList;
     try
@@ -56,7 +56,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     catch(std::exception& e)
     {
         Musec::UI::MessageDialog::messageDialog(
-           "在此电脑上寻找 ASIO 驱动程序时出现错误。程序将以未加载音频驱动的方式运行。",
+           "An error occured while looking for ASIO drivers on this computer. The program will run without loading the ASIO driver.",
            "Musec",
            Musec::UI::MessageDialog::IconType::Error
         );
@@ -72,7 +72,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     {
         // 没有找到 ASIO 驱动，程序将以音频引擎关闭的状态运行
         Musec::UI::MessageDialog::messageDialog(
-           "在此电脑上找不到 ASIO 驱动程序。程序将以未加载音频驱动的方式运行。",
+           "No ASIO drivers are found on this computer. The program will run without loading the ASIO driver.",
            "Musec",
            Musec::UI::MessageDialog::IconType::Warning
         );
@@ -84,14 +84,14 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
         {
             if(std::get<ASIODriverField::CLSIDField>(item) == driverCLSID)
             {
-                splashScreen->setBootText("正在加载 ASIO 驱动程序...");
+                splashScreen->setBootText("Loading ASIO driver...");
                 try
                 {
                     AppASIODriver() = ASIODriver(item);
                 }
                 catch(std::runtime_error& exception)
                 {
-                   Musec::UI::MessageDialog::messageDialog("无法加载 ASIO 驱动程序。程序将以未加载音频驱动的方式运行。",
+                   Musec::UI::MessageDialog::messageDialog("The ASIO driver cannot be loaded. The program will run without loading the ASIO driver.",
                                                         "Musec",
                                                         Musec::UI::MessageDialog::IconType::Warning);
                     AppASIODriver() = ASIODriver();
@@ -100,7 +100,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
             }
         }
     }
-    splashScreen->setBootText("正在打开主界面...");
+    splashScreen->setBootText("Opening main window...");
 }
 
 
