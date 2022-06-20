@@ -12,6 +12,7 @@
         <file>qmlproject/PluginSettings.qml</file>
         <file>qmlproject/ProjectPropertiesWindow.qml</file>
         <file>qmlproject/SplashScreen.qml</file>
+        <file>qmlproject/Strings.qml</file>
         <file>qmlproject/TapTempoWindow.qml</file>
         <file>qmlproject/TechnicalSupportWindow.qml</file>
         <file>qmlproject/WelcomeWindow.qml</file>

@@ -13,7 +13,7 @@ Rectangle {
     clip: true
     color: Constants.backgroundColor
     property int firstColumnWidth: 150
-    property int secondColumnWidth: 320
+    property int secondColumnWidth: 100
     Grid {
         columns: 2
         columnSpacing: 10
@@ -46,7 +46,7 @@ Rectangle {
             id: comboBoxLanguage
             model: ["简体中文", "繁體中文", "English"]
             font.family: Constants.font
-            width: firstColumnWidth
+            width: secondColumnWidth
         }
         Text {
             width: firstColumnWidth
@@ -74,7 +74,7 @@ Rectangle {
             id: comboBoxColor
             model: ["Dark", "Light"]
             font.family: Constants.font
-            width: firstColumnWidth
+            width: secondColumnWidth
         }
         Text {
             width: firstColumnWidth
@@ -89,7 +89,7 @@ Rectangle {
             model: ["50%", "75%", "100%", "125%", "150%", "175%", "200%"]
             currentIndex: 2
             font.family: Constants.font
-            width: firstColumnWidth
+            width: secondColumnWidth
         }
         Text {
             width: firstColumnWidth

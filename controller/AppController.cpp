@@ -1,7 +1,9 @@
 #include "AppController.hpp"
 
+#include "base/Constants.hpp"
 #include "controller/AssetDirectoryController.hpp"
 #include "controller/ConfigController.hpp"
+#include "controller/LoggingController.hpp"
 #include "controller/PluginController.hpp"
 #include "controller/PluginSettingsController.hpp"
 #include "dao/PluginDirectoryDAO.hpp"
@@ -9,7 +11,7 @@
 #include "native/Native.hpp"
 #include "ui/MessageDialog.hpp"
 #include "ui/Render.hpp"
-#include "LoggingController.hpp"
+#include "ui/UI.hpp"
 
 #include <QDir>
 #include <QFile>
@@ -24,15 +26,15 @@ namespace Musec::Controller
 void initApplication(Musec::Event::SplashScreen* splashScreen)
 {
     using namespace Musec::Event;
-    splashScreen->setBootText("Starting...");
+    auto strings = Musec::UI::strings;
     if(Musec::Controller::findAppData())
     {
-        splashScreen->setBootText("Loading application config...");
+        splashScreen->setBootText(strings->property("loadConfigText").toString());
         Musec::Controller::loadAppData();
     }
     else
     {
-        splashScreen->setBootText("Welcome to Musec! Initializing application config...");
+        splashScreen->setBootText(strings->property("initConfigText").toString());
         Musec::Controller::initAppData();
         // 在这里添加打开初次设置窗口的操作
     }
@@ -45,7 +47,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
         Musec::UI::Render::setSystemRender();
     }
     auto& appConfig = Musec::Controller::ConfigController::appConfig();
-    splashScreen->setBootText("Looking for audio devices...");
+    splashScreen->setBootText(strings->property("searchingAudioDeviceText").toString());
     // 加载 ASIO 驱动列表
     decltype(Musec::Audio::Driver::enumerateDrivers()) driverList;
     try
@@ -56,13 +58,13 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     catch(std::exception& e)
     {
         Musec::UI::MessageDialog::messageDialog(
-           "An error occured while looking for ASIO drivers on this computer. The program will run without loading the ASIO driver.",
-           "Musec",
+           strings->property("enumeratingASIODriverErrorText").toString(),
+           Musec::Base::ProductName,
            Musec::UI::MessageDialog::IconType::Error
         );
     }
     // 加载 ASIO 驱动
-    splashScreen->setBootText("正在寻找 ASIO 驱动程序...");
+    splashScreen->setBootText(strings->property("searchingASIODriverText").toString());
     Musec::Audio::Driver::AppASIODriver();
     auto driverCLSID = QString::fromStdString(
         appConfig["musec"]["options"]["audio-hardware"]["driver-id"]
@@ -72,8 +74,8 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     {
         // 没有找到 ASIO 驱动，程序将以音频引擎关闭的状态运行
         Musec::UI::MessageDialog::messageDialog(
-           "No ASIO drivers are found on this computer. The program will run without loading the ASIO driver.",
-           "Musec",
+           strings->property("noASIODriverFoundText").toString(),
+           Musec::Base::ProductName,
            Musec::UI::MessageDialog::IconType::Warning
         );
     }
@@ -84,15 +86,15 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
         {
             if(std::get<ASIODriverField::CLSIDField>(item) == driverCLSID)
             {
-                splashScreen->setBootText("Loading ASIO driver...");
+                splashScreen->setBootText(strings->property("loadingASIODriverText").toString());
                 try
                 {
                     AppASIODriver() = ASIODriver(item);
                 }
                 catch(std::runtime_error& exception)
                 {
-                   Musec::UI::MessageDialog::messageDialog("The ASIO driver cannot be loaded. The program will run without loading the ASIO driver.",
-                                                        "Musec",
+                   Musec::UI::MessageDialog::messageDialog(strings->property("loadASIODriverErrorText").toString(),
+                                                        Musec::Base::ProductName,
                                                         Musec::UI::MessageDialog::IconType::Warning);
                     AppASIODriver() = ASIODriver();
                 }
@@ -100,7 +102,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
             }
         }
     }
-    splashScreen->setBootText("Opening main window...");
+    splashScreen->setBootText(strings->property("openingMainWindowText").toString());
 }
 
 
@@ -114,7 +116,7 @@ bool findAppData()
 void initAppData()
 {
     QDir roaming(Musec::Native::RoamingDirectoryPath());
-    roaming.mkdir("Musec");
+    roaming.mkdir(Musec::Base::ProductName);
     QDir dir(Musec::Native::DataDirectoryPath());
     dir.refresh();
     if(!dir.exists())

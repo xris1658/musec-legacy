@@ -61,6 +61,7 @@ int main(int argc, char* argv[]) try
     // 显示启动屏
     theEngine.load(QUrl("qrc:/qmlproject/SplashScreen.qml"));
     splashWindow = qobject_cast<QQuickWindow*>(theEngine.rootObjects()[0]);
+    strings = splashWindow->property("strings").value<QObject*>(); assert(strings);
     SplashScreen splashScreenEventHandler;
     MainWindow mainWindow(splashScreenEventHandler);
     mainWindowEvents = &mainWindow;

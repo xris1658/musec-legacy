@@ -2,6 +2,7 @@ module qmlproject
 
 singleton EventBridge 1.0 EventBridge.qml
 singleton Objects 1.0 Objects.qml
+singleton Strings 1.0 Strings.qml
 AboutQtWindow 1.0 AboutQtWindow.qml
 AboutWindow 1.0 AboutWindow.qml
 AudioHardwareSelector 1.0 AudioHardwareSelector.qml

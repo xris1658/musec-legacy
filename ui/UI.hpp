@@ -19,6 +19,8 @@ extern QQuickWindow* mainWindow;
 // 选项窗口
 extern QQuickWindow* optionsWindow;
 
+extern QObject* strings;
+
 void setIcon(QWindow* window);
 }
 }

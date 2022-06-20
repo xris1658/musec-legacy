@@ -59,7 +59,7 @@ Rectangle {
         }
         MCtrl.ComboBox {
             id: comboBoxDriver
-            width: 100
+            width: openDriverSettingsButton.width
             font.family: Constants.font
             textRole: "name"
             valueRole: "clsid"
@@ -82,7 +82,7 @@ Rectangle {
             spacing: 5
             MCtrl.ComboBox {
                 id: comboBoxSampleRate
-                width: 100
+                width: openDriverSettingsButton.width
                 model: ["44100", "48000", "88200", "96000", "176400", "192000"]
                 currentIndex: 0
                 font.family: Constants.font
@@ -104,6 +104,7 @@ Rectangle {
             height: 20
         }
         MCtrl.Button {
+            id: openDriverSettingsButton
             text: qsTr("Open Driver Settings")
             height: 20
             enabled: comboBoxDriver.count != 0 && comboBoxDriver.currentIndex != -1
@@ -136,9 +137,9 @@ Rectangle {
         }
         MCtrl.ComboBox {
             id: comboBoxInputDevice
+            width: openDriverSettingsButton.width
             model: ["Microphone", "Stereo Mix"]
             font.family: Constants.font
-            width: 100
         }
         Text {
             width: 100
@@ -150,9 +151,9 @@ Rectangle {
         }
         MCtrl.ComboBox {
             id: comboBoxOutputDevice
+            width: openDriverSettingsButton.width
             model: ["Speaker", "Headphone"]
             font.family: Constants.font
-            width: 100
         }
         Text {
             width: 100
@@ -241,7 +242,7 @@ Rectangle {
         Text {
             width: 100
             height: 20
-            text: (inputLatencyInSamples + outputLatencyInSamples)  + qsTr(" 采样 (") + ((inputLatencyInSamples + outputLatencyInSamples) * 1000 / sampleRate).toPrecision(3) + qsTr(" ms)")
+            text: (inputLatencyInSamples + outputLatencyInSamples) + qsTr(" samples") + " (" + ((inputLatencyInSamples + outputLatencyInSamples) * 1000 / sampleRate).toPrecision(3) + qsTr(" ms)")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignLeft

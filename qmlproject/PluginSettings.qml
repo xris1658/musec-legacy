@@ -40,7 +40,7 @@ Rectangle {
         Text {
             width: 100
             height: 100
-            text: qsTr("Scan olugins from these directories:")
+            text: qsTr("Scan plugins from these directories:")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -48,6 +48,7 @@ Rectangle {
             verticalAlignment: Text.AlignTop
         }
         Rectangle {
+            id: pluginPathListViewPlaceholder
             width: 300
             height: 100
             color: Constants.backgroundColor
@@ -90,6 +91,7 @@ Rectangle {
             width: 300
             height: 20
             Grid {
+                id: buttonPathOperationGrid
                 rows: 1
                 spacing: 5
                 anchors.right: parent.right
@@ -98,8 +100,8 @@ Rectangle {
                 verticalItemAlignment: Grid.AlignVCenter
                 MCtrl.Button {
                     id: buttonAddPath
-                    text: qsTr("+ Add a directory...")
-                    width: 100
+                    text: qsTr("&Add...")
+                    width: 80
                     height: 20
                     font.family: Constants.font
                     FolderDialog {
@@ -120,8 +122,8 @@ Rectangle {
                 }
                 MCtrl.Button {
                     id: buttonDelPath
-                    text: qsTr("- Remove selected directories")
-                    width: 120
+                    text: qsTr("&Remove")
+                    width: 80
                     height: 20
                     font.family: Constants.font
                     enabled: pluginPathListModel.length
@@ -158,8 +160,8 @@ Rectangle {
                 verticalItemAlignment: Grid.AlignTop
                 MCtrl.Button {
                     id: buttonRescan
-                    text: scanning? qsTr("Scanning plugins..."): qsTr("Scan Plugins")
-                    width: 225
+                    text: scanning? qsTr("Scanning..."): qsTr("&Scan Plugins")
+                    width: buttonPathOperationGrid.width
                     height: 20
                     font.family: Constants.font
                     enabled: !scanning

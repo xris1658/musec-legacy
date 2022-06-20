@@ -9,6 +9,7 @@ Window {
     flags: Qt.SplashScreen
     title: qsTr("Musec")
     property EventBridge eventBridge: EventBridge
+    property Strings strings: Strings
 
     property alias bootText: text_.text
     signal setBootText(newBootText: string)
@@ -40,7 +41,7 @@ Window {
             anchors.bottom: parent.bottom
             anchors.leftMargin: 45
             anchors.bottomMargin: 45
-            text: bootText
+            text: qsTr("Starting...")
             color: "#C0C0C0"
             font.family: Constants.font
             font.pixelSize: 15
