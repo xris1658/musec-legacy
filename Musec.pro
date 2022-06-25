@@ -4,6 +4,7 @@ QT += widgets
 CONFIG += c++17
 CONFIG += resources_big
 CONFIG += qtquickcompiler
+CONFIG += lrelease embed_translations
 
 CONFIG(debug, debug | release) {
     CONFIG += qml_debug
@@ -234,6 +235,8 @@ LIBS += \
     swscale.lib \
     # avcpp
     avcpp.lib
+
+TRANSLATIONS += i18n/Musec_zh_CN.ts
 
 CONFIG(debug, debug | release) {
     LIBS += yaml-cppd.lib \

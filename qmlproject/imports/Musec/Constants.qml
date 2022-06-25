@@ -124,7 +124,7 @@ QtObject {
     readonly property string duplicateText:             qsTr("Duplicate")
     readonly property string duplicateTextWithMnemonic: qsTr("&Duplicate")
     readonly property string renameText:                qsTr("Rename")
-    readonly property string renameTextWithMnemonic:    qsTr("Rename")
+    readonly property string renameTextWithMnemonic:    qsTr("Rena&me")
 
     readonly property ListModel dynamicKeyName: ListModel {
         ListElement {

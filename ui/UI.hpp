@@ -6,6 +6,7 @@
 
 #include <QQuickWindow>
 #include <QQmlApplicationEngine>
+#include <QTranslator>
 
 namespace Musec
 {
@@ -21,7 +22,11 @@ extern QQuickWindow* optionsWindow;
 
 extern QObject* strings;
 
+extern QTranslator* translator;
+
 void setIcon(QWindow* window);
+
+bool loadTranslation(const QString& name);
 }
 }
 

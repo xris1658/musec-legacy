@@ -255,3 +255,4 @@ target_link_libraries(VST3PluginTestWithQt
                       avcpp::avcpp-static)
 
 file(COPY Resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY_FILE i18n/Musec_zh_CN.qm ${CMAKE_CURRENT_BINARY_DIR}/Musec_zh_CN.qm ONLY_IF_DIFFERENT)

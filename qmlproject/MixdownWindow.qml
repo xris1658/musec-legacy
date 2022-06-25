@@ -48,7 +48,7 @@ Window {
                     }
                     Text {
                         width: firstColumnWidth
-                        text: qsTr("File Name:")
+                        text: qsTr("File Name") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -75,7 +75,7 @@ Window {
                     }
                     Text {
                         width: firstColumnWidth
-                        text: qsTr("Path:")
+                        text: qsTr("Path") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -143,7 +143,7 @@ Window {
                     }
                     Text {
                         width: firstColumnWidth
-                        text: qsTr("Format: ")
+                        text: qsTr("Format") + ": "
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -158,7 +158,7 @@ Window {
                     }
                     Text {
                         width: firstColumnWidth
-                        text: qsTr("Sample Rate:")
+                        text: qsTr("Sample Rate") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -181,7 +181,7 @@ Window {
                     }
                     Text {
                         width: firstColumnWidth
-                        text: qsTr("Bit Depth:")
+                        text: qsTr("Bit Depth") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -190,7 +190,7 @@ Window {
                     MCtrl.ComboBox {
                         width: firstColumnWidth
                         height: 20
-                        model: [qsTr("16-Bit Integer"), qsTr("24-Bit Integer"), qsTr("32-Bit Float"), qsTr("64-Bit Integer")]
+                        model: [qsTr("16-Bit Integer"), qsTr("24-Bit Integer"), qsTr("32-Bit Float"), qsTr("64-Bit Float")]
                         currentIndex: 0
                         font.family: Constants.font
                         onCurrentIndexChanged: {
@@ -202,7 +202,7 @@ Window {
                     }
                     Text {
                         width: firstColumnWidth
-                        text: qsTr("Dithering:")
+                        text: qsTr("Dithering") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -228,7 +228,7 @@ Window {
                         opacity: checkBoxDithering.checked? 1: 0
                         width: firstColumnWidth
                         height: checkBoxDithering.checked? 40: 0
-                        text: qsTr("Warning:")
+                        text: qsTr("Warning") + ":"
                         font.family: Constants.font
                         color: Constants.warningTextColor
                         horizontalAlignment: Text.AlignRight
@@ -260,7 +260,7 @@ Window {
                     }
                     Text {
                         width: firstColumnWidth
-                        text: qsTr("Export as Mono:")
+                        text: qsTr("Export as Mono") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -271,7 +271,7 @@ Window {
                     }
                     Text {
                         width: firstColumnWidth
-                        text: qsTr("标准化:")
+                        text: qsTr("Normalize") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -286,7 +286,7 @@ Window {
                     }
                     Text {
                         width: firstColumnWidth
-                        text: qsTr("Tails:")
+                        text: qsTr("Tails") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -315,7 +315,7 @@ Window {
                     }
                     Text {
                         width: firstColumnWidth
-                        text: qsTr("File Format:")
+                        text: qsTr("File Format") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -344,7 +344,7 @@ Window {
                     }
                     Text {
                         width: firstColumnWidth
-                        text: qsTr("Close This Window:")
+                        text: qsTr("Close This Window") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -355,7 +355,7 @@ Window {
                     }
                     Text {
                         width: firstColumnWidth
-                        text: qsTr("Open Export Directory:")
+                        text: qsTr("Open Export Directory") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -366,7 +366,7 @@ Window {
                     }
                     Text {
                         width: firstColumnWidth
-                        text: qsTr("Execute a Command:")
+                        text: qsTr("Execute a Command") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -394,7 +394,7 @@ Window {
                     Text {
                         width: firstColumnWidth
                         height: 80
-                        text: qsTr("Tip:")
+                        text: qsTr("Tip") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor2
                         verticalAlignment: Text.AlignTop

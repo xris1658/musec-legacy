@@ -52,7 +52,7 @@ Window {
                     bottomPadding: 10
                     spacing: 5
                     Text {
-                        text: "Musec"
+                        text: Strings.applicationName
                         color: Constants.contentColor1
                         font.family: "Noto Sans CJK SC Bold"
                         font.pixelSize: 20

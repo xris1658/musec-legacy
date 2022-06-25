@@ -33,7 +33,7 @@ Window {
                 anchors.right: parent.right
                 anchors.rightMargin: (parent.height - contentHeight) / 2
                 anchors.verticalCenter: parent.verticalCenter
-                text: qsTr("# of Adjustable parameters:") + parameterListView.count
+                text: qsTr("# of Adjustable parameters") + ":" + parameterListView.count
                 font.family: Constants.font
                 color: Constants.contentColor1
                 font.pixelSize: parent.height * 0.6

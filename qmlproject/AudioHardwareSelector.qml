@@ -51,7 +51,7 @@ Rectangle {
         }
         Text {
             width: 100
-            text: qsTr("Driver: ")
+            text: qsTr("Driver") + ": "
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -72,7 +72,7 @@ Rectangle {
         }
         Text {
             width: 100
-            text: qsTr("Sample Rate: ")
+            text: qsTr("Sample Rate") + ": "
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -129,7 +129,7 @@ Rectangle {
         }
         Text {
             width: 100
-            text: qsTr("Input Devie: ")
+            text: qsTr("Input Device") + ": "
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -143,7 +143,7 @@ Rectangle {
         }
         Text {
             width: 100
-            text: qsTr("Output Device: ")
+            text: qsTr("Output Device") + ": "
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -172,7 +172,7 @@ Rectangle {
         Text {
             width: 100
             height: 20
-            text: qsTr("Buffer size: ")
+            text: qsTr("Buffer size") + ": "
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -182,7 +182,7 @@ Rectangle {
         Text {
             width: 100
             height: 20
-            text: bufferSize + qsTr(" sample(s)")
+            text: bufferSize + " " + qsTr("sample(s)")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignLeft
@@ -192,7 +192,7 @@ Rectangle {
         Text {
             width: 100
             height: 20
-            text: qsTr("Input latency: ")
+            text: qsTr("Input latency") + ": "
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -202,7 +202,7 @@ Rectangle {
         Text {
             width: 100
             height: 20
-            text: inputLatencyInSamples + qsTr(" samples") + " (" + (inputLatencyInSamples * 1000 / sampleRate).toPrecision(3) + qsTr(" ms)")
+            text: inputLatencyInSamples + " " + qsTr("sample(s)") + " (" + (inputLatencyInSamples * 1000 / sampleRate).toPrecision(3) + " " + qsTr("ms") + ")"
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignLeft
@@ -212,7 +212,7 @@ Rectangle {
         Text {
             width: 100
             height: 20
-            text: qsTr("Output latency: ")
+            text: qsTr("Output latency") + ": "
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -222,7 +222,7 @@ Rectangle {
         Text {
             width: 100
             height: 20
-            text: outputLatencyInSamples + qsTr(" samples") + " (" + (outputLatencyInSamples * 1000 / sampleRate).toPrecision(3) + qsTr(" ms)")
+            text: outputLatencyInSamples + " " + qsTr("sample(s)") + " (" + (outputLatencyInSamples * 1000 / sampleRate).toPrecision(3) + " " + qsTr("ms") + ")"
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignLeft
@@ -232,7 +232,7 @@ Rectangle {
         Text {
             width: 100
             height: 20
-            text: qsTr("Sum latency: ")
+            text: qsTr("Sum latency") + ": "
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -242,7 +242,7 @@ Rectangle {
         Text {
             width: 100
             height: 20
-            text: (inputLatencyInSamples + outputLatencyInSamples) + qsTr(" samples") + " (" + ((inputLatencyInSamples + outputLatencyInSamples) * 1000 / sampleRate).toPrecision(3) + qsTr(" ms)")
+            text: (inputLatencyInSamples + outputLatencyInSamples) + " " + qsTr("sample(s)") + " (" + ((inputLatencyInSamples + outputLatencyInSamples) * 1000 / sampleRate).toPrecision(3) + " " + qsTr("ms") + ")"
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignLeft

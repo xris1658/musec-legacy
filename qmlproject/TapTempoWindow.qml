@@ -36,7 +36,7 @@ Window {
         columnSpacing: 10
         MCtrl.Button {
             id: tapButton
-            text: qsTr("TAP")
+            text: "TAP"
             width: root.width - 10 * 2
             height: width
             onClicked: {

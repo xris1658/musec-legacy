@@ -8,7 +8,7 @@ import Musec.Controls 1.0 as MCtrl
 Window {
     flags: Qt.Dialog
     id: root
-    title: qsTr("Musec")
+    title: Strings.applicationName
     color: Constants.backgroundColor
     visibility: Qt.WindowModal
     visible: true
@@ -75,7 +75,7 @@ Window {
                         Row {
                             spacing: -1
                             Repeater {
-                                model: ["简体中文", "正體中文", "English"]
+                                model: ["简体中文", "繁體中文", "English"]
                                 MCtrl.Button {
 //                                    width: 100
                                     text: modelData

@@ -38,6 +38,26 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
         Musec::Controller::initAppData();
         // 在这里添加打开初次设置窗口的操作
     }
+    // 告知主线程在这里加载翻译
+    auto& promiseStart = Musec::Controller::loadTranslationPromiseStart();
+    promiseStart.set_value(
+        QString::fromStdString(
+            Musec::Controller::ConfigController::appConfig()
+            ["musec"]["options"]["general"]["language"]
+            .as<std::string>()
+        )
+    );
+    // 等待主线程加载完成
+    auto& promiseEnd = Musec::Controller::loadTranslationPromiseEnd();
+    auto loadTranslationResult = promiseEnd.get_future().get();
+//    if(!loadTranslationResult)
+//    {
+//        Musec::UI::MessageDialog::messageDialog(
+//           strings->property("loadTranslationFailedText").toString(),
+//           Musec::Base::ProductName,
+//           Musec::UI::MessageDialog::IconType::Warning
+//        );
+//    }
     auto systemRender =
         Musec::Controller::ConfigController::appConfig()
         ["musec"]["options"]["general"]["system-render"]
@@ -251,6 +271,18 @@ void loadAssetDirectoryList()
 void openSpecialCharacterInput()
 {
     Musec::Native::openSpecialCharacterInput();
+}
+
+std::promise<QString>& loadTranslationPromiseStart()
+{
+    static std::promise<QString> ret;
+    return ret;
+}
+
+std::promise<bool>& loadTranslationPromiseEnd()
+{
+    static std::promise<bool> ret;
+    return ret;
 }
 
 }

@@ -241,7 +241,7 @@ Item {
                     height: editorSnapUnit.height
                     anchors.left: automationButton.right
                     anchors.top: automationButton.top
-                    model: ["Hide", "Show at Top", "Show at Bottom"]
+                    model: [qsTr("Hide"), qsTr("Show at Top"), qsTr("Show at Bottom")]
                     currentIndex: showMasterTrack
                     MCtrl.ToolTip {
                         visible: parent.hovered
@@ -430,7 +430,7 @@ Item {
                                 else if(type == 3) {
                                     insertAudioTrack.trigger(blankHeaderDropArea);
                                 }
-                                console.log("Create a new track with plugin: ");
+                                console.log("Create a new track with plugin") + ": ";
                                 console.log(drop.getDataAsString("type"), drop.getDataAsString("pluginId"));
                             }
                             else {
@@ -581,7 +581,7 @@ Item {
                             }
                             onDropped: {
                                 if(checkDragEvent(drop)) {
-                                    console.log("Append a plugin to track: ");
+                                    console.log("Append a plugin to track") + ": ";
                                     console.log(drop.getDataAsString("type"), drop.getDataAsString("pluginId"));
                                 }
                             }

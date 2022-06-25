@@ -40,7 +40,7 @@ Rectangle {
         Text {
             width: 100
             height: 100
-            text: qsTr("Scan plugins from these directories:")
+            text: qsTr("Scan plugins from these directories") + ":"
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -210,7 +210,7 @@ Rectangle {
         }
         MCtrl.ComboBox {
             id: comboBoxPluginPriority
-            model: ["VST2 Prior", "VST3 Prior"]
+            model: [qsTr("VST2 Prior"), qsTr("VST3 Prior")]
             font.family: Constants.font
             width: 100
         }

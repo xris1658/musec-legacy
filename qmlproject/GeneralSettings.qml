@@ -165,7 +165,7 @@ Rectangle {
                 }
                 MCtrl.ToolTip {
                     id: systemTextRenderingInfoToolTip
-                    text: qsTr("If applications that improves your font rendering (e.g. MacType),\nplease check this. Otherwise this is not recommended to check.")
+                    text: qsTr("If applications that improves your font rendering (e.g. MacType) are installed,\nplease check this. Otherwise this is not recommended to check.")
 //                    visible: systemTextRenderingInfoMouseArea.containsMouse
                     visible: systemTextRenderingInfoButton.hovered | systemTextRenderingInfoButton.activeFocus
                 }

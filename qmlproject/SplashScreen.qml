@@ -7,7 +7,7 @@ import Musec 1.0
 Window {
     id: splashScreen
     flags: Qt.SplashScreen
-    title: qsTr("Musec")
+    title: Strings.applicationName
     property EventBridge eventBridge: EventBridge
     property Strings strings: Strings
 

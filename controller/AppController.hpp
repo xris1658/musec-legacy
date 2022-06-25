@@ -10,6 +10,7 @@
 #include <QString>
 
 #include <array>
+#include <future>
 
 namespace Musec
 {
@@ -56,6 +57,12 @@ void loadAssetDirectoryList();
 
 // 打开用于输入特殊字符的程序
 void openSpecialCharacterInput();
+
+// 用于 SplashScreenWorkThread 和主线程交流的 promise（主线程收）
+std::promise<QString>& loadTranslationPromiseStart();
+
+// 用于 SplashScreenWorkThread 和主线程交流的 promise（主线程发）
+std::promise<bool>& loadTranslationPromiseEnd();
 }
 }
 

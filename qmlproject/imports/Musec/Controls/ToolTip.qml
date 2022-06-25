@@ -4,7 +4,7 @@ import Musec 1.0
 
 QQC2.ToolTip {
     id: control
-    text: qsTr("工具提示文字")
+    text: "Tool tip text"
     contentItem: Text {
         text: control.text
         font: Constants.font

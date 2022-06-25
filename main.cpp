@@ -1,4 +1,5 @@
 // 项目头文件
+#include "controller/AppController.hpp"
 #include "controller/LoggingController.hpp"
 #include "entities/EntitiesInitializer.hpp"
 #include "event/EventBase.hpp"
@@ -66,6 +67,14 @@ int main(int argc, char* argv[]) try
     MainWindow mainWindow(splashScreenEventHandler);
     mainWindowEvents = &mainWindow;
     splashScreenEventHandler.onInitDialog();
+    // 等待启动屏工作线程通知，然后加载翻译
+    auto& promiseStart = Musec::Controller::loadTranslationPromiseStart();
+    const auto& translation = promiseStart.get_future().get();
+    // 告知启动屏工作线程翻译加载完成
+    auto& promiseEnd = Musec::Controller::loadTranslationPromiseEnd();
+    QTranslator theTranslator;
+    translator = &theTranslator;
+    promiseEnd.set_value(Musec::UI::loadTranslation(translation));
     auto ret = app.exec();
     return ret;
 }

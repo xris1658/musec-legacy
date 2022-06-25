@@ -74,15 +74,8 @@ QtObject {
     signal setSystemTextRenderingComplete()
     onSetSystemTextRenderingComplete: {
         // 弹出需要重启的对话框
-        var component = Qt.createComponent("./imports/Musec/Dialogs/MessageDialog.qml");
-        if(component.status == Component.Ready) {
-            var rebootPrompt = component.createObject(eventBridge);
-            rebootPrompt.message = qsTr("The option changes is saved. A restart is required to apply.")
-            rebootPrompt.title = qsTr("Musec");
-            rebootPrompt.standardButtons = DialogButtonBox.Ok;
-            rebootPrompt.icon = MDlg.MessageDialog.Icon.Info;
-            rebootPrompt.showNormal();
-        }
+        messageDialog(Strings.optionSaveRebootPromptText,
+            Strings.applicationName, MDlg.MessageDialog.Icon.Info);
     }
 
     signal trackInserted(index: int)

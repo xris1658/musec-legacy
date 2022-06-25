@@ -51,7 +51,7 @@ Window {
                     }
                     Text {
                         width: 100
-                        text: qsTr("File Name:")
+                        text: qsTr("File Name") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -69,7 +69,7 @@ Window {
                     }
                     Text {
                         width: 100
-                        text: qsTr("Path:")
+                        text: qsTr("Path") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -98,7 +98,7 @@ Window {
                             enabled: !newProject
                         }
                         MCtrl.Button {
-                            text: qsTr("&Show in Explorer")
+                            text: qsTr("Sh&ow in Explorer")
                             font.family: Constants.font
                             height: 20
                             enabled: !newProject
@@ -120,7 +120,7 @@ Window {
                     }
                     Text {
                         width: 100
-                        text: qsTr("Title:")
+                        text: qsTr("Title") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -148,7 +148,7 @@ Window {
                     }
                     Text {
                         width: 100
-                        text: qsTr("Author:")
+                        text: qsTr("Author") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -176,7 +176,7 @@ Window {
                     }
                     Text {
                         width: 100
-                        text: qsTr("Company:")
+                        text: qsTr("Company") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -204,7 +204,7 @@ Window {
                     }
                     Text {
                         width: 100
-                        text: qsTr("Genre:")
+                        text: qsTr("Genre") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
@@ -252,7 +252,7 @@ Window {
                             Text {
                                 anchors.right: parent.right
                                 anchors.top: parent.top
-                            text: qsTr("Remarks:")
+                            text: qsTr("Remarks") + ":"
                             font.family: Constants.font
                             color: Constants.contentColor1
                             horizontalAlignment: Text.AlignRight
@@ -297,7 +297,7 @@ Window {
                     }
                     Text {
                         width: 100
-                        text: qsTr("Panning comp.:")
+                        text: qsTr("Panning comp.") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight

@@ -261,29 +261,29 @@ Rectangle {
                 id: contextMenu
                 title: qsTr("Search Box Options")
                 MCtrl.Action {
-                    text: qsTr("&Undo")
+                    text: Constants.undoTextWithMnemonic
                     shortcut: "Ctrl+Z"
                 }
                 MCtrl.MenuSeparator {}
                 MCtrl.Action {
-                    text: qsTr("Cu&t")
+                    text: Constants.cutTextWithMnemonic
                     shortcut: "Ctrl+X"
                 }
                 MCtrl.Action {
-                    text: qsTr("&Copy")
+                    text: Constants.copyTextWithMnemonic
                     shortcut: "Ctrl+C"
                 }
                 MCtrl.Action {
-                    text: qsTr("&Paste")
+                    text: Constants.pasteTextWithMnemonic
                     shortcut: "Ctrl+V"
                 }
                 MCtrl.Action {
-                    text: qsTr("&Delete")
+                    text: Constants.deleteTextWithMnemonic
                     shortcut: "Delete"
                 }
                 MCtrl.MenuSeparator {}
                 MCtrl.Action {
-                    text: qsTr("Select &All")
+                    text: Constants.selectAllTextWithMnemonic
                     shortcut: "Ctrl+A"
                 }
                 MCtrl.MenuSeparator {}
@@ -298,7 +298,7 @@ Rectangle {
                 anchors.right: parent.right
                 width: height
                 height: parent.height
-                text: qsTr("\u00d7")
+                text: "\u00d7"
                 border.width: 0
                 opacity: assetsSearchBox.text.length? 1: 0
                 onClicked: {

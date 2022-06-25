@@ -11,7 +11,7 @@ Item {
         height: 20
         background: Item {}
         TabButton {
-            text: qsTr("素材")
+            text: "Tab Button"
             width: implicitWidth
             font.family: Constants.font
             contentItem: Text {

@@ -352,12 +352,12 @@ ApplicationWindow {
             title: qsTr("&Edit")
 
             MCtrl.Action {
-                text: qsTr("&Undo")
+                text: Constants.undoTextWithMnemonic
                 shortcut: "Ctrl+Z"
                 enabled: false
             }
             MCtrl.Action {
-                text: qsTr("&Redo")
+                text: Constants.redoTextWithMnemonic
                 shortcut: "Ctrl+Y"
                 enabled: false
             }
@@ -369,27 +369,27 @@ ApplicationWindow {
 
             MCtrl.MenuSeparator {}
             MCtrl.Action {
-                text: qsTr("Cu&t")
+                text: Constants.cutTextWithMnemonic
                 shortcut: "Ctrl+X"
                 onTriggered: {
                     dirty = true;
                 }
             }
             MCtrl.Action {
-                text: qsTr("&Copy")
+                text: Constants.copyTextWithMnemonic
                 shortcut: "Ctrl+C"
             }
             MCtrl.Action {
-                text: qsTr("&Paste")
+                text: Constants.pasteTextWithMnemonic
                 shortcut: "Ctrl+V"
             }
             MCtrl.Action {
-                text: qsTr("&Delete")
+                text: Constants.deleteTextWithMnemonic
                 shortcut: "Delete"
             }
             MCtrl.MenuSeparator {}
             MCtrl.Action {
-                text: qsTr("Select &All")
+                text: Constants.selectAllTextWithMnemonic
                 shortcut: "Ctrl+A"
             }
             MCtrl.MenuSeparator {}

@@ -12,6 +12,7 @@ Item {
     id: root
     width: 200
     height: contentColumn.height
+    readonly property alias contentHeight: contentColumn.height
     property string name
     property string path
     property int itemHeight: 20
