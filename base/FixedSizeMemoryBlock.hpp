@@ -29,6 +29,12 @@ public:
         rhs.blockSize_ = 0U;
         // rhs.block_ = nullptr;
     }
+    FixedSizeMemoryBlock& operator=(FixedSizeMemoryBlock&& rhs) noexcept
+    {
+        std::swap(blockSize_, rhs.blockSize_);
+        std::swap(block_, rhs.block_);
+        return *this;
+    }
     ~FixedSizeMemoryBlock()
     {
         if(blockSize_)
@@ -50,8 +56,8 @@ public:
         return blockSize_;
     }
 private:
-    std::size_t blockSize_;
-    std::byte* block_;
+    std::size_t blockSize_ = 0;
+    std::byte* block_ = nullptr;
 };
 }
 }

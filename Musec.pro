@@ -64,7 +64,6 @@ HEADERS += \
     audio/engine/MIDIClock.hpp \
     audio/engine/Project.hpp \
     audio/host/MusecVST3Host.hpp \
-    audio/host/VST3ComponentHandler.hpp \
     audio/media/AudioSequence.hpp \
     audio/media/MIDISequence.hpp \
     audio/plugin/IPlugin.hpp \
@@ -146,7 +145,6 @@ SOURCES += \
     audio/engine/MIDIClock.cpp \
     audio/engine/Project.cpp \
     audio/host/MusecVST3Host.cpp \
-    audio/host/VST3ComponentHandler.cpp \
     audio/media/AudioSequence.cpp \
     audio/media/MIDISequence.cpp \
     audio/plugin/ShellPluginId.cpp \

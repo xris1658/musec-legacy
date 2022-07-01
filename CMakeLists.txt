@@ -66,8 +66,6 @@ set(PROJECT_SOURCES
     audio/engine/Project.hpp
     audio/host/MusecVST3Host.cpp
     audio/host/MusecVST3Host.hpp
-    audio/host/VST3ComponentHandler.cpp
-    audio/host/VST3ComponentHandler.hpp
     audio/media/AudioSequence.cpp
     audio/media/AudioSequence.hpp
     audio/media/MIDISequence.cpp

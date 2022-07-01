@@ -2,6 +2,7 @@
 #define MUSEC_AUDIO_PLUGIN_VST3PLUGIN
 
 #include "audio/plugin/IPlugin.hpp"
+#include "base/FixedSizeMemoryBlock.hpp"
 #include "base/PluginBase.hpp"
 #include "native/Native.hpp"
 #include "native/WindowsLibraryRAII.hpp"
@@ -66,6 +67,7 @@ template<typename SampleType>
 class VST3Plugin:
     public Musec::Native::WindowsLibraryRAII,
     public Musec::Audio::Plugin::IPlugin<SampleType>,
+    public Steinberg::Vst::IComponentHandler,
     public Steinberg::IPlugFrame
 {
     using Base = Musec::Native::WindowsLibraryRAII;
@@ -109,6 +111,11 @@ public: // FUnknown interfaces
     Steinberg::tresult queryInterface(const Steinberg::TUID iid, void** obj) override;
     Steinberg::uint32 addRef() override;
     Steinberg::uint32 release() override;
+public: // IComponentHandler interfaces
+    Steinberg::tresult PLUGIN_API beginEdit(Steinberg::Vst::ParamID id) override;
+    Steinberg::tresult PLUGIN_API performEdit(Steinberg::Vst::ParamID id, Steinberg::Vst::ParamValue valueNormalized) override;
+    Steinberg::tresult PLUGIN_API endEdit(Steinberg::Vst::ParamID id) override;
+    Steinberg::tresult PLUGIN_API restartComponent(Steinberg::int32 flags) override;
 public: // IPluginFrame interfaces
     Steinberg::tresult resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* newSize) override;
 public:
@@ -134,14 +141,18 @@ private:
     Steinberg::Vst::INoteExpressionController* noteExpressionController_ = nullptr;
     Steinberg::Vst::IKeyswitchController* keyswitchController_ = nullptr;
     Steinberg::Vst::IXmlRepresentationController* xmlRepresentationController_ = nullptr;
-
+    // 用于 IComponentHandler 的成员
+    Steinberg::int32 paramCount_ = 0;
+    Musec::Base::FixedSizeMemoryBlock paramBlock_ = {0};
     Steinberg::Vst::IConnectionPoint* componentPoint_ = nullptr;
     Steinberg::Vst::IConnectionPoint* editControllerPoint_ = nullptr;
     Steinberg::IPlugView* view_ = nullptr;
     int audioInputBusIndex = -1;
     int audioOutputBusIndex = -1;
     // 输入参数改变
-    Steinberg::Vst::ParameterChanges paramChanges_;
+    Steinberg::Vst::ParameterChanges inputParameterChanges_;
+    // 输出参数改变
+    Steinberg::Vst::ParameterChanges outputParameterChanges_;
     // IAudioProcessor::process 函数调用的实参
     Steinberg::Vst::ProcessData processData_;
     // 调用 process 函数时将 data 赋值给 processData_

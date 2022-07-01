@@ -18,17 +18,11 @@ Musec::Model::TrackListModel& AppTrackListModel()
     return ret;
 }
 
-Musec::Audio::Host::VST3ComponentHandler AppVST3ComponentHandler()
-{
-    return Musec::Audio::Host::VST3ComponentHandler::instance();
-}
-
 void initializeFacility()
 {
     Musec::Audio::Driver::AppASIODriver();
     AppProject();
     AppTrackListModel();
-    AppVST3ComponentHandler();
 }
 
 void insertTrack(std::size_t index, const Entities::CompleteTrack& track)
