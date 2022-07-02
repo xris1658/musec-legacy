@@ -1,7 +1,7 @@
 #ifndef MUSEC_AUDIO_MEDIA_MIDISEQUENCE
 #define MUSEC_AUDIO_MEDIA_MIDISEQUENCE
 
-#include "audio/base/AutomationWithCurve.hpp"
+#include "audio/base/Automation.hpp"
 
 #include <array>
 #include <set>
@@ -13,7 +13,7 @@ namespace Audio
 {
 namespace Media
 {
-using Musec::Audio::Base::AutomationWithCurve;
+using Musec::Audio::Base::Automation;
 struct Note
 {
     std::int64_t startTime;
@@ -27,7 +27,7 @@ class MIDISequence
 {
 public:
     // 将值存储为 double 格式以应对动态精度
-    using AutomationType = AutomationWithCurve<std::int8_t, double>;
+    using AutomationType = Automation<std::int8_t, double>;
 public:
     enum CheckBound
     {

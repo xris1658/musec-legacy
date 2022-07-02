@@ -1,7 +1,7 @@
 #ifndef MUSEC_AUDIO_ENGINE_MIDICLOCK
 #define MUSEC_AUDIO_ENGINE_MIDICLOCK
 
-#include "audio/base/TempoAutomationWithCurve.hpp"
+#include "audio/base/TempoAutomation.hpp"
 #include "audio/base/Chrono.hpp"
 #include "native/Native.hpp"
 
@@ -40,7 +40,7 @@ public:
         aboutToDie_ = true;
     }
 public:
-    Musec::Audio::Base::TempoAutomationWithCurve<PPQ>& tempoAutomation()
+    Musec::Audio::Base::TempoAutomation<PPQ>& tempoAutomation()
     {
         return tempoAutomation_;
     }
@@ -93,7 +93,7 @@ public:
     }
 private:
     // 速度自动化
-    Musec::Audio::Base::TempoAutomationWithCurve<PPQ> tempoAutomation_;
+    Musec::Audio::Base::TempoAutomation<PPQ> tempoAutomation_;
     // 当前所在位置（PPQ）
     Musec::Audio::Base::TimePoint<PPQ> position_;
     // 是否正在播放

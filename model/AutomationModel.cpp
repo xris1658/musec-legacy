@@ -60,7 +60,7 @@ int AutomationModel::pointCount() const
 
 constexpr int AutomationModel::columnSize()
 {
-    return Musec::Audio::Base::AutomationPointWithCurveColumnCount;
+    return Musec::Audio::Base::AutomationPointColumnCount;
 }
 
 int AutomationModel::rowCount(const QModelIndex&) const

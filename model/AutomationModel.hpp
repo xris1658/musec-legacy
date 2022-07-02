@@ -1,7 +1,7 @@
 #ifndef MUSEC_MODEL_AUTOMATIONMODEL
 #define MUSEC_MODEL_AUTOMATIONMODEL
 
-#include "audio/base/AutomationWithCurve.hpp"
+#include "audio/base/Automation.hpp"
 #include "model/ModelBase.hpp"
 
 #include <QAbstractListModel>
@@ -14,7 +14,7 @@ class AutomationModel: public QAbstractListModel
 {
     Q_OBJECT
 public:
-    using Automation = Musec::Audio::Base::AutomationWithCurve<std::int64_t, double>;
+    using Automation = Musec::Audio::Base::Automation<std::int64_t, double>;
     using Point = Automation::Point;
 public:
     enum RoleNames
