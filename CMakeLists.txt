@@ -252,5 +252,11 @@ target_link_libraries(VST3PluginTestWithQt
                       avcpp::FFmpeg
                       avcpp::avcpp-static)
 
+string(REPLACE "/" "\\" CMAKE_SOURCE_DIR_BACKSLASH ${CMAKE_SOURCE_DIR})
+string(REPLACE "/" "\\" CMAKE_CURRENT_BINARY_DIR_BACKSLASH ${CMAKE_CURRENT_BINARY_DIR})
+
+add_custom_command(TARGET Musec PRE_BUILD COMMAND ${Qt5_DIR}/../../../bin/lrelease.exe ${CMAKE_SOURCE_DIR}/i18n/Musec_zh_CN.ts)
+
+add_custom_command(TARGET Musec POST_BUILD COMMAND copy /B /Y /V ${CMAKE_SOURCE_DIR_BACKSLASH}\\i18n\\Musec_zh_CN.qm ${CMAKE_CURRENT_BINARY_DIR_BACKSLASH}\\Musec_zh_CN.qm)
+
 file(COPY Resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-file(COPY i18n/Musec_zh_CN.qm DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
