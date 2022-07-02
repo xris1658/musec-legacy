@@ -78,23 +78,21 @@ following ways:
      ```
      You might need to replace the path to Visual Studio to the directory you installed it to.
    - Open **Visual Studio 2019** -> **VC** -> **x64 Native Tools Command Prompt for VS 2019**.
-2. Use CMake to configure and build the project. Execute the following command using the command
-window that just opened:
-  ```shell
-  <Path to cmake.exe> -G "NMake Makefiles" --toolchain <vcpkg install directory>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK directory> -DASIOSDK_PATH=<ASIO SDK directory> -S <Musec source directory> -B <Directory you'd like to generate the program>
-  # Note: use forward slash "/" in the directory
-  ```
+2. Use CMake to configure and build the project. Execute the following command using the command window that just opened:
+    ```shell
+    <Path to cmake.exe> -G "NMake Makefiles JOM" --toolchain <vcpkg   install directory>/scripts/buildsystems/vcpkg.cmake   -DVST3SDK_SOURCE_DIR=<VST3 SDK directory> -DASIOSDK_PATH=<ASIO SDK directory> -DCMAKE_MAKE_PROGRAM=<Path to Qt>/Tools/QtCreator/bin/jom/jom.exe -S <Musec source directory> -B <Directory you'd like to generate the program>
+    # Note: use forward slash "/" in the directory
+    ```
+    We use JOM from Qt, instead of NMake provided by MSVC. That's   because NMake does not do parallel builds. If `jom.exe` is not found, then you can get one at [qt-labs/jom](https://github.com/qt-labs/jom).
 3. Change the working directory to the directory you'd like to generate the program:
-  ```shell
-  cd /d <Directory> # Use /d while changing to the directory in another drive
-  ```
+    ```shell
+    cd /d <Directory> # Use /d while changing to the directory in another drive
+    ```
 4. Finally, build the program:
-  ```shell
-  nmake Musec
-  ```
-
-If the program prints `[100%] Built target Musec` in the end, congratulations! The program has just
-built successfully.
+    ```shell
+    <Path to cmake.exe> --build <Build directory> --target Musec -j <Parallel job count>
+    ```
+    If the program prints `[100%] Built target Musec` in the end, congratulations! The program has just built successfully.
 
 ## Build the project with <u>qmake</u>
 If you're using qmake, things will get dirty, as many steps (like building dependencies and preparing
@@ -172,9 +170,13 @@ library files) have to be made manually.
   - Manually copy the `Resources` folder to the build path.
 
   You could automatically copy the files by adding custom build processes, but there are some things you should notice:
-  - You can't use `copy` to do this, since it is a command you can use in Command Propmt or Powershell instead of an executable, and Qt Creator can't find a program named `copy`.
+  - You can't use `copy` directly to do this, since it is a command you can use in Command Propmt or Powershell instead of an executable, and Qt Creator can't find a program named `copy`. The correct way is to use `cmd` to execute the `copy` command:
+    ```
+    cmd /C copy /B /Y Ei18n\Musec_zh_CN.qm <Build directory>\Musec_zh_CN.qm
+    ```
+    - You might want to check the return code of the operation. Check [How do I get the application exit code from a Windows command line? - Stack Overflow](https://stackoverflow.com/questions/334879/how-do-i-get-the-application-exit-code-from-a-windows-command-line) for details.
   - You could use `robocopy`, an utility in Windows. But you might like to call it using another program, instead of using it directly in the process, since
-    - `robocopy` will return `0` if all of the files are **already copied** and `1` if all of the files are **not in the destination directory initailly and copied successfully**.
+    - `robocopy` will return `0` if all of the files are **already copied and same as the original files**, and `1` if all of the files are **not in the destination directory initially and copied successfully**.
     - Qt Creator will treat non-zero return code as error, so it will complain about the `robocopy` step even if the files are successfully copied, which shouldn't be treated as an error.
 
 ## Debugging

@@ -62,20 +62,20 @@
      读者需要将 Visual Studio 的路径换成安装时的路径。
    - 打开 **Visual Studio 2019** -> **VC** -> **x64 Native Tools Command Prompt for VS 2019**。
 2. 使用 CMake 配置并构建项目。使用上一步打开的命令窗口，执行以下命令：
-  ```shell
-  <Path to cmake.exe> -G "NMake Makefiles" --toolchain <vcpkg 目录>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK 目录> -DASIOSDK_PATH=<ASIO SDK 目录> -S <Musec 项目目录> -B <项目的生成位置>
-  # 注意：目录使用正斜杠 "/" 
-  ```
+    ```shell
+    <Path to cmake.exe> -G "NMake Makefiles" --toolchain <vcpkg 目录>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK 目录> -DASIOSDK_PATH=<ASIO SDK 目录> -DCMAKE_MAKE_PROGRAM=<Qt 路径>/Tools/QtCreator/bin/jom/jom.exe -S <Musec 项目目录> -B <项目的生成位置>
+    # 注意：目录使用正斜杠 "/" 
+    ```
+    我们不使用 MSVC 提供的 NMake，而使用 Qt 的 JOM。因为 NMake 不会进行并行构建。如果没有找到 `jom.exe`，可以到 [qt-labs/jom](https://github.com/qt-labs/jom) 下载一个。
 3. 将工作目录切换到项目的生成位置：
-  ```shell
-  cd /d <生成位置> # 要切换到与当前工作目录所在磁盘分区不同的目录下，需要添加 /d
-  ```
+    ```shell
+    cd /d <生成位置> # 要切换到与当前工作目录所在磁盘分区不同的目录下，需要添加 /d
+    ```
 4. 最后生成程序：
-  ```shell
-  nmake Musec
-  ```
-
-如果程序最后显示 `[100%] Built target Musec`，恭喜你！程序构建成功了。
+    ```shell
+    nmake Musec
+    ```
+    如果程序最后显示 `[100%] Built target Musec`，恭喜你！程序构建成功了。
 
 ## 用 <u>qmake</u> 构建项目
 如果用 qmake，构建过程相对棘手一些，因为很多步骤需要手动进行（如构建依赖项、准备库文件等）。
@@ -152,10 +152,14 @@
   - 自行将 `Resources` 文件夹复制到生成路径。
 
   可以通过添加定制生成步骤的方式自动复制文件，不过需要注意以下事项：
-  - 不能使用 `copy`，因为 `copy` 只是一条命令，可以在命令提示符和 Powershell 中使用，不是可执行程序。Qt Creator 找不到名为 `copy` 的程序。
-  - 可以用 Windows 自带的实用程序 `robocopy`。不过或许读者更想用其他程序调用，而不是直接在生成步骤内使用，因为
-    - 如果所有文件 **都已经复制过**，`robocopy` 会返回 `0`；如果所有文件 **原本不在目标目录下，而复制操作均成功复制了所有文件**，则返回 `1`。
-    - Qt Creator 将非零返回值视为错误，因此会在 `robocopy` 步骤中提示出错，哪怕文件全部成功复制到了生成目录。这不该视作错误。
+  - 不能直接使用 `copy`，因为 `copy` 只是一条命令，可以在命令提示符和 Powershell 中使用，不是可执行程序，而 Qt Creator 找不到名为 `copy` 的程序。正确的方式是使用 `cmd` 来执行 `copy` 命令：
+    ```
+    cmd /C copy /B /Y Ei18n\Musec_zh_CN.qm <Build directory>\Musec_zh_CN.qm
+    ```
+    - 你可能想要检查操作的返回值。要了解详情，请参阅 [How do I get the application exit code from a Windows command line? - Stack Overflow](https://stackoverflow.com/questions/334879/how-do-i-get-the-application-exit-code-from-a-windows-command-line)。
+  - 可以用 Windows 自带的实用程序 `robocopy`。不过或许读者更想用其他程序调用此程序，而不是直接在生成步骤内使用，因为
+    - 如果所有文件 **都已经复制过，且与原来的文件相同**，`robocopy` 会返回 `0`；如果所有文件 **原本不在目标目录下，而复制操作成功复制了所有文件**，则返回 `1`。
+    - Qt Creator 将非零返回值视为错误，因此会在 `robocopy` 步骤中提示出错，哪怕文件全部成功复制到了生成目录（这不该视作错误）。
 
 ## 调试
 Visual Studio 和较新版本的 CLion 支持 NatVis，可以基于配置文件对对象进行可视化处理。当调试使用其他库（如 Qt）的应用时，NatVis 会非常有用。
