@@ -14,4 +14,3 @@ ProjectPropertiesWindow 1.0 ProjectPropertiesWindow.qml
 TapTempoWindow 1.0 TapTempoWindow.qml
 TechnicalSupportWindow 1.0 TechnicalSupportWindow.qml
 SplashScreen 1.0 SplashScreen.qml
-WelcomeWindow 1.0 WelcomeWindow.qml

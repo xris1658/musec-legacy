@@ -15,7 +15,6 @@
         <file>qmlproject/Strings.qml</file>
         <file>qmlproject/TapTempoWindow.qml</file>
         <file>qmlproject/TechnicalSupportWindow.qml</file>
-        <file>qmlproject/WelcomeWindow.qml</file>
         <file>qmlproject/images/Musec-image-2.ico</file>
         <file>qmlproject/images/Splashscreen.png</file>
         <file>qmlproject/images/addfolder.svg</file>
