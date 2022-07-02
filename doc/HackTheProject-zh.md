@@ -73,7 +73,6 @@
     ```
 4. 最后生成程序：
     ```shell
-    nmake Musec
     <cmake.exe 路径> --build <生成目录> --target Musec -j <并行任务数量>
     ```
     如果程序最后显示 `[100%] Built target Musec`，恭喜你！程序构建成功了。
