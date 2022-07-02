@@ -63,7 +63,7 @@
    - 打开 **Visual Studio 2019** -> **VC** -> **x64 Native Tools Command Prompt for VS 2019**。
 2. 使用 CMake 配置并构建项目。使用上一步打开的命令窗口，执行以下命令：
     ```shell
-    <Path to cmake.exe> -G "NMake Makefiles" --toolchain <vcpkg 目录>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK 目录> -DASIOSDK_PATH=<ASIO SDK 目录> -DCMAKE_MAKE_PROGRAM=<Qt 路径>/Tools/QtCreator/bin/jom/jom.exe -S <Musec 项目目录> -B <项目的生成位置>
+    <cmake.exe 路径> -G "NMake Makefiles" --toolchain <vcpkg 目录>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK 目录> -DASIOSDK_PATH=<ASIO SDK 目录> -DCMAKE_MAKE_PROGRAM=<Qt 路径>/Tools/QtCreator/bin/jom/jom.exe -S <Musec 项目目录> -B <项目的生成位置>
     # 注意：目录使用正斜杠 "/" 
     ```
     我们不使用 MSVC 提供的 NMake，而使用 Qt 的 JOM。因为 NMake 不会进行并行构建。如果没有找到 `jom.exe`，可以到 [qt-labs/jom](https://github.com/qt-labs/jom) 下载一个。
@@ -74,6 +74,7 @@
 4. 最后生成程序：
     ```shell
     nmake Musec
+    <cmake.exe 路径> --build <生成目录> --target Musec -j <并行任务数量>
     ```
     如果程序最后显示 `[100%] Built target Musec`，恭喜你！程序构建成功了。
 
