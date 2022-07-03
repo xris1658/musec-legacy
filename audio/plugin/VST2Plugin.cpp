@@ -362,6 +362,17 @@ bool VST2Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
     effect_->dispatcher(effect_, AEffectOpcodes::effSetSampleRate, 0, 0, nullptr, sampleRate);
     effect_->dispatcher(effect_, AEffectOpcodes::effSetBlockSize, 0, maxSampleCount, nullptr, 0);
     initializeEditor();
+    paramBlock_ = {sizeof(VST2ParameterInfo) * effect_->numParams};
+    auto paramBlockAsArray = reinterpret_cast<VST2ParameterInfo*>(paramBlock_.data());
+    VstIntPtr paramPropertiesSupported = 0;
+    for(decltype(effect_->numParams) i = 0; i < effect_->numParams; ++i)
+    {
+        paramPropertiesSupported = effect_->dispatcher(effect_, AEffectXOpcodes::effGetParameterProperties, i, 0, &(paramBlockAsArray[i].properties), 0);
+        effect_->dispatcher(effect_, AEffectOpcodes::effGetParamName, i, 0, paramBlockAsArray[i].name, 0);
+        effect_->dispatcher(effect_, AEffectOpcodes::effGetParamDisplay, i, 0, paramBlockAsArray[i].display, 0);
+        effect_->dispatcher(effect_, AEffectOpcodes::effGetParamLabel, i, 0, paramBlockAsArray[i].unit, 0);
+        paramBlockAsArray[i].value = effect_->getParameter(effect_, i);
+    }
     return true;
 }
 
@@ -426,7 +437,6 @@ void VST2Plugin<SampleType>::process(const Musec::Audio::Base::AudioBufferViews<
     {
         outputsRaw_[i] = Musec::Controller::AudioEngineController::dummyBufferView<SampleType>().getSamples();
     }
-    // 获取采样数的方式可能不对
     std::int32_t sampleCount = Musec::Controller::AudioEngineController::getCurrentBlockSize();
     if constexpr(std::is_same_v<SampleType, float>)
     {
