@@ -3,7 +3,7 @@
 
 #include "common/asio.h"
 
-#include <QChar>
+#include <QString>
 
 namespace Musec
 {
@@ -13,18 +13,18 @@ namespace Driver
 {
 namespace Literals
 {
-constexpr char asioErrorOk[] = "The operation is done succesfully.";
-constexpr char asioErrorSuccess[]  = "The operation is done succesfully.";
-constexpr char asioErrorNotPresent[] = "There is no hardware input or output devices, or the devices are not available.";
-constexpr char asioErrorHardwareMalfunction[] = "The current hardware is malfunctioning.";
-constexpr char asioErrorInvalidParameter[] = "The current parameter is invalid. You might need to check settings of the audio driver.";
-constexpr char asioErrorInvalidMode[] = "The mode of the hardware is invalid.";
-constexpr char asioErrorSamplePositionIsNotAdvancing[] = "The hardware can't return the sample position.";
-constexpr char asioErrorNoClock[] = "The sample rate selected is not supported by the hardware.";
-constexpr char asioErrorNoMemory[] = "The available memory space is not enough to complete current operation.";
-constexpr char asioErrorUnknown[] = "Unknown error. Unfortunately, that's all we know.";
+constexpr char asioErrorOk[] = "asioErrorOkText";
+constexpr char asioErrorSuccess[]  ="asioErrorSuccessText";
+constexpr char asioErrorNotPresent[] = "asioErrorNotPresentText";
+constexpr char asioErrorHardwareMalfunction[] = "asioErrorHardwareMalfunctionText";
+constexpr char asioErrorInvalidParameter[] = "asioErrorInvalidParameterText";
+constexpr char asioErrorInvalidMode[] = "asioErrorInvalidModeText";
+constexpr char asioErrorSamplePositionIsNotAdvancing[] = "asioErrorSamplePositionIsNotAdvancingText";
+constexpr char asioErrorNoClock[] = "asioErrorNoClockText";
+constexpr char asioErrorNoMemory[] = "asioErrorNoMemoryText";
+constexpr char asioErrorUnknown[] = "asioErrorUnknownText";
 
-const char* asioErrorMessage(ASIOError error);
+const QString& asioErrorMessage(ASIOError error);
 }
 }
 }

@@ -23,7 +23,7 @@ Rectangle {
     }
 
     //大号时钟
-    BigClockBackup {
+    BigClock {
         id: bigClock
         anchors.centerIn: parent
     }

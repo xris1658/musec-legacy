@@ -11,7 +11,7 @@ YAML::Node& appConfig()
 void createAppConfig()
 {
     auto& configFileNode = appConfig();
-    configFileNode["musec"]["options"]["general"]["language"] = "zh-cn";
+    configFileNode["musec"]["options"]["general"]["language"] = "en_US";
     configFileNode["musec"]["options"]["general"]["theme"] = "dark";
     configFileNode["musec"]["options"]["general"]["scale"] = 100;
     configFileNode["musec"]["options"]["general"]["touch"] = true;

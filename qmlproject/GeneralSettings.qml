@@ -12,7 +12,7 @@ Rectangle {
     height: 500
     clip: true
     color: Constants.backgroundColor
-    property int firstColumnWidth: 150
+    property int firstColumnWidth: 125
     property int secondColumnWidth: 100
     Grid {
         columns: 2
@@ -123,7 +123,7 @@ Rectangle {
         }
         Text {
             width: firstColumnWidth
-            text: qsTr("Use system font rendering")
+            text: qsTr("System font rendering")
             font.family: Constants.font
             font.italic: true
             color: Constants.contentColor1

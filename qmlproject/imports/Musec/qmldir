@@ -5,8 +5,6 @@ Arrangement 1.0 Arrangement.qml
 Assets 1.0 Assets.qml
 Automation 1.0 Automation.qml
 BasicPluginEditor 1.0 BasicPluginEditor.qml
-BigClock 0.5 BigClockBackup.qml
-BigClockBackup 1.0 BigClockBackup.qml
 BigClock 1.0 BigClock.qml
 ContentArea 1.0 ContentArea.qml
 DirectoryFontLoader 1.0 DirectoryFontLoader.qml

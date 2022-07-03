@@ -15,6 +15,8 @@ Rectangle {
     height: 500
     clip: true
     color: Constants.backgroundColor
+    property int firstColumnWidth: 125
+    property int secondColumnWidth: 275
     property bool scanning: false
 
     Grid {
@@ -38,9 +40,9 @@ Rectangle {
             height: 20
         }
         Text {
-            width: 100
+            width: root.firstColumnWidth
             height: 100
-            text: qsTr("Scan plugins from these directories") + ":"
+            text: qsTr("Scan plugins from") + ":"
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -49,7 +51,7 @@ Rectangle {
         }
         Rectangle {
             id: pluginPathListViewPlaceholder
-            width: 300
+            width: root.secondColumnWidth
             height: 100
             color: Constants.backgroundColor
             border.color: Constants.borderColor
@@ -84,11 +86,11 @@ Rectangle {
             }
         }
         Item {
-            width: 100
+            width: root.firstColumnWidth
             height: 20
         }
         Item {
-            width: 300
+            width: root.secondColumnWidth
             height: 20
             Grid {
                 id: buttonPathOperationGrid
@@ -144,11 +146,11 @@ Rectangle {
             }
         }
         Item {
-            width: 100
+            width: root.firstColumnWidth
             height: 20
         }
         Item {
-            width: 300
+            width: root.secondColumnWidth
             height: 20
             Grid {
                 id: scanPluginGrid
@@ -183,11 +185,11 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
         }
         Item {
-            width: 320
+            width: root.secondColumnWidth
             height: 20
         }
         Text {
-            width: 100
+            width: root.firstColumnWidth
             text: qsTr("Scan Shortcuts")
             font.family: Constants.font
             color: Constants.contentColor1
@@ -201,7 +203,7 @@ Rectangle {
             tristate: false
         }
         Text {
-            width: 100
+            width: root.firstColumnWidth
             text: qsTr("Plugin Format Priority")
             font.family: Constants.font
             color: Constants.contentColor1

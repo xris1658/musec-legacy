@@ -471,85 +471,6 @@
     </message>
 </context>
 <context>
-    <name>BigClockBackup</name>
-    <message>
-        <location filename="../qmlproject/imports/Musec/BigClockBackup.qml" line="85"/>
-        <source>%</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/imports/Musec/BigClockBackup.qml" line="96"/>
-        <source>CPU</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/imports/Musec/BigClockBackup.qml" line="165"/>
-        <source>MAJOR</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/imports/Musec/BigClockBackup.qml" line="181"/>
-        <source>minor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/imports/Musec/BigClockBackup.qml" line="199"/>
-        <source>KEY SIG.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/imports/Musec/BigClockBackup.qml" line="221"/>
-        <location filename="../qmlproject/imports/Musec/BigClockBackup.qml" line="261"/>
-        <source>0001:01.00</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/imports/Musec/BigClockBackup.qml" line="230"/>
-        <source>0005:01.00</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/imports/Musec/BigClockBackup.qml" line="240"/>
-        <source>LOOP</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/imports/Musec/BigClockBackup.qml" line="277"/>
-        <source>BAR:BEAT.STEP ▼</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/imports/Musec/BigClockBackup.qml" line="280"/>
-        <source>HH:MM:SS.SS ▼</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/imports/Musec/BigClockBackup.qml" line="283"/>
-        <source>SAMPLE ▼</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/imports/Musec/BigClockBackup.qml" line="332"/>
-        <source>.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/imports/Musec/BigClockBackup.qml" line="354"/>
-        <source>TEMPO</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/imports/Musec/BigClockBackup.qml" line="403"/>
-        <source>/</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/imports/Musec/BigClockBackup.qml" line="430"/>
-        <source>TIME SIG.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Clip</name>
     <message>
         <location filename="../qmlproject/imports/Musec/Clip.qml" line="16"/>
@@ -785,22 +706,22 @@
 <context>
     <name>ExplorerView</name>
     <message>
-        <location filename="../qmlproject/imports/Musec/Views/ExplorerView.qml" line="37"/>
+        <location filename="../qmlproject/imports/Musec/Views/ExplorerView.qml" line="38"/>
         <source>Folder Options</source>
         <translation>文件夹选项</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Views/ExplorerView.qml" line="44"/>
+        <location filename="../qmlproject/imports/Musec/Views/ExplorerView.qml" line="45"/>
         <source>&amp;Open in Explorer</source>
         <translation>在文件资源管理器中打开(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Views/ExplorerView.qml" line="54"/>
+        <location filename="../qmlproject/imports/Musec/Views/ExplorerView.qml" line="55"/>
         <source>File Options</source>
         <translation>文件选项</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Views/ExplorerView.qml" line="61"/>
+        <location filename="../qmlproject/imports/Musec/Views/ExplorerView.qml" line="62"/>
         <source>Sh&amp;ow in Explorer</source>
         <translation>在文件资源管理器中显示(&amp;O)</translation>
     </message>
@@ -867,7 +788,7 @@
     </message>
     <message>
         <location filename="../qmlproject/GeneralSettings.qml" line="126"/>
-        <source>Use system font rendering</source>
+        <source>System font rendering</source>
         <translation>使用系统文字渲染</translation>
     </message>
     <message>
@@ -1500,7 +1421,7 @@ If you add dithering devices on the master track, please uncheck this option.</s
     </message>
     <message>
         <location filename="../qmlproject/PluginSettings.qml" line="43"/>
-        <source>Scan plugins from these directories</source>
+        <source>Scan plugins from</source>
         <translation>插件扫描目录</translation>
     </message>
     <message>
@@ -1695,7 +1616,7 @@ If you add dithering devices on the master track, please uncheck this option.</s
     </message>
     <message>
         <location filename="../qmlproject/Strings.qml" line="14"/>
-        <source>An error occured while looking for ASIO drivers on this computer. The program will run without loading the ASIO driver.</source>
+        <source>An error occurred while looking for ASIO drivers on this computer. The program will run without loading the ASIO driver.</source>
         <translation>在这台电脑上寻找 ASIO 驱动程序时发生了错误。程序将以未加载 ASIO 驱动程序的状态运行。</translation>
     </message>
     <message>
@@ -1709,7 +1630,53 @@ If you add dithering devices on the master track, please uncheck this option.</s
         <translation>无法加载 ASIO 驱动程序。程序将以未加载 ASIO 驱动程序的状态运行。</translation>
     </message>
     <message>
+        <location filename="../qmlproject/Strings.qml" line="18"/>
+        <location filename="../qmlproject/Strings.qml" line="19"/>
+        <source>The operation is done succesfully.</source>
+        <translation>操作成功完成。</translation>
+    </message>
+    <message>
         <location filename="../qmlproject/Strings.qml" line="20"/>
+        <source>There is no hardware input or output devices, or the devices are not available.</source>
+        <translation>没有硬件输入或输出设备，或者当前的设备不可用。</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/Strings.qml" line="21"/>
+        <source>The current hardware is malfunctioning.</source>
+        <translation>当前硬件没有正常工作。</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/Strings.qml" line="22"/>
+        <source>The current parameter is invalid. You might need to check settings of the audio driver.</source>
+        <translation>当前使用的参数无效，可能需要检查音频驱动的设置。</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/Strings.qml" line="23"/>
+        <source>The mode of the hardware is invalid.</source>
+        <translation>当前的硬件状态无效。</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/Strings.qml" line="24"/>
+        <source>The hardware can&apos;t return the sample position.</source>
+        <translation>硬件无法返回采样时刻。</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/Strings.qml" line="25"/>
+        <source>The sample rate selected is not supported by the hardware.</source>
+        <translation>硬件不支持当前使用的音频采样率。</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/Strings.qml" line="26"/>
+        <source>The available memory space is not enough to complete current operation.</source>
+        <translation>内存空间不足，无法完成当前操作。</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/Strings.qml" line="27"/>
+        <source>Unknown error. Unfortunately, that&apos;s all we know.</source>
+        <translation>未知错误。可惜能了解的信息只有这么多了。</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/Strings.qml" line="31"/>
         <source>The option changes is saved. A restart is required to apply.</source>
         <translation>对选项的更改已经保存。需要重新启动才能生效。</translation>
     </message>
@@ -1751,64 +1718,6 @@ If you add dithering devices on the master track, please uncheck this option.</s
         <location filename="../qmlproject/imports/Musec/TrackHeader.qml" line="45"/>
         <source>Type Track Name</source>
         <translation>键入轨道名称</translation>
-    </message>
-</context>
-<context>
-    <name>WelcomeWindow</name>
-    <message>
-        <location filename="../qmlproject/WelcomeWindow.qml" line="11"/>
-        <source>Musec</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/WelcomeWindow.qml" line="29"/>
-        <source>欢迎使用 Musec</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/WelcomeWindow.qml" line="35"/>
-        <source>点击“下一步”可以开始进行初始设置。</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/WelcomeWindow.qml" line="42"/>
-        <source>如果您曾经导出了软件设置，可以进行导入。</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/WelcomeWindow.qml" line="47"/>
-        <source>导入设置文件(&amp;S)...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/WelcomeWindow.qml" line="59"/>
-        <source>设置外观</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/WelcomeWindow.qml" line="69"/>
-        <source>语言 / Language</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/WelcomeWindow.qml" line="87"/>
-        <source>配色方案</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/WelcomeWindow.qml" line="143"/>
-        <source>◂ 上一步(&amp;P)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/WelcomeWindow.qml" line="153"/>
-        <source>下一步(&amp;N) ▸</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/WelcomeWindow.qml" line="163"/>
-        <source>取消(&amp;C)</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -62,17 +62,15 @@ Window {
                                 categoryList.currentIndex = index;
                             }
                         }
-                        Row {
-                            anchors.fill: parent
-                            Item {
-                                width: height
-                                height: itemDelegate.height
-                            }
-                            Text {
-                                text: modelData
-                                font.family: Constants.font
-                                color: categoryList.currentIndex == index? Constants.listHighlightContentColor : Constants.contentColor1
-                            }
+                        Text {
+                            text: modelData
+                            font.family: Constants.font
+                            anchors.left: parent.left
+                            anchors.leftMargin: parent.height / 2
+                            anchors.right: parent.right
+                            anchors.rightMargin: anchors.leftMargin
+                            elide: Text.ElideRight
+                            color: categoryList.currentIndex == index? Constants.listHighlightContentColor: Constants.contentColor1
                         }
                     }
                     highlight: Rectangle {

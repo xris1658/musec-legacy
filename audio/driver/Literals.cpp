@@ -1,33 +1,36 @@
 #include "Literals.hpp"
 
+#include <ui/UI.hpp>
+
 namespace Musec::Audio::Driver::Literals
 {
-const char* asioErrorMessage(ASIOError error)
+const QString& asioErrorMessage(ASIOError error)
 {
+    using namespace Musec::UI;
     using ASIOErrorEnum = decltype(ASE_OK);
     switch(error)
     {
     case ASIOErrorEnum::ASE_OK:
-        return asioErrorOk;
+        return strings->property(asioErrorOk).toString();
     case ASIOErrorEnum::ASE_SUCCESS:
-        return asioErrorSuccess;
+        return strings->property(asioErrorSuccess).toString();
     case ASIOErrorEnum::ASE_NotPresent:
-        return asioErrorNotPresent;
+        return strings->property(asioErrorNotPresent).toString();
     case ASIOErrorEnum::ASE_HWMalfunction:
-        return asioErrorHardwareMalfunction;
+        return strings->property(asioErrorHardwareMalfunction).toString();
     case ASIOErrorEnum::ASE_InvalidParameter:
-        return asioErrorInvalidParameter;
+        return strings->property(asioErrorInvalidParameter).toString();
     case ASIOErrorEnum::ASE_InvalidMode:
-        return asioErrorInvalidMode;
+        return strings->property(asioErrorInvalidMode).toString();
     case ASIOErrorEnum::ASE_SPNotAdvancing:
-        return asioErrorSamplePositionIsNotAdvancing;
+        return strings->property(asioErrorSamplePositionIsNotAdvancing).toString();
     case ASIOErrorEnum::ASE_NoClock:
-        return asioErrorNoClock;
+        return strings->property(asioErrorNoClock).toString();
     case ASIOErrorEnum::ASE_NoMemory:
-        return asioErrorNoMemory;
+        return strings->property(asioErrorNoMemory).toString();
     default:
         break;
     }
-    return asioErrorUnknown;
+    return strings->property(asioErrorUnknown).toString();
 }
 }
