@@ -27,7 +27,8 @@ class MIDISequence
 {
 public:
     // 将值存储为 double 格式以应对动态精度
-    using AutomationType = Automation<std::int8_t, double>;
+    using AutomationType = Automation;
+    static_assert(std::is_same_v<AutomationType::ValueType, double>);
 public:
     enum CheckBound
     {

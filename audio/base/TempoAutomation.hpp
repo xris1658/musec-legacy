@@ -19,12 +19,12 @@ constexpr auto minimumTempo = 30.0;
 constexpr auto maximumTempo = 300.0;
 
 template<std::size_t PPQ>
-using TempoAutomationPoint = AutomationPoint<TimePoint<PPQ>, double>;
+using TempoAutomationPoint = AutomationPoint;
 
 template<std::size_t PPQ>
-class TempoAutomation: public Automation<TimePoint<PPQ>, double>
+class TempoAutomation: public Automation
 {
-    using Base = Automation<TimePoint<PPQ>, double>;
+    using Base = Automation;
 public:
     TempoAutomation(): Base(minimumTempo, maximumTempo) {}
 private:
@@ -83,7 +83,7 @@ public:
         {
             if (notBeforeStart == Base::cbegin())
             {
-                ret = secondElapsed(notBeforeStart->value_, to - from);
+                ret = secondElapsed(notBeforeStart->value(), to - from);
                 return ret;
             }
             else
@@ -97,33 +97,33 @@ public:
         auto afterEnd = Base::upperBound(to);
         if (afterStart == Base::cend() /*&& afterEnd == Bae::cend()*/)
         {
-            ret = secondElapsed((Base::cend() - 1)->value_, to - from);
+            ret = secondElapsed((Base::cend() - 1)->value(), to - from);
             return ret;
         }
         // --from--point--point--to--
         // Step 1 of 3: from--
         if(notBeforeStart == Base::cbegin())
         {
-            ret += secondElapsed(notBeforeStart->value_, notBeforeStart->time_ - from);
+            ret += secondElapsed(notBeforeStart->value(), notBeforeStart->time() - from);
         }
         else
         {
-            ret += secondElapsed(notBeforeStart - 1, from, notBeforeStart->time_);
+            ret += secondElapsed(notBeforeStart - 1, from, notBeforeStart->time());
         }
         auto beforeEnd = notBeforeEnd - 1;
         // Step 2 of 3: --point--point--
         for(auto it = notBeforeStart; it < beforeEnd; ++it)
         {
-            ret += secondElapsed(it, it->time_, (it + 1)->time_);
+            ret += secondElapsed(it, it->time(), (it + 1)->time());
         }
         // Step 3 of 3: --to
         if(notBeforeEnd == Base::cend())
         {
-            ret += secondElapsed(beforeEnd->value_, to - beforeEnd->time_);
+            ret += secondElapsed(beforeEnd->value(), to - beforeEnd->time());
         }
         else
         {
-            ret += secondElapsed(beforeEnd, beforeEnd->time_, to);
+            ret += secondElapsed(beforeEnd, beforeEnd->time(), to);
         }
         return ret;
     }
@@ -146,10 +146,10 @@ public:
         }
         // from 右侧的点，或者与 from 重合的点
         auto lowerBound = Base::lowerBound(from);
-        double sec = from == lowerBound->time_? 0: secondElapsed(from, lowerBound->time_);
+        double sec = from == lowerBound->time()? 0: secondElapsed(from, lowerBound->time());
         for(auto i = lowerBound; i != Base::cend() - 1; ++i)
         {
-            auto durationFromThisToNext = secondElapsed(i, i->time_, (i + 1)->time_);
+            auto durationFromThisToNext = secondElapsed(i, i->time(), (i + 1)->time());
             // --o--o--x--
             if(sec + durationFromThisToNext < second)
             {
@@ -158,16 +158,16 @@ public:
             // --o--o(x)--
             else if(sec + durationFromThisToNext == second)
             {
-                return Duration<PPQ>((i + 1)->time_);
+                return Duration<PPQ>((i + 1)->time());
             }
             // --o--x--o--
             else
             {
                 // 点两边的速度值相等，用不着上迭代法
-                if(i->value_ == (i + 1)->value_)
+                if(i->value() == (i + 1)->value())
                 {
-                    auto pulsePerSecond = i->value_ * PPQ / 60.0;
-                    return Duration<PPQ>(i->time_.pulse() + pulsePerSecond * (second - sec));
+                    auto pulsePerSecond = i->value() * PPQ / 60.0;
+                    return Duration<PPQ>(i->time().pulse() + pulsePerSecond * (second - sec));
                 }
                 else
                 {
@@ -181,20 +181,20 @@ public:
                     // (leftRatio + rightRatio) / 2
                     double ratio = (leftRatio + rightRatio) * half;
                     // ratio 对应的时间点（浮点）
-                    auto timePoint = i->time_ + (pointIteratorAtRight->time_ - i->time_) * ratio;
+                    auto timePoint = i->time() + (pointIteratorAtRight->time() - i->time()) * ratio;
                     // leftRatio 对应的时间点（浮点）
-                    auto leftRange = i->time_ + (pointIteratorAtRight->time_ - i->time_) * leftRatio;
+                    auto leftRange = i->time() + (pointIteratorAtRight->time() - i->time()) * leftRatio;
                     // rightRatio 对应的时间点（浮点）
-                    auto rightRange = i->time_ + (pointIteratorAtRight->time_ - i->time_) * rightRatio;
+                    auto rightRange = i->time() + (pointIteratorAtRight->time() - i->time()) * rightRatio;
                     while(rightRange - leftRange >= 1)
                     {
                         // 偏右
-                        if(remain - secondElapsed(i, static_cast<double>(i->time_), timePoint) > precision * half)
+                        if(remain - secondElapsed(i, static_cast<double>(i->time()), timePoint) > precision * half)
                         {
                             leftRatio += delta;
                         }
                         // 偏左
-                        else if(secondElapsed(i, static_cast<double>(i->time_), timePoint) - remain > precision * half)
+                        else if(secondElapsed(i, static_cast<double>(i->time()), timePoint) - remain > precision * half)
                         {
                             rightRatio -= delta;
                         }
@@ -205,9 +205,9 @@ public:
                         }
                         delta *= half;
                         ratio = (leftRatio + rightRatio) * half;
-                        timePoint = i->time_ + (pointIteratorAtRight->time_ - i->time_) * ratio;
-                        leftRange = i->time_ + (pointIteratorAtRight->time_ - i->time_) * leftRatio;
-                        rightRange = i->time_ + (pointIteratorAtRight->time_ - i->time_) * rightRatio;
+                        timePoint = i->time() + (pointIteratorAtRight->time() - i->time()) * ratio;
+                        leftRange = i->time() + (pointIteratorAtRight->time() - i->time()) * leftRatio;
+                        rightRange = i->time() + (pointIteratorAtRight->time() - i->time()) * rightRatio;
                     }
                     auto floor = Duration<PPQ>(std::floor(timePoint));
                     auto ceiling = Duration<PPQ>(std::ceil(timePoint));
@@ -240,8 +240,8 @@ public:
         }
         // 脉冲值在最后一个点之后
         auto remain = second - sec;
-        auto pulsePerSecond = (Base::cend() - 1)->value_ * PPQ / 60.0;
-        auto ret = Duration<PPQ>(((Base::cend() - 1)->time_ - from).duration() + pulsePerSecond * remain);
+        auto pulsePerSecond = (Base::cend() - 1)->value() * PPQ / 60.0;
+        auto ret = Duration<PPQ>(((Base::cend() - 1)->time() - from).duration() + pulsePerSecond * remain);
         return ret;
     }
     // 求速度自动化在特定时刻下经过的脉冲数。

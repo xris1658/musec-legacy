@@ -1,5 +1,5 @@
-#ifndef MUSEC_DKWTP_AUTOMATION
-#define MUSEC_DKWTP_AUTOMATION
+#ifndef MUSEC_AUDIO_BASE_AUTOMATION
+#define MUSEC_AUDIO_BASE_AUTOMATION
 
 #include "math/QuadraticFunction.hpp"
 
@@ -14,45 +14,91 @@ namespace Audio
 {
 namespace Base
 {
-template<typename T, typename V>
-struct AutomationPoint
+class AutomationPoint
 {
-    T time_;
-    V value_;
+public:
+    using TimeType = std::int64_t;
+    using ValueType = double;
+private:
+    using Self = AutomationPoint;
+public:
+    AutomationPoint(std::int64_t time, double value, double curve) : time_(time), value_(value), curve_(curve)
+    {}
+    AutomationPoint(const Self&) = default;
+    Self& operator=(const Self&) = default;
+    ~AutomationPoint() noexcept = default;
+public:
+    TimeType time() const
+    {
+        return time_;
+    }
+    void setTime(TimeType time)
+    {
+        time_ = time;
+    }
+    ValueType value() const
+    {
+        return value_;
+    }
+    void setValue(ValueType value)
+    {
+        value_ = value;
+    }
+    double curve() const
+    {
+        return curve_;
+    }
+    void setCurve(double curve)
+    {
+        curve_ = curve;
+    }
+public:
+    bool operator==(const AutomationPoint& rhs) const
+    {
+        return time_ == rhs.time_
+            && value_ == rhs.value_
+            && curve_ == rhs.curve_;
+    }
+    bool operator!=(const AutomationPoint& rhs) const
+    {
+        return !(rhs == *this);
+    }
+private:
+    TimeType time_;
+    ValueType value_;
     double curve_;
 };
 
-constexpr int AutomationPointColumnCount = 3;
+bool timeFromPointIsLessThanTime(const AutomationPoint& point, const AutomationPoint::TimeType& time);
 
-template<typename T, typename V>
-bool timeFromPointIsLessThanTime(const AutomationPoint<T, V>& point, const T& time)
+struct AutomationMembers
 {
-    return point.time_ < time;
-}
+    using PointVector = std::vector<AutomationPoint>;
+    PointVector points_;
+    AutomationPoint::ValueType minValue_;
+    AutomationPoint::ValueType maxValue_;
+};
 
-template<typename T, typename V>
 class Automation
 {
 public:
-    using TimeType = T;
-    using ValueType = V;
-    using Self = Automation<T, V>;
-    using Point = AutomationPoint<T, V>;
+    using TimeType = AutomationPoint::TimeType;
+    using ValueType = AutomationPoint::ValueType;
+    using Self = Automation;
+    using Point = AutomationPoint;
 protected:
-    using PointVector = std::vector<Point>;
+    using PointVector = AutomationMembers::PointVector;
     using PointVectorIterator = typename PointVector::iterator;
     using PointVectorConstIterator = typename PointVector::const_iterator;
 public:
-    Automation(double minValue = 0.0, double maxValue = 1.0): points_(), minValue_(minValue), maxValue_(maxValue) {}
-    Automation(const Self& rhs): points_(rhs.points_), minValue_(rhs.minValue_), maxValue_(rhs.maxValue) {}
-    Automation(Self&& rhs) noexcept: points_(std::move(rhs.points_)), minValue_(rhs.minValue_), maxValue_(rhs.maxValue_) {}
+    Automation(double minValue = 0.0, double maxValue = 1.0): members_{{}, minValue, maxValue} {}
+    Automation(const Self& rhs): members_(rhs.members_) {}
+    Automation(Self&& rhs) noexcept: members_(std::move(rhs.members_)) {}
     Self& operator=(const Self& rhs)
     {
         if (this != &rhs)
         {
-            points_ = rhs.points_;
-            minValue_ = rhs.minValue_;
-            maxValue_ = rhs.maxValue_;
+            members_ = rhs.members_;
         }
         return *this;
     }
@@ -60,35 +106,33 @@ public:
     {
         if (this != &rhs)
         {
-            points_ = std::move(rhs.points_);
-            minValue_ = rhs.minValue_;
-            maxValue_ = rhs.maxValue_;
+            members_ = std::move(rhs.members_);
         }
         return *this;
     }
     ~Automation() noexcept {}
 protected:
-    PointVectorConstIterator lowerBound(const T& time) const
+    PointVectorConstIterator lowerBound(const AutomationPoint::TimeType& time) const
     {
-        return std::lower_bound(points_.cbegin(), points_.cend(), time, timeFromPointIsLessThanTime<T, V>);
+        return std::lower_bound(points_.cbegin(), points_.cend(), time, timeFromPointIsLessThanTime);
     }
-    PointVectorConstIterator upperBound(const T& time) const
+    PointVectorConstIterator upperBound(const AutomationPoint::TimeType& time) const
     {
         auto ret = lowerBound(time);
-        if (ret != points_.cend() && ret->time_ == time)
+        if (ret != points_.cend() && ret->time() == time)
         {
             ++ret;
         }
         return ret;
     }
-    PointVectorIterator lowerBound(const T& time)
+    PointVectorIterator lowerBound(const AutomationPoint::TimeType& time)
     {
-        return std::lower_bound(points_.begin(), points_.end(), time, timeFromPointIsLessThanTime<T, V>);
+        return std::lower_bound(points_.begin(), points_.end(), time, timeFromPointIsLessThanTime);
     }
-    PointVectorIterator upperBound(const T& time)
+    PointVectorIterator upperBound(const AutomationPoint::TimeType& time)
     {
         auto ret = lowerBound(time);
-        if (ret != points_.cend() && ret->time_ == time)
+        if (ret != points_.cend() && ret->time() == time)
         {
             ++ret;
         }
@@ -117,20 +161,20 @@ protected:
             throw std::invalid_argument("");
         }
         auto right = left + 1;
-        if(right == points_.cend() || left->time_ == right->time_ || left->value_ == right->value_)
+        if(right == points_.cend() || left->time() == right->time() || left->value() == right->value())
         {
-            return {0, 0, left->value_};
+            return {0, 0, left->value()};
         }
-        auto controlX = (left->time_ + right->time_) * 0.5;
-        auto up = right->curve_ * 0.5 + 0.5;
-        auto controlY = left->value_ < right->value_?
-                        left->value_ + up * (right->value_ - left->value_):
-                        right->value_ + up * (left->value_ - right->value_);
-        auto dLeft = (controlY - left->value_) / (controlX - left->time_);
-        auto dRight = (right->value_ - controlY) / (right->time_ - controlX);
-        auto a = (dRight - dLeft) * 0.5 / (right->time_ - left->time_);
-        auto b = dLeft - 2 * a * left->value_;
-        auto c = left->value_ - a * left->time_ * left->time_ - b * left->time_;
+        auto controlX = (left->time() + right->time()) * 0.5;
+        auto up = right->curve() * 0.5 + 0.5;
+        auto controlY = left->value() < right->value()?
+                        left->value() + up * (right->value() - left->value()):
+                        right->value() + up * (left->value() - right->value());
+        auto dLeft = (controlY - left->value()) / (controlX - left->time());
+        auto dRight = (right->value() - controlY) / (right->time() - controlX);
+        auto a = (dRight - dLeft) * 0.5 / (right->time() - left->time());
+        auto b = dLeft - 2 * a * left->value();
+        auto c = left->value() - a * left->time() * left->time() - b * left->time();
         return {a, b, c};
     }
 public:
@@ -142,6 +186,14 @@ public:
     {
         return points_.empty();
     }
+    AutomationPoint::ValueType minValue() const noexcept
+    {
+        return minValue_;
+    }
+    AutomationPoint::ValueType maxValue() const noexcept
+    {
+        return maxValue_;
+    }
     const Point& operator[](const std::size_t index) const
     {
         return points_[index];
@@ -149,24 +201,38 @@ public:
     Point& operator[](const std::size_t index)
     {
         return const_cast<Point&>(
-                static_cast<const Self&>(*this).operator[](index)
+            static_cast<const Self&>(*this).operator[](index)
         );
     }
-    std::size_t pointCountAtTime(const T& time) const
+    const Point& at(const std::size_t index) const
+    {
+        if(index < 0 || index >= pointCount())
+        {
+            throw std::out_of_range("Error: at() out of range");
+        }
+        return operator[](index);
+    }
+    Point& at(const std::size_t index)
+    {
+        return const_cast<Point&>(
+            static_cast<const Self&>(*this).at(index)
+        );
+    }
+    std::size_t pointCountAtTime(const AutomationPoint::TimeType& time) const
     {
         auto lower = lowerBound(time);
-        if (lower == points_.end() || lower->time_ != time)
+        if (lower == points_.end() || lower->time() != time)
         {
             return 0;
         }
         std::size_t ret = 0;
-        for (auto iterator = lower; iterator != points_.end() && iterator->time_ == time; ++iterator)
+        for (auto iterator = lower; iterator != points_.end() && iterator->time() == time; ++iterator)
         {
             ++ret;
         }
         return ret;
     }
-    std::size_t firstPointIndexAtTime(const T& time) const
+    std::size_t firstPointIndexAtTime(const AutomationPoint::TimeType& time) const
     {
         auto lower = lowerBound(time);
         if(lower == points_.end())
@@ -178,40 +244,40 @@ public:
             return lower - points_.begin();
         }
     }
-    V operator()(const T& time, std::size_t index = 0) const
+    double operator()(const AutomationPoint::TimeType& time, std::size_t index = 0) const
     {
         auto lower = lowerBound(time);
         // 给定的时刻在所有点之后
         if (lower == points_.cend())
         {
-            return points_.crbegin()->value_;
+            return points_.crbegin()->value();
         }
         else
         {
             // 给定的时刻与点重合
-            if (lower->time_ == time)
+            if (lower->time() == time)
             {
                 if (index)
                 {
                     auto retIterator = lower + index;
-                    if (retIterator->time_ != time)
+                    if (retIterator->time() != time)
                     {
                         throw std::invalid_argument("");
                     }
-                    return retIterator->value_;
+                    return retIterator->value();
                 }
                 else
                 {
-                    return lower->value_;
+                    return lower->value();
                 }
             }
-            else/* if(lower->time_ > time)*/
+            else/* if(lower->time() > time)*/
             {
-                // lower->time_ != time
+                // lower->time() != time
                 // 给定的时刻在所有点之前，或与第一个点重合
                 if (lower == points_.begin())
                 {
-                    return lower->value_;
+                    return lower->value();
                 }
                 else
                 {
@@ -225,21 +291,21 @@ public:
     // 如果所在时间点有其他点存在，则按照给定的索引值将点插入到合适的位置。
     std::size_t insertPoint(Point point, std::size_t indexInEqualTimePoint = 0)
     {
-        if(point.value_ < minValue_)
+        if(point.value() < minValue_)
         {
-            point.value_ = minValue_;
+            point.setValue(minValue_);
         }
-        else if(point.value_ > maxValue_)
+        else if(point.value() > maxValue_)
         {
-            point.value_ = maxValue_;
+            point.setValue(maxValue_);
         }
-        auto lower = lowerBound(point.time_);
+        auto lower = lowerBound(point.time());
         if (lower == points_.end())
         {
             points_.emplace_back(point);
             return points_.size() - 1;
         }
-        else if (lower->time_ != point.time_)
+        else if (lower->time() != point.time())
         {
             auto it = points_.emplace(lower + 1, point);
             return it - points_.begin();
@@ -250,7 +316,7 @@ public:
             {
                 auto insertBefore = lower + indexInEqualTimePoint;
                 auto insertAfter = insertBefore - 1;
-                if (insertAfter->time_ != point.time_)
+                if (insertAfter->time() != point.time())
                 {
                     throw std::invalid_argument("");
                 }
@@ -268,7 +334,6 @@ public:
     {
         points_.erase(points_.begin() + index);
         auto right = begin() + index;
-        right->curve_ = 0;
     }
     void setValueOfPoint(std::size_t index, double value)
     {
@@ -280,18 +345,49 @@ public:
         {
             value = maxValue_;
         }
+        (*this)[index].setValue(value);
+    }
+    // 更改某点出现的时间，并返回更改后点所在的索引。
+    std::size_t setTimeOfPoint(std::size_t index, AutomationPoint::TimeType time, std::size_t indexInEqualTimePoint = 0)
+    {
+        if(index >= pointCount())
+        {
+            throw std::out_of_range("setTimeOfPoint out of range");
+        }
+        auto pointCountAtTime = this->pointCountAtTime(time);
+        auto newIndex = lowerBound(time) - begin() - pointCountAtTime;
+        if(pointCountAtTime)
+        {
+            newIndex += indexInEqualTimePoint;
+        }
+        // 算法库中移动容器内元素的函数，不是强转为右值的 std::move
+        std::move(begin() + index, begin() + index + 1, begin() + newIndex - 1);
+        return newIndex;
+    }
+    void setCurveOfPoint(std::size_t index, double curve)
+    {
+        if(curve > 1.0)
+        {
+            curve = 1.0;
+        }
+        else if(curve < -1.0)
+        {
+            curve = -1.0;
+        }
+        (*this)[index].setCurve(curve);
     }
     void clearPoints()
     {
         points_.clear();
     }
 private:
-    PointVector points_;
-    double minValue_;
-    double maxValue_;
+    AutomationMembers members_;
+    PointVector& points_ = members_.points_;
+    decltype(AutomationMembers::minValue_)& minValue_ = members_.minValue_;
+    decltype(AutomationMembers::maxValue_)& maxValue_ = members_.maxValue_;
 };
 }
 }
 }
 
-#endif //MUSEC_DKWTP_AUTOMATION
+#endif //MUSEC_AUDIO_BASE_AUTOMATION
