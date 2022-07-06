@@ -3,6 +3,8 @@
 
 #include "ASIODriverForward.hpp"
 
+#include <cstdint>
+
 namespace Musec
 {
 namespace Audio
@@ -10,6 +12,8 @@ namespace Audio
 namespace Driver
 {
 extern bool driverSupportsOutputReady;
+
+extern void(*functionThatUsesDuration)(std::int64_t);
 
 void onASIOBufferSwitch(long doubleBufferIndex,
                         ASIOBool directProcess);

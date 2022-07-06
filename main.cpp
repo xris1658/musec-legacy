@@ -11,6 +11,8 @@
 #include "ui/FontUtility.hpp"
 #include "ui/UI.hpp"
 
+#include "ModuleConnector.hpp"
+
 // Qt
 #include <QApplication>
 #include <QCoreApplication>
@@ -52,6 +54,7 @@ int main(int argc, char* argv[]) try
     FontUtility::loadFonts();
     Musec::Entities::EntitiesInitializer::initialize();
     Musec::Model::ModelInitializer::initialize();
+    Musec::connectFacility();
     QQmlApplicationEngine theEngine;
     engine = &theEngine;
     theEngine.addImportPath("qrc:/");

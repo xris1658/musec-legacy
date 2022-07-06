@@ -9,7 +9,7 @@ Item {
     height: 54
     property int numerator: timeSignatureIndicatorNumeratorComboBox.currentText
     property int demoninator: timeSignatureIndicatorDenominatorComboBox.currentText
-    property int cpu: 20
+    property int cpu: 0
     property int currentKey: 10
     property int currentNoteName: Constants.NoteName.Sharp
     property double bpm: 128.0
@@ -75,7 +75,7 @@ Item {
                     Rectangle {
                         id: cpuIndicatorForeground
                         anchors.left: cpuIndicatorBackground.left
-                        width: cpu / 100 * cpuIndicatorBackground.width
+                        width: cpu * cpuIndicatorBackground.width / 100
                         height: 18
                         color: Constants.bigClockCpuBackColor
                         z: 1

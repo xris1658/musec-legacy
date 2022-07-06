@@ -98,6 +98,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      eventBridge,   SIGNAL(updateArrangement()));
     QObject::connect(this,          SIGNAL(newPluginWindow()),
                      eventBridge,   SIGNAL(newPluginWindow()));
+    QObject::connect(this,          SIGNAL(updateUsage(double)),
+                     eventBridge,   SIGNAL(updateUsage(double)));
 }
 
 EventHandler::~EventHandler()

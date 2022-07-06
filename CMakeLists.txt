@@ -191,6 +191,8 @@ set(PROJECT_SOURCES
     ui/FontUtility.hpp
     ui/MessageDialog.cpp
     ui/MessageDialog.hpp
+    ui/PluginWindow.cpp
+    ui/PluginWindow.hpp
     ui/Render.cpp
     ui/Render.hpp
     ui/UI.cpp
@@ -199,8 +201,9 @@ set(PROJECT_SOURCES
     util/Endian.hpp
     util/Literal.cpp
     util/Literal.hpp
-    ui/PluginWindow.cpp
-    ui/PluginWindow.hpp)
+    util/TimerClamp.hpp
+    ModuleConnector.cpp
+    ModuleConnector.hpp)
 
 set(TEST_COMMON_SOURCES
     test/common/PluginWindowThread.cpp

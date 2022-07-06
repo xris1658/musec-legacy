@@ -92,4 +92,9 @@ QtObject {
     onNewPluginWindow: {
         Objects.mainWindow.newPluginWindow();
     }
+
+    signal updateUsage(usage: double)
+    onUpdateUsage: {
+        Objects.mainWindow.cpu = Math.round(usage * 100);
+    }
 }

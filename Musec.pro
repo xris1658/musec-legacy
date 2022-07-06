@@ -134,7 +134,8 @@ HEADERS += \
     ui/Render.hpp \
     ui/UI.hpp \
     util/Endian.hpp \
-    util/Literal.hpp
+    util/Literal.hpp \
+    ModuleConnector.hpp
 
 SOURCES += \
     audio/base/AudioBufferView.cpp \
@@ -206,7 +207,8 @@ SOURCES += \
     ui/Render.cpp \
     ui/UI.cpp \
     util/Endian.cpp \
-    util/Literal.cpp
+    util/Literal.cpp \
+    ModuleConnector.cpp
 
 RESOURCES += \
     Musec.qrc

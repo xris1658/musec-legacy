@@ -34,6 +34,7 @@ signals:
     void requestExplorerViewComplete();
     void updateArrangement();
     void newPluginWindow();
+    void updateUsage(double usage);
 public slots:
     void onMainWindowOpened();
     void onOptionsWindowOpened();

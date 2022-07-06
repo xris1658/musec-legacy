@@ -36,6 +36,7 @@ ApplicationWindow {
     property alias mixerVisible: actionMixerVisible.checked
 
     property alias bpm: mainBar.bpm
+    property alias cpu: mainBar.cpu
 
     property alias arrangementPosition: arrangement.position
 

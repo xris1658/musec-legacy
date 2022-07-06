@@ -7,6 +7,7 @@ Rectangle {
     property alias numerator: bigClock.numerator
     property alias demoninator: bigClock.demoninator
     property alias bpm: bigClock.bpm
+    property alias cpu: bigClock.cpu
     signal playStart();
     signal playStop();
     width: parent.width
