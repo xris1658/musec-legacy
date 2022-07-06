@@ -47,11 +47,12 @@
 ### 使用 IDE
 以 CLion 为例：
 1. 用 CLion 打开项目目录，或者项目内的 `CMakeLists.txt`。
-2. CLion 会提示用户配置 CMake 项目。（以后可以通过 **文件 | 设置 | 构建、执行、部署 | CMake** 进行配置。）在所有使用 Visual Studio 工具链的配置的 CMake 选项处填写以下内容
+2. CLion 会提示用户配置 CMake 项目。（以后可以通过 **文件 | 设置 | 构建、执行、部署 | CMake** 进行配置。）将所有使用 Visual Studio 工具链的配置的生成器设为 **NMake Makefiles JOM**，并在 CMake 选项处填写以下内容
 ```
 -DCMAKE_TOOLCHAIN_FILE=<vcpkg 目录>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK 目录> -DASIOSDK_PATH=<ASIO SDK 目录>
 ```
-3. 构建目标 `Musec`。
+- 我们不使用 MSVC 提供的 NMake，而使用 Qt 的 JOM。因为 NMake 不会进行并行构建。如果没有找到 `jom.exe`，可以到 [qt-labs/jom](https://github.com/qt-labs/jom) 下载一个。
+1. 构建目标 `Musec`。
 
 ### 使用命令行
 1. 打开配置有 Visual Studio 环境的命令窗口。可以使用以下方式进行这一操作：
@@ -64,9 +65,7 @@
 2. 使用 CMake 配置并构建项目。使用上一步打开的命令窗口，执行以下命令：
     ```shell
     <cmake.exe 路径> -G "NMake Makefiles" --toolchain <vcpkg 目录>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK 目录> -DASIOSDK_PATH=<ASIO SDK 目录> -DCMAKE_MAKE_PROGRAM=<Qt 路径>/Tools/QtCreator/bin/jom/jom.exe -S <Musec 项目目录> -B <项目的生成位置>
-    # 注意：目录使用正斜杠 "/" 
     ```
-    我们不使用 MSVC 提供的 NMake，而使用 Qt 的 JOM。因为 NMake 不会进行并行构建。如果没有找到 `jom.exe`，可以到 [qt-labs/jom](https://github.com/qt-labs/jom) 下载一个。
 3. 将工作目录切换到项目的生成位置：
     ```shell
     cd /d <生成位置> # 要切换到与当前工作目录所在磁盘分区不同的目录下，需要添加 /d
@@ -154,7 +153,7 @@
   可以通过添加定制生成步骤的方式自动复制文件，不过需要注意以下事项：
   - 不能直接使用 `copy`，因为 `copy` 只是一条命令，可以在命令提示符和 Powershell 中使用，不是可执行程序，而 Qt Creator 找不到名为 `copy` 的程序。正确的方式是使用 `cmd` 来执行 `copy` 命令：
     ```
-    cmd /C copy /B /Y Ei18n\Musec_zh_CN.qm <Build directory>\Musec_zh_CN.qm
+    cmd /C copy /B /Y i18n\Musec_zh_CN.qm <Build directory>\Musec_zh_CN.qm
     ```
     - 你可能想要检查操作的返回值。要了解详情，请参阅 [How do I get the application exit code from a Windows command line? - Stack Overflow](https://stackoverflow.com/questions/334879/how-do-i-get-the-application-exit-code-from-a-windows-command-line)。
   - 可以用 Windows 自带的实用程序 `robocopy`。不过或许读者更想用其他程序调用此程序，而不是直接在生成步骤内使用，因为

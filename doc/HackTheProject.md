@@ -61,12 +61,11 @@ If you're using CMake, the building process will be relatively simple.
 ### Using IDEs
 Take CLion for example:
 1. Open the project directory or `CMakeLists.txt` with CLion.
-2. CLion will prompt you to configure the CMake project. (You can configure it later by selecting 
-**File | Settings | Build, Execution, Deployment | CMake**.) Fill the "CMake Options" text box in all
-the Profiles using Visual Studio toolchain with
+2. CLion will prompt you to configure the CMake project. (You can configure it later by selecting **File | Settings | Build, Execution, Deployment | CMake**.) Set the generator of all the Profiles using Visual Studio toolchain to **NMake Makefiles JOM**, then fill these "CMake Options" text boxes with
 ```
--DCMAKE_TOOLCHAIN_FILE=<vcpkg directory>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK directory> -DASIOSDK_PATH=<ASIO SDK directory>
+-DCMAKE_TOOLCHAIN_FILE=<vcpkg directory>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK directory> -DASIOSDK_PATH=<ASIO SDK directory> -DCMAKE_MAKE_PROGRAM=<Path to Qt>/Tools/QtCreator/bin/jom/jom.exe
 ```
+- We use JOM from Qt, instead of NMake provided by MSVC. That's because NMake does not do parallel builds. If `jom.exe` is not found, then you can get one at [qt-labs/jom](https://github.com/qt-labs/jom).
 3. Build the target `Musec`.
 
 ### Using command-line
@@ -80,10 +79,8 @@ following ways:
    - Open **Visual Studio 2019** -> **VC** -> **x64 Native Tools Command Prompt for VS 2019**.
 2. Use CMake to configure and build the project. Execute the following command using the command window that just opened:
     ```shell
-    <Path to cmake.exe> -G "NMake Makefiles JOM" --toolchain <vcpkg   install directory>/scripts/buildsystems/vcpkg.cmake   -DVST3SDK_SOURCE_DIR=<VST3 SDK directory> -DASIOSDK_PATH=<ASIO SDK directory> -DCMAKE_MAKE_PROGRAM=<Path to Qt>/Tools/QtCreator/bin/jom/jom.exe -S <Musec source directory> -B <Directory you'd like to generate the program>
-    # Note: use forward slash "/" in the directory
+    <Path to cmake.exe> -G "NMake Makefiles JOM" --toolchain <vcpkg install directory>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK directory> -DASIOSDK_PATH=<ASIO SDK directory> -DCMAKE_MAKE_PROGRAM=<Path to Qt>/Tools/QtCreator/bin/jom/jom.exe -S <Musec source directory> -B <Directory you'd like to generate the program>
     ```
-    We use JOM from Qt, instead of NMake provided by MSVC. That's   because NMake does not do parallel builds. If `jom.exe` is not found, then you can get one at [qt-labs/jom](https://github.com/qt-labs/jom).
 3. Change the working directory to the directory you'd like to generate the program:
     ```shell
     cd /d <Directory> # Use /d while changing to the directory in another drive
@@ -172,7 +169,7 @@ library files) have to be made manually.
   You could automatically copy the files by adding custom build processes, but there are some things you should notice:
   - You can't use `copy` directly to do this, since it is a command you can use in Command Propmt or Powershell instead of an executable, and Qt Creator can't find a program named `copy`. The correct way is to use `cmd` to execute the `copy` command:
     ```
-    cmd /C copy /B /Y Ei18n\Musec_zh_CN.qm <Build directory>\Musec_zh_CN.qm
+    cmd /C copy /B /Y i18n\Musec_zh_CN.qm <Build directory>\Musec_zh_CN.qm
     ```
     - You might want to check the return code of the operation. Check [How do I get the application exit code from a Windows command line? - Stack Overflow](https://stackoverflow.com/questions/334879/how-do-i-get-the-application-exit-code-from-a-windows-command-line) for details.
   - You could use `robocopy`, an utility in Windows. But you might like to call it using another program, instead of using it directly in the process, since
