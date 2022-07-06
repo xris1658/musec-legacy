@@ -37,6 +37,12 @@ const char16_t* removeAllPluginsCommand()
         u"DELETE FROM plugin";
     return ret;
 }
+const char16_t* resetPluginIdFromSequenceCommand()
+{
+    static char16_t ret[] =
+        u"DELETE FROM sqlite_sequence WHERE name = 'plugin'";
+    return ret;
+}
 const char16_t* getAllPluginCountCommand()
 {
     static char16_t ret[] =
@@ -76,6 +82,7 @@ void insertPlugin(const Musec::Base::PluginWriteInfo& pluginWriteInfo)
 void removeAllPlugins()
 {
     AppDatabase() << Impl::removeAllPluginsCommand();
+    AppDatabase() << Impl::resetPluginIdFromSequenceCommand();
 }
 
 QList<Musec::Base::PluginReadInfo> selectAllPlugin(bool reserve)
