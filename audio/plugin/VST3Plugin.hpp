@@ -85,8 +85,8 @@ public:
     Steinberg::Vst::IEditController* editController() const;
     Steinberg::IPlugView* getView() const;
 public: // IDevice interfaces
-    uint8_t inputCount() const override;
-    uint8_t outputCount() const override;
+    std::uint8_t inputCount() const override;
+    std::uint8_t outputCount() const override;
     void process(const Audio::Base::AudioBufferViews<SampleType>& inputs,
         const Audio::Base::AudioBufferViews<SampleType>& outputs) override;
 public: // IPlugin interfaces

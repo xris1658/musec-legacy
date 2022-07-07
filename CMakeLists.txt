@@ -149,8 +149,8 @@ set(PROJECT_SOURCES
     event/EventBase.hpp
     event/EventHandler.cpp
     event/EventHandler.hpp
-    event/MainWindow.cpp
-    event/MainWindow.hpp
+    event/MainWindowEvent.cpp
+    event/MainWindowEvent.hpp
     event/ObjectCreateListener.cpp
     event/ObjectCreateListener.hpp
     event/SplashScreen.cpp

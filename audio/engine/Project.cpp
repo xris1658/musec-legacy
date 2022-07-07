@@ -23,6 +23,8 @@ Project::Project(int reserveTrackCount):
     pluginGraph_(),
     tracks_(),
     masterTrack_(),
+    masterTrackGain_(), masterTrackPanning_(),
+    masterTrackControls_(),
     gain_(), panning_(),
     trackMute_(), trackSolo_(), trackInvertPhase_(), trackArmRecording_(),
     pluginAndWindow_()
@@ -142,7 +144,6 @@ void Project::insertTrack(std::size_t index, const Musec::Entities::CompleteTrac
     trackSolo_.insert(trackSolo_.begin(), track.isTrackSolo());
     trackInvertPhase_.insert(trackInvertPhase_.begin(), track.isTrackInvertPhase());
     trackArmRecording_.insert(trackArmRecording_.begin(), track.isTrackArmRecording());
-    return;
 }
 
 void Project::eraseTrack(std::size_t index)
@@ -189,6 +190,7 @@ const Musec::Base::FixedSizeMemoryBlock& Project::masterTrackAudioBuffer() const
     return masterTrackAudioBuffer_;
 }
 
+// 此函数在 ASIOBufferSwitch 回调中调用，因此无需调整优先级。或许应该按照 ASIO 文档提到的，将优先级调成实时 + MMCSS。
 void Project::process()
 {
     std::lock_guard<std::mutex> lg(mutex_);
@@ -210,21 +212,21 @@ void Project::process()
             {audioBuffer_[i].get(),                    currentBlockSize},
             {audioBuffer_[i].get() + currentBlockSize, currentBlockSize}
         };
-        for(auto& bufferView: audioBufferViews)
-        {
-            bufferView.init();
-        }
+       for(auto& bufferView: audioBufferViews)
+       {
+           bufferView.init();
+       }
         if (track->trackType() == Musec::Audio::Track::TrackType::kInstrumentTrack)
         {
             auto instrumentTrack = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(track);
             const auto& instrument = instrumentTrack->getInstrument();
             if (instrument)
             {
-                if(instrument->pluginFormat() == Musec::Base::PluginFormat::FormatVST2)
-                {
-                    auto instrumentAsVST2 = std::static_pointer_cast<Musec::Audio::Plugin::VST2Plugin<float>>(instrument);
-                    std::async(std::launch::async, [instrumentAsVST2]() { instrumentAsVST2->effect()->dispatcher(instrumentAsVST2->effect(), AEffectOpcodes::effEditIdle, 0, 0, nullptr, 0.0); });
-                }
+                // if(instrument->pluginFormat() == Musec::Base::PluginFormat::FormatVST2)
+                // {
+                //     auto instrumentAsVST2 = std::static_pointer_cast<Musec::Audio::Plugin::VST2Plugin<float>>(instrument);
+                //     std::async(std::launch::async, [instrumentAsVST2]() { instrumentAsVST2->effect()->dispatcher(instrumentAsVST2->effect(), AEffectOpcodes::effEditIdle, 0, 0, nullptr, 0.0); });
+                // }
                 instrument->process({}, audioBufferViews);
             }
             const auto& audioEffectPlugins = instrumentTrack->getAudioEffectPluginSequences()[0];
@@ -262,7 +264,7 @@ void Project::process()
             }
         }
     }
-    // ll. 239-240
+    // ll. 246-247
     for (auto j = 0; j < currentBlockSize; ++j)
     {
         for (auto i = 0; i < masterTrackAudioBufferViews.size(); ++i)

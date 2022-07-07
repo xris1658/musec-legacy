@@ -4,6 +4,6 @@ namespace Musec::Event
 {
 QObject* eventBridge = nullptr;
 EventHandler* eventHandler = nullptr;
-MainWindow* mainWindowEvents = nullptr;
+MainWindowEvent* mainWindowEvents = nullptr;
 
 }

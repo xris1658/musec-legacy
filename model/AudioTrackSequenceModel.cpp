@@ -7,9 +7,9 @@ AudioTrackSequenceModel::AudioTrackSequenceModel(QObject* parent):
 {
     roleNames_.reserve(columnSize());
     roleNames_[RoleNames::StartTimeRole] = "startTime";
-    roleNames_[EndTimeRole] = "endTime";
-    roleNames_[ClipRole] = "clip";
-    roleNames_[ClipStartsAtRole] = "clipStartsAt";
+    roleNames_[RoleNames::EndTimeRole] = "endTime";
+    roleNames_[RoleNames::ClipRole] = "clip";
+    roleNames_[RoleNames::ClipStartsAtRole] = "clipStartsAt";
 }
 
 AudioTrackSequenceModel::~AudioTrackSequenceModel()

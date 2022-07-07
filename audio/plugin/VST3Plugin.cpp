@@ -42,6 +42,11 @@ VST3Plugin<SampleType>::VST3Plugin(const QString& path, int classIndex):
     }
     if (pluginInitProc)
     {
+        // Windows 平台可省略入口和出口函数的调用，但 macOS 和 Linux 不行
+        // macOS 和 Linux 平台的入口和出口函数的名字与 Windows 的不同
+        // macOS: bundleEntry 和 BundleExit
+        // Linux: ModuleEntry 和 ModuleExit
+        // https://steinbergmedia.github.io/vst3_dev_portal/pages/Technical+Documentation/VST+Module+Architecture/Loading.html
         if (!pluginInitProc())
         {
             // 初始化出现问题

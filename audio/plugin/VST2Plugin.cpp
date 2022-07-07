@@ -17,10 +17,14 @@
 // 为了防止违反 ODR，将相关文件放到另一个命名空间下
 namespace VST2AudioEffectX
 {
+#pragma warning(push)
+#pragma warning(disable: 4458) // 局部声明覆盖
+#pragma warning(disable: 4100) // 未引用的形参
 #include <public.sdk/source/vst2.x/audioeffect.h>
 #include <public.sdk/source/vst2.x/audioeffectx.h>
 #include <public.sdk/source/vst2.x/audioeffect.cpp>
 #include <public.sdk/source/vst2.x/audioeffectx.cpp>
+#pragma warning(pop)
 }
 
 namespace Musec::Audio::Plugin
@@ -33,7 +37,13 @@ bool stringEqual(const char* lhs, const char* rhs)
 }
 }
 
-VstIntPtr pluginVST2Callback(AEffect* effect, VstInt32 opcode, VstInt32 index, VstIntPtr value, void* ptr, float opt)
+VstIntPtr VSTCALLBACK pluginVST2Callback(
+    AEffect* effect,
+    VstInt32 opcode,
+    [[maybe_unused]] VstInt32 index,
+    [[maybe_unused]] VstIntPtr value,
+    [[maybe_unused]] void* ptr,
+    [[maybe_unused]] float opt)
 {
     VstIntPtr ret = 0;
     switch (opcode)
@@ -281,10 +291,10 @@ template<typename SampleType>
 VST2Plugin<SampleType>::VST2Plugin(const QString& path, bool scanPlugin, VstInt32 shellPluginId):
     VST2Plugin::Base(path)
 {
-    auto pluginEntryProc = Musec::Native::getExport<Musec::Base::VST2PluginEntryProc>(*this, "VSTPluginMain");
+    auto pluginEntryProc = Musec::Native::getExport<VST2PluginEntryProc>(*this, "VSTPluginMain");
     if(!pluginEntryProc)
     {
-        pluginEntryProc = Musec::Native::getExport<Musec::Base::VST2PluginEntryProc>(*this, "main");
+        pluginEntryProc = Musec::Native::getExport<VST2PluginEntryProc>(*this, "main");
         if(!pluginEntryProc)
         {
             // 抛出异常

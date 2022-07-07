@@ -11,11 +11,11 @@ namespace Musec
 {
 namespace Event
 {
-class MainWindow: public QObject
+class MainWindowEvent: public QObject
 {
     Q_OBJECT
 public:
-    MainWindow(const Musec::Event::SplashScreen& splash);
+    MainWindowEvent(const Musec::Event::SplashScreen& splash);
 public slots:
     void openMainWindow();
 signals:

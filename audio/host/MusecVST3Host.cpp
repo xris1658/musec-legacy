@@ -16,10 +16,10 @@ MusecVST3Host& MusecVST3Host::instance()
     return ret;
 }
 
-tresult PLUGIN_API MusecVST3Host::queryInterface(const char* iid, void** obj)
+tresult PLUGIN_API MusecVST3Host::queryInterface(const char* iid_, void** obj)
 {
-    QUERY_INTERFACE(iid, obj, FUnknown::iid, IHostApplication)
-    QUERY_INTERFACE(iid, obj, IHostApplication::iid, IHostApplication)
+    QUERY_INTERFACE(iid_, obj, FUnknown::iid, IHostApplication)
+    QUERY_INTERFACE(iid_, obj, IHostApplication::iid, IHostApplication)
 
     // 初始化属性表
     return kNoInterface;
@@ -35,7 +35,7 @@ uint32 PLUGIN_API MusecVST3Host::release()
     return 1;
 }
 
-tresult PLUGIN_API MusecVST3Host::createInstance(TUID cid, TUID iid, void** obj)
+tresult PLUGIN_API MusecVST3Host::createInstance(TUID, TUID, void** obj)
 {
     *obj = nullptr;
     return kNotImplemented;

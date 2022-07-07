@@ -2,7 +2,7 @@
 #define MUSEC_EVENT_EVENTBASE
 
 #include "event/EventHandler.hpp"
-#include "event/MainWindow.hpp"
+#include "event/MainWindowEvent.hpp"
 
 #include <QObject>
 
@@ -15,7 +15,7 @@ extern QObject* eventBridge;
 extern Musec::Event::EventHandler* eventHandler;
 
 // 主窗口的事件收发
-extern MainWindow* mainWindowEvents;
+extern MainWindowEvent* mainWindowEvents;
 }
 }
 

@@ -86,7 +86,7 @@ bool FixedSizeMemoryPool::full() const
 
 void FixedSizeMemoryPool::expandPool()
 {
-    auto blockCount = initialBlockCount_ * (1 << pools_.size());
+    auto blockCount = initialBlockCount_ * (1i64 << pools_.size());
     pools_.emplace_back(memoryBlockSize_ * blockCount);
     vacant_.emplace_back(blockCount, true);
     mutexes_.emplace_back();

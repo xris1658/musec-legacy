@@ -6,8 +6,11 @@
 #include "base/PluginBase.hpp"
 #include "native/WindowsLibraryRAII.hpp"
 
+#pragma warning(push)
+#pragma warning(disable: 4996) // C 风格字符串操纵可能不安全
 #include <pluginterfaces/vst2.x/aeffect.h>
 #include <pluginterfaces/vst2.x/aeffectx.h>
+#pragma warning(pop)
 
 #include <QString>
 
@@ -19,6 +22,9 @@ namespace Audio
 {
 namespace Plugin
 {
+// VST2 插件的入口函数（VSTPluginMain 或 main）
+using VST2PluginEntryProc = AEffect* (*)(audioMasterCallback);
+
 VstIntPtr pluginVST2Callback(AEffect* effect, VstInt32 opcode, VstInt32 index, VstIntPtr value, void* ptr, float opt);
 
 class ShellPluginId
@@ -37,7 +43,7 @@ public:
 public:
     AEffect* getShellPlugin(VstInt32 id,
                             bool idShouldBeZero,
-                            Musec::Base::VST2PluginEntryProc pluginEntryProc);
+                            VST2PluginEntryProc pluginEntryProc);
 private:
     VstInt32 id_ = 0;
     bool idShouldBeZero_ = true;

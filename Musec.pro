@@ -108,7 +108,7 @@ HEADERS += \
     entities/EntitiesInitializer.hpp \
     event/EventBase.hpp \
     event/EventHandler.hpp \
-    event/MainWindow.hpp \
+    event/MainWindowEvent.hpp \
     event/ObjectCreateListener.hpp \
     event/SplashScreen.hpp \
     event/SplashScreenForward.hpp \
@@ -182,7 +182,7 @@ SOURCES += \
     entities/EntitiesInitializer.cpp \
     event/EventBase.cpp \
     event/EventHandler.cpp \
-    event/MainWindow.cpp \
+    event/MainWindowEvent.cpp \
     event/ObjectCreateListener.cpp \
     event/SplashScreen.cpp \
     event/SplashScreenWorkerThread.cpp \

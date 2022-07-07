@@ -255,23 +255,10 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                                 Vst::BusDirections::kInput,
                                 Vst::BusDirections::kOutput
                             };
-                        // constexpr wchar_t names[][5] = { L"音频输入", L"音频输出", L"事件输入", L"事件输出" };
                         int32 busCounts[] = { 0, 0, 0, 0 };
-                        // Vst::BusInfo busInfo;
                         for(int i = 0; i < 4; ++i)
                         {
                             busCounts[i] = component->getBusCount(mediaTypes[i], busDirections[i]);
-                            // auto busCount = busCounts[i];
-                            // for(decltype(busCount) j = 0; j < busCount; ++j)
-                            // {
-                            //     component->getBusInfo(mediaTypes[i], busDirections[i], j, busInfo);
-                            //     if(busInfo.busType == Vst::BusTypes::kMain)
-                            //     {
-                            //     }
-                            //     else
-                            //     {
-                            //     }
-                            // }
                         }
                         // 没有考虑只有输出，只有输入的插件和只有音频输入和事件输出的插件。可能需要修改。
                         if(busCounts[0] && busCounts[1] && busCounts[2])

@@ -4,7 +4,7 @@
 #include "entities/EntitiesInitializer.hpp"
 #include "event/EventBase.hpp"
 #include "event/ObjectCreateListener.hpp"
-#include "event/MainWindow.hpp"
+#include "event/MainWindowEvent.hpp"
 #include "event/SplashScreen.hpp"
 #include "model/ModelInitializer.hpp"
 #include "native/Native.hpp"
@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) try
     splashWindow = qobject_cast<QQuickWindow*>(theEngine.rootObjects()[0]);
     strings = splashWindow->property("strings").value<QObject*>(); assert(strings);
     SplashScreen splashScreenEventHandler;
-    MainWindow mainWindow(splashScreenEventHandler);
+    MainWindowEvent mainWindow(splashScreenEventHandler);
     mainWindowEvents = &mainWindow;
     splashScreenEventHandler.onInitDialog();
     // 等待启动屏工作线程通知，然后加载翻译

@@ -4,9 +4,6 @@
 #include <QList>
 #include <QString>
 
-#include <pluginterfaces/vst2.x/aeffect.h>
-#include <pluginterfaces/vst2.x/aeffectx.h>
-
 #include <pluginterfaces/base/ipluginbase.h>
 
 namespace Musec
@@ -21,9 +18,6 @@ using PluginWriteInfo = std::tuple<QString, int, QString, int, int>;
 
 // 从数据库读取的插件信息：ID，路径，UID，名称，格式，类型
 using PluginReadInfo = std::tuple<int, QString, int, QString, int, int>;
-
-// VST2 插件的入口函数（VSTPluginMain 或 main）
-using VST2PluginEntryProc = AEffect* (*)(audioMasterCallback);
 
 // VST3 插件的初始化函数（InitDll）
 using VST3PluginInitProc = bool(*)();
@@ -81,14 +75,6 @@ enum PluginType
 
 // 获取插件的格式
 PluginFormat pluginFormat(const QString& path);
-
-// VST2 插件的宿主回调函数
-VstIntPtr VSTCALLBACK pluginVST2Callback(AEffect* effect,
-                                         VstInt32 opcode,
-                        [[maybe_unused]] VstInt32 index,
-                        [[maybe_unused]] VstIntPtr value,
-                        [[maybe_unused]] void* ptr,
-                        [[maybe_unused]] float opt);
 
 // 扫描一个库文件
 QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path);

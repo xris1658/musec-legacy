@@ -1,4 +1,4 @@
-#include "MainWindow.hpp"
+#include "MainWindowEvent.hpp"
 
 #include "audio/driver/ASIODriver.hpp"
 #include "controller/ASIODriverController.hpp"
@@ -13,15 +13,15 @@
 
 namespace Musec::Event
 {
-MainWindow::MainWindow(const Musec::Event::SplashScreen& splash): QObject(nullptr)
+MainWindowEvent::MainWindowEvent(const Musec::Event::SplashScreen& splash): QObject(nullptr)
 {
     QObject::connect(&splash, &Musec::Event::SplashScreen::openMainWindow,
-                     this,    &MainWindow::openMainWindow);
-    QObject::connect(this,    &MainWindow::openMainWindowComplete,
+                     this,    &MainWindowEvent::openMainWindow);
+    QObject::connect(this,    &MainWindowEvent::openMainWindowComplete,
                      &splash, &Musec::Event::SplashScreen::closeDialog);
 }
 
-void MainWindow::openMainWindow()
+void MainWindowEvent::openMainWindow()
 {
     using namespace Musec::UI;
     using namespace Musec::Event;
@@ -34,8 +34,8 @@ void MainWindow::openMainWindow()
     Musec::Event::eventBridge = eventBridge;
     Musec::Event::eventHandler = &Musec::Event::EventHandler::instance(eventBridge);
     QObject::connect(eventHandler, &Musec::Event::EventHandler::updatePluginList,
-                     this, &Musec::Event::MainWindow::updatePluginList);
-    QObject::connect(this, &Musec::Event::MainWindow::openMainWindowComplete,
+                     this, &Musec::Event::MainWindowEvent::updatePluginList);
+    QObject::connect(this, &Musec::Event::MainWindowEvent::openMainWindowComplete,
                      eventHandler, &Musec::Event::EventHandler::onMainWindowOpened);
     // Musec.qml, Musec.onActiveFocusItemChanged()
     auto visibility = mainWindow->visibility();
@@ -51,7 +51,7 @@ void MainWindow::openMainWindow()
     openMainWindowComplete();
 }
 
-void MainWindow::updateAssetDirectoryList()
+void MainWindowEvent::updateAssetDirectoryList()
 {
     using namespace Musec::UI;
     std::remove_reference_t<decltype(Musec::Controller::AppAssetDirectoryList())> list;
@@ -61,7 +61,7 @@ void MainWindow::updateAssetDirectoryList()
         QVariant::fromValue<QObject*>(&Musec::Controller::AppAssetDirectoryList()));
 }
 
-void MainWindow::updateASIODriverList()
+void MainWindowEvent::updateASIODriverList()
 {
     using namespace Musec::UI;
     std::remove_reference_t<decltype(Musec::Controller::AppASIODriverList())> list;
@@ -87,7 +87,7 @@ void MainWindow::updateASIODriverList()
     );
 }
 
-void MainWindow::updatePluginList()
+void MainWindowEvent::updatePluginList()
 {
     using namespace Musec::UI;
     mainWindow->setProperty(
