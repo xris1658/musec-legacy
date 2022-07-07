@@ -401,7 +401,7 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
                                      long doubleBufferIndex,
                                      ASIOBool directProcess)
 {
-    Impl::onASIOBufferSwitchWithoutTimerClamp(doubleBufferIndex, directProcess);
+    onASIOBufferSwitch(doubleBufferIndex, directProcess);
     return nullptr;
 }
 
