@@ -61,6 +61,7 @@ public slots:
     void onTrackAboutToBeRemoved(const QModelIndex &parent, int first, int last);
     void onNewPluginWindowReady();
     void onSetIcon();
+    void onScanShortcutChanged(bool newValue);
 private:
     std::vector<QMetaObject::Connection> optionsWindowConnection;
 };

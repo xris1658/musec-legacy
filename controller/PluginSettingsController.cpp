@@ -1,6 +1,6 @@
 #include "PluginSettingsController.hpp"
 #include "base/PluginBase.hpp"
-#include "dao/DatabaseDAO.hpp"
+#include "controller/ConfigController.hpp"
 #include "dao/PluginDAO.hpp"
 #include "dao/PluginDirectoryDAO.hpp"
 
@@ -34,10 +34,19 @@ void removePluginDirectory(const QString& path)
 /// 就是这个玩意卡了我三天 :(
 void scanPlugins()
 {
-    std::vector<QString> plugins;
-    std::queue<QDir> pluginDirectories;
+    QFlags<QDir::Filter> scanFileFlags = QDir::Filter::Files | QDir::Filter::Hidden;
     QStringList nameFilters;
     nameFilters << "*.dll" << "*.vst3";
+    auto scanShortcut = Musec::Controller::ConfigController::appConfig()["musec"]["options"]["plugin"]["enable-shortcut"].as<bool>();
+    QString lnk;
+    if(scanShortcut)
+    {
+        scanFileFlags |= QDir::Filter::System;
+        nameFilters << "*.lnk";
+        lnk = nameFilters[2]; lnk.remove(0, 2);
+    }
+    std::vector<QString> plugins;
+    std::queue<QDir> pluginDirectories;
     Musec::DAO::removeAllPlugins();
     auto pluginDirectoryList = Musec::DAO::selectPluginDirectory();
     for(auto& item: pluginDirectoryList)
@@ -54,16 +63,30 @@ void scanPlugins()
         for(decltype(size) i = 0; i < size; ++i)
         {
             auto& dir = pluginDirectories.front();
-            auto fileList = dir.entryInfoList(nameFilters,
-                QDir::Filter::Files | QDir::Filter::Hidden);
+            auto fileList = dir.entryInfoList(nameFilters, scanFileFlags);
             auto fileListSize = fileList.size();
             if(fileListSize)
             {
                 for(decltype(fileListSize) i = 0; i < fileListSize; ++i)
                 {
                     auto path = fileList[i].absoluteFilePath();
-                    path.replace(QChar('/'), QChar('\\'));
-                    plugins.emplace_back(path);
+                    if(fileList[i].suffix() == lnk)
+                    {
+                        auto resolvedPath = fileList[i].symLinkTarget();
+                        if(!resolvedPath.isEmpty())
+                        {
+                            resolvedPath.replace(QChar('/'), QChar('\\'));
+                            if(!resolvedPath.isEmpty())
+                            {
+                                plugins.emplace_back(resolvedPath);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        path.replace(QChar('/'), QChar('\\'));
+                        plugins.emplace_back(path);
+                    }
                 }
             }
             auto dirList = dir.entryInfoList(
@@ -95,5 +118,11 @@ void scanPlugins()
             );
         }
     }
+}
+
+void setScanShortcut(bool value)
+{
+    using namespace Musec::Controller::ConfigController;
+    appConfig()["musec"]["options"]["plugin"]["enable-shortcut"] = value;
 }
 }

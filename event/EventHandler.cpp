@@ -23,7 +23,7 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
 {
     using namespace Musec::Event;
     using namespace Musec::UI;
-    using Musec::Event::MainWindow;
+    using Musec::Event::MainWindowEvent;
     // QML -> C++
     QObject::connect(eventBridge, SIGNAL(optionsWindowOpened()),
                      this,        SLOT(onOptionsWindowOpened()));
@@ -65,11 +65,11 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      this,        SLOT(onSetIcon()));
     // (this) C++ -> C++ (other)
     QObject::connect(this,             &EventHandler::updatePluginList,
-                     mainWindowEvents, &MainWindow::updatePluginList);
+                     mainWindowEvents, &MainWindowEvent::updatePluginList);
     QObject::connect(this,             &EventHandler::signalScanPluginComplete,
-                     mainWindowEvents, &MainWindow::updatePluginList);
+                     mainWindowEvents, &MainWindowEvent::updatePluginList);
     QObject::connect(this,             &EventHandler::updateASIODriverList,
-                     mainWindowEvents, &MainWindow::updateASIODriverList);
+                     mainWindowEvents, &MainWindowEvent::updateASIODriverList);
     // (other) C++ -> C++ (this)
     QObject::connect(&(Musec::Controller::AudioEngineController::AppTrackListModel()),
                      &Musec::Model::TrackListModel::rowsInserted,
@@ -202,6 +202,12 @@ void EventHandler::onOptionsWindowOpened()
             QObject::connect(
                 eventBridge, SIGNAL(systemTextRenderingChanged(bool)),
                 this,        SLOT(onSystemTextRenderingChanged(bool))
+            )
+        );
+        optionsWindowConnection.emplace_back(
+            QObject::connect(
+                eventBridge, SIGNAL(scanShortcutChanged(bool)),
+                this,        SLOT(onScanShortcutChanged(bool))
             )
         );
     }
@@ -375,5 +381,10 @@ void EventHandler::onSetIcon()
 {
     auto window = Musec::UI::mainWindow->property("windowToSetIcon").value<QWindow*>();
     Musec::UI::setIcon(window);
+}
+
+void EventHandler::onScanShortcutChanged(bool newValue)
+{
+    Musec::Controller::PluginSettingsController::setScanShortcut(newValue);
 }
 }

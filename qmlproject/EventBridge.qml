@@ -22,6 +22,7 @@ QtObject {
     signal driverASIOSelectionChanged(clsid: string)
     signal sampleRateChanged(sampleRate: int)
     signal systemTextRenderingChanged(newValue: bool)
+    signal scanShortcutChanged(newValue: bool)
     signal openSpecialCharacterInput()
     signal setArrangementPosition(position: int)
     signal requestExplorerView()

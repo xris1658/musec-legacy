@@ -20,6 +20,9 @@ void removePluginDirectory(const QString&);
 
 // 扫描所有目录的插件
 void scanPlugins();
+
+// 更改扫描插件快捷方式的设置项
+void setScanShortcut(bool value);
 }
 }
 }

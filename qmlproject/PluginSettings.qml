@@ -201,6 +201,9 @@ Rectangle {
             width: 16
             height: 16
             tristate: false
+            onCheckedChanged: {
+                EventBridge.scanShortcutChanged(checked);
+            }
         }
         Text {
             width: root.firstColumnWidth
