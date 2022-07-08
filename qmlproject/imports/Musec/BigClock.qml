@@ -10,6 +10,7 @@ Item {
     property int numerator: timeSignatureIndicatorNumeratorComboBox.currentText
     property int demoninator: timeSignatureIndicatorDenominatorComboBox.currentText
     property int cpu: 0
+    property bool engineRunning: false
     property int currentKey: 10
     property int currentNoteName: Constants.NoteName.Sharp
     property double bpm: 128.0
@@ -82,7 +83,7 @@ Item {
                     }
                     Text {
                         id: cpuIndicatorText
-                        text: cpu + "%"
+                        text: root.engineRunning? cpu + "%": "OFF"
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
                         font.family: "Noto Sans Mono Condensed"

@@ -16,6 +16,10 @@ Rectangle {
     property int inputLatencyInSamples: 512
     property int outputLatencyInSamples: 512
     property int sampleRate
+    function driverLoadedAndWorking() {
+        return comboBoxDriver.count != 0 && currentDriver != -1;
+    }
+
     onSampleRateChanged: {
         for(var i = 0; i < comboBoxSampleRate.count; ++i) {
             if(sampleRate == parseFloat(comboBoxSampleRate.model[i])) {
@@ -51,6 +55,7 @@ Rectangle {
         }
         Text {
             width: 100
+            height: 20
             text: qsTr("Driver") + ": "
             font.family: Constants.font
             color: Constants.contentColor1
@@ -59,12 +64,13 @@ Rectangle {
         }
         MCtrl.ComboBox {
             id: comboBoxDriver
-            width: openDriverSettingsButton.width
+            width: 150
+            height: 20
             font.family: Constants.font
             textRole: "name"
             valueRole: "clsid"
             displayText: count == 0? qsTr("No ASIO driver found"):
-                         currentIndex == -1? qsTr("No ASIO driver loaded"):
+                         currentIndex == -1? qsTr("No driver loaded"):
                          currentText
             onCurrentValueChanged: {
                 EventBridge.driverASIOSelectionChanged(currentValue);
@@ -72,13 +78,16 @@ Rectangle {
         }
         Text {
             width: 100
+            height: 20
             text: qsTr("Sample Rate") + ": "
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignVCenter
+            visible: root.driverLoadedAndWorking()
         }
         Row {
+            visible: root.driverLoadedAndWorking()
             spacing: 5
             MCtrl.ComboBox {
                 id: comboBoxSampleRate
@@ -102,17 +111,19 @@ Rectangle {
         Item {
             width: 100
             height: 20
+            visible: root.driverLoadedAndWorking()
         }
         MCtrl.Button {
             id: openDriverSettingsButton
+            width: comboBoxDriver.width
+            visible: root.driverLoadedAndWorking()
             text: qsTr("Open Driver Settings")
             height: 20
-            enabled: comboBoxDriver.count != 0 && comboBoxDriver.currentIndex != -1
+            enabled: root.driverLoadedAndWorking();
             onClicked: {
                 EventBridge.openASIODriverControlPanel();
             }
         }
-
         Text {
             width: 100
             height: 20
@@ -122,10 +133,12 @@ Rectangle {
             horizontalAlignment: Text.AlignLeft
             leftPadding: 5
             verticalAlignment: Text.AlignVCenter
+            visible: root.driverLoadedAndWorking()
         }
         Item {
             width: 320
             height: 20
+            visible: root.driverLoadedAndWorking()
         }
         Text {
             width: 100
@@ -134,12 +147,14 @@ Rectangle {
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignVCenter
+            visible: root.driverLoadedAndWorking()
         }
         MCtrl.ComboBox {
             id: comboBoxInputDevice
             width: openDriverSettingsButton.width
             model: ["Microphone", "Stereo Mix"]
             font.family: Constants.font
+            visible: root.driverLoadedAndWorking()
         }
         Text {
             width: 100
@@ -148,12 +163,14 @@ Rectangle {
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignVCenter
+            visible: root.driverLoadedAndWorking()
         }
         MCtrl.ComboBox {
             id: comboBoxOutputDevice
             width: openDriverSettingsButton.width
             model: ["Speaker", "Headphone"]
             font.family: Constants.font
+            visible: root.driverLoadedAndWorking()
         }
         Text {
             width: 100
@@ -164,10 +181,12 @@ Rectangle {
             horizontalAlignment: Text.AlignLeft
             leftPadding: 5
             verticalAlignment: Text.AlignVCenter
+            visible: root.driverLoadedAndWorking()
         }
         Item {
             width: 320
             height: 20
+            visible: root.driverLoadedAndWorking()
         }
         Text {
             width: 100
@@ -178,6 +197,7 @@ Rectangle {
             horizontalAlignment: Text.AlignRight
             leftPadding: 5
             verticalAlignment: Text.AlignVCenter
+            visible: root.driverLoadedAndWorking()
         }
         Text {
             width: 100
@@ -188,6 +208,7 @@ Rectangle {
             horizontalAlignment: Text.AlignLeft
             leftPadding: 5
             verticalAlignment: Text.AlignVCenter
+            visible: root.driverLoadedAndWorking()
         }
         Text {
             width: 100
@@ -198,6 +219,7 @@ Rectangle {
             horizontalAlignment: Text.AlignRight
             leftPadding: 5
             verticalAlignment: Text.AlignVCenter
+            visible: root.driverLoadedAndWorking()
         }
         Text {
             width: 100
@@ -208,6 +230,7 @@ Rectangle {
             horizontalAlignment: Text.AlignLeft
             leftPadding: 5
             verticalAlignment: Text.AlignVCenter
+            visible: root.driverLoadedAndWorking()
         }
         Text {
             width: 100
@@ -218,6 +241,7 @@ Rectangle {
             horizontalAlignment: Text.AlignRight
             leftPadding: 5
             verticalAlignment: Text.AlignVCenter
+            visible: root.driverLoadedAndWorking()
         }
         Text {
             width: 100
@@ -228,6 +252,7 @@ Rectangle {
             horizontalAlignment: Text.AlignLeft
             leftPadding: 5
             verticalAlignment: Text.AlignVCenter
+            visible: root.driverLoadedAndWorking()
         }
         Text {
             width: 100
@@ -238,6 +263,7 @@ Rectangle {
             horizontalAlignment: Text.AlignRight
             leftPadding: 5
             verticalAlignment: Text.AlignVCenter
+            visible: root.driverLoadedAndWorking()
         }
         Text {
             width: 100
@@ -248,6 +274,7 @@ Rectangle {
             horizontalAlignment: Text.AlignLeft
             leftPadding: 5
             verticalAlignment: Text.AlignVCenter
+            visible: root.driverLoadedAndWorking()
         }
     }
 }

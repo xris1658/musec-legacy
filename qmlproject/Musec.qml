@@ -618,6 +618,7 @@ ApplicationWindow {
     //顶部的工具栏
     MainBar {
         id: mainBar
+        engineRunning: (mainWindow.driverList != null) && (!(mainWindow.driverList.empty())) && mainWindow.currentDriver != -1
         onPlayStart: {
             EventBridge.playStart();
         }

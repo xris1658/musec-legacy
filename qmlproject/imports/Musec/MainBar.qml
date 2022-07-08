@@ -8,6 +8,7 @@ Rectangle {
     property alias demoninator: bigClock.demoninator
     property alias bpm: bigClock.bpm
     property alias cpu: bigClock.cpu
+    property alias engineRunning: bigClock.engineRunning
     signal playStart();
     signal playStop();
     width: parent.width
