@@ -23,10 +23,16 @@ using WindowType = HWND;
 
 using ErrorCodeType = decltype(GetLastError());
 // 漫游用户数据路径（用户文件夹\AppData\Roaming）
-const QString& RoamingDirectoryPath();
+const QString& roamingAppDataFolder();
+
+// 程序安装目录（系统盘\Program Files）
+const QString& programFilesFolder();
+
+// 本地用户数据路径（用户文件夹\AppData\Local）
+const QString& localAppDataFolder();
 
 // Musec 程序用户数据路径（用户文件夹\AppData\Roaming\Musec）
-const QString& DataDirectoryPath();
+const QString& dataDirectoryPath();
 
 SystemTimeType getCurrentTime();
 

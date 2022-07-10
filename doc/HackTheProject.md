@@ -55,6 +55,7 @@ to your machine.
   SDK. The reason I chose this link from The Internet Archive is that the documentation is 
   present in this file, including some calling sequence diagrams. This might be useful when the 
   developer encountered some issues. (**Please RTFM, again, RTFM, do it!**)
+- Clone the [CLAP SDK repository](https://github.com/free-audio/clap).
 
 ## Build the project with <u>CMake</u>
 If you're using CMake, the building process will be relatively simple.
@@ -63,7 +64,7 @@ Take CLion for example:
 1. Open the project directory or `CMakeLists.txt` with CLion.
 2. CLion will prompt you to configure the CMake project. (You can configure it later by selecting **File | Settings | Build, Execution, Deployment | CMake**.) Set the generator of all the Profiles using Visual Studio toolchain to **NMake Makefiles JOM**, then fill these "CMake Options" text boxes with
 ```
--DCMAKE_TOOLCHAIN_FILE=<vcpkg directory>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK directory> -DASIOSDK_PATH=<ASIO SDK directory> -DCMAKE_MAKE_PROGRAM=<Path to Qt>/Tools/QtCreator/bin/jom/jom.exe
+-DCMAKE_TOOLCHAIN_FILE=<vcpkg directory>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK directory> -DASIOSDK_PATH=<ASIO SDK directory> -DCLAP_SOURCE_DIR=<Path to CLAP SDK> -DCMAKE_MAKE_PROGRAM=<Path to Qt>/Tools/QtCreator/bin/jom/jom.exe
 ```
 - We use JOM from Qt, instead of NMake provided by MSVC. That's because NMake does not do parallel builds. If `jom.exe` is not found, then you can get one at [qt-labs/jom](https://github.com/qt-labs/jom).
 3. Build the target `Musec`.
@@ -79,7 +80,7 @@ following ways:
    - Open **Visual Studio 2019** -> **VC** -> **x64 Native Tools Command Prompt for VS 2019**.
 2. Use CMake to configure and build the project. Execute the following command using the command window that just opened:
     ```shell
-    <Path to cmake.exe> -G "NMake Makefiles JOM" --toolchain <vcpkg install directory>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK directory> -DASIOSDK_PATH=<ASIO SDK directory> -DCMAKE_MAKE_PROGRAM=<Path to Qt>/Tools/QtCreator/bin/jom/jom.exe -S <Musec source directory> -B <Directory you'd like to generate the program>
+    <Path to cmake.exe> -G "NMake Makefiles JOM" --toolchain <vcpkg install directory>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK directory> -DASIOSDK_PATH=<ASIO SDK directory> -DCLAP_SOURCE_DIR=<Path to CLAP SDK> -DCMAKE_MAKE_PROGRAM=<Path to Qt>/Tools/QtCreator/bin/jom/jom.exe -S <Musec source directory> -B <Directory you'd like to generate the program>
     ```
 3. Change the working directory to the directory you'd like to generate the program:
     ```shell
@@ -115,7 +116,7 @@ library files) have to be made manually.
   - Clone the repository to your machine.
   - Open `<Musec directory>\Musec.pro` using Qt Creator.
   - Check **Desktop Qt 5.15.2 MSVC2019 64-bit**, then click **Configure Project** button.
-  - Click **Switch to Edit mode** (text button on the left) or press Ctrl+2, then open `Musec.pro`. Replace the variables at ll.18-20 to paths to the corresponding dependencies.
+  - Click **Switch to Edit mode** (text button on the left) or press Ctrl+2, then open `Musec.pro`. Replace the variables wrapped with `Variables` comment to paths to the corresponding dependencies.
   - Build the project.
   - Manually copy some DLL files to the build path.
     - For Debug build:
@@ -169,12 +170,21 @@ library files) have to be made manually.
   You could automatically copy the files by adding custom build processes, but there are some things you should notice:
   - You can't use `copy` directly to do this, since it is a command you can use in Command Propmt or Powershell instead of an executable, and Qt Creator can't find a program named `copy`. The correct way is to use `cmd` to execute the `copy` command:
     ```
-    cmd /C copy /B /Y i18n\Musec_zh_CN.qm <Build directory>\Musec_zh_CN.qm
+    cmd /C copy /B /Y <Path to files to copy> <Destination>
     ```
     - You might want to check the return code of the operation. Check [How do I get the application exit code from a Windows command line? - Stack Overflow](https://stackoverflow.com/questions/334879/how-do-i-get-the-application-exit-code-from-a-windows-command-line) for details.
   - You could use `robocopy`, an utility in Windows. But you might like to call it using another program, instead of using it directly in the process, since
     - `robocopy` will return `0` if all of the files are **already copied and same as the original files**, and `1` if all of the files are **not in the destination directory initially and copied successfully**.
     - Qt Creator will treat non-zero return code as error, so it will complain about the `robocopy` step even if the files are successfully copied, which shouldn't be treated as an error.
+
+## Compiling with Libraries and Compiling with Source
+We built some dependencies as dynamic libraries using vcpkg before building the project. Additionally，we built the VST3 SDK as static libraries before building the project using qmake. Some dependencies are compiled along with the project as source codes.
+There are some pros and cons of these 3 ways building dependencies.
+- Dynamic libraries can be used simultaneously by multiple applications with one copy of the code in the memory in order to save memory (nowadays memory capacity incerases so fast that this might be not a significant advantage anymore). But it's quite easy to be affected by DLL hell.
+- Static libraries won't be affected by DLL Hell. However you need to keep the toolchains and parameters used while compiling the library and the application identical to prevent compile or runtime problems.
+- Compiling using source code can effectively prevent problems brought by library versions. But compiling with source will spend more time than the time compiling using libraries.
+
+You should check these information before choosing the way that fits for you.
 
 ## Debugging
 Visual Studio and recent versions of CLion support NatVis, which can visualize objects base on configuration files. When debugging applications using libraries like Qt, this can be very helpful.

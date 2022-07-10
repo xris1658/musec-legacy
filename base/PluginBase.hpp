@@ -61,7 +61,9 @@ enum PluginFormat
 {
     FormatNotAPlugin = 0,
     FormatVST2,
-    FormatVST3
+    FormatVST3,
+    FormatCLAP,
+    PluginFormatCount
 };
 
 // 插件的类型（未知，MIDI 效果器，乐器，音频效果器）

@@ -16,16 +16,21 @@ QMAKE_CXXFLAGS += /Zc:wchar_t /W4
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+# Variables
 ASIOSDK_DIR        = C:/asiosdk_2.3.3_2019-06-14
 VST3SDK_DIR        = D:/apps/vst3sdk
 VCPKG_DIR          = D:/apps/vcpkg
+CLAP_DIR           = D:/apps/clap
 message(ASIO SDK directory: $$ASIOSDK_DIR)
 message( VST SDK direcotry: $$VST3SDK_DIR)
 message(   vcpkg directory: $$VCPKG_DIR)
+message(CLAP SDK directory: $$CLAP_DIR)
+# Variables
 
 INCLUDEPATH += $$VCPKG_DIR/installed/x64-windows/include \
                $$VST3SDK_DIR \
-               $$ASIOSDK_DIR
+               $$ASIOSDK_DIR \
+               $$CLAP_DIR/include
 
 CONFIG(debug, debug | release) {
     QMAKE_LIBDIR += \
@@ -63,9 +68,11 @@ HEADERS += \
     audio/engine/Graph.hpp \
     audio/engine/MIDIClock.hpp \
     audio/engine/Project.hpp \
+    audio/host/CLAPHost.hpp \
     audio/host/MusecVST3Host.hpp \
     audio/media/AudioSequence.hpp \
     audio/media/MIDISequence.hpp \
+    audio/plugin/CLAPPlugin.hpp \
     audio/plugin/IPlugin.hpp \
     audio/plugin/VST2Plugin.hpp \
     audio/plugin/VST3Plugin.hpp \
@@ -125,6 +132,7 @@ HEADERS += \
     model/ModelInitializer.hpp \
     model/PluginListModel.hpp \
     model/PluginSequenceModel.hpp \
+    model/TempoAutomationModel.hpp \
     model/TrackListModel.hpp \
     native/Native.hpp \
     native/WindowsLibraryRAII.hpp \
@@ -146,9 +154,11 @@ SOURCES += \
     audio/driver/Literals.cpp \
     audio/engine/MIDIClock.cpp \
     audio/engine/Project.cpp \
+    audio/host/CLAPHost.cpp \
     audio/host/MusecVST3Host.cpp \
     audio/media/AudioSequence.cpp \
     audio/media/MIDISequence.cpp \
+    audio/plugin/CLAPPlugin.cpp \
     audio/plugin/ShellPluginId.cpp \
     audio/plugin/VST2Plugin.cpp \
     audio/plugin/VST3Plugin.cpp \
@@ -198,6 +208,7 @@ SOURCES += \
     model/ModelInitializer.cpp \
     model/PluginListModel.cpp \
     model/PluginSequenceModel.cpp \
+    model/TempoAutomationModel.cpp \
     model/TrackListModel.cpp \
     native/Native.cpp \
     native/WindowsLibraryRAII.cpp \

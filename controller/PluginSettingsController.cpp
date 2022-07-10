@@ -36,14 +36,14 @@ void scanPlugins()
 {
     QFlags<QDir::Filter> scanFileFlags = QDir::Filter::Files | QDir::Filter::Hidden;
     QStringList nameFilters;
-    nameFilters << "*.dll" << "*.vst3";
+    nameFilters << "*.dll" << "*.vst3" << "*.clap";
     auto scanShortcut = Musec::Controller::ConfigController::appConfig()["musec"]["options"]["plugin"]["enable-shortcut"].as<bool>();
     QString lnk;
     if(scanShortcut)
     {
         scanFileFlags |= QDir::Filter::System;
         nameFilters << "*.lnk";
-        lnk = nameFilters[2]; lnk.remove(0, 2);
+        lnk = nameFilters.back(); lnk.remove(0, 2);
     }
     std::vector<QString> plugins;
     std::queue<QDir> pluginDirectories;

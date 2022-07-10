@@ -16,9 +16,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt5 COMPONENTS Core Quick Widgets Qml Gui QuickCompiler REQUIRED)
 
 include_directories(${ASIOSDK_PATH}
+                    ${CLAP_SOURCE_DIR}/include
                     ${SQLITE_MODERN_CPP_INCLUDE_DIRS})
 
-add_subdirectory(${VST3SDK_SOURCE_DIR} ${PROJECT_BINARY_DIR}/vst3sdk)
+add_subdirectory(${VST3SDK_SOURCE_DIR} EXCLUDE_FROM_ALL ${PROJECT_BINARY_DIR}/vst3sdk)
 
 add_custom_target(GenerateLocaleBase COMMAND ${Qt5_DIR}/../../../bin/lupdate.exe ${CMAKE_SOURCE_DIR}/Musec.pro -ts ${CMAKE_SOURCE_DIR}/i18n/base.ts)
 add_custom_target(GenerateLocaleCN COMMAND ${Qt5_DIR}/../../../bin/lupdate.exe ${CMAKE_SOURCE_DIR}/Musec.pro -ts ${CMAKE_SOURCE_DIR}/i18n/Musec_zh_CN.ts)
@@ -26,8 +27,7 @@ add_custom_target(GenerateLocaleCN COMMAND ${Qt5_DIR}/../../../bin/lupdate.exe $
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 find_path(SQLITE_MODERN_CPP_INCLUDE_DIRS "sqlite_modern_cpp.h")
 #find_path(FFTWPP_INCLUDE_DIRS "fftwpp/Array.cc")
-find_package(yaml-cpp
-CONFIG REQUIRED)
+find_package(yaml-cpp CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 find_package(avcpp CONFIG REQUIRED)
@@ -41,12 +41,14 @@ set(RESOURCE_FILE Musec_resource.rc)
 qt5_add_resources(QT_RESOURCES ./Musec.qrc)
 
 set(PROJECT_SOURCES
+    ModuleConnector.cpp
+    ModuleConnector.hpp
     audio/arrangement/ClipInTrack.hpp
     audio/arrangement/TrackSequence.hpp
-    audio/base/AudioBufferView.hpp
     audio/base/AudioBufferView.cpp
-    audio/base/Automation.hpp
+    audio/base/AudioBufferView.hpp
     audio/base/Automation.cpp
+    audio/base/Automation.hpp
     audio/base/Chrono.hpp
     audio/base/Constants.hpp
     audio/base/TempoAutomation.hpp
@@ -61,19 +63,23 @@ set(PROJECT_SOURCES
     audio/driver/ASIODriver.hpp
     audio/driver/ASIODriverForward.hpp
     audio/driver/ASIODriverStreamInfo.hpp
-    audio/driver/Literals.hpp
     audio/driver/Literals.cpp
+    audio/driver/Literals.hpp
     audio/engine/Graph.hpp
     audio/engine/MIDIClock.cpp
     audio/engine/MIDIClock.hpp
     audio/engine/Project.cpp
     audio/engine/Project.hpp
+    audio/host/CLAPHost.cpp
+    audio/host/CLAPHost.hpp
     audio/host/MusecVST3Host.cpp
     audio/host/MusecVST3Host.hpp
     audio/media/AudioSequence.cpp
     audio/media/AudioSequence.hpp
     audio/media/MIDISequence.cpp
     audio/media/MIDISequence.hpp
+    audio/plugin/CLAPPlugin.cpp
+    audio/plugin/CLAPPlugin.hpp
     audio/plugin/IPlugin.hpp
     audio/plugin/ShellPluginId.cpp
     audio/plugin/VST2Plugin.cpp
@@ -103,6 +109,8 @@ set(PROJECT_SOURCES
     base/PluginBase.cpp
     base/PluginBase.hpp
     base/QmlBase.hpp
+    concurrent/ThreadPool.cpp
+    concurrent/ThreadPool.hpp
     controller/ASIODriverController.cpp
     controller/ASIODriverController.hpp
     controller/AppController.cpp
@@ -137,8 +145,6 @@ set(PROJECT_SOURCES
     dao/PluginDAO.hpp
     dao/PluginDirectoryDAO.cpp
     dao/PluginDirectoryDAO.hpp
-    concurrent/ThreadPool.cpp
-    concurrent/ThreadPool.hpp
     entities/CompleteTrack.cpp
     entities/CompleteTrack.hpp
     entities/EntitiesInitializer.cpp
@@ -168,8 +174,8 @@ set(PROJECT_SOURCES
     model/AssetDirectoryListModel.hpp
     model/AudioTrackSequenceModel.cpp
     model/AudioTrackSequenceModel.hpp
-    model/AutomationModel.hpp
     model/AutomationModel.cpp
+    model/AutomationModel.hpp
     model/FileListModel.cpp
     model/FileListModel.hpp
     model/FolderListModel.cpp
@@ -181,6 +187,8 @@ set(PROJECT_SOURCES
     model/PluginListModel.hpp
     model/PluginSequenceModel.cpp
     model/PluginSequenceModel.hpp
+    model/TempoAutomationModel.cpp
+    model/TempoAutomationModel.hpp
     model/TrackListModel.cpp
     model/TrackListModel.hpp
     native/Native.cpp
@@ -201,9 +209,7 @@ set(PROJECT_SOURCES
     util/Endian.hpp
     util/Literal.cpp
     util/Literal.hpp
-    util/TimerClamp.hpp
-    ModuleConnector.cpp
-    ModuleConnector.hpp)
+    util/TimerClamp.hpp)
 
 set(TEST_COMMON_SOURCES
     test/common/PluginWindowThread.cpp

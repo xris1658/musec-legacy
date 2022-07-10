@@ -25,6 +25,44 @@ namespace Native
 {
 namespace Impl
 {
+class SHGetFolderHelper
+{
+private:
+    SHGetFolderHelper(int csidl): csidl_(csidl)
+    {
+        auto getFolderResult = SHGetFolderPathW(
+            nullptr,
+            csidl_,
+            NULL,
+            SHGFP_TYPE_CURRENT,
+            path_);
+        if(getFolderResult != S_OK)
+        {
+            path_[0] = '\0';
+        }
+    }
+public:
+    static SHGetFolderHelper& getFolderHelper(int csidl)
+    {
+        static SHGetFolderHelper ret(csidl);
+        return ret;
+    }
+    const wchar_t* operator()()
+    {
+        return path_;
+    }
+private:
+    int csidl_;
+    wchar_t path_[MAX_PATH];
+};
+
+template<int CSIDL>
+const QString& getFolderAsWCharArray()
+{
+    static auto ret = QString::fromWCharArray(SHGetFolderHelper::getFolderHelper(CSIDL)());
+    return ret;
+}
+
 std::uint64_t procMask()
 {
     std::uint64_t procMask = 0;
@@ -49,21 +87,25 @@ std::int64_t qpf()
     return ret;
 }
 }
-const QString& RoamingDirectoryPath()
+
+const QString& roamingAppDataFolder()
 {
-    static wchar_t path[MAX_PATH] = {0};
-    auto getFolderResult = SHGetFolderPathW(nullptr, CSIDL_APPDATA, NULL, SHGFP_TYPE_CURRENT, path);
-    if(getFolderResult != S_OK)
-    {
-        // TODO: 异常处理
-    }
-    static auto ret = QString::fromWCharArray(path);
-    return ret;
+    return Impl::getFolderAsWCharArray<CSIDL_APPDATA>();
 }
 
-const QString& DataDirectoryPath()
+const QString& programFilesFolder()
 {
-    static QString ret = QString(RoamingDirectoryPath()).append("\\").append(Musec::Base::ProductName);
+    return Impl::getFolderAsWCharArray<CSIDL_PROGRAM_FILES>();
+}
+
+const QString& localAppDataFolder()
+{
+    return Impl::getFolderAsWCharArray<CSIDL_LOCAL_APPDATA>();
+}
+
+const QString& dataDirectoryPath()
+{
+    static QString ret = QString(roamingAppDataFolder()).append("\\").append(Musec::Base::ProductName);
     return ret;
 }
 
@@ -226,17 +268,20 @@ QString errorMessageFromErrorCode(ErrorCodeType errorCode)
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL, errorCode, 0, rawErrorString, 0, nullptr);
     QString ret;
-    if(std::is_same_v<TCHAR, char>)
+    if(messageLength)
     {
-        // 重解转换只是为了屏蔽类型不一致的误报
-        auto ptr = reinterpret_cast<char*>(rawErrorString);
-        ret = QString(ptr);
-    }
-    else if(std::is_same_v<TCHAR, wchar_t>)
-    {
-        // 重解转换只是为了屏蔽类型不一致的误报
-        auto ptr = reinterpret_cast<wchar_t*>(rawErrorString);
-        ret = QString::fromWCharArray(ptr);
+        if constexpr(std::is_same_v<TCHAR, char>)
+        {
+            // 重解转换只是为了屏蔽类型不一致的误报
+            auto ptr = reinterpret_cast<char*>(rawErrorString);
+            ret = QString(ptr);
+        }
+        else if constexpr(std::is_same_v<TCHAR, wchar_t>)
+        {
+            // 重解转换只是为了屏蔽类型不一致的误报
+            auto ptr = reinterpret_cast<wchar_t*>(rawErrorString);
+            ret = QString::fromWCharArray(ptr);
+        }
     }
     LocalFree(rawErrorString);
     return ret;

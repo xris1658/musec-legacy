@@ -1,10 +1,13 @@
 #include "PluginBase.hpp"
 
-#include "audio/driver/ASIODriver.hpp"
 #include "audio/host/MusecVST3Host.hpp"
-#include "base/Constants.hpp"
-#include "controller/ASIODriverController.hpp"
 #include "audio/plugin/VST2Plugin.hpp"
+#include "audio/plugin/VST3Plugin.hpp"
+#include "audio/plugin/CLAPPlugin.hpp"
+#include "controller/ASIODriverController.hpp"
+#include "native/Native.hpp"
+
+#include <clap/plugin-features.h>
 
 #include <pluginterfaces/vst/ivstaudioprocessor.h>
 
@@ -23,6 +26,7 @@ PluginFormat pluginFormat(const QString& path)
 {
     static QString vst2("dll");
     static QString vst3("vst3");
+    static QString clap("clap");
     QFileInfo fileInfo(path);
     auto suffix = fileInfo.suffix();
     if(suffix == vst2)
@@ -32,6 +36,10 @@ PluginFormat pluginFormat(const QString& path)
     else if(suffix == vst3)
     {
         return PluginFormat::FormatVST3;
+    }
+    else if(suffix == clap)
+    {
+        return PluginFormat::FormatCLAP;
     }
     return PluginFormat::FormatNotAPlugin;
 }
@@ -107,7 +115,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                 );
             }
         }
-        catch (WindowsLibraryRAII::ExceptionType exception)
+        catch (WindowsLibraryRAII::ExceptionType)
         {
             //
         }
@@ -318,10 +326,53 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                 }
             }
         }
-        catch (WindowsLibraryRAII::ExceptionType exception)
+        catch (WindowsLibraryRAII::ExceptionType)
         {
 //
         }
+    }
+    else if(format == PluginFormat::FormatCLAP)
+    {
+        try
+        {
+            Musec::Audio::Plugin::CLAPPlugin<float> plugin(path);
+            const auto factory = plugin.factory();
+            auto count = factory->get_plugin_count(factory);
+            for(decltype(count) i = 0; i < count; ++i)
+            {
+                auto desc = factory->get_plugin_descriptor(factory, i);
+                auto name = desc->name;
+                auto features = desc->features;
+                for(int j = 0; features[j]; ++j)
+                {
+                    auto feature = features[j];
+                    if(std::strcmp(feature, CLAP_PLUGIN_FEATURE_INSTRUMENT) == 0)
+                    {
+                        ret.append(
+                            std::make_tuple(
+                                i,
+                                QString(desc->name),
+                                PluginFormat::FormatCLAP,
+                                PluginType::TypeInstrument
+                            )
+                        );
+                    }
+                    else if(std::strcmp(feature, CLAP_PLUGIN_FEATURE_AUDIO_EFFECT) == 0
+                         || std::strcmp(feature, CLAP_PLUGIN_FEATURE_NOTE_EFFECT) == 0)
+                    {
+                        ret.append(
+                            std::make_tuple(
+                                i,
+                                QString(desc->name),
+                                PluginFormat::FormatCLAP,
+                                PluginType::TypeAudioFX
+                            )
+                        );
+                    }
+                }
+            }
+        }
+        catch(WindowsLibraryRAII::ExceptionType) {}
     }
     return ret;
 }
@@ -329,19 +380,22 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
 QStringList& defaultPluginDirectoryList()
 {
     static QStringList ret;
-    static wchar_t path[MAX_PATH] = {0};
-    auto getFolderResult = SHGetFolderPathW(
-        nullptr,
-        CSIDL_PROGRAM_FILES,
-        NULL,
-        SHGFP_TYPE_CURRENT,
-        path);
-    if(getFolderResult == S_OK)
+    ret.reserve(5);
+    auto programFilesPath = Musec::Native::programFilesFolder();
+    if(!programFilesPath.isEmpty())
     {
-        ret.reserve(3);
-        ret << QString::fromWCharArray(path).append("\\Steinberg\\VstPlugins")
-            << QString::fromWCharArray(path).append("\\VstPlugins")
-            << QString::fromWCharArray(path).append("\\Common Files\\VST3");
+        // VST2
+        ret << programFilesPath.append("\\Steinberg\\VstPlugins")
+            << programFilesPath.append("\\VstPlugins")
+        // VST3
+            << programFilesPath.append("\\Common Files\\VST3");
+    }
+    auto localAppDataPath = Musec::Native::localAppDataFolder();
+    if(!localAppDataPath.isEmpty())
+    {
+        // CLAP
+        ret << programFilesPath.append("\\Common Files\\CLAP")
+            << localAppDataPath.append("\\Programs\\Common\\CLAP");
     }
     return ret;
 }

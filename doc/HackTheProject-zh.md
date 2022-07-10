@@ -33,15 +33,15 @@
   <vcpkg 目录>\downloads\tools\cmake-3.21.1-windows\cmake-3.21.1-windows-i386
   ```
   这是一份 32 位的 CMake，可以在 64 位系统上运行，不过应该不能用 x64 的工具链，需要换用 x86_64。
-- 下载并安装 Qt 5.15.2。在选择安装组件时，勾选 **Qt 5.15.2** 下的 **MSVC 2019 64-bit**。
-  - 读者可能会勾选 **Qt 5.15.2** 下的 **Qt Debug information Files** 以及 **Developer and Designer Tools** 下的 **Debugging Tools for Windows** ，用于调试程序。
+- 下载并安装 Qt 5。在选择安装组件时，勾选对应项下的 **MSVC 2019 64-bit**。
+  - 读者可能会一并勾选 **Qt Debug information Files** 以及 **Developer and Designer Tools** 下的 **Debugging Tools for Windows** ，用于调试程序。
 - 下载并解压 [Steinberg ASIO SDK](https://www.steinberg.net/asiosdk)。
 - 克隆 [Steinberg VST3 SDK 仓库](https://github.com/steinbergmedia/vst3sdk)。
 - 下载 [Steinberg VST2 SDK 压缩文件](https://archive.org/download/VST2SDK/vst_sdk2_4_rev2.zip)，并将文件中 `vstsdk2.4` 文件夹的内容（除了 `index.html`）解压到 VST3 SDK 目录下。  
   能在 VST3 SDK 的 `pluginterfaces` 目录中找到 `vst` 和 `vst2.x`，就说明做对了。
   > 为什么上面的链接**不是** Steinberg 官网的？  
   Steinberg 在数年前决定将 VST2 SDK 变成专有代码，并且不再开放下载；自家产品也会逐步停止对 VST2 的支持。不少网站还提供这份 SDK，我选用这个链接，是因为这个文件包含了文档，其中有调用的时序图。当开发者遇到了问题时，文档或许会很有用。（ **请务必读文档，务必读文档，务必读文档！** 重要的事情说三遍！）
-
+- 克隆 [CLAP SDK 仓库](https://github.com/free-audio/clap)。
 ## 用 <u>CMake</u> 构建项目
 如果用 CMake，构建项目的过程会相对简单。
 ### 使用 IDE
@@ -49,10 +49,10 @@
 1. 用 CLion 打开项目目录，或者项目内的 `CMakeLists.txt`。
 2. CLion 会提示用户配置 CMake 项目。（以后可以通过 **文件 | 设置 | 构建、执行、部署 | CMake** 进行配置。）将所有使用 Visual Studio 工具链的配置的生成器设为 **NMake Makefiles JOM**，并在 CMake 选项处填写以下内容
 ```
--DCMAKE_TOOLCHAIN_FILE=<vcpkg 目录>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK 目录> -DASIOSDK_PATH=<ASIO SDK 目录>
+-DCMAKE_TOOLCHAIN_FILE=<vcpkg 目录>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK 目录> -DASIOSDK_PATH=<ASIO SDK 目录> -DCLAP_SOURCE_DIR=<CLAP SDK 目录> -DCMAKE_MAKE_PROGRAM=<Qt 目录>/Tools/QtCreator/bin/jom/jom.exe
 ```
 - 我们不使用 MSVC 提供的 NMake，而使用 Qt 的 JOM。因为 NMake 不会进行并行构建。如果没有找到 `jom.exe`，可以到 [qt-labs/jom](https://github.com/qt-labs/jom) 下载一个。
-1. 构建目标 `Musec`。
+3. 构建目标 `Musec`。
 
 ### 使用命令行
 1. 打开配置有 Visual Studio 环境的命令窗口。可以使用以下方式进行这一操作：
@@ -64,7 +64,7 @@
    - 打开 **Visual Studio 2019** -> **VC** -> **x64 Native Tools Command Prompt for VS 2019**。
 2. 使用 CMake 配置并构建项目。使用上一步打开的命令窗口，执行以下命令：
     ```shell
-    <cmake.exe 路径> -G "NMake Makefiles" --toolchain <vcpkg 目录>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK 目录> -DASIOSDK_PATH=<ASIO SDK 目录> -DCMAKE_MAKE_PROGRAM=<Qt 路径>/Tools/QtCreator/bin/jom/jom.exe -S <Musec 项目目录> -B <项目的生成位置>
+    <cmake.exe 路径> -G "NMake Makefiles" --toolchain <vcpkg 目录>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK 目录> -DASIOSDK_PATH=<ASIO SDK 目录> -DCLAP_SOURCE_DIR=<CLAP SDK 目录> -DCMAKE_MAKE_PROGRAM=<Qt 路径>/Tools/QtCreator/bin/jom/jom.exe -S <Musec 项目目录> -B <项目的生成位置>
     ```
 3. 将工作目录切换到项目的生成位置：
     ```shell
@@ -99,13 +99,13 @@
   - 将 Musec 仓库克隆到本机。
   - 用 Qt Creator 打开 `<Musec directory>\Musec.pro`。
   - 勾选 **Desktop Qt 5.15.2 MSVC2019 64-bit**，然后点击 **Configure Project** 按钮。
-  - 点击 **切换到编辑模式**（左侧边栏的文本图标）或按 Ctrl+2，然后打开 `Musec.pro`。将第 18-20 行的变量代为相应依赖的路径。
+  - 点击 **切换到编辑模式**（左侧边栏的文本图标）或按 Ctrl+2，然后打开 `Musec.pro`。将使用 Variables 注释包围的变量代为相应依赖的路径。
   - 构建项目。
   - 自行将一些 DLL 文件复制到生成目录。
     - 对于 Debug 版：
       - DLL 文件的路径为 `<Path to vcpkg>\installed\x64-windows\debug\bin`
       - 目标路径为 `<Path to Musec>\debug`
-      - 以下是要复制的 DLL文件：
+      - 以下是要复制的 DLL 文件：
       ```
       avcodec-58.dll
       avdevice-58.dll
@@ -153,12 +153,21 @@
   可以通过添加定制生成步骤的方式自动复制文件，不过需要注意以下事项：
   - 不能直接使用 `copy`，因为 `copy` 只是一条命令，可以在命令提示符和 Powershell 中使用，不是可执行程序，而 Qt Creator 找不到名为 `copy` 的程序。正确的方式是使用 `cmd` 来执行 `copy` 命令：
     ```
-    cmd /C copy /B /Y i18n\Musec_zh_CN.qm <Build directory>\Musec_zh_CN.qm
+    cmd /C copy /Y <要复制的文件路径> <目标路径>
     ```
     - 你可能想要检查操作的返回值。要了解详情，请参阅 [How do I get the application exit code from a Windows command line? - Stack Overflow](https://stackoverflow.com/questions/334879/how-do-i-get-the-application-exit-code-from-a-windows-command-line)。
   - 可以用 Windows 自带的实用程序 `robocopy`。不过或许读者更想用其他程序调用此程序，而不是直接在生成步骤内使用，因为
     - 如果所有文件 **都已经复制过，且与原来的文件相同**，`robocopy` 会返回 `0`；如果所有文件 **原本不在目标目录下，而复制操作成功复制了所有文件**，则返回 `1`。
     - Qt Creator 将非零返回值视为错误，因此会在 `robocopy` 步骤中提示出错，哪怕文件全部成功复制到了生成目录（这不该视作错误）。
+
+## 库编译和源码编译
+我们在生成程序前，先使用 vcpkg 生成了一部分依赖的动态库。使用 qmake 生成前，还需要生成 VST3 SDK 的静态库。有一些依赖是作为源码和项目一齐编译的。
+这三种生成方式各有利弊。
+- 动态库可以由多个程序同时使用，节省内存（如今内存容量飞涨，或许也算不上显著优点了）。缺点是极容易收受到 DLL Hell 的影响。
+- 静态库编译的优点是不会收到 DLL Hell 的影响。缺点是需要尽可能保证库和程序的编译工具链和参数一致，以免编译和运行时出现问题。
+- 源码编译的优点是可以有效避免库版本带来的问题，缺点是编译时间比库编译长。
+
+建议读者参考这些信息，选择最符合自己需求的方式。
 
 ## 调试
 Visual Studio 和较新版本的 CLion 支持 NatVis，可以基于配置文件对对象进行可视化处理。当调试使用其他库（如 Qt）的应用时，NatVis 会非常有用。
