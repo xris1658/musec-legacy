@@ -5,6 +5,7 @@
 #include "controller/AudioEngineController.hpp"
 #include "entities/Plugin.hpp"
 #include "model/PluginSequenceModel.hpp"
+#include "audio/plugin/CLAPPlugin.hpp"
 #include "audio/plugin/VST2Plugin.hpp"
 #include "audio/plugin/VST3Plugin.hpp"
 #include "ui/PluginWindow.hpp"
@@ -27,6 +28,12 @@ std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> pluginFromPathAndSubId(con
     else if(format == Musec::Base::PluginFormat::FormatVST3)
     {
         return std::make_shared<Musec::Audio::Plugin::VST3Plugin<float>>(path, pluginSubId);
+    }
+    else if(format == Musec::Base::PluginFormat::FormatCLAP)
+    {
+        auto ret = std::make_shared<Musec::Audio::Plugin::CLAPPlugin<float>>(path);
+        ret->createPlugin(pluginSubId);
+        return ret;
     }
     else
     {
