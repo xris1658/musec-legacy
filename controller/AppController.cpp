@@ -49,15 +49,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     );
     // 等待主线程加载完成
     auto& promiseEnd = Musec::Controller::loadTranslationPromiseEnd();
-    auto loadTranslationResult = promiseEnd.get_future().get();
-//    if(!loadTranslationResult)
-//    {
-//        Musec::UI::MessageDialog::messageDialog(
-//           strings->property("loadTranslationFailedText").toString(),
-//           Musec::Base::ProductName,
-//           Musec::UI::MessageDialog::IconType::Warning
-//        );
-//    }
+    promiseEnd.get_future().get();
     auto systemRender =
         Musec::Controller::ConfigController::appConfig()
         ["musec"]["options"]["general"]["system-render"]
@@ -75,7 +67,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
         driverList = Musec::Audio::Driver::enumerateDrivers();
         AppASIODriverList().setList(driverList);
     }
-    catch(std::exception& e)
+    catch(std::exception&)
     {
         Musec::UI::MessageDialog::messageDialog(
            strings->property("enumeratingASIODriverErrorText").toString(),
@@ -84,6 +76,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
         );
     }
     // 加载 ASIO 驱动
+    // FIXME: 此处获取字符串的代码可能会失败，因为相关字符串可能还没构造好（产生空指针异常）
     splashScreen->setBootText(strings->property("searchingASIODriverText").toString());
     Musec::Audio::Driver::AppASIODriver();
     auto driverCLSID = QString::fromStdString(
@@ -135,9 +128,9 @@ bool findAppData()
 
 void initAppData()
 {
-    QDir roaming(Musec::Native::RoamingDirectoryPath());
+    QDir roaming(Musec::Native::roamingAppDataFolder());
     roaming.mkdir(Musec::Base::ProductName);
-    QDir dir(Musec::Native::DataDirectoryPath());
+    QDir dir(Musec::Native::dataDirectoryPath());
     dir.refresh();
     if(!dir.exists())
     {

@@ -55,6 +55,7 @@ Rectangle {
             height: 100
             color: Constants.backgroundColor
             border.color: Constants.borderColor
+            clip: true
             ListView {
                 id: pluginPathListView
                 anchors.fill: parent
@@ -65,7 +66,7 @@ Rectangle {
                     width: parent.width
                     height: 20
                     clip: true
-                    color: pluginPathListView.currentIndex == index? Constants.currentElementColor: Constants.backgroundColor
+                    color: pluginPathListView.currentIndex == index? Constants.currentElementColor: "transparent"
                     Text {
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter

@@ -9,7 +9,7 @@ namespace Musec::DAO
 const QString& ConfigFilePath()
 {
     using namespace Musec::Native;
-    static QString ret = QString(DataDirectoryPath()).append(configFileNameWithBackslash);
+    static QString ret = QString(dataDirectoryPath()).append(configFileNameWithBackslash);
     return ret;
 }
 

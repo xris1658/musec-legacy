@@ -549,7 +549,7 @@ bool VST2Plugin<SampleType>::activated()
     return activated_;
 }
 
-    template class VST2Plugin<float>;
+template class VST2Plugin<float>;
 template class VST2Plugin<double>;
 // ------------------------------------------------------------------------------------------
 }

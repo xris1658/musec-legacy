@@ -806,7 +806,7 @@ void VST3Plugin<SampleType>::onWindowSizeChanged()
 template<typename SampleType>
 bool VST3Plugin<SampleType>::getBypass() const
 {
-    return this->audioProcessorStatus_ != VST3AudioProcessorStatus::Processing;
+    return this->audioProcessorStatus_ <= VST3AudioProcessorStatus::Processing;
 }
 
 template<typename SampleType> QString VST3Plugin<SampleType>::getName() const

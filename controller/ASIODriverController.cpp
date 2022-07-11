@@ -157,7 +157,7 @@ void setASIODriver(const QString& clsid)
                         clsid.toStdString();
                 ConfigController::saveAppConfig();
             }
-            catch(std::runtime_error& exception)
+            catch(std::runtime_error&)
             {
                 Musec::UI::MessageDialog::messageDialog(
                     "无法加载 ASIO 驱动程序。程序将以未加载音频驱动的方式运行。",

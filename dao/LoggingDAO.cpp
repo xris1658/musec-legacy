@@ -26,7 +26,7 @@ LoggerType& createLogger()
     static auto ret =  spdlog::basic_logger_mt(
         "MusecLogger",
         QString(
-            Musec::Native::DataDirectoryPath() + "\\log\\" + loggingFileName()
+            Musec::Native::dataDirectoryPath() + "\\log\\" + loggingFileName()
         )
         .toStdString()
     );

@@ -56,7 +56,7 @@ enum PluginReadInfoField
     ReadFieldType
 };
 
-// 插件的格式（非插件，VST2，VST3）
+// 插件的格式（非插件，VST2，VST3，CLAP）
 enum PluginFormat
 {
     FormatNotAPlugin = 0,

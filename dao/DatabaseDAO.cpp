@@ -13,7 +13,7 @@ namespace Musec::DAO
 {
 const QString& DatabasePath()
 {
-    static QString ret = QString(Musec::Native::DataDirectoryPath())
+    static QString ret = QString(Musec::Native::dataDirectoryPath())
         .append(databaseNameWithBackslash);
     return ret;
 }

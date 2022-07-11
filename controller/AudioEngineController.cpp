@@ -37,7 +37,6 @@ void appendTrack(const Entities::CompleteTrack& track)
 
 double getCurrentSampleRate()
 {
-    double ret;
     if(Musec::Audio::Driver::AppASIODriver())
     {
         return Musec::Audio::Driver::getSampleRate();
