@@ -30,6 +30,13 @@ Rectangle {
         assetDirectoryListModel.setProperty(assetDirectoryListModel.count - 1, "id", newId);
     }
 
+    function getPluginFormatName(pluginFormat: int) {
+        return pluginFormat == 1? "VST2":
+               pluginFormat == 2? "VST3":
+               pluginFormat == 3? "CLAP":
+                                  qsTr("Unknown");
+    }
+
     Component {
         id: pluginItemComponent
         MCtrl.Button {
@@ -52,7 +59,7 @@ Rectangle {
                     }
                 }
                 Text {
-                    text: name
+                    text: name + " (" + root.getPluginFormatName(format) + ")"
                     font.family: Constants.font
                     color: Constants.contentColor1
                 }
