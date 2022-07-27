@@ -55,7 +55,7 @@ to your machine.
   SDK. The reason I chose this link from The Internet Archive is that the documentation is 
   present in this file, including some calling sequence diagrams. This might be useful when the 
   developer encountered some issues. (**Please RTFM, again, RTFM, do it!**)
-- Clone the [CLAP SDK repository](https://github.com/free-audio/clap).
+- Clone the [CLAP SDK repository](https://github.com/free-audio/clap) and [CLAP Helpers repository](https://github.com/free-audio/clap-helpers).
 
 ## Build the project with <u>CMake</u>
 If you're using CMake, the building process will be relatively simple.
@@ -64,7 +64,7 @@ Take CLion for example:
 1. Open the project directory or `CMakeLists.txt` with CLion.
 2. CLion will prompt you to configure the CMake project. (You can configure it later by selecting **File | Settings | Build, Execution, Deployment | CMake**.) Set the generator of all the Profiles using Visual Studio toolchain to **NMake Makefiles JOM**, then fill these "CMake Options" text boxes with
 ```
--DCMAKE_TOOLCHAIN_FILE=<vcpkg directory>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK directory> -DASIOSDK_PATH=<ASIO SDK directory> -DCLAP_SOURCE_DIR=<Path to CLAP SDK> -DCMAKE_MAKE_PROGRAM=<Path to Qt>/Tools/QtCreator/bin/jom/jom.exe
+-DCMAKE_TOOLCHAIN_FILE=<vcpkg directory>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK directory> -DASIOSDK_PATH=<ASIO SDK directory> -DCLAP_SOURCE_DIR=<Path to CLAP SDK> -DCLAP_HELPERS_DIR=<Path to CLAP Helpers> -DCMAKE_MAKE_PROGRAM=<Path to Qt>/Tools/QtCreator/bin/jom/jom.exe
 ```
 - We use JOM from Qt, instead of NMake provided by MSVC. That's because NMake does not do parallel builds. If `jom.exe` is not found, then you can get one at [qt-labs/jom](https://github.com/qt-labs/jom).
 3. Build the target `Musec`.

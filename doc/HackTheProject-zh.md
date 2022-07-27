@@ -41,7 +41,7 @@
   能在 VST3 SDK 的 `pluginterfaces` 目录中找到 `vst` 和 `vst2.x`，就说明做对了。
   > 为什么上面的链接**不是** Steinberg 官网的？  
   Steinberg 在数年前决定将 VST2 SDK 变成专有代码，并且不再开放下载；自家产品也会逐步停止对 VST2 的支持。不少网站还提供这份 SDK，我选用这个链接，是因为这个文件包含了文档，其中有调用的时序图。当开发者遇到了问题时，文档或许会很有用。（ **请务必读文档，务必读文档，务必读文档！** 重要的事情说三遍！）
-- 克隆 [CLAP SDK 仓库](https://github.com/free-audio/clap)。
+- 克隆 [CLAP SDK 仓库](https://github.com/free-audio/clap) 和 [CLAP Helpers 仓库](https://github.com/free-audio/clap-helpers)。
 ## 用 <u>CMake</u> 构建项目
 如果用 CMake，构建项目的过程会相对简单。
 ### 使用 IDE
@@ -49,7 +49,7 @@
 1. 用 CLion 打开项目目录，或者项目内的 `CMakeLists.txt`。
 2. CLion 会提示用户配置 CMake 项目。（以后可以通过 **文件 | 设置 | 构建、执行、部署 | CMake** 进行配置。）将所有使用 Visual Studio 工具链的配置的生成器设为 **NMake Makefiles JOM**，并在 CMake 选项处填写以下内容
 ```
--DCMAKE_TOOLCHAIN_FILE=<vcpkg 目录>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK 目录> -DASIOSDK_PATH=<ASIO SDK 目录> -DCLAP_SOURCE_DIR=<CLAP SDK 目录> -DCMAKE_MAKE_PROGRAM=<Qt 目录>/Tools/QtCreator/bin/jom/jom.exe
+-DCMAKE_TOOLCHAIN_FILE=<vcpkg 目录>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK 目录> -DASIOSDK_PATH=<ASIO SDK 目录> -DCLAP_SOURCE_DIR=<CLAP SDK 目录> -DCLAP_HELPERS_DIR=<CLAP Helpers 目录> -DCMAKE_MAKE_PROGRAM=<Qt 目录>/Tools/QtCreator/bin/jom/jom.exe
 ```
 - 我们不使用 MSVC 提供的 NMake，而使用 Qt 的 JOM。因为 NMake 不会进行并行构建。如果没有找到 `jom.exe`，可以到 [qt-labs/jom](https://github.com/qt-labs/jom) 下载一个。
 3. 构建目标 `Musec`。
