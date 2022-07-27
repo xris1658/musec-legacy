@@ -1,7 +1,7 @@
-#ifndef MUSEC_MODEL_AUTOMATIONMODEL
-#define MUSEC_MODEL_AUTOMATIONMODEL
+#ifndef MUSEC_MODEL_TEMPOAUTOMATIONMODEL
+#define MUSEC_MODEL_TEMPOAUTOMATIONMODEL
 
-#include "audio/base/Automation.hpp"
+#include "audio/base/TempoAutomation.hpp"
 #include "model/ModelBase.hpp"
 
 #include <QAbstractListModel>
@@ -10,9 +10,11 @@ namespace Musec
 {
 namespace Model
 {
-class AutomationModel: public QAbstractListModel
+class TempoAutomationModel: public QAbstractListModel
 {
     Q_OBJECT
+public:
+    using TempoAutomation = Musec::Audio::Base::TempoAutomation<96>;
 public:
     enum RoleNames
     {
@@ -21,12 +23,12 @@ public:
         CurveRole
     };
 public:
-    explicit AutomationModel(QObject* parent = nullptr);
-    virtual ~AutomationModel();
+    explicit TempoAutomationModel(QObject* parent = nullptr);
+    virtual ~TempoAutomationModel();
 public:
-    const Audio::Base::Automation& getAutomation() const;
-    void setAutomation(const Musec::Audio::Base::Automation& automation);
-    void setAutomation(Musec::Audio::Base::Automation&& automation);
+    const TempoAutomation& getTempoAutomation() const;
+    void setTempoAutomation(const TempoAutomation& automation);
+    void setTempoAutomation(TempoAutomation&& automation);
 public:
     Q_INVOKABLE int count() const noexcept;
     Q_INVOKABLE bool empty() const noexcept;
@@ -53,13 +55,12 @@ public:
 protected:
     RoleNamesType roleNames() const override;
 private:
-    void automationAboutToSet();
-    void automationSet();
+    void automationSet(int oldRowCount, int newRowCount);
 private:
-    Musec::Audio::Base::Automation automation_;
+    TempoAutomation automation_;
     RoleNamesType roleNames_;
 };
 }
 }
 
-#endif //MUSEC_MODEL_AUTOMATIONMODEL
+#endif //MUSEC_MODEL_TEMPOAUTOMATIONMODEL

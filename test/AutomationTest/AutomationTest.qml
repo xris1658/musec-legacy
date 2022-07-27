@@ -11,8 +11,8 @@ Window {
     property alias automationModel: automation.model
     Automation {
         id: automation
-        width: 900
-        height: 50
+        width: parent.width
+        height: 100
         timeUnitWidth: 0.5 + slider.value * 5.5
     }
     Slider {

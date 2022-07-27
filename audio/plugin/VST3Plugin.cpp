@@ -10,23 +10,25 @@
 #include <public.sdk/source/common/memorystream.h>
 #include <public.sdk/source/common/memorystream.cpp>
 
+#include <algorithm>
 #include <stdexcept>
 
 namespace Musec::Audio::Plugin
 {
 // VST3Plugin ctor & dtor
 // ------------------------------------------------------------------------------------------
-template<typename SampleType>
-VST3Plugin<SampleType>::VST3Plugin():
+VST3Plugin::VST3Plugin():
     VST3Plugin::Base(), VST3Plugin::IPluginInterface()
 {
 }
 
-template<typename SampleType>
-VST3Plugin<SampleType>::VST3Plugin(const QString& path, int classIndex):
+VST3Plugin::VST3Plugin(const QString& path, int classIndex):
     VST3Plugin::Base(path), VST3Plugin::IPluginInterface()
 {
-    auto pluginInitProc = Musec::Native::getExport<Musec::Base::VST3PluginInitProc>(*this, "InitDll");
+    // macOS 和 Linux 平台的入口和出口函数的名字与 Windows 的不同
+    // macOS: bundleEntry 和 bundleExit
+    // Linux: ModuleEntry 和 ModuleExit
+    auto pluginInitProc = Musec::Native::getExport<Musec::Base::VST3PluginInitProc>(*this, VST3PluginInitName);
     auto pluginFactoryProc = Musec::Native::getExport<Musec::Base::VST3PluginFactoryProc>(*this, "GetPluginFactory");
     if (!pluginFactoryProc)
     {
@@ -43,9 +45,6 @@ VST3Plugin<SampleType>::VST3Plugin(const QString& path, int classIndex):
     if (pluginInitProc)
     {
         // Windows 平台可省略入口和出口函数的调用，但 macOS 和 Linux 不行
-        // macOS 和 Linux 平台的入口和出口函数的名字与 Windows 的不同
-        // macOS: bundleEntry 和 BundleExit
-        // Linux: ModuleEntry 和 ModuleExit
         // https://steinbergmedia.github.io/vst3_dev_portal/pages/Technical+Documentation/VST+Module+Architecture/Loading.html
         if (!pluginInitProc())
         {
@@ -71,8 +70,7 @@ VST3Plugin<SampleType>::VST3Plugin(const QString& path, int classIndex):
     audioProcessorStatus_ = VST3AudioProcessorStatus::Created;
 }
 
-template<typename SampleType>
-VST3Plugin<SampleType>::~VST3Plugin()
+VST3Plugin::~VST3Plugin()
 {
     if(editControllerStatus_ == VST3EditControllerStatus::Connected)
     {
@@ -100,7 +98,7 @@ VST3Plugin<SampleType>::~VST3Plugin()
         factory_->release();
         audioProcessorStatus_ = VST3AudioProcessorStatus::NoAudioProcessor;
         editControllerStatus_ = VST3EditControllerStatus::NoEditController;
-        auto pluginExitProc = Musec::Native::getExport<Musec::Base::VST3PluginExitProc>(*this, "ExitDll");
+        auto pluginExitProc = Musec::Native::getExport<Musec::Base::VST3PluginExitProc>(*this, VST3PluginExitName);
         if (pluginExitProc)
         {
             pluginExitProc();
@@ -111,20 +109,17 @@ VST3Plugin<SampleType>::~VST3Plugin()
 
 // VST3Plugin raw pointer type
 // ------------------------------------------------------------------------------------------
-template<typename SampleType>
-Steinberg::Vst::IAudioProcessor* VST3Plugin<SampleType>::effect() const
+Steinberg::Vst::IAudioProcessor* VST3Plugin::effect() const
 {
     return audioProcessor_;
 }
 
-template<typename SampleType>
-Steinberg::Vst::IComponent* VST3Plugin<SampleType>::component() const
+Steinberg::Vst::IComponent* VST3Plugin::component() const
 {
     return component_;
 }
 
-template<typename SampleType>
-Steinberg::Vst::IEditController* VST3Plugin<SampleType>::editController() const
+Steinberg::Vst::IEditController* VST3Plugin::editController() const
 {
     return editController_;
 }
@@ -132,8 +127,7 @@ Steinberg::Vst::IEditController* VST3Plugin<SampleType>::editController() const
 
 // VST3Plugin IDevice interfaces
 // ------------------------------------------------------------------------------------------
-template<typename SampleType>
-std::uint8_t VST3Plugin<SampleType>::inputCount() const
+std::uint8_t VST3Plugin::inputCount() const
 {
     std::uint8_t ret = 0;
     for (auto& arrangement: inputSpeakerArrangements_)
@@ -143,8 +137,7 @@ std::uint8_t VST3Plugin<SampleType>::inputCount() const
     return ret;
 }
 
-template<typename SampleType>
-std::uint8_t VST3Plugin<SampleType>::outputCount() const
+std::uint8_t VST3Plugin::outputCount() const
 {
     std::uint8_t ret = 0;
     for (auto& arrangement: outputSpeakerArrangements_)
@@ -154,20 +147,19 @@ std::uint8_t VST3Plugin<SampleType>::outputCount() const
     return ret;
 }
 
-template<typename SampleType>
-void VST3Plugin<SampleType>::process(const Musec::Audio::Base::AudioBufferViews<SampleType>& inputs,
-    const Musec::Audio::Base::AudioBufferViews<SampleType>& outputs)
+void VST3Plugin::process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs, int inputCount,
+    Musec::Audio::Base::AudioBufferView<SampleType>* outputs, int outputCount)
 {
     processData_.numSamples = Musec::Controller::AudioEngineController::getCurrentBlockSize();
     auto inputBusSize = inputs_.size();
     auto outputBusSize = outputs_.size();
     for(auto i = 0; i < inputBusSize; ++i)
     {
-        if(i == audioInputBusIndex)
+        if(i == audioInputBusIndex_)
         {
             for(auto j = 0; j < inputRaws_[i].size(); ++j)
             {
-                if(j < inputs.size())
+                if(j < inputCount)
                 {
                     inputRaws_[i][j] = inputs[j].getSamples();
                 }
@@ -189,11 +181,11 @@ void VST3Plugin<SampleType>::process(const Musec::Audio::Base::AudioBufferViews<
     }
     for(auto i = 0; i < outputBusSize; ++i)
     {
-        if(i == audioOutputBusIndex)
+        if(i == audioOutputBusIndex_)
         {
             for(auto j = 0; j < outputRaws_[i].size(); ++j)
             {
-                if(j < outputs.size())
+                if(j < outputCount)
                 {
                     outputRaws_[i][j] = outputs[j].getSamples();
                 }
@@ -220,27 +212,30 @@ void VST3Plugin<SampleType>::process(const Musec::Audio::Base::AudioBufferViews<
     auto& processContext = Musec::Audio::Host::MusecVST3Host::AppProcessContext();
     processData_.processContext = &processContext;
     audioProcessor_->process(processData_);
-    if(editController_)
-    {
-        auto paramCount = outputParameterChanges_.getParameterCount();
-        for(decltype(paramCount) i = 0; i < paramCount; ++i)
-        {
-            auto* paramValueQueue = outputParameterChanges_.getParameterData(i);
-            auto paramId = paramValueQueue->getParameterId();
-            Steinberg::int32 sampleOffset = 0;
-            Steinberg::Vst::ParamValue paramValue;
-            paramValueQueue->getPoint(i, sampleOffset, paramValue);
-            editController_->setParamNormalized(paramId, paramValue);
-        }
-    }
+    // FIXME：IEditController 的函数只能在 UI 线程调用
+    // if(editController_)
+    // {
+    //     auto paramCount = outputParameterChanges_.getParameterCount();
+    //     for(decltype(paramCount) i = 0; i < paramCount; ++i)
+    //     {
+    //         auto* paramValueQueue = outputParameterChanges_.getParameterData(i);
+    //         auto paramId = paramValueQueue->getParameterId();
+    //         Steinberg::int32 sampleOffset = 0;
+    //         Steinberg::Vst::ParamValue paramValue;
+    //         paramValueQueue->getPoint(i, sampleOffset, paramValue);
+    //         // FIXME: 由于 IEditController 的函数不能在音频处理线程调用，
+    //         //  因此调用 VST3 Host Checker 的相关函数导致堆栈溢出
+    //         //  参考：public.sdk/samples/vst/hostchecker/source/hostcheckercontroller.cpp, ll. 734 - 738
+    //         std::thread([=]() { editController_->setParamNormalized(paramId, paramValue); }).detach();
+    //     }
+    // }
 }
 
 // ------------------------------------------------------------------------------------------
 
 // VST3Plugin IPlugin interfaces
 // ------------------------------------------------------------------------------------------
-template<typename SampleType>
-bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampleCount)
+bool VST3Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
 {
     auto initializeComponentResult = component_->initialize(&Musec::Audio::Host::MusecVST3Host::instance());
     if(initializeComponentResult != Steinberg::kResultOk)
@@ -255,34 +250,12 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
         return false;
     }
     audioProcessorStatus_ = VST3AudioProcessorStatus::Initialized;
-    if constexpr(std::is_same_v<SampleType, float>)
+    if(audioProcessor_->canProcessSampleSize(Steinberg::Vst::SymbolicSampleSizes::kSample32)
+        == Steinberg::kResultFalse)
     {
-        if(audioProcessor_->canProcessSampleSize(Steinberg::Vst::SymbolicSampleSizes::kSample32)
-            == Steinberg::kResultFalse)
-        {
-            return false;
-        }
+        return false;
     }
-    if constexpr(std::is_same_v<SampleType, double>)
-    {
-        if(audioProcessor_->canProcessSampleSize(Steinberg::Vst::SymbolicSampleSizes::kSample64)
-            == Steinberg::kResultFalse)
-        {
-            return false;
-        }
-    }
-    if(initializeEditor())
-    {
-        paramCount_ = editController_->getParameterCount();
-        paramBlock_ = Musec::Base::FixedSizeMemoryBlock((sizeof(Steinberg::Vst::ParamValue) + sizeof(Steinberg::Vst::ParameterInfo)) * paramCount_);
-        auto* paramValue = reinterpret_cast<Steinberg::Vst::ParamValue*>(paramBlock_.data());
-        auto* paramInfo = reinterpret_cast<Steinberg::Vst::ParameterInfo*>(paramValue + paramCount_);
-        for(decltype(paramCount_) i = 0; i < paramCount_; ++i)
-        {
-            editController_->getParameterInfo(i, paramInfo[i]);
-            paramValue[i] = editController_->getParamNormalized(paramInfo[i].id);
-        }
-    }
+    initializeEditor();
     audioProcessor_->queryInterface(Steinberg::Vst::IProcessContextRequirements::iid,
         reinterpret_cast<void**>(&processContextRequirements_));
     audioProcessor_->queryInterface(Steinberg::Vst::IAudioPresentationLatency::iid,
@@ -331,38 +304,38 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
         inputSpeakerArrangements_.data(), processData_.numInputs,
         outputSpeakerArrangements_.data(), processData_.numOutputs);
     decltype(setBusArrangementsResult) getBusArrangementResult = Steinberg::kResultOk;
-    if(setBusArrangementsResult != Steinberg::kNotImplemented)
+    if(setBusArrangementsResult != Steinberg::kNotImplemented
+    && setBusArrangementsResult != Steinberg::kResultOk)
     {
+        // 再次调用 getBusArrangement，用于宿主程序与插件之间协商总线布局
+        // 参考：https://developer.steinberg.help/pages/viewpage.action?pageId=49906849
+        // My plug-in is capable of processing all possible channel configurations
+        // https://developer.steinberg.help/display/VST/Bus+Arrangement+Setting+Sequences
+        for (decltype(outputBusCount) i = 0; i < outputBusCount; ++i)
+        {
+            getBusArrangementResult = audioProcessor_->getBusArrangement(
+                Steinberg::Vst::BusDirections::kOutput, i, outputSpeakerArrangements_[i]
+            );
+            if (getBusArrangementResult == Steinberg::kNotImplemented)
+            {
+                break;
+            }
+        }
+        if (getBusArrangementResult != Steinberg::kNotImplemented)
+        {
+            for (decltype(inputBusCount) i = 0; i < inputBusCount; ++i)
+            {
+                audioProcessor_->getBusArrangement(
+                    Steinberg::Vst::BusDirections::kInput, i, inputSpeakerArrangements_[i]
+                );
+            }
+        }
+        setBusArrangementsResult = audioProcessor_->setBusArrangements(
+            inputSpeakerArrangements_.data(), inputSpeakerArrangements_.size(), outputSpeakerArrangements_.data(),
+            outputSpeakerArrangements_.size());
         if (setBusArrangementsResult != Steinberg::kResultOk)
         {
-            // 再次调用 getBusArrangement，用于宿主程序与插件之间协商总线布局
-            // 参考：https://developer.steinberg.help/pages/viewpage.action?pageId=49906849
-            // My plug-in is capable of processing all possible channel configurations
-            // https://developer.steinberg.help/display/VST/Bus+Arrangement+Setting+Sequences
-            for (decltype(outputBusCount) i = 0; i < outputBusCount; ++i)
-            {
-                getBusArrangementResult = audioProcessor_->getBusArrangement(
-                    Steinberg::Vst::BusDirections::kOutput, i, outputSpeakerArrangements_[i]);
-                if(getBusArrangementResult == Steinberg::kNotImplemented)
-                {
-                    break;
-                }
-            }
-            if(getBusArrangementResult != Steinberg::kNotImplemented)
-            {
-                for(decltype(inputBusCount) i = 0; i < inputBusCount; ++i)
-                {
-                    audioProcessor_->getBusArrangement(Steinberg::Vst::BusDirections::kInput, i,
-                        inputSpeakerArrangements_[i]);
-                }
-            }
-            setBusArrangementsResult = audioProcessor_->setBusArrangements(
-                inputSpeakerArrangements_.data(), inputSpeakerArrangements_.size(),
-                outputSpeakerArrangements_.data(), outputSpeakerArrangements_.size());
-            if(setBusArrangementsResult != Steinberg::kResultOk)
-            {
-                return false;
-            }
+            return false;
         }
     }
     if(getBusArrangementResult == Steinberg::kResultOk)
@@ -394,10 +367,11 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
         auto getBusInfoResult = component_->getBusInfo(Steinberg::Vst::MediaTypes::kAudio,
             Steinberg::Vst::BusDirections::kInput, i, busInfo
         );
-        if(getBusInfoResult == Steinberg::kResultOk
+        if(audioInputBusIndex_ == -1
+        && getBusInfoResult == Steinberg::kResultOk
         && busInfo.busType == Steinberg::Vst::BusTypes::kMain)
         {
-            audioInputBusIndex = i;
+            audioInputBusIndex_ = i;
         }
         inputs_[i].numChannels = busInfo.channelCount;
         inputRaws_[i] = SampleTypePointers(busInfo.channelCount, nullptr);
@@ -408,10 +382,11 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
     {
         auto getBusInfoResult = component_->getBusInfo(Steinberg::Vst::MediaTypes::kAudio,
                 Steinberg::Vst::BusDirections::kOutput, i, busInfo);
-        if(getBusInfoResult == Steinberg::kResultOk
+        if(audioOutputBusIndex_ == -1
+        && getBusInfoResult == Steinberg::kResultOk
         && busInfo.busType == Steinberg::Vst::BusTypes::kMain)
         {
-            audioOutputBusIndex = i;
+            audioOutputBusIndex_ = i;
             component_->activateBus(Steinberg::Vst::MediaTypes::kAudio,
                 Steinberg::Vst::BusDirections::kOutput, i, true);
         }
@@ -463,8 +438,7 @@ bool VST3Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampl
     return true;
 }
 
-template<typename SampleType>
-bool VST3Plugin<SampleType>::uninitialize()
+bool VST3Plugin::uninitialize()
 {
     if(editControllerStatus_ == VST3EditControllerStatus::Initialized)
     {
@@ -482,8 +456,7 @@ bool VST3Plugin<SampleType>::uninitialize()
     return ret;
 }
 
-template<typename SampleType>
-bool VST3Plugin<SampleType>::initializeEditor()
+bool VST3Plugin::initializeEditor()
 {
     Steinberg::TUID controllerId;
     if (component_->getControllerClassId(controllerId) == Steinberg::kResultOk)
@@ -553,6 +526,13 @@ bool VST3Plugin<SampleType>::initializeEditor()
         {
             editController_->setComponentState(&memoryStream);
         }
+        paramCount_ = editController_->getParameterCount();
+        paramBlock_ = Musec::Base::FixedSizeMemoryBlock(sizeof(VST3PluginParameter) * paramCount_);
+        auto paramBlockAsArray = reinterpret_cast<VST3PluginParameter*>(paramBlock_.data());
+        for(decltype(paramCount_) i = 0; i < paramCount_; ++i)
+        {
+            paramBlockAsArray[i] = VST3PluginParameter(editController_, i);
+        }
         view_ = editController_->createView(Steinberg::Vst::ViewType::kEditor);
         if (view_)
         {
@@ -563,15 +543,16 @@ bool VST3Plugin<SampleType>::initializeEditor()
     return true;
 }
 
-template<typename SampleType>
-bool VST3Plugin<SampleType>::uninitializeEditor()
+bool VST3Plugin::uninitializeEditor()
 {
     detachWithWindow();
+    paramBlock_ = Musec::Base::FixedSizeMemoryBlock();
+    paramCount_ = 0;
     if(componentPoint_ && editControllerPoint_)
     {
+        using Steinberg::Vst::ConnectionProxy;
         componentPoint_->disconnect(editControllerPoint_);
         editControllerPoint_->disconnect(componentPoint_);
-
         componentPoint_->release();
         editControllerPoint_->release();
         componentPoint_ = nullptr;
@@ -591,8 +572,7 @@ bool VST3Plugin<SampleType>::uninitializeEditor()
     return true;
 }
 
-template<typename SampleType>
-bool VST3Plugin<SampleType>::activate()
+bool VST3Plugin::activate()
 {
     auto ret = (component_->setActive(true));
     if(ret == Steinberg::kResultOk)
@@ -602,8 +582,7 @@ bool VST3Plugin<SampleType>::activate()
     return ret == Steinberg::kResultOk;
 }
 
-template<typename SampleType>
-bool VST3Plugin<SampleType>::deactivate()
+bool VST3Plugin::deactivate()
 {
     auto ret = component_->setActive(false);
     if(ret == Steinberg::kResultOk)
@@ -614,8 +593,7 @@ bool VST3Plugin<SampleType>::deactivate()
 }
 
 // 或许上 RAII 更合适？
-template<typename SampleType>
-bool VST3Plugin<SampleType>::startProcessing()
+bool VST3Plugin::startProcessing()
 {
     if(audioProcessorStatus_ == VST3AudioProcessorStatus::Activated)
     {
@@ -635,8 +613,7 @@ bool VST3Plugin<SampleType>::startProcessing()
 }
 
 // 或许上 RAII 更合适？
-template<typename SampleType>
-bool VST3Plugin<SampleType>::stopProcessing()
+bool VST3Plugin::stopProcessing()
 {
     if(audioProcessorStatus_ == VST3AudioProcessorStatus::Processing)
     {
@@ -652,10 +629,12 @@ bool VST3Plugin<SampleType>::stopProcessing()
     return false;
 }
 
-template<typename SampleType>
-Steinberg::tresult VST3Plugin<SampleType>::queryInterface(const Steinberg::int8* iid, void** obj)
+Steinberg::tresult VST3Plugin::queryInterface(const Steinberg::int8* iid, void** obj)
 {
-    if(iid == Steinberg::Vst::IComponentHandler::iid || iid == Steinberg::IPlugFrame::iid || iid == Steinberg::FUnknown::iid)
+    if(iid == Steinberg::Vst::IComponentHandler::iid
+    || iid == Steinberg::Vst::IComponentHandler2::iid
+    || iid == Steinberg::IPlugFrame::iid
+    || iid == Steinberg::FUnknown::iid)
     {
         *obj = this;
         return Steinberg::kResultOk;
@@ -663,45 +642,85 @@ Steinberg::tresult VST3Plugin<SampleType>::queryInterface(const Steinberg::int8*
     return Steinberg::kNoInterface;
 }
 
-template<typename SampleType>
-Steinberg::uint32 VST3Plugin<SampleType>::addRef()
+Steinberg::uint32 VST3Plugin::addRef()
 {
     return 1;
 }
 
-template<typename SampleType>
-Steinberg::uint32 VST3Plugin<SampleType>::release()
+Steinberg::uint32 VST3Plugin::release()
 {
     return 1;
 }
 
-template<typename SampleType>
-Steinberg::tresult VST3Plugin<SampleType>::beginEdit(Steinberg::Vst::ParamID id)
+// VST3Plugin IComponentHandler interfaces
+// ------------------------------------------------------------------------------------------
+Steinberg::tresult VST3Plugin::beginEdit(Steinberg::Vst::ParamID id)
 {
-    return Steinberg::kNotImplemented;
+    if(parameterCount())
+    {
+        auto parameters = reinterpret_cast<VST3PluginParameter*>(paramBlock_.data());
+        for(decltype(paramCount_) i = 0; i < paramCount_; ++i)
+        {
+            auto& parameter = static_cast<VST3PluginParameter&>(this->parameter(i));
+            if(id == parameter.getParameterInfo().id)
+            {
+                paramIdAndIndex_.insert({id, i});
+                return Steinberg::kResultOk;
+            }
+        }
+    }
+    return Steinberg::kInvalidArgument;
 }
 
-template<typename SampleType>
-Steinberg::tresult VST3Plugin<SampleType>::performEdit(Steinberg::Vst::ParamID id,
+Steinberg::tresult VST3Plugin::performEdit(Steinberg::Vst::ParamID id,
     Steinberg::Vst::ParamValue valueNormalized)
 {
-    return Steinberg::kNotImplemented;
+    editController_->setParamNormalized(id, valueNormalized);
+    // TODO: 用 paramIdAndIndex_ 中对应的索引值对 UI 等进行更新
+    auto index = paramIdAndIndex_[id];
+    return Steinberg::kResultOk;
 }
 
-template<typename SampleType>
-Steinberg::tresult VST3Plugin<SampleType>::endEdit(Steinberg::Vst::ParamID id)
+Steinberg::tresult VST3Plugin::endEdit(Steinberg::Vst::ParamID id)
+{
+    auto index = paramIdAndIndex_[id];
+    paramIdAndIndex_.erase(id);
+    return Steinberg::kResultOk;
+}
+
+Steinberg::tresult VST3Plugin::restartComponent(Steinberg::int32 flags)
 {
     return Steinberg::kNotImplemented;
 }
 
-template<typename SampleType>
-Steinberg::tresult VST3Plugin<SampleType>::restartComponent(Steinberg::int32 flags)
+// VST3Plugin IComponentHandler2 interfaces
+// ------------------------------------------------------------------------------------------
+Steinberg::tresult VST3Plugin::setDirty(Steinberg::TBool state)
 {
     return Steinberg::kNotImplemented;
 }
 
-template<typename SampleType>
-Steinberg::tresult VST3Plugin<SampleType>::resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* newSize)
+Steinberg::tresult VST3Plugin::requestOpenEditor(Steinberg::FIDString name)
+{
+    if(window_)
+    {
+        window_->showNormal();
+        return Steinberg::kResultOk;
+    }
+    return Steinberg::kResultFalse;
+}
+
+Steinberg::tresult VST3Plugin::startGroupEdit()
+{
+    return Steinberg::kNotImplemented;
+}
+
+Steinberg::tresult VST3Plugin::finishGroupEdit()
+{
+    return Steinberg::kNotImplemented;
+}
+
+Steinberg::tresult VST3Plugin::resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* newSize)
 {
     Steinberg::ViewRect oldSize; view->getSize(&oldSize);
     window_->setWidth(newSize->getWidth());
@@ -711,20 +730,17 @@ Steinberg::tresult VST3Plugin<SampleType>::resizeView(Steinberg::IPlugView* view
     return Steinberg::kResultOk;
 }
 
-template<typename SampleType>
-const SpeakerArrangements& VST3Plugin<SampleType>::inputSpeakerArrangements()
+const SpeakerArrangements& VST3Plugin::inputSpeakerArrangements()
 {
     return inputSpeakerArrangements_;
 }
 
-template<typename SampleType>
-const SpeakerArrangements& VST3Plugin<SampleType>::outputSpeakerArrangements()
+const SpeakerArrangements& VST3Plugin::outputSpeakerArrangements()
 {
     return outputSpeakerArrangements_;
 }
 
-template<typename SampleType>
-bool VST3Plugin<SampleType>::attachToWindow(QWindow* window)
+bool VST3Plugin::attachToWindow(QWindow* window)
 {
     if(view_)
     {
@@ -736,7 +752,7 @@ bool VST3Plugin<SampleType>::attachToWindow(QWindow* window)
         window_->setHeight(viewRect.getHeight());
         window_->setTitle(classInfo_.name);
         view_->attached(reinterpret_cast<HWND>(window_->winId()), Steinberg::kPlatformTypeHWND);
-        Musec::Controller::AudioEngineController::AppProject().addPluginWindowMapping(audioProcessor_, window_);
+        // Musec::Controller::AudioEngineController::AppProject().addPluginWindowMapping(audioProcessor_, window_);
         QObject::connect(window_, &QWindow::widthChanged,
             [this](int) { onWindowSizeChanged(); });
         QObject::connect(window_, &QWindow::heightChanged,
@@ -746,8 +762,7 @@ bool VST3Plugin<SampleType>::attachToWindow(QWindow* window)
     return false;
 }
 
-template<typename SampleType>
-bool VST3Plugin<SampleType>::detachWithWindow()
+bool VST3Plugin::detachWithWindow()
 {
     if(!window_)
     {
@@ -756,33 +771,29 @@ bool VST3Plugin<SampleType>::detachWithWindow()
     if(view_)
     {
         view_->removed();
-        Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(audioProcessor_);
+        // Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(audioProcessor_);
         window_ = nullptr;
         return true;
     }
     return false;
 }
 
-template<typename SampleType>
-const Steinberg::PClassInfo& VST3Plugin<SampleType>::getClassInfo() const
+const Steinberg::PClassInfo& VST3Plugin::getClassInfo() const
 {
     return classInfo_;
 }
 
-template<typename SampleType>
-Steinberg::IPluginFactory* VST3Plugin<SampleType>::factory() const
+Steinberg::IPluginFactory* VST3Plugin::factory() const
 {
     return factory_;
 }
 
-template<typename SampleType>
-Steinberg::IPlugView* VST3Plugin<SampleType>::getView() const
+Steinberg::IPlugView* VST3Plugin::getView() const
 {
     return view_;
 }
 
-template<typename SampleType>
-void VST3Plugin<SampleType>::onWindowSizeChanged()
+void VST3Plugin::onWindowSizeChanged()
 {
     if(view_)
     {
@@ -792,24 +803,26 @@ void VST3Plugin<SampleType>::onWindowSizeChanged()
         auto height = window_->height();
         auto newRect = Steinberg::ViewRect(x, y, x + width, y + height);
         auto oldRect = Steinberg::ViewRect(); view_->getSize(&oldRect);
-        if(view_->checkSizeConstraint(&newRect) == Steinberg::kResultOk)
+        if(view_->checkSizeConstraint(&newRect) != Steinberg::kNotImplemented)
         {
             window_->setX(newRect.left);
             window_->setY(newRect.top);
             window_->setWidth(newRect.getWidth());
             window_->setHeight(newRect.getHeight());
-            view_->onSize(&newRect);
+            auto onSizeResult = view_->onSize(&newRect);
         }
+        view_->getSize(&newRect);
+        window_->setWidth(newRect.getWidth());
+        window_->setHeight(newRect.getHeight());
     }
 }
 
-template<typename SampleType>
-bool VST3Plugin<SampleType>::getBypass() const
+bool VST3Plugin::getBypass() const
 {
     return this->audioProcessorStatus_ <= VST3AudioProcessorStatus::Processing;
 }
 
-template<typename SampleType> QString VST3Plugin<SampleType>::getName() const
+ QString VST3Plugin::getName() const
 {
     if(!factory_)
     {
@@ -818,28 +831,33 @@ template<typename SampleType> QString VST3Plugin<SampleType>::getName() const
     return QString(getClassInfo().name);
 }
 
-template<typename SampleType> QWindow* VST3Plugin<SampleType>::window()
+ QWindow* VST3Plugin::window()
 {
     return window_;
 }
 
-template<typename SampleType> bool VST3Plugin<SampleType>::hasUI()
+ bool VST3Plugin::hasUI()
 {
     return view_;
 }
 
-template<typename SampleType>
-Musec::Base::PluginFormat VST3Plugin<SampleType>::pluginFormat()
+Musec::Base::PluginFormat VST3Plugin::pluginFormat()
 {
     return Musec::Base::PluginFormat::FormatVST3;
 }
 
-template<typename SampleType>
-bool VST3Plugin<SampleType>::activated()
+bool VST3Plugin::activated()
 {
     return audioProcessorStatus_ >= VST3AudioProcessorStatus::Activated;
 }
 
-template class VST3Plugin<float>;
-template class VST3Plugin<double>;
+int VST3Plugin::parameterCount()
+{
+    return paramCount_;
+}
+
+IParameter& VST3Plugin::parameter(int index)
+{
+    return reinterpret_cast<VST3PluginParameter*>(paramBlock_.data())[index];
+}
 }

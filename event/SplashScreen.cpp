@@ -8,11 +8,11 @@
 
 namespace Musec::Event
 {
-SplashScreen::SplashScreen(QObject* parent): QObject(parent), workerThread(this)
+SplashScreen::SplashScreen(QObject* parent): QObject(parent), workerThread_(this)
 {
     using namespace Musec::UI;
     // C++ -> C++
-    QObject::connect(&workerThread, &SplashScreenWorkerThread::finished,
+    QObject::connect(&workerThread_, &SplashScreenWorkerThread::finished,
                      this,          &SplashScreen::openMainWindow);
     // C++ -> QML
     QObject::connect(this,         SIGNAL(closeDialog()),
@@ -28,6 +28,6 @@ SplashScreen::~SplashScreen()
 
 void SplashScreen::onInitDialog()
 {
-    workerThread.start();
+    workerThread_.start();
 }
 }

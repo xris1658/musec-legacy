@@ -21,6 +21,7 @@ ASIOSDK_DIR        = C:/asiosdk_2.3.3_2019-06-14
 VST3SDK_DIR        = D:/apps/vst3sdk
 VCPKG_DIR          = D:/apps/vcpkg
 CLAP_DIR           = D:/apps/clap
+CLAP_HELPER_DIR    = D:/apps/clap-helpers
 message(ASIO SDK directory: $$ASIOSDK_DIR)
 message( VST SDK direcotry: $$VST3SDK_DIR)
 message(   vcpkg directory: $$VCPKG_DIR)
@@ -30,7 +31,8 @@ message(CLAP SDK directory: $$CLAP_DIR)
 INCLUDEPATH += $$VCPKG_DIR/installed/x64-windows/include \
                $$VST3SDK_DIR \
                $$ASIOSDK_DIR \
-               $$CLAP_DIR/include
+               $$CLAP_DIR/include \
+               $$CLAP_HELPER_DIR/include
 
 CONFIG(debug, debug | release) {
     QMAKE_LIBDIR += \
@@ -49,6 +51,7 @@ message(Library directory: $$QMAKE_LIBDIR)
 DEFINES += _CRT_SECURE_NO_WARNINGS
 
 HEADERS += \
+    ModuleConnector.hpp \
     audio/arrangement/ClipInTrack.hpp \
     audio/arrangement/TrackSequence.hpp \
     audio/base/AudioBufferView.hpp \
@@ -68,17 +71,23 @@ HEADERS += \
     audio/engine/Graph.hpp \
     audio/engine/MIDIClock.hpp \
     audio/engine/Project.hpp \
+    audio/host/CLAPEvents.hpp \
     audio/host/CLAPHost.hpp \
     audio/host/MusecVST3Host.hpp \
     audio/media/AudioSequence.hpp \
     audio/media/MIDISequence.hpp \
     audio/plugin/CLAPPlugin.hpp \
+    audio/plugin/CLAPPluginParameter.hpp \
+    audio/plugin/CLAPUtils.hpp \
+    audio/plugin/IParameter.hpp \
     audio/plugin/IPlugin.hpp \
     audio/plugin/VST2Plugin.hpp \
+    audio/plugin/VST2PluginParameter.hpp \
     audio/plugin/VST3Plugin.hpp \
+    audio/plugin/VST3PluginParameter.hpp \
     audio/track/AudioTrack.hpp \
-    audio/track/InstrumentTrack.hpp \
     audio/track/ITrack.hpp \
+    audio/track/InstrumentTrack.hpp \
     audio/track/MIDITrack.hpp \
     audio/track/PluginSequence.hpp \
     audio/track/TrackInformation.hpp \
@@ -93,8 +102,8 @@ HEADERS += \
     base/PluginBase.hpp \
     base/QmlBase.hpp \
     concurrent/ThreadPool.hpp \
-    controller/AppController.hpp \
     controller/ASIODriverController.hpp \
+    controller/AppController.hpp \
     controller/AssetController.hpp \
     controller/AssetDirectoryController.hpp \
     controller/AudioEngineController.hpp \
@@ -111,8 +120,8 @@ HEADERS += \
     dao/PluginDAO.hpp \
     dao/PluginDirectoryDAO.hpp \
     entities/CompleteTrack.hpp \
-    entities/Plugin.hpp \
     entities/EntitiesInitializer.hpp \
+    entities/Plugin.hpp \
     event/EventBase.hpp \
     event/EventHandler.hpp \
     event/MainWindowEvent.hpp \
@@ -143,9 +152,10 @@ HEADERS += \
     ui/UI.hpp \
     util/Endian.hpp \
     util/Literal.hpp \
-    ModuleConnector.hpp
+    util/TimerClamp.hpp
 
 SOURCES += \
+    ModuleConnector.cpp \
     audio/base/AudioBufferView.cpp \
     audio/base/Automation.cpp \
     audio/base/TimeSignature.cpp \
@@ -154,14 +164,18 @@ SOURCES += \
     audio/driver/Literals.cpp \
     audio/engine/MIDIClock.cpp \
     audio/engine/Project.cpp \
+    audio/host/CLAPEvents.cpp \
     audio/host/CLAPHost.cpp \
     audio/host/MusecVST3Host.cpp \
     audio/media/AudioSequence.cpp \
     audio/media/MIDISequence.cpp \
     audio/plugin/CLAPPlugin.cpp \
+    audio/plugin/CLAPPluginParameter.cpp \
     audio/plugin/ShellPluginId.cpp \
     audio/plugin/VST2Plugin.cpp \
+    audio/plugin/VST2PluginParameter.cpp \
     audio/plugin/VST3Plugin.cpp \
+    audio/plugin/VST3PluginParameter.cpp \
     audio/track/AudioTrack.cpp \
     audio/track/InstrumentTrack.cpp \
     audio/track/MIDITrack.cpp \
@@ -170,8 +184,8 @@ SOURCES += \
     base/FixedSizeMemoryPool.cpp \
     base/PluginBase.cpp \
     concurrent/ThreadPool.cpp \
-    controller/AppController.cpp \
     controller/ASIODriverController.cpp \
+    controller/AppController.cpp \
     controller/AssetController.cpp \
     controller/AssetDirectoryController.cpp \
     controller/AudioEngineController.cpp \
@@ -188,15 +202,14 @@ SOURCES += \
     dao/PluginDAO.cpp \
     dao/PluginDirectoryDAO.cpp \
     entities/CompleteTrack.cpp \
-    entities/Plugin.cpp \
     entities/EntitiesInitializer.cpp \
+    entities/Plugin.cpp \
     event/EventBase.cpp \
     event/EventHandler.cpp \
     event/MainWindowEvent.cpp \
     event/ObjectCreateListener.cpp \
     event/SplashScreen.cpp \
     event/SplashScreenWorkerThread.cpp \
-    main.cpp \
     math/Integration.cpp \
     math/QuadraticFunction.cpp \
     model/ASIODriverListModel.cpp \
@@ -218,8 +231,7 @@ SOURCES += \
     ui/Render.cpp \
     ui/UI.cpp \
     util/Endian.cpp \
-    util/Literal.cpp \
-    ModuleConnector.cpp
+    util/Literal.cpp
 
 RESOURCES += \
     Musec.qrc

@@ -33,6 +33,7 @@ public:
     List getList() const;
     int itemCount() const;
     static constexpr int columnSize();
+    Q_INVOKABLE bool empty() const noexcept;
 public:
     virtual int rowCount(const QModelIndex&) const override;
     virtual int columnCount(const QModelIndex&) const override;

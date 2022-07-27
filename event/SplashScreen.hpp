@@ -23,7 +23,7 @@ signals:
     void openMainWindow();
     void closeDialog();
 private:
-    Musec::Event::SplashScreenWorkerThread workerThread;
+    Musec::Event::SplashScreenWorkerThread workerThread_;
 };
 }
 }

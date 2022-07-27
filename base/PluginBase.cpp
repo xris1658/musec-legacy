@@ -54,7 +54,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
     {
         try
         {
-            Musec::Audio::Plugin::VST2Plugin<float> plugin(path, true);
+            Musec::Audio::Plugin::VST2Plugin plugin(path, true);
             auto effect = plugin.effect();
             std::array<char, kVstMaxProductStrLen> nameBuffer = {0};
             auto category = effect->dispatcher(effect, effGetPlugCategory, 0, 0, nullptr, 0);
@@ -75,7 +75,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                     }
                     // 加载插件，获取插件的信息
     //                AEffect* subPlugin = pluginEntryProc(pluginVST2Callback);
-                    auto plugin = Musec::Audio::Plugin::VST2Plugin<float>(path, false, shellPluginId);
+                    auto plugin = Musec::Audio::Plugin::VST2Plugin(path, false, shellPluginId);
                     auto subPlugin = plugin.effect();
                     int pluginType = subPlugin->flags & effFlagsIsSynth?
                         PluginType::TypeInstrument:
@@ -151,7 +151,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
             }
             auto factory = pluginFactoryProc();
             Steinberg::IPluginFactory2* factory2 = nullptr;
-            auto factory2Result = factory->queryInterface(Steinberg::IPluginFactory2::iid, reinterpret_cast<void**>(&factory2));
+            auto factory2Result = factory->queryInterface(Steinberg::IPluginFactory2_iid, reinterpret_cast<void**>(&factory2));
             if(factory2Result == Steinberg::kResultOk)
             {
                 auto classCount = factory2->countClasses();
@@ -236,10 +236,10 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                         auto pluginType = PluginType::TypeUnknown;
                         IAudioProcessor* audioProcessor = nullptr;
                         /*auto result = */factory->createInstance(classInfo.cid,
-                                                                  IAudioProcessor::iid,
+                                                                  IAudioProcessor_iid,
                                                                   reinterpret_cast<void**>(&audioProcessor));
                         IComponent* component = nullptr;
-                        /*result = */audioProcessor->queryInterface(IComponent::iid,
+                        /*result = */audioProcessor->queryInterface(IComponent_iid,
                                                                     reinterpret_cast<void**>(&component));
                         auto& host = MusecVST3Host::instance();
                         component->initialize(&host);
@@ -335,7 +335,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
     {
         try
         {
-            Musec::Audio::Plugin::CLAPPlugin<float> plugin(path);
+            Musec::Audio::Plugin::CLAPPlugin plugin(path);
             const auto factory = plugin.factory();
             auto count = factory->get_plugin_count(factory);
             for(decltype(count) i = 0; i < count; ++i)

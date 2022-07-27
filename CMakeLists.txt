@@ -17,9 +17,10 @@ find_package(Qt5 COMPONENTS Core Quick Widgets Qml Gui QuickCompiler REQUIRED)
 
 include_directories(${ASIOSDK_PATH}
                     ${CLAP_SOURCE_DIR}/include
+                    ${CLAP_HELPERS_DIR}/include
                     ${SQLITE_MODERN_CPP_INCLUDE_DIRS})
 
-add_subdirectory(${VST3SDK_SOURCE_DIR} EXCLUDE_FROM_ALL ${PROJECT_BINARY_DIR}/vst3sdk)
+add_subdirectory(${VST3SDK_SOURCE_DIR} ${PROJECT_BINARY_DIR}/vst3sdk)
 
 add_custom_target(GenerateLocaleBase COMMAND ${Qt5_DIR}/../../../bin/lupdate.exe ${CMAKE_SOURCE_DIR}/Musec.pro -ts ${CMAKE_SOURCE_DIR}/i18n/base.ts)
 add_custom_target(GenerateLocaleCN COMMAND ${Qt5_DIR}/../../../bin/lupdate.exe ${CMAKE_SOURCE_DIR}/Musec.pro -ts ${CMAKE_SOURCE_DIR}/i18n/Musec_zh_CN.ts)
@@ -70,6 +71,8 @@ set(PROJECT_SOURCES
     audio/engine/MIDIClock.hpp
     audio/engine/Project.cpp
     audio/engine/Project.hpp
+    audio/host/CLAPEvents.cpp
+    audio/host/CLAPEvents.hpp
     audio/host/CLAPHost.cpp
     audio/host/CLAPHost.hpp
     audio/host/MusecVST3Host.cpp
@@ -80,12 +83,20 @@ set(PROJECT_SOURCES
     audio/media/MIDISequence.hpp
     audio/plugin/CLAPPlugin.cpp
     audio/plugin/CLAPPlugin.hpp
+    audio/plugin/CLAPPluginParameter.cpp
+    audio/plugin/CLAPPluginParameter.hpp
+    audio/plugin/CLAPUtils.hpp
+    audio/plugin/IParameter.hpp
     audio/plugin/IPlugin.hpp
     audio/plugin/ShellPluginId.cpp
     audio/plugin/VST2Plugin.cpp
     audio/plugin/VST2Plugin.hpp
+    audio/plugin/VST2PluginParameter.cpp
+    audio/plugin/VST2PluginParameter.hpp
     audio/plugin/VST3Plugin.cpp
     audio/plugin/VST3Plugin.hpp
+    audio/plugin/VST3PluginParameter.cpp
+    audio/plugin/VST3PluginParameter.hpp
     audio/track/AudioTrack.cpp
     audio/track/AudioTrack.hpp
     audio/track/ITrack.hpp
@@ -209,7 +220,8 @@ set(PROJECT_SOURCES
     util/Endian.hpp
     util/Literal.cpp
     util/Literal.hpp
-    util/TimerClamp.hpp)
+    util/TimerClamp.hpp
+    )
 
 set(TEST_COMMON_SOURCES
     test/common/PluginWindowThread.cpp

@@ -2,6 +2,7 @@
 
 #include "audio/driver/ASIODriver.hpp"
 #include "audio/engine/Project.hpp"
+#include "audio/plugin/VST2PluginParameter.hpp"
 #include "controller/AudioEngineController.hpp"
 #include "base/Constants.hpp"
 #include "base/PluginBase.hpp"
@@ -287,8 +288,7 @@ VstIntPtr VSTCALLBACK pluginVST2Callback(
     return ret;
 }
 
-template<typename SampleType>
-VST2Plugin<SampleType>::VST2Plugin(const QString& path, bool scanPlugin, VstInt32 shellPluginId):
+VST2Plugin::VST2Plugin(const QString& path, bool scanPlugin, VstInt32 shellPluginId):
     VST2Plugin::Base(path)
 {
     auto pluginEntryProc = Musec::Native::getExport<VST2PluginEntryProc>(*this, "VSTPluginMain");
@@ -320,20 +320,12 @@ VST2Plugin<SampleType>::VST2Plugin(const QString& path, bool scanPlugin, VstInt3
     {
         effect_ = ShellPluginId::instance().getShellPlugin(shellPluginId, true, pluginEntryProc);
     }
-    if constexpr(std::is_same_v<SampleType, double>)
-    {
-        if(!(effect_->flags & VstAEffectFlags::effFlagsCanDoubleReplacing))
-        {
-            throw std::runtime_error("This plugin cannot process 64-bit float!");
-        }
-    }
     effect_->dispatcher(effect_, effOpen, 0, 0, nullptr, 0);
     inputsRaw_ = std::vector<SampleType*>(inputCount(), nullptr);
     outputsRaw_ = std::vector<SampleType*>(outputCount(), nullptr);
 }
 
-template<typename SampleType>
-VST2Plugin<SampleType>::~VST2Plugin()
+VST2Plugin::~VST2Plugin()
 {
     if(effect_)
     {
@@ -348,132 +340,113 @@ VST2Plugin<SampleType>::~VST2Plugin()
     }
 }
 
-template<typename SampleType>
-AEffect* VST2Plugin<SampleType>::effect() const
+AEffect* VST2Plugin::effect() const
 {
     return effect_;
 }
 
-template<typename SampleType>
-std::uint8_t VST2Plugin<SampleType>::inputCount() const
+std::uint8_t VST2Plugin::inputCount() const
 {
     return static_cast<std::uint8_t>(effect_->numInputs);
 }
 
-template<typename SampleType>
-std::uint8_t VST2Plugin<SampleType>::outputCount() const
+std::uint8_t VST2Plugin::outputCount() const
 {
     return static_cast<std::uint8_t>(effect_->numOutputs);
 }
 
-template<typename SampleType>
-bool VST2Plugin<SampleType>::initialize(double sampleRate, std::int32_t maxSampleCount)
+bool VST2Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
 {
     effect_->dispatcher(effect_, AEffectOpcodes::effSetSampleRate, 0, 0, nullptr, sampleRate);
     effect_->dispatcher(effect_, AEffectOpcodes::effSetBlockSize, 0, maxSampleCount, nullptr, 0);
     initializeEditor();
-    paramBlock_ = {sizeof(VST2ParameterInfo) * effect_->numParams};
-    auto paramBlockAsArray = reinterpret_cast<VST2ParameterInfo*>(paramBlock_.data());
-    VstIntPtr paramPropertiesSupported = 0;
-    for(decltype(effect_->numParams) i = 0; i < effect_->numParams; ++i)
+    auto paramCount = parameterCount();
+    paramBlock_ = decltype(paramBlock_)(sizeof(VST2PluginParameter) * paramCount);
+    auto paramBlockAsArray = reinterpret_cast<VST2PluginParameter*>(paramBlock_.data());
+    for(decltype(paramCount) i = 0; i < paramCount; ++i)
     {
-        paramPropertiesSupported = effect_->dispatcher(effect_, AEffectXOpcodes::effGetParameterProperties, i, 0, &(paramBlockAsArray[i].properties), 0);
-        effect_->dispatcher(effect_, AEffectOpcodes::effGetParamName, i, 0, paramBlockAsArray[i].name, 0);
-        effect_->dispatcher(effect_, AEffectOpcodes::effGetParamDisplay, i, 0, paramBlockAsArray[i].display, 0);
-        effect_->dispatcher(effect_, AEffectOpcodes::effGetParamLabel, i, 0, paramBlockAsArray[i].unit, 0);
-        paramBlockAsArray[i].value = effect_->getParameter(effect_, i);
+        auto& param = paramBlockAsArray[i];
+        param = VST2PluginParameter(*this, i);
     }
     return true;
 }
 
-template<typename SampleType>
-bool VST2Plugin<SampleType>::uninitialize()
+bool VST2Plugin::uninitialize()
 {
+    paramBlock_ = Musec::Base::FixedSizeMemoryBlock();
     uninitializeEditor();
     stopProcessing();
+    deactivate();
     return true;
 }
 
-template<typename SampleType>
-bool VST2Plugin<SampleType>::activate()
+bool VST2Plugin::activate()
 {
     effect_->dispatcher(effect_, AEffectOpcodes::effMainsChanged,  0, 1, nullptr, 0);
     activated_ = true;
     return true;
 }
 
-template<typename SampleType>
-bool VST2Plugin<SampleType>::deactivate()
+bool VST2Plugin::deactivate()
 {
     effect_->dispatcher(effect_, AEffectOpcodes::effMainsChanged, 0, 0, nullptr, 0);
     activated_ = false;
     return true;
 }
 
-template<typename SampleType>
-bool VST2Plugin<SampleType>::startProcessing()
+bool VST2Plugin::startProcessing()
 {
     effect_->dispatcher(effect_, AEffectXOpcodes::effStartProcess, 0, 0, nullptr, 0);
     bypass_ = false;
     return true;
 }
 
-template<typename SampleType>
-bool VST2Plugin<SampleType>::stopProcessing()
+bool VST2Plugin::stopProcessing()
 {
     effect_->dispatcher(effect_, AEffectXOpcodes::effStopProcess, 0, 0, nullptr, 0);
     bypass_ = true;
     return true;
 }
 
-template<typename SampleType>
-void VST2Plugin<SampleType>::process(const Musec::Audio::Base::AudioBufferViews<SampleType>& inputs,
-    const Musec::Audio::Base::AudioBufferViews<SampleType>& outputs)
+void VST2Plugin::process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs, int inputCount,
+    Musec::Audio::Base::AudioBufferView<SampleType>* outputs, int outputCount)
 {
-    for(int i = 0; i < inputs.size(); ++i)
+    for(int i = 0; i < inputCount; ++i)
     {
         inputsRaw_[i] = inputs[i].getSamples();
-        if(inputsRaw_.size() > inputs.size())
+        if(inputsRaw_.size() > inputCount)
         {
-            inputsRaw_[i + inputs.size()] = inputs[i].getSamples();
+            inputsRaw_[i + inputCount] = inputs[i].getSamples();
         }
     }
-    auto outputSize = outputs.size();
-    for(int i = 0; i < outputSize; ++i)
+    for(int i = 0; i < outputCount; ++i)
     {
         outputsRaw_[i] = outputs[i].getSamples();
     }
-    for(int i = outputSize; i < effect_->numOutputs; ++i)
+    for(int i = outputCount; i < effect_->numOutputs; ++i)
     {
         outputsRaw_[i] = Musec::Controller::AudioEngineController::dummyBufferView<SampleType>().getSamples();
     }
     std::int32_t sampleCount = Musec::Controller::AudioEngineController::getCurrentBlockSize();
-    if constexpr(std::is_same_v<SampleType, float>)
-    {
-        effect_->processReplacing(effect_, inputsRaw_.data(), outputsRaw_.data(), sampleCount);
-    }
-    else if constexpr(std::is_same_v<SampleType, double>)
-    {
-        effect_->processDoubleReplacing(effect_, inputsRaw_.data(), outputsRaw_.data(), sampleCount);
-    }
+    effect_->processReplacing(effect_, inputsRaw_.data(), outputsRaw_.data(), sampleCount);
 }
 
-template<typename SampleType> bool VST2Plugin<SampleType>::initializeEditor()
+bool VST2Plugin::initializeEditor()
 {
     return effect_->flags & VstAEffectFlags::effFlagsHasEditor;
 }
 
-template<typename SampleType> bool VST2Plugin<SampleType>::uninitializeEditor()
+bool VST2Plugin::uninitializeEditor()
 {
     return detachWithWindow();
 }
 
-template<typename SampleType> bool VST2Plugin<SampleType>::getBypass() const
+bool VST2Plugin::getBypass() const
 {
     return bypass_;
 }
 
-template<typename SampleType> QString VST2Plugin<SampleType>::getName() const
+QString VST2Plugin::getName() const
 {
     if(!effect_)
     {
@@ -489,7 +462,7 @@ template<typename SampleType> QString VST2Plugin<SampleType>::getName() const
     return QString(nameBuffer.data());
 }
 
-template<typename SampleType> bool VST2Plugin<SampleType>::attachToWindow(QWindow* window)
+bool VST2Plugin::attachToWindow(QWindow* window)
 {
     window->setTitle(getName());
     ERect* rect = nullptr;
@@ -513,7 +486,7 @@ template<typename SampleType> bool VST2Plugin<SampleType>::attachToWindow(QWindo
     }
 }
 
-template<typename SampleType> bool VST2Plugin<SampleType>::detachWithWindow()
+bool VST2Plugin::detachWithWindow()
 {
     if(!window_)
     {
@@ -525,31 +498,34 @@ template<typename SampleType> bool VST2Plugin<SampleType>::detachWithWindow()
     return true;
 }
 
-template<typename SampleType>
-QWindow* VST2Plugin<SampleType>::window()
+QWindow* VST2Plugin::window()
 {
     return window_;
 }
 
-template<typename SampleType>
-bool VST2Plugin<SampleType>::hasUI()
+bool VST2Plugin::hasUI()
 {
     return effect_ && (effect_->flags & VstAEffectFlags::effFlagsHasEditor);
 }
 
-template<typename SampleType>
-Musec::Base::PluginFormat VST2Plugin<SampleType>::pluginFormat()
+Musec::Base::PluginFormat VST2Plugin::pluginFormat()
 {
     return Musec::Base::PluginFormat::FormatVST2;
 }
 
-template<typename SampleType>
-bool VST2Plugin<SampleType>::activated()
+bool VST2Plugin::activated()
 {
     return activated_;
 }
 
-template class VST2Plugin<float>;
-template class VST2Plugin<double>;
+int VST2Plugin::parameterCount()
+{
+    return effect_->numParams;
+}
+
+IParameter& VST2Plugin::parameter(int index)
+{
+    return (reinterpret_cast<VST2PluginParameter*>(paramBlock_.data()))[index];
+}
 // ------------------------------------------------------------------------------------------
 }

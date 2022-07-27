@@ -1,7 +1,10 @@
 #ifndef MUSEC_AUDIO_PLUGIN_CLAPPLUGIN
 #define MUSEC_AUDIO_PLUGIN_CLAPPLUGIN
 
+#include "audio/base/Automation.hpp"
+#include "audio/host/CLAPHost.hpp"
 #include "audio/plugin/IPlugin.hpp"
+#include "base/FixedSizeMemoryBlock.hpp"
 #include "native/WindowsLibraryRAII.hpp"
 
 #include <clap/ext/audio-ports.h>
@@ -12,7 +15,11 @@
 #include <clap/plugin-factory.h>
 #include <clap/process.h>
 
+#include <clap/helpers/event-list.hh>
+
 #include <QString>
+
+#include <vector>
 
 namespace Musec
 {
@@ -30,33 +37,30 @@ enum class CLAPPluginStatus: std::int8_t
     Processing = 0x10
 };
 
-enum class CLAPPluginEditorStatus: std::int8_t
-{
-    NoEditor =0x00,
-    Created = 0x01,
-    Initialized = 0x02
-};
-
-template<typename SampleType>
 class CLAPPlugin:
     public Musec::Native::WindowsLibraryRAII,
-    public Musec::Audio::Plugin::IPlugin<SampleType>
+    public Musec::Audio::Plugin::IPlugin<float>
 {
+    using SampleType = float;
 public:
     CLAPPlugin();
     CLAPPlugin(const QString& path);
-    CLAPPlugin(CLAPPlugin&&) = default;
+    CLAPPlugin(CLAPPlugin&& rhs) noexcept;
+    CLAPPlugin& operator=(CLAPPlugin&& rhs) noexcept;
     bool createPlugin(int index);
-    static CLAPPlugin<SampleType> fromPathAndIndex(const QString& path, int index);
+    CLAPPlugin(const QString& path, int index);
     ~CLAPPlugin() override;
+    void swap(CLAPPlugin& rhs);
 public:
     std::uint8_t inputCount() const override;
     std::uint8_t outputCount() const override;
-    void process(const Musec::Audio::Base::AudioBufferViews<SampleType>& inputs,
-        const Musec::Audio::Base::AudioBufferViews<SampleType>& outputs) override;
+    void process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs, int inputCount,
+        Musec::Audio::Base::AudioBufferView<SampleType>* outputs, int outputCount) override;
 public:
     const clap_plugin* plugin() const;
     const clap_plugin_factory* factory() const;
+    const clap_plugin_gui* pluginGUI() const;
+    const clap_plugin_params* pluginParams() const;
 public:
     bool initialize(double sampleRate, std::int32_t maxSampleCount) override;
     bool uninitialize() override;
@@ -65,6 +69,7 @@ public:
     bool attachToWindow(QWindow* window) override;
     bool detachWithWindow() override;
     QWindow* window() override;
+    void onWindowSizeChanged();
     bool activate() override;
     bool deactivate() override;
     bool activated() override;
@@ -74,29 +79,43 @@ public:
     bool getBypass() const override;
     QString getName() const override;
     Musec::Base::PluginFormat pluginFormat() override;
+    int parameterCount() override;
+    IParameter& parameter(int index) override;
 private:
+    void initHost();
+private:
+    char hostArea[sizeof(Musec::Audio::Host::CLAPHost)];
     const clap_plugin* plugin_ = nullptr;
     const clap_plugin_audio_ports* audioPorts_ = nullptr;
     const clap_plugin_entry* entry_ = nullptr;
     const clap_plugin_factory* factory_ = nullptr;
     const clap_plugin_descriptor* desc_ = nullptr;
+    const clap_plugin_gui* gui_ = nullptr;
+    const clap_plugin_params* params_ = nullptr;
     double sampleRate_;
     std::uint32_t minBlockSize_;
     std::uint32_t maxBlockSize_;
     clap_process processData_;
-    std::vector<clap_audio_buffer> bufferForProcessData_;
-    const clap_plugin_gui* gui_ = nullptr;
     QWindow* window_ = nullptr;
-    const clap_plugin_params* params_ = nullptr;
     clap_window clapWindow_;
     CLAPPluginStatus pluginStatus_ = CLAPPluginStatus::NoPlugin;
-    CLAPPluginEditorStatus pluginEditorStatus_ = CLAPPluginEditorStatus::NoEditor;
+    clap_audio_buffer processDataInput_;
+    clap_audio_buffer processDataOutput_;
+    clap::helpers::EventList eventInputList_;
+    clap::helpers::EventList eventOutputList_;
+    std::vector<SampleType*> rawInputs_;
+    std::vector<SampleType*> rawOutputs_;
+    Musec::Base::FixedSizeMemoryBlock paramBlock_;
 };
+}
+}
+}
 
-extern template class CLAPPlugin<float>;
-extern template class CLAPPlugin<double>;
-}
-}
+namespace std
+{
+template<> void swap(Musec::Audio::Plugin::CLAPPlugin& lhs, Musec::Audio::Plugin::CLAPPlugin& rhs)
+noexcept(std::is_move_constructible_v<Musec::Audio::Plugin::CLAPPlugin>
+      && std::is_move_assignable_v<Musec::Audio::Plugin::CLAPPlugin>);
 }
 
 #endif //MUSEC_AUDIO_PLUGIN_CLAPPLUGIN

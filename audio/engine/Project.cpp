@@ -1,5 +1,6 @@
 #include "Project.hpp"
 
+#include "audio/host/CLAPEvents.hpp"
 #include "audio/host/MusecVST3Host.hpp"
 #include "audio/plugin/VST2Plugin.hpp"
 #include "audio/track/AudioTrack.hpp"
@@ -8,6 +9,7 @@
 #include "controller/AudioEngineController.hpp"
 #include "ui/PluginWindow.hpp"
 
+#include <array>
 #include <future>
 #include <thread>
 
@@ -190,17 +192,21 @@ const Musec::Base::FixedSizeMemoryBlock& Project::masterTrackAudioBuffer() const
     return masterTrackAudioBuffer_;
 }
 
-// 此函数在 ASIOBufferSwitch 回调中调用，因此无需调整优先级。或许应该按照 ASIO 文档提到的，将优先级调成实时 + MMCSS。
+// 此函数在 ASIOBufferSwitch 回调中调用，因此无需调整优先级。
+// 如果不由 ASIO 驱动调用，或许应该按照 ASIO 文档提到的，将优先级调成实时 + MMCSS。
 void Project::process()
 {
     std::lock_guard<std::mutex> lg(mutex_);
     auto& processContext = Musec::Audio::Host::MusecVST3Host::AppProcessContext();
+    auto& eventTransport = Musec::Audio::Host::AppCLAPEventTransport();
     Musec::Controller::AudioEngineController::fillProcessContext(processContext);
+    Musec::Controller::AudioEngineController::fillEventTransport(eventTransport);
     masterTrackAudioBuffer_.init();
     std::size_t currentBlockSize = Musec::Controller::AudioEngineController::getCurrentBlockSize();
-    Musec::Audio::Base::AudioBufferViews<float> audioBufferViews(
-        2, Musec::Audio::Base::AudioBufferView<float>()
-    );
+    std::array<Musec::Audio::Base::AudioBufferView<float>, 2> audioBufferViews;
+    // Musec::Audio::Base::AudioBufferViews<float> audioBufferViews(
+    //     2, Musec::Audio::Base::AudioBufferView<float>()
+    // );
     Musec::Audio::Base::AudioBufferViews<float> masterTrackAudioBufferViews {
         Musec::Audio::Base::AudioBufferView<float>(reinterpret_cast<float*>(masterTrackAudioBuffer_.data()), currentBlockSize),
         Musec::Audio::Base::AudioBufferView<float>(reinterpret_cast<float*>(masterTrackAudioBuffer_.data()) + currentBlockSize, currentBlockSize)
@@ -208,10 +214,8 @@ void Project::process()
     for (int i = 0; i < trackCount(); ++i)
     {
         auto& track = tracks_[i];
-        audioBufferViews = {
-            {audioBuffer_[i].get(),                    currentBlockSize},
-            {audioBuffer_[i].get() + currentBlockSize, currentBlockSize}
-        };
+        audioBufferViews[0] = {audioBuffer_[i].get(),                    currentBlockSize};
+        audioBufferViews[1] = {audioBuffer_[i].get() + currentBlockSize, currentBlockSize};
        for(auto& bufferView: audioBufferViews)
        {
            bufferView.init();
@@ -222,17 +226,12 @@ void Project::process()
             const auto& instrument = instrumentTrack->getInstrument();
             if (instrument)
             {
-                // if(instrument->pluginFormat() == Musec::Base::PluginFormat::FormatVST2)
-                // {
-                //     auto instrumentAsVST2 = std::static_pointer_cast<Musec::Audio::Plugin::VST2Plugin<float>>(instrument);
-                //     std::async(std::launch::async, [instrumentAsVST2]() { instrumentAsVST2->effect()->dispatcher(instrumentAsVST2->effect(), AEffectOpcodes::effEditIdle, 0, 0, nullptr, 0.0); });
-                // }
-                instrument->process({}, audioBufferViews);
+                instrument->process(nullptr, 0, audioBufferViews.data(), 2);
             }
             const auto& audioEffectPlugins = instrumentTrack->getAudioEffectPluginSequences()[0];
             for (const auto& audioEffect: audioEffectPlugins)
             {
-                audioEffect->process(audioBufferViews, audioBufferViews);
+                audioEffect->process(audioBufferViews.data(), 2, audioBufferViews.data(), 2);
             }
         }
         else if (track->trackType() == Musec::Audio::Track::TrackType::kAudioTrack)
@@ -241,7 +240,7 @@ void Project::process()
             const auto& plugins = audioTrack->getPluginSequences()[0];
             for (const auto& audioEffect: plugins)
             {
-                audioEffect->process(audioBufferViews, audioBufferViews);
+                audioEffect->process(audioBufferViews.data(), 2, audioBufferViews.data(), 2);
             }
         }
         // 按帧操作。
@@ -285,7 +284,7 @@ void Project::process()
     const auto& masterTrackAudioEffects = masterTrack_.getPluginSequences()[0];
     for(const auto& audioEffect: masterTrackAudioEffects)
     {
-        audioEffect->process(masterTrackAudioBufferViews, masterTrackAudioBufferViews);
+        audioEffect->process(masterTrackAudioBufferViews.data(), 2, masterTrackAudioBufferViews.data(), 2);
     }
 }
 

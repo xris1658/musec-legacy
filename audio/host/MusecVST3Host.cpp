@@ -1,5 +1,7 @@
 #include "MusecVST3Host.hpp"
 
+#include <public.sdk/source/vst/hosting/hostclasses.h>
+
 #include <cwchar>
 
 namespace Musec::Audio::Host
@@ -35,8 +37,22 @@ uint32 PLUGIN_API MusecVST3Host::release()
     return 1;
 }
 
-tresult PLUGIN_API MusecVST3Host::createInstance(TUID, TUID, void** obj)
+tresult PLUGIN_API MusecVST3Host::createInstance(TUID cid, TUID iid, void** obj)
 {
+    auto classId = FUID::fromTUID(cid);
+    auto interfaceId = FUID::fromTUID(iid);
+    if(classId == IMessage::iid && interfaceId == IMessage::iid)
+    {
+        // TODO: 换用从内存池分配
+        *obj = new HostMessage;
+        return kResultOk;
+    }
+    else if(classId == IAttributeList::iid && interfaceId == IAttributeList::iid)
+    {
+        // TODO: 换用从内存池分配
+        *obj = new HostAttributeList;
+        return kResultOk;
+    }
     *obj = nullptr;
     return kNotImplemented;
 }

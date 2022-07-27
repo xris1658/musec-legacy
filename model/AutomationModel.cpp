@@ -22,14 +22,16 @@ const Musec::Audio::Base::Automation& AutomationModel::getAutomation() const
 
 void AutomationModel::setAutomation(const Musec::Audio::Base::Automation& automation)
 {
+    automationAboutToSet();
     automation_ = automation;
-    // TODO: 发信号告知自动化改变
+    automationSet();
 }
 
 void AutomationModel::setAutomation(Musec::Audio::Base::Automation&& automation)
 {
+    automationAboutToSet();
     automation_ = std::move(automation);
-    // TODO: 发信号告知自动化改变
+    automationSet();
 }
 
 int AutomationModel::count() const noexcept
@@ -48,8 +50,12 @@ constexpr int AutomationModel::columnSize() noexcept
     return 3;
 }
 
-double AutomationModel::timeOfPoint(int index) const
+int AutomationModel::timeOfPoint(int index) const
 {
+    if(index < 0 || index >= count())
+    {
+        throw std::out_of_range("Out of range. If this function is not called by your own C++ codes, check your QML code.");
+    }
     return automation_[index].time();
 }
 
@@ -112,15 +118,29 @@ void AutomationModel::setValueOfPoint(int index, double value)
 
 int AutomationModel::setTimeOfPoint(int index, int time, int indexInEqualTimePoint)
 {
-    auto ret = automation_.setTimeOfPoint(index, time, indexInEqualTimePoint);
-    if(ret != index)
+    auto newIndex = automation_.ifSetTimeOfPoint(index, time, indexInEqualTimePoint);
+    if(newIndex == index)
     {
-        beginMoveRows(QModelIndex(), index, index, QModelIndex(), ret);
-        // 移动行是否会使 View 同步更新数据？
+        automation_.setTimeOfPoint(index, time, indexInEqualTimePoint);
+        dataChanged(this->index(index), this->index(index), {RoleNames::TimeRole});
     }
-    auto modelIndex = this->index(ret);
-    dataChanged(modelIndex, modelIndex, {RoleNames::TimeRole});
-    return ret;
+    else
+    {
+        beginResetModel();
+
+        // // destinationChild: 要移动到移动前的哪个元素之前
+        // // 因此向下移需要加一，向上移不需要
+        // // 问题：各个曲线的位置不会自动根据点的次序重新画
+        // beginMoveRows(this->index(0), index, index, this->index(0),
+        //     (newIndex > index? newIndex + 1: newIndex));
+        automation_.setTimeOfPoint(index, time, indexInEqualTimePoint);
+        // endMoveRows();
+        // dataChanged(this->index(std::min(index, int(newIndex))),
+        //     this->index(std::max(index, int(newIndex)))/*, QVector<int>()*/);
+
+        endResetModel();
+    }
+    return newIndex;
 }
 
 void AutomationModel::setCurveOfPoint(int index, double curve)
@@ -177,7 +197,8 @@ bool AutomationModel::setData(const QModelIndex& index, const QVariant& value, i
     switch (role)
     {
     case RoleNames::TimeRole:
-        return false;
+        setTimeOfPoint(row, value.value<int>(), 0);
+        return true;
     case RoleNames::ValueRole:
         setValueOfPoint(row, value.value<double>());
         return true;
@@ -192,5 +213,25 @@ bool AutomationModel::setData(const QModelIndex& index, const QVariant& value, i
 RoleNamesType AutomationModel::roleNames() const
 {
     return roleNames_;
+}
+
+void AutomationModel::automationAboutToSet()
+{
+    auto oldRowCount = automation_.pointCount();
+    if(oldRowCount != 0)
+    {
+        beginRemoveRows(QModelIndex(), 0, oldRowCount  -1);
+        endRemoveRows();
+    }
+}
+
+void AutomationModel::automationSet()
+{
+    auto newRowCount = automation_.pointCount();
+    if(newRowCount != 0)
+    {
+        beginInsertRows(QModelIndex(), 0, newRowCount - 1);
+        endInsertRows();
+    }
 }
 }

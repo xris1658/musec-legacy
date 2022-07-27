@@ -62,6 +62,11 @@ constexpr int ASIODriverListModel::columnSize()
     return std::tuple_size_v<Item>;
 }
 
+bool ASIODriverListModel::empty() const noexcept
+{
+    return list_.empty();
+}
+
 int ASIODriverListModel::rowCount(const QModelIndex&) const
 {
     return itemCount();

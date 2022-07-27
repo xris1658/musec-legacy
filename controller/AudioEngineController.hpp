@@ -8,6 +8,8 @@
 
 #include <pluginterfaces/vst/ivstprocesscontext.h>
 
+#include <clap/events.h>
+
 namespace Musec
 {
 namespace Controller
@@ -26,6 +28,7 @@ long getInputLatency();
 long getOutputLatency();
 double getCurrentTempo();
 void fillProcessContext(Steinberg::Vst::ProcessContext& processContext);
+void fillEventTransport(clap_event_transport& eventTransport);
 
 template<typename SampleType>
 Musec::Audio::Base::AudioBufferView<SampleType> dummyBufferView()

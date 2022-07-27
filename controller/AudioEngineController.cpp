@@ -1,6 +1,7 @@
 #include "AudioEngineController.hpp"
 
 #include "audio/driver/ASIODriver.hpp"
+#include "audio/plugin/CLAPUtils.hpp"
 #include "controller/MIDIClockController.hpp"
 #include "native/Native.hpp"
 
@@ -106,5 +107,16 @@ void fillProcessContext(Steinberg::Vst::ProcessContext& processContext)
     processContext.sampleRate = getCurrentSampleRate();
     processContext.systemTime = Musec::Native::currentTimeInNanosecond();
     processContext.tempo = getCurrentTempo();
+}
+
+void fillEventTransport(clap_event_transport& eventTransport)
+{
+    Musec::Audio::Plugin::fillEventHeader(eventTransport, CLAP_EVENT_TRANSPORT);
+    auto& header = eventTransport.header;
+    header.time = 0;
+    header.flags = 0;
+    eventTransport.flags =
+        CLAP_TRANSPORT_HAS_TEMPO;
+    eventTransport.tempo = getCurrentTempo();
 }
 }

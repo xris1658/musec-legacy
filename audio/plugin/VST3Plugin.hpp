@@ -2,6 +2,7 @@
 #define MUSEC_AUDIO_PLUGIN_VST3PLUGIN
 
 #include "audio/plugin/IPlugin.hpp"
+#include "audio/plugin/VST3PluginParameter.hpp"
 #include "base/FixedSizeMemoryBlock.hpp"
 #include "base/PluginBase.hpp"
 #include "native/Native.hpp"
@@ -14,9 +15,14 @@
 #include <pluginterfaces/vst/ivstnoteexpression.h>
 #include <pluginterfaces/vst/ivstrepresentation.h>
 
+#include <public.sdk/source/vst/hosting/connectionproxy.h>
+#include <public.sdk/source/vst/hosting/parameterchanges.h>
+
 #include <QString>
 #include <QWindow>
-#include <public.sdk/source/vst/hosting/parameterchanges.h>
+
+#include <map>
+#include <memory>
 
 namespace Musec
 {
@@ -24,6 +30,16 @@ namespace Audio
 {
 namespace Plugin
 {
+#if(WIN32)
+constexpr char VST3PluginInitName[] = "InitDll";
+constexpr char VST3PluginExitName[] = "ExitDll";
+#elif(MAC)
+constexpr char VST3PluginInitName[] = "bundleEntry";
+constexpr char VST3PluginExitName[] = "bundleExit";
+#elif(LINUX)
+constexpr char VST3PluginInitName[] = "ModuleEntry";
+constexpr char VST3PlugiNExitName[] = "ModuleExit";
+#endif
 // VST3 插件音频组件的状态。
 // 参见：https://developer.steinberg.help/display/VST/Audio+Processor+Call+Sequence
 enum class VST3AudioProcessorStatus: std::int8_t
@@ -63,16 +79,18 @@ constexpr Steinberg::uint32 BasicProcessContextRequirement =
     | Steinberg::Vst::IProcessContextRequirements::Flags::kNeedSystemTime
     | Steinberg::Vst::IProcessContextRequirements::Flags::kNeedTimeSignature;
 
-template<typename SampleType>
 class VST3Plugin:
     public Musec::Native::WindowsLibraryRAII,
-    public Musec::Audio::Plugin::IPlugin<SampleType>,
+    public Musec::Audio::Plugin::IPlugin<float>,
     public Steinberg::Vst::IComponentHandler,
+    public Steinberg::Vst::IComponentHandler2,
     public Steinberg::IPlugFrame
 {
+    using SampleType = float;
     using Base = Musec::Native::WindowsLibraryRAII;
     using IPluginInterface = Musec::Audio::Plugin::IPlugin<SampleType>;
     using SampleTypePointers = std::vector<SampleType*>;
+public:
 public: // ctor & dtor
     VST3Plugin();
     VST3Plugin(const QString& path, int classIndex);
@@ -87,16 +105,15 @@ public:
 public: // IDevice interfaces
     std::uint8_t inputCount() const override;
     std::uint8_t outputCount() const override;
-    void process(const Audio::Base::AudioBufferViews<SampleType>& inputs,
-        const Audio::Base::AudioBufferViews<SampleType>& outputs) override;
+    void process(Audio::Base::AudioBufferView<SampleType>* inputs, int inputCount,
+        Audio::Base::AudioBufferView<SampleType>* outputs, int outputCount) override;
 public: // IPlugin interfaces
     bool activate() override;
     bool deactivate() override;
     bool initialize(double sampleRate, std::int32_t sampleCount) override;
     bool uninitialize() override;
-private:
-    bool initializeEditor();
-    bool uninitializeEditor();
+    int parameterCount() override;
+    IParameter& parameter(int index) override;
 public:
     bool attachToWindow(QWindow* window) override;
     bool detachWithWindow() override;
@@ -116,6 +133,11 @@ public: // IComponentHandler interfaces
     Steinberg::tresult PLUGIN_API performEdit(Steinberg::Vst::ParamID id, Steinberg::Vst::ParamValue valueNormalized) override;
     Steinberg::tresult PLUGIN_API endEdit(Steinberg::Vst::ParamID id) override;
     Steinberg::tresult PLUGIN_API restartComponent(Steinberg::int32 flags) override;
+public: // IComponentHandler2 interfaces
+    Steinberg::tresult PLUGIN_API setDirty(Steinberg::TBool state) override;
+    Steinberg::tresult PLUGIN_API requestOpenEditor(Steinberg::FIDString name = Steinberg::Vst::ViewType::kEditor) override;
+    Steinberg::tresult PLUGIN_API startGroupEdit();
+    Steinberg::tresult PLUGIN_API finishGroupEdit();
 public: // IPluginFrame interfaces
     Steinberg::tresult resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* newSize) override;
 public:
@@ -123,6 +145,8 @@ public:
     const SpeakerArrangements& outputSpeakerArrangements();
     bool activated() override;
 private:
+    bool initializeEditor();
+    bool uninitializeEditor();
     void onWindowSizeChanged();
 private:
     Steinberg::PClassInfo classInfo_;
@@ -147,8 +171,8 @@ private:
     Steinberg::Vst::IConnectionPoint* componentPoint_ = nullptr;
     Steinberg::Vst::IConnectionPoint* editControllerPoint_ = nullptr;
     Steinberg::IPlugView* view_ = nullptr;
-    int audioInputBusIndex = -1;
-    int audioOutputBusIndex = -1;
+    int audioInputBusIndex_ = -1;
+    int audioOutputBusIndex_ = -1;
     // 输入参数改变
     Steinberg::Vst::ParameterChanges inputParameterChanges_;
     // 输出参数改变
@@ -171,10 +195,10 @@ private:
     VST3EditControllerStatus editControllerStatus_ = VST3EditControllerStatus::NoEditController;
     EffectAndEditorUnified effectAndEditorUnified_ = EffectAndEditorUnified::NotUnified;
     QWindow* window_ = nullptr;
+    // 参数 ID 和对 paramBlock_ 对应的索引
+    // 有必要把 std::map 换成定容量 AVL 吗？
+    std::map<Steinberg::Vst::ParamID, int> paramIdAndIndex_;
 };
-
-extern template class VST3Plugin<float>;
-extern template class VST3Plugin<double>;
 }
 }
 }

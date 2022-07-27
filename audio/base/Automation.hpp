@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <utility>
 #include <vector>
+#include <cassert>
 
 namespace Musec
 {
@@ -86,7 +87,6 @@ public:
     using ValueType = AutomationPoint::ValueType;
     using Self = Automation;
     using Point = AutomationPoint;
-protected:
     using PointVector = AutomationMembers::PointVector;
     using PointVectorIterator = typename PointVector::iterator;
     using PointVectorConstIterator = typename PointVector::const_iterator;
@@ -111,7 +111,6 @@ public:
         return *this;
     }
     ~Automation() noexcept {}
-protected:
     PointVectorConstIterator lowerBound(const AutomationPoint::TimeType& time) const
     {
         return std::lower_bound(points_.cbegin(), points_.cend(), time, timeFromPointIsLessThanTime);
@@ -177,7 +176,6 @@ protected:
         auto c = left->value() - a * left->time() * left->time() - b * left->time();
         return {a, b, c};
     }
-public:
     std::size_t pointCount() const noexcept
     {
         return points_.size();
@@ -291,14 +289,7 @@ public:
     // 如果所在时间点有其他点存在，则按照给定的索引值将点插入到合适的位置。
     std::size_t insertPoint(Point point, std::size_t indexInEqualTimePoint = 0)
     {
-        if(point.value() < minValue_)
-        {
-            point.setValue(minValue_);
-        }
-        else if(point.value() > maxValue_)
-        {
-            point.setValue(maxValue_);
-        }
+        point.setValue(std::clamp(point.value(), minValue_, maxValue_));
         auto lower = lowerBound(point.time());
         if (lower == points_.end())
         {
@@ -307,7 +298,7 @@ public:
         }
         else if (lower->time() != point.time())
         {
-            auto it = points_.emplace(lower + 1, point);
+            auto it = points_.emplace(lower, point);
             return it - points_.begin();
         }
         else
@@ -347,21 +338,48 @@ public:
         }
         (*this)[index].setValue(value);
     }
+    std::size_t ifSetTimeOfPoint(std::size_t index, Automation::TimeType time, std::size_t indexInEqualTimePoint = 0)
+    {
+        auto oldTime = operator[](index).time();
+        if(time == oldTime)
+        {
+            return index;
+        }
+        if(time < 0)
+        {
+            time = 0;
+        }
+        auto lowerBoundIndex = lowerBound(time) + indexInEqualTimePoint - begin();
+        if(oldTime < time)
+        {
+            --lowerBoundIndex;
+        }
+        assert(lowerBoundIndex >= 0);
+        return lowerBoundIndex;
+    }
     // 更改某点出现的时间，并返回更改后点所在的索引。
     std::size_t setTimeOfPoint(std::size_t index, AutomationPoint::TimeType time, std::size_t indexInEqualTimePoint = 0)
     {
-        if(index >= pointCount())
+        auto newIndex = ifSetTimeOfPoint(index, time, indexInEqualTimePoint);
+        operator[](index).setTime(time);
+        if(newIndex == index)
         {
-            throw std::out_of_range("setTimeOfPoint out of range");
+            return newIndex;
         }
-        auto pointCountAtTime = this->pointCountAtTime(time);
-        auto newIndex = lowerBound(time) - begin() - pointCountAtTime;
-        if(pointCountAtTime)
+        else if(newIndex > index)
         {
-            newIndex += indexInEqualTimePoint;
+            for(auto i = index; i < newIndex; ++i)
+            {
+                std::swap(points_[i], points_[i + 1]);
+            }
         }
-        // 算法库中移动容器内元素的函数，不是强转为右值的 std::move
-        std::move(begin() + index, begin() + index + 1, begin() + newIndex - 1);
+        else
+        {
+            for(auto i = index; i-- > newIndex; )
+            {
+                std::swap(points_[i], points_[i + 1]);
+            }
+        }
         return newIndex;
     }
     void setCurveOfPoint(std::size_t index, double curve)

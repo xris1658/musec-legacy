@@ -3,6 +3,7 @@
 
 #include "audio/base/AudioBufferView.hpp"
 #include "audio/device/IDevice.hpp"
+#include "audio/plugin/IParameter.hpp"
 #include "base/PluginBase.hpp"
 
 #include <QString>
@@ -46,6 +47,8 @@ public:
     virtual bool getBypass() const = 0;
     virtual QString getName() const = 0;
     virtual Musec::Base::PluginFormat pluginFormat() = 0;
+    virtual int parameterCount() = 0;
+    virtual IParameter& parameter(int index) = 0;
 };
 }
 }

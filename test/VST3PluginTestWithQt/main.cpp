@@ -21,7 +21,7 @@ int main(int argc, char** argv) try
 	QWindow& window = *pluginWindowThread.window();
 	pluginWindowThread.start();
 	{
-		Musec::Audio::Plugin::VST3Plugin<float> vst3(
+		Musec::Audio::Plugin::VST3Plugin vst3(
 			"C:\\Program Files\\Common Files\\VST3\\FabFilter\\FabFilter Pro-Q 3.vst3"
 			, 0);
 		try

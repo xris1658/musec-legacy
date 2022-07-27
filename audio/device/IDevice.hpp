@@ -24,7 +24,8 @@ public:
     virtual std::uint8_t inputCount() const = 0;
     virtual std::uint8_t outputCount() const = 0;
 public:
-    virtual void process(const Musec::Audio::Base::AudioBufferViews<SampleType>& inputs, const Musec::Audio::Base::AudioBufferViews<SampleType>& outputs) = 0;
+    virtual void process(Musec::Audio::Base::AudioBufferView<SampleType>* input, int inputCount,
+        Musec::Audio::Base::AudioBufferView<SampleType>* output, int outputCount) = 0;
 };
 }
 }

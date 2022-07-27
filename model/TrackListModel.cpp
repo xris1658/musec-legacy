@@ -21,21 +21,25 @@ namespace Impl
 {
 std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> pluginFromPathAndSubId(const QString& path, int pluginSubId, int format)
 {
-    if(format == Musec::Base::PluginFormat::FormatVST2)
+    try
     {
-        return std::make_shared<Musec::Audio::Plugin::VST2Plugin<float>>(path, false, pluginSubId);
+        if(format == Musec::Base::PluginFormat::FormatVST2)
+        {
+            return std::make_shared<Musec::Audio::Plugin::VST2Plugin>(path, false, pluginSubId);
+        }
+        else if(format == Musec::Base::PluginFormat::FormatVST3)
+        {
+            return std::make_shared<Musec::Audio::Plugin::VST3Plugin>(path, pluginSubId);
+        }
+        else if(format == Musec::Base::PluginFormat::FormatCLAP)
+        {
+            auto ret = std::make_shared<Musec::Audio::Plugin::CLAPPlugin>(path);
+            ret->createPlugin(pluginSubId);
+            return ret;
+        }
+        return nullptr;
     }
-    else if(format == Musec::Base::PluginFormat::FormatVST3)
-    {
-        return std::make_shared<Musec::Audio::Plugin::VST3Plugin<float>>(path, pluginSubId);
-    }
-    else if(format == Musec::Base::PluginFormat::FormatCLAP)
-    {
-        auto ret = std::make_shared<Musec::Audio::Plugin::CLAPPlugin<float>>(path);
-        ret->createPlugin(pluginSubId);
-        return ret;
-    }
-    else
+    catch(...)
     {
         return nullptr;
     }
