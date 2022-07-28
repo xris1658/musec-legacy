@@ -210,6 +210,7 @@ SOURCES += \
     event/ObjectCreateListener.cpp \
     event/SplashScreen.cpp \
     event/SplashScreenWorkerThread.cpp \
+    main.cpp \
     math/Integration.cpp \
     math/QuadraticFunction.cpp \
     model/ASIODriverListModel.cpp \
