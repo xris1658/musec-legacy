@@ -35,6 +35,7 @@ ApplicationWindow {
     property alias midiEditorVisible: actionMidiEditorVisible.checked
     property alias mixerVisible: actionMixerVisible.checked
 
+    property alias engineRunning: mainBar.engineRunning
     property alias bpm: mainBar.bpm
     property alias cpu: mainBar.cpu
 
@@ -618,7 +619,6 @@ ApplicationWindow {
     //顶部的工具栏
     MainBar {
         id: mainBar
-        engineRunning: (mainWindow.driverList != null) && (!(mainWindow.driverList.empty())) && mainWindow.currentDriver != -1
         onPlayStart: {
             EventBridge.playStart();
         }
