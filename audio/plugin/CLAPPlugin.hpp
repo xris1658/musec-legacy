@@ -45,12 +45,11 @@ class CLAPPlugin:
 public:
     CLAPPlugin();
     CLAPPlugin(const QString& path);
-    CLAPPlugin(CLAPPlugin&& rhs) noexcept;
-    CLAPPlugin& operator=(CLAPPlugin&& rhs) noexcept;
+    CLAPPlugin(CLAPPlugin&& rhs) = delete;
+    CLAPPlugin& operator=(CLAPPlugin&& rhs) = delete;
     bool createPlugin(int index);
     CLAPPlugin(const QString& path, int index);
     ~CLAPPlugin() override;
-    void swap(CLAPPlugin& rhs);
 public:
     std::uint8_t inputCount() const override;
     std::uint8_t outputCount() const override;
@@ -64,12 +63,9 @@ public:
 public:
     bool initialize(double sampleRate, std::int32_t maxSampleCount) override;
     bool uninitialize() override;
-    bool initializeEditor();
-    bool uninitializeEditor();
     bool attachToWindow(QWindow* window) override;
     bool detachWithWindow() override;
     QWindow* window() override;
-    void onWindowSizeChanged();
     bool activate() override;
     bool deactivate() override;
     bool activated() override;
@@ -82,6 +78,9 @@ public:
     int parameterCount() override;
     IParameter& parameter(int index) override;
 private:
+    bool initializeEditor();
+    bool uninitializeEditor();
+    void onWindowSizeChanged();
     void initHost();
 private:
     char hostArea[sizeof(Musec::Audio::Host::CLAPHost)];
@@ -109,13 +108,6 @@ private:
 };
 }
 }
-}
-
-namespace std
-{
-template<> void swap(Musec::Audio::Plugin::CLAPPlugin& lhs, Musec::Audio::Plugin::CLAPPlugin& rhs)
-noexcept(std::is_move_constructible_v<Musec::Audio::Plugin::CLAPPlugin>
-      && std::is_move_assignable_v<Musec::Audio::Plugin::CLAPPlugin>);
 }
 
 #endif //MUSEC_AUDIO_PLUGIN_CLAPPLUGIN

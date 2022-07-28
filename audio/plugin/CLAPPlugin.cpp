@@ -36,20 +36,6 @@ CLAPPlugin::CLAPPlugin(const QString& path):
     }
 }
 
-CLAPPlugin::CLAPPlugin(CLAPPlugin&& rhs) noexcept
-{
-    std::swap(*this, rhs);
-}
-
-CLAPPlugin& CLAPPlugin::operator=(CLAPPlugin&& rhs) noexcept
-{
-    if(this != &rhs)
-    {
-        std::swap(*this, rhs);
-    }
-    return *this;
-}
-
 bool CLAPPlugin::createPlugin(int index)
 {
     if(factory_)
@@ -91,38 +77,7 @@ CLAPPlugin::~CLAPPlugin()
         entry_->deinit();
         entry_ = nullptr;
     }
-} // 析构 rawInputs_ 时访问了无效的内存。原因未知。
-
-void CLAPPlugin::swap(CLAPPlugin& rhs)
-{
-    std::swap<Musec::Native::WindowsLibraryRAII>(*this, rhs);
-    for(auto i = 0; i < sizeof(Musec::Audio::Host::CLAPHost); i += 8)
-    {
-        std::swap(reinterpret_cast<double&>(hostArea[i]), reinterpret_cast<double&>(rhs.hostArea[i]));
-    }
-    std::swap(hostArea, rhs.hostArea);
-    std::swap(plugin_, rhs.plugin_);
-    std::swap(audioPorts_, rhs.audioPorts_);
-    std::swap(entry_, rhs.entry_);
-    std::swap(factory_, rhs.factory_);
-    std::swap(desc_, rhs.desc_);
-    std::swap(gui_, rhs.gui_);
-    std::swap(params_, rhs.params_);
-    std::swap(sampleRate_, rhs.sampleRate_);
-    std::swap(minBlockSize_, rhs.minBlockSize_);
-    std::swap(maxBlockSize_, rhs.maxBlockSize_);
-    std::swap(processData_, rhs.processData_);
-    std::swap(window_,rhs.window_);
-    std::swap(clapWindow_, rhs.clapWindow_);
-    std::swap(pluginStatus_, rhs.pluginStatus_);
-    std::swap(processDataInput_, rhs.processDataInput_);
-    std::swap(processDataOutput_, rhs.processDataOutput_);
-    std::swap_ranges(reinterpret_cast<char*>(&eventInputList_), reinterpret_cast<char*>(&eventInputList_) + sizeof(clap::helpers::EventList), reinterpret_cast<char*>(&rhs.eventInputList_));
-    std::swap_ranges(reinterpret_cast<char*>(&eventOutputList_), reinterpret_cast<char*>(&eventOutputList_) + sizeof(clap::helpers::EventList), reinterpret_cast<char*>(&rhs.eventOutputList_));
-    std::swap(rawInputs_, rhs.rawInputs_);
-    std::swap(rawOutputs_, rhs.rawOutputs_);
-    std::swap(paramBlock_, rhs.paramBlock_);
-}
+} // 析构 rawInputs_ 时访问了无效的内存，导致错误出现。原因未知。
 
 std::uint8_t CLAPPlugin::inputCount() const
 {
@@ -319,7 +274,7 @@ bool CLAPPlugin::attachToWindow(QWindow* window)
     if(supported)
     {
         gui_->create(plugin_, CLAP_WINDOW_API_WIN32, false);
-        gui_->set_scale(plugin_,1.0);
+        gui_->set_scale(plugin_, 1.0);
         std::uint32_t width, height;
         auto getSizeResult = gui_->get_size(plugin_, &width, &height);
         if(getSizeResult)
@@ -351,9 +306,8 @@ bool CLAPPlugin::detachWithWindow()
     }
     if(gui_)
     {
-        gui_->hide(plugin_);
-        Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(this);
         gui_->destroy(plugin_);
+        Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(this);
         window_ = nullptr;
         return true;
     }
@@ -417,14 +371,4 @@ void CLAPPlugin::initHost()
     new(hostArea) Musec::Audio::Host::CLAPHost(*this);
 }
 
-}
-
-namespace std
-{
-template<> void swap(Musec::Audio::Plugin::CLAPPlugin& lhs, Musec::Audio::Plugin::CLAPPlugin& rhs)
-noexcept(std::is_move_constructible_v<Musec::Audio::Plugin::CLAPPlugin>
-         && std::is_move_assignable_v<Musec::Audio::Plugin::CLAPPlugin>)
-{
-    lhs.swap(rhs);
-}
 }

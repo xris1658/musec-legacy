@@ -146,14 +146,25 @@ bool CLAPHost::hostGUIRequestResize(const clap_host* host, uint32_t width, uint3
 
 bool CLAPHost::hostGUIRequestShow(const clap_host* host)
 {
-    // 直接对 CLAPPlugin 对象进行操作无法将窗口的显示状态传递给 Musec::Entities::Plugin 对象，
-    // 无法更新 UI 显示。因此这一函数目前什么都不做，只返回 false
+    auto hostClass = checkHost(host);
+    if(hostClass)
+    {
+        auto window = hostClass->plugin_->window();
+        window->showNormal();
+        return true;
+    }
     return false;
 }
 
 bool CLAPHost::hostGUIRequestHide(const clap_host* host)
 {
-    // 同上
+    auto hostClass = checkHost(host);
+    if(hostClass)
+    {
+        auto window = hostClass->plugin_->window();
+        window->hide();
+        return true;
+    }
     return false;
 }
 

@@ -171,8 +171,8 @@ void Project::removePluginWindowMapping(void* plugin)
     auto iterator = pluginAndWindow_.find(plugin);
     if(iterator != pluginAndWindow_.end())
     {
-        auto pluginWindow = iterator->second;
-        Musec::UI::destroyPluginWindow(pluginWindow);
+        Musec::UI::destroyPluginWindow(iterator->second);
+        pluginAndWindow_.erase(iterator);
     }
 }
 

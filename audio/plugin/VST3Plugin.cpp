@@ -575,21 +575,25 @@ bool VST3Plugin::uninitializeEditor()
 bool VST3Plugin::activate()
 {
     auto ret = (component_->setActive(true));
-    if(ret == Steinberg::kResultOk)
+    if(ret == Steinberg::kResultOk
+    || ret == Steinberg::kNotImplemented)
     {
         audioProcessorStatus_ = VST3AudioProcessorStatus::Activated;
+        return true;
     }
-    return ret == Steinberg::kResultOk;
+    return false;
 }
 
 bool VST3Plugin::deactivate()
 {
     auto ret = component_->setActive(false);
-    if(ret == Steinberg::kResultOk)
+    if(ret == Steinberg::kResultOk
+    || ret == Steinberg::kNotImplemented)
     {
         audioProcessorStatus_ = VST3AudioProcessorStatus::SetupDone;
+        return true;
     }
-    return ret == Steinberg::kResultOk;
+    return false;
 }
 
 // 或许上 RAII 更合适？
@@ -752,7 +756,7 @@ bool VST3Plugin::attachToWindow(QWindow* window)
         window_->setHeight(viewRect.getHeight());
         window_->setTitle(classInfo_.name);
         view_->attached(reinterpret_cast<HWND>(window_->winId()), Steinberg::kPlatformTypeHWND);
-        // Musec::Controller::AudioEngineController::AppProject().addPluginWindowMapping(audioProcessor_, window_);
+        Musec::Controller::AudioEngineController::AppProject().addPluginWindowMapping(audioProcessor_, window_);
         QObject::connect(window_, &QWindow::widthChanged,
             [this](int) { onWindowSizeChanged(); });
         QObject::connect(window_, &QWindow::heightChanged,
@@ -771,7 +775,7 @@ bool VST3Plugin::detachWithWindow()
     if(view_)
     {
         view_->removed();
-        // Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(audioProcessor_);
+        Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(audioProcessor_);
         window_ = nullptr;
         return true;
     }
