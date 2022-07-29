@@ -26,7 +26,7 @@ void destroyPluginWindow(QWindow* window)
     if(window)
     {
         window->setProperty("destroyingPlugin", QVariant::fromValue(true));
-        window->close();
+        delete window;
     }
 }
 }
