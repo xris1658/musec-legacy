@@ -252,6 +252,10 @@ target_compile_definitions(Musec
 
 #target_include_directories(Musec PRIVATE ${FFTWPP_INCLUDE_DIRS})
 
+target_link_options(Musec
+                    PRIVATE
+                    "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'")
+
 target_link_libraries(Musec
                       Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets
                       version # Windows API

@@ -20,10 +20,10 @@ CLAPPlugin::CLAPPlugin(const QString& path):
     entry_ = Musec::Native::getExport<const clap_plugin_entry*>(*this, "clap_entry");
     if(!entry_)
     {
-        // 抛出异常
+        throw std::runtime_error("Error: CLAP plugin entry not found! This might be not a CLAP plugin.");
     }
-    auto pathAsStdString = path.toStdString();
-    auto initResult = entry_->init(pathAsStdString.c_str());
+    auto pathAsUtf8 = path.toUtf8();
+    auto initResult = entry_->init(pathAsUtf8.data());
     if(!initResult)
     {
         entry_ = nullptr;
@@ -44,7 +44,6 @@ bool CLAPPlugin::createPlugin(int index)
         desc_ = factory_->get_plugin_descriptor(factory_, index);
         auto host = new(hostArea) Musec::Audio::Host::CLAPHost(*this);
         plugin_ = factory_->create_plugin(factory_, &(host->host()), desc_->id);
-        // plugin_ = factory_->create_plugin(factory_, nullptr, desc_->id);
         pluginStatus_ = CLAPPluginStatus::Created;
         return plugin_;
     }

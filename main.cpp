@@ -1,4 +1,3 @@
-// 项目头文件
 #include "controller/AppController.hpp"
 #include "controller/LoggingController.hpp"
 #include "entities/EntitiesInitializer.hpp"
@@ -26,10 +25,6 @@
 #include <QUrl>
 #include <QtGlobal>
 
-#pragma comment(linker, "\"/manifestdependency:type='win32' \
-name='Microsoft.Windows.Common-Controls' version='6.0.0.0'  \
-processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
-
 int main(int argc, char* argv[]) try
 {
     using namespace Musec::Event;
@@ -40,8 +35,9 @@ int main(int argc, char* argv[]) try
     // 本程序的 QML 代码中使用 Qt.Labs 中的颜色对话框
     // (ColorDialog: Qt.Labs.platform)，在 QML Runtime 中
     // 使用 QColorDialog (Qt Widgets), 而生成应用程序时，
-    // 若应用不带 Qt Widgets 模块, 则回退至 QML 自立实现
-    // DefaultColorDialog.qml.
+    // 若应用不带 Qt Widgets 模块, 则先尝试回退至 QML 自立实现
+    // DefaultColorDialog.qml. 若失败, 则在控制台中提示用户
+    // 没有添加颜色对话框的实现.
     // 为保证平台实现一致, 在项目文件中添加 Qt Widgets 组件
     // 支持, 并将 QGuiApplicaiton 改为其派生类 QApplication.
     // (不需要添加 <QColorDialog> 头文件.)

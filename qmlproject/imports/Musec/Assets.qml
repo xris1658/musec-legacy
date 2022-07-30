@@ -463,7 +463,6 @@ Rectangle {
                                 }
                             }
                             onClicked: {
-                                folderDialog.title = "添加位置";
                                 folderDialog.open();
                             }
                         }
