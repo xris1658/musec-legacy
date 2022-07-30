@@ -123,8 +123,7 @@ void CLAPPlugin::process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs
     processDataOutput_.data32 = rawOutputs_.data();
     processData_.audio_inputs = &processDataInput_;
     processData_.audio_outputs = &processDataOutput_;
-    // FIXME: 基于 JUCE 的插件的其处理函数会因为事件列表出问题而读取野指针
-    // plugin_->process(plugin_, &processData_);
+    plugin_->process(plugin_, &processData_);
 }
 
 const clap_plugin* CLAPPlugin::plugin() const
