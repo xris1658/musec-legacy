@@ -99,8 +99,6 @@ QVariant PluginSequenceModel::data(const QModelIndex& index, int role) const
     {
     case RoleNames::ValidRole:
         return QVariant::fromValue(static_cast<bool>((*pluginSequence)[row]));
-    case RoleNames::ActivatedRole:
-        return QVariant::fromValue((*pluginSequence)[row]->activated());
     case RoleNames::ProcessingRole:
         return QVariant::fromValue((*pluginSequence)[row]->processing());
     case RoleNames::NameRole:
