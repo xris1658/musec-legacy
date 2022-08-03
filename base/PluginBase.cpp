@@ -22,11 +22,12 @@
 
 namespace Musec::Base
 {
+const char* vst2 = "dll";
+const char* vst3 = "vst3";
+const char* clap = "clap";
+
 PluginFormat pluginFormat(const QString& path)
 {
-    static QString vst2("dll");
-    static QString vst3("vst3");
-    static QString clap("clap");
     QFileInfo fileInfo(path);
     auto suffix = fileInfo.suffix();
     if(suffix == vst2)

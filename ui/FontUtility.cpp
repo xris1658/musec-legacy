@@ -6,26 +6,15 @@
 
 namespace Musec::UI
 {
-QString& FontUtility::ttfSuffix()
-{
-    static QString ret = "ttf";
-    return ret;
-}
-QString& FontUtility::otfSuffix()
-{
-    static QString ret = "otf";
-    return ret;
-}
-QString& FontUtility::ttcSuffix()
-{
-    static QString ret = "ttc";
-    return ret;
-}
+const char* ttfSuffix = "ttf";
+const char* otfSuffix = "otf";
+const char* ttcSuffix = "ttc";
+
 bool FontUtility::suffixIsFont(const QString& suffix)
 {
-    return suffix == Musec::UI::FontUtility::ttfSuffix()
-        || suffix == Musec::UI::FontUtility::otfSuffix()
-        || suffix == Musec::UI::FontUtility::ttcSuffix();
+    return suffix == ttfSuffix
+        || suffix == otfSuffix
+        || suffix == ttcSuffix;
 }
 void FontUtility::loadFonts()
 {

@@ -10,9 +10,6 @@ namespace UI
 class FontUtility
 {
 public:
-    static QString& ttfSuffix();
-    static QString& otfSuffix();
-    static QString& ttcSuffix();
     static bool suffixIsFont(const QString&);
     static void loadFonts();
 };

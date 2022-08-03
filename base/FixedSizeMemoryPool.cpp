@@ -21,6 +21,31 @@ FixedSizeMemoryPool::IteratorOfLists& FixedSizeMemoryPool::IteratorOfLists::oper
     return *this;
 }
 
+FixedSizeMemoryPool::IteratorOfLists FixedSizeMemoryPool::IteratorOfLists::operator++(int)
+{
+    auto ret = *this;
+    operator++();
+    return ret;
+}
+
+FixedSizeMemoryPool::IteratorOfLists FixedSizeMemoryPool::IteratorOfLists::operator--(int)
+{
+    auto ret = *this;
+    operator--();
+    return ret;
+}
+
+bool FixedSizeMemoryPool::IteratorOfLists::operator==(const IteratorOfLists& rhs) const
+{
+    return poolsIterator == rhs.poolsIterator
+           && vacantIterator == rhs.vacantIterator
+           && mutexesIterator == rhs.mutexesIterator;
+}
+bool FixedSizeMemoryPool::IteratorOfLists::operator!=(const IteratorOfLists& rhs) const
+{
+    return !(*this == rhs);
+}
+
 FixedSizeMemoryPool::IteratorOfLists FixedSizeMemoryPool::begin()
 {
     return {pools_.begin(), vacant_.begin(), mutexes_.begin()};
@@ -33,9 +58,7 @@ FixedSizeMemoryPool::IteratorOfLists FixedSizeMemoryPool::end()
 
 FixedSizeMemoryPool::IteratorOfLists FixedSizeMemoryPool::beforeEnd()
 {
-    auto ret = end();
-    --ret;
-    return ret;
+    return --end();
 }
 
 FixedSizeMemoryPool::FixedSizeMemoryPool(std::size_t memoryBlockSize, std::size_t initialBlockCount):
@@ -90,6 +113,11 @@ void FixedSizeMemoryPool::expandPool()
     pools_.emplace_back(memoryBlockSize_ * blockCount);
     vacant_.emplace_back(blockCount, true);
     mutexes_.emplace_back();
+}
+
+void* FixedSizeMemoryPool::rawPointerAt(const std::list<SinglePool>::iterator& poolIterator, std::size_t blockIndex)
+{
+    return reinterpret_cast<void*>(poolIterator->data() + memoryBlockSize_ * blockIndex);
 }
 
 std::size_t FixedSizeMemoryPool::memoryBlockSize() const noexcept

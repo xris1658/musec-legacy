@@ -25,16 +25,10 @@ private:
         std::list<std::mutex>::iterator mutexesIterator;
         IteratorOfLists& operator++();
         IteratorOfLists& operator--();
-        bool operator==(const IteratorOfLists& rhs) const
-        {
-            return poolsIterator == rhs.poolsIterator
-                && vacantIterator == rhs.vacantIterator
-                && mutexesIterator == rhs.mutexesIterator;
-        }
-        bool operator!=(const IteratorOfLists& rhs) const
-        {
-            return !(*this == rhs);
-        }
+        IteratorOfLists operator++(int); // Is post-in/decrement needed? Must return type be const?
+        IteratorOfLists operator--(int); // ditto
+        bool operator==(const IteratorOfLists& rhs) const;
+        bool operator!=(const IteratorOfLists& rhs) const;
     };
     IteratorOfLists begin();
     IteratorOfLists end();
@@ -47,10 +41,7 @@ private:
     bool empty() const;
     bool full() const;
     void expandPool();
-    void* rawPointerAt(std::list<SinglePool>::iterator poolIterator, std::size_t blockIndex)
-    {
-        return reinterpret_cast<void*>(poolIterator->data() + memoryBlockSize_ * blockIndex);
-    }
+    void* rawPointerAt(const std::list<SinglePool>::iterator& poolIterator, std::size_t blockIndex);
 public:
     std::size_t memoryBlockSize() const noexcept;
 public:
