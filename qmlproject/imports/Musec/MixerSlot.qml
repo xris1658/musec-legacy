@@ -18,13 +18,15 @@ MCtrl.Button {
     signal positionChanged(drag: var)
     color: hovered? Qt.lighter(editorVisible? Constants.currentElementColor: Constants.backgroundColor):
                     editorVisible? Constants.currentElementColor: Constants.backgroundColor
+    signal enabledButtonClicked()
+    signal rightClicked(x: int, y: int)
+
     function getFullWidth() {
         var ret = enabledIndicatorArea.width + pluginNameText.contentWidth;
         console.log(ret);
         return ret;
     }
-    signal enabledButtonClicked()
-    signal rightClicked(x: int, y: int)
+
     Item {
         z: 1
         id: enabledIndicatorArea

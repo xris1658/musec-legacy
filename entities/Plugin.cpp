@@ -8,19 +8,16 @@ Plugin::Plugin(QObject* parent):
     QObject(parent),
     plugin_(nullptr),
     name_(),
-    enabled_(false),
     sidechainExist_(false),
     sidechainEnabled_(false)
 {
 }
 
-Plugin::Plugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin,
-               const QString& name, bool enabled,
-               bool sidechainExist, bool sidechainEnabled):
+Plugin::Plugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin, const QString& name, bool sidechainExist,
+    bool sidechainEnabled):
     QObject(nullptr),
     plugin_(plugin),
     name_(name),
-    enabled_(enabled),
     sidechainExist_(sidechainExist),
     sidechainEnabled_(sidechainEnabled)
 {
@@ -52,7 +49,7 @@ Musec::Entities::Plugin Plugin::fromPlugin(std::shared_ptr<Musec::Audio::Plugin:
 {
     if(plugin)
     {
-        return Musec::Entities::Plugin(plugin, plugin->getName(), !plugin->getBypass(), false, false);
+        return Musec::Entities::Plugin(plugin, plugin->getName(), false, false);
     }
     else
     {
@@ -76,15 +73,19 @@ void Plugin::setName(const QString& name)
     nameChanged();
 }
 
-bool Plugin::isEnabled() const
+bool Plugin::isProcessing() const
 {
-    return enabled_;
+    return plugin_ && (plugin_->processing());
+
 }
 
-void Plugin::setEnabled(bool enabled)
+void Plugin::setProcessing(bool processing)
 {
-    enabled_ = enabled;
-    enabledChanged();
+    if(plugin_)
+    {
+        plugin_->setProcessing(processing);
+    }
+    processingChanged();
 }
 
 bool Plugin::isSidechainExist() const
@@ -113,15 +114,14 @@ void Plugin::swap(Plugin& rhs) noexcept
 {
     std::swap(plugin_, rhs.plugin_);
     std::swap(name_, rhs.name_);
-    std::swap(enabled_, rhs.enabled_);
     std::swap(sidechainExist_, rhs.sidechainExist_);
     std::swap(sidechainEnabled_, rhs.sidechainEnabled_);
     nameChanged();
-    enabledChanged();
+    processingChanged();
     sidechainExistChanged();
     sidechainEnabledChanged();
     rhs.nameChanged();
-    rhs.enabledChanged();
+    rhs.processingChanged();
     rhs.sidechainExistChanged();
     rhs.sidechainEnabledChanged();
 }

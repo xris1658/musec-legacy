@@ -16,7 +16,7 @@ Item {
         anchors.fill: parent
         color: Constants.backgroundColor
     }
-    property bool instrumentEnabled: false
+    property bool instrumentEnabled
     property string instrumentName
     property bool instrumentSidechainExist: false
     property bool instrumentSidechainEnabled: false
@@ -45,7 +45,9 @@ Item {
         loadInstrument(path, pluginSubId, format);
     }
     signal instrumentSlotVisibleToggled(instrumentWindowVisible: bool)
+    signal instrumentSlotEnabledToggled(instrumentSlotEnabled: bool)
     signal audioEffectSlotVisibleToggled(audioEffectWindowVisible: bool, effectIndex: int)
+    signal audioEffectSlotEnabledToggled(audioEffectEnabled: bool, effectIndex: int)
     // 效果器操作
     signal audioEffectSlotDragEventEntered(drag: var, audioEffectIndex: int)
     onAudioEffectSlotDragEventEntered: {
@@ -155,7 +157,8 @@ Item {
                             root.instrumentSlotVisibleToggled(!editorVisible);
                         }
                         onEnabledButtonClicked: {
-                            //
+                            console.log(!slotEnabled);
+                            root.instrumentSlotEnabledToggled(!slotEnabled);
                         }
                         onRightClicked: {
                             root.instrumentSlot = instrumentButton;
@@ -169,7 +172,7 @@ Item {
                     MixerSlot {
                         anchors.fill: parent
                         name: plugin_name
-                        slotEnabled: valid && activated
+                        slotEnabled: processing
                         sidechainExist: sidechain_exist
                         sidechainEnabled: sidechain_enabled
                         editorVisible: window_visible
@@ -180,10 +183,10 @@ Item {
                             root.audioEffectSlotDragEventDropped(drop, index);
                         }
                         onClicked: {
-                            root.audioEffectSlotVisibleToggled(!editorVisible, index);
+                            window_visible = !editorVisible;
                         }
                         onEnabledButtonClicked: {
-                            //
+                            processing = !slotEnabled;
                         }
                         onRightClicked: {
                             root.audioSlotRightClicked(index, x, y);

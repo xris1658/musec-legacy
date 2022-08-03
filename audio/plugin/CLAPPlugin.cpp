@@ -369,4 +369,9 @@ void CLAPPlugin::initHost()
     new(hostArea) Musec::Audio::Host::CLAPHost(*this);
 }
 
+bool CLAPPlugin::processing()
+{
+    return pluginStatus_ >= CLAPPluginStatus::Processing;
+}
+
 }

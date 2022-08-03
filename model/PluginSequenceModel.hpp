@@ -28,7 +28,7 @@ public:
     enum RoleNames
     {
         ValidRole = Qt::UserRole,
-        ActivatedRole,
+        ProcessingRole,
         NameRole,
         SidechainExistRole,
         SidechainEnabledRole,
@@ -48,7 +48,8 @@ public:
     int columnCount(const QModelIndex&) const override;
     QVariant data(const QModelIndex& index, int role) const override;
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
-    Q_INVOKABLE void setWindowVisible(int effectIndex, bool visible);
+    Q_INVOKABLE
+    Q_INVOKABLE
     void insert(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin, int index);
     void replace(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin, int index);
     void remove(int index);

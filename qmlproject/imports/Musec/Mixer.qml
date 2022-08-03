@@ -174,9 +174,6 @@ Rectangle {
             onReplaceEffect: {
                 root.tracks.replaceEffectMasterTrack(pluginFormat, pluginPath, pluginSubId, effectIndex);
             }
-            onAudioEffectSlotVisibleToggled: {
-                masterTrackPluginSequence.setWindowVisible(effectIndex, audioEffectWindowVisible);s
-            }
             onAudioSlotRightClicked: (audioEffectIndex, menuX, menuY) => {
                 root.audioEffectSlotRightClicked(-1, audioEffectIndex, menuX, menuY);
             }
@@ -241,7 +238,7 @@ Rectangle {
                     channelSolo: solo
                     channelInverted: invertPhase
                     channelArmRecording: armRecording
-                    instrumentEnabled: instrument? instrument.enabled: false
+                    instrumentEnabled: instrument? instrument.processing: false
                     instrumentName: instrument? instrument.name: ""
                     instrumentSidechainExist: instrument? instrument.sidechainExist: false
                     instrumentSidechainEnabled: instrument? instrument.sidechainEnabled: false
@@ -272,8 +269,10 @@ Rectangle {
                             instrument.windowVisible = instrumentWindowVisible;
                         }
                     }
-                    onAudioEffectSlotVisibleToggled: {
-                        plugin_list.setWindowVisible(effectIndex, audioEffectWindowVisible);
+                    onInstrumentSlotEnabledToggled: {
+                        if(instrument) {
+                            instrument.processing = instrumentSlotEnabled;
+                        }
                     }
                     onInstrumentSlotRightClicked: {
                         root.instrumentSlotRightClicked(index, x, y);

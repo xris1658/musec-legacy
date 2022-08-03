@@ -69,6 +69,7 @@ public:
     bool activate() override;
     bool deactivate() override;
     bool activated() override;
+    bool processing() override;
     bool startProcessing() override;
     bool stopProcessing() override;
     bool hasUI() override;

@@ -3,11 +3,11 @@
 
 #include "audio/arrangement/TrackSequence.hpp"
 #include "audio/engine/Graph.hpp"
-#include "base/FixedSizeMemoryPool.hpp"
-#include "entities/CompleteTrack.hpp"
 #include "audio/plugin/IPlugin.hpp"
 #include "audio/track/AudioTrack.hpp"
 #include "audio/track/ITrack.hpp"
+#include "base/FixedSizeMemoryPool.hpp"
+#include "entities/CompleteTrack.hpp"
 
 #include <QWindow>
 

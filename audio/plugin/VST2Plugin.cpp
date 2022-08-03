@@ -527,5 +527,10 @@ IParameter& VST2Plugin::parameter(int index)
 {
     return (reinterpret_cast<VST2PluginParameter*>(paramBlock_.data()))[index];
 }
+
+bool VST2Plugin::processing()
+{
+    return !bypass_;
+}
 // ------------------------------------------------------------------------------------------
 }

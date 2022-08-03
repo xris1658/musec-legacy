@@ -37,7 +37,7 @@ void PluginSequenceModel::initRoleNames()
 {
     roleNames_.reserve(columnSize());
     roleNames_[RoleNames::ValidRole] = "valid";
-    roleNames_[RoleNames::ActivatedRole] = "activated";
+    roleNames_[RoleNames::ProcessingRole] = "processing";
     roleNames_[RoleNames::NameRole] = "plugin_name";
     roleNames_[RoleNames::SidechainExistRole] = "sidechain_exist";
     roleNames_[RoleNames::SidechainEnabledRole] = "sidechain_enabled";
@@ -101,6 +101,8 @@ QVariant PluginSequenceModel::data(const QModelIndex& index, int role) const
         return QVariant::fromValue(static_cast<bool>((*pluginSequence)[row]));
     case RoleNames::ActivatedRole:
         return QVariant::fromValue((*pluginSequence)[row]->activated());
+    case RoleNames::ProcessingRole:
+        return QVariant::fromValue((*pluginSequence)[row]->processing());
     case RoleNames::NameRole:
         return QVariant::fromValue((*pluginSequence)[row]->getName());
     case RoleNames::SidechainExistRole:
@@ -145,39 +147,21 @@ bool PluginSequenceModel::setData(const QModelIndex& index, const QVariant& valu
         if(plugin->hasUI())
         {
             plugin->window()->setVisible(value.value<bool>());
+            dataChanged(index, index, { RoleNames::WindowVisibleRole });
             return true;
         }
         return false;
     }
+    case RoleNames::ProcessingRole:
+    {
+        auto& plugin = (*pluginSequence)[row];
+        plugin->setProcessing(value.value<bool>());
+        dataChanged(index, index, { RoleNames::ProcessingRole });
+        return true;
+    }
     default:
         return false;
     }
-}
-
-void PluginSequenceModel::setWindowVisible(int effectIndex, bool visible)
-{
-    if(effectIndex < 0 || effectIndex >= itemCount())
-    {
-        return;
-    }
-    setData(index(effectIndex), QVariant::fromValue(visible), RoleNames::WindowVisibleRole);
-    dataChanged(index(effectIndex), index(effectIndex), { RoleNames::WindowVisibleRole });
-    // const Musec::Audio::Track::PluginSequence<float>* pluginSequence = nullptr;
-    // if(instrumentTrack_)
-    // {
-    //     pluginSequence = &(instrumentTrack_->getAudioEffectPluginSequences()[0]);
-    // }
-    // else if(audioTrack_)
-    // {
-    //     pluginSequence = &(audioTrack_->getPluginSequences()[0]);
-    // }
-    // auto plugin = (*pluginSequence)[effectIndex];
-    // auto window = plugin->window();
-    // if(plugin->hasUI() && window)
-    // {
-    //     window->setVisible(visible);
-    //     dataChanged(index(effectIndex), index(effectIndex), { RoleNames::WindowVisibleRole });
-    // }
 }
 
 void PluginSequenceModel::insert(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin, int index)

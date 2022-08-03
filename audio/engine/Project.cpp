@@ -224,14 +224,17 @@ void Project::process()
         {
             auto instrumentTrack = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(track);
             const auto& instrument = instrumentTrack->getInstrument();
-            if (instrument)
+            if (instrument && (instrument->processing()))
             {
                 instrument->process(nullptr, 0, audioBufferViews.data(), 2);
             }
             const auto& audioEffectPlugins = instrumentTrack->getAudioEffectPluginSequences()[0];
             for (const auto& audioEffect: audioEffectPlugins)
             {
-                audioEffect->process(audioBufferViews.data(), 2, audioBufferViews.data(), 2);
+                if(audioEffect->processing())
+                {
+                    audioEffect->process(audioBufferViews.data(), 2, audioBufferViews.data(), 2);
+                }
             }
         }
         else if (track->trackType() == Musec::Audio::Track::TrackType::kAudioTrack)
@@ -240,7 +243,10 @@ void Project::process()
             const auto& plugins = audioTrack->getPluginSequences()[0];
             for (const auto& audioEffect: plugins)
             {
-                audioEffect->process(audioBufferViews.data(), 2, audioBufferViews.data(), 2);
+                if(!audioEffect->getBypass())
+                {
+                    audioEffect->process(audioBufferViews.data(), 2, audioBufferViews.data(), 2);
+                }
             }
         }
         // 按帧操作。
@@ -284,7 +290,10 @@ void Project::process()
     const auto& masterTrackAudioEffects = masterTrack_.getPluginSequences()[0];
     for(const auto& audioEffect: masterTrackAudioEffects)
     {
-        audioEffect->process(masterTrackAudioBufferViews.data(), 2, masterTrackAudioBufferViews.data(), 2);
+        if(audioEffect->processing())
+        {
+            audioEffect->process(masterTrackAudioBufferViews.data(), 2, masterTrackAudioBufferViews.data(), 2);
+        }
     }
 }
 

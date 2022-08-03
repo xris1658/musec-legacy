@@ -37,12 +37,17 @@ public:
     virtual bool activate() = 0;
     virtual bool deactivate() = 0;
     virtual bool activated() = 0;
+    virtual bool processing() = 0;
     virtual bool startProcessing() = 0;
     virtual bool stopProcessing() = 0;
     virtual bool hasUI() = 0;
+    bool setProcessing(bool processing)
+    {
+        return processing? startProcessing(): stopProcessing();
+    }
     bool setBypass(bool bypass)
     {
-        return bypass? stopProcessing(): startProcessing();
+        return setProcessing(!bypass);
     }
     virtual bool getBypass() const = 0;
     virtual QString getName() const = 0;

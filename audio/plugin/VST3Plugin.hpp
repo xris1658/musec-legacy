@@ -144,6 +144,7 @@ public:
     const SpeakerArrangements& inputSpeakerArrangements();
     const SpeakerArrangements& outputSpeakerArrangements();
     bool activated() override;
+    bool processing() override;
 private:
     bool initializeEditor();
     bool uninitializeEditor();

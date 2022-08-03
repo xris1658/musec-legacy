@@ -823,7 +823,7 @@ void VST3Plugin::onWindowSizeChanged()
 
 bool VST3Plugin::getBypass() const
 {
-    return this->audioProcessorStatus_ <= VST3AudioProcessorStatus::Processing;
+    return this->audioProcessorStatus_ < VST3AudioProcessorStatus::Processing;
 }
 
  QString VST3Plugin::getName() const
@@ -863,5 +863,10 @@ int VST3Plugin::parameterCount()
 IParameter& VST3Plugin::parameter(int index)
 {
     return reinterpret_cast<VST3PluginParameter*>(paramBlock_.data())[index];
+}
+
+bool VST3Plugin::processing()
+{
+    return audioProcessorStatus_ >= VST3AudioProcessorStatus::Processing;
 }
 }

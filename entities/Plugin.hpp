@@ -19,7 +19,7 @@ class Plugin: public QObject
 //  | ******* | type  | name for UI    | member in class        | getter                | setter                  | signal                       |
 //  | ------- | ----- | -------------- | ---------------------- | --------------------- | ----------------------- | ---------------------------- |
     Q_PROPERTY(QString name             MEMBER name_             READ getName            WRITE setName             NOTIFY nameChanged            )
-    Q_PROPERTY(bool    enabled          MEMBER enabled_          READ isEnabled          WRITE setEnabled          NOTIFY enabledChanged         )
+    Q_PROPERTY(bool    processing                                READ isProcessing       WRITE setProcessing       NOTIFY processingChanged      )
     Q_PROPERTY(bool    sidechainExist   MEMBER sidechainExist_   READ isSidechainExist   WRITE setSidechainExist   NOTIFY sidechainExistChanged  )
     Q_PROPERTY(bool    sidechainEnabled MEMBER sidechainEnabled_ READ isSidechainEnabled WRITE setSidechainEnabled NOTIFY sidechainEnabledChanged)
     Q_PROPERTY(bool    windowVisible                             READ isWindowVisible    WRITE setWindowVisible    NOTIFY windowVisibleChanged   )
@@ -36,8 +36,8 @@ public:
 public:
     Plugin(QObject* parent = nullptr);
     Plugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin,
-           const QString& name, bool enabled,
-           bool sidechainExist, bool sidechainEnabled);
+        const QString& name, bool sidechainExist,
+        bool sidechainEnabled);
     Plugin(Plugin&& rhs) noexcept;
     Plugin& operator=(Plugin&& rhs) noexcept;
     ~Plugin();
@@ -46,18 +46,17 @@ public:
     bool valid() const;
     const QString& getName() const;
     void setName(const QString& name);
-    bool isEnabled() const;
-    void setEnabled(bool enabled);
+    bool isProcessing() const;
+    void setProcessing(bool processing);
     bool isSidechainExist() const;
     void setSidechainExist(bool sidechainExist);
     bool isSidechainEnabled() const;
     void setSidechainEnabled(bool sidechainEnabled);
     bool isWindowVisible() const;
     void setWindowVisible(bool windowVisible);
-
 signals:
     void nameChanged();
-    void enabledChanged();
+    void processingChanged();
     void sidechainExistChanged();
     void sidechainEnabledChanged();
     void windowVisibleChanged();
@@ -68,7 +67,7 @@ private:
 private:
     std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin_;
     QString name_;
-    bool enabled_;
+    // bool enabled_;
     bool sidechainExist_;
     bool sidechainEnabled_;
 };
