@@ -62,6 +62,7 @@ set(PROJECT_SOURCES
     audio/driver/ASIOCallback.hpp
     audio/driver/ASIODriver.cpp
     audio/driver/ASIODriver.hpp
+    audio/driver/ASIODriverBasicInfo.hpp
     audio/driver/ASIODriverForward.hpp
     audio/driver/ASIODriverStreamInfo.hpp
     audio/driver/Literals.cpp
@@ -220,8 +221,7 @@ set(PROJECT_SOURCES
     util/Endian.hpp
     util/Literal.cpp
     util/Literal.hpp
-    util/TimerClamp.hpp
-    )
+    util/TimerClamp.hpp)
 
 set(TEST_COMMON_SOURCES
     test/common/PluginWindowThread.cpp

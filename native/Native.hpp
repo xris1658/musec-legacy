@@ -1,8 +1,11 @@
 #ifndef MUSEC_NATIVE_NATIVE
 #define MUSEC_NATIVE_NATIVE
 
+#include "audio/driver/ASIODriverBasicInfo.hpp"
+#include "audio/driver/ASIODriverForward.hpp"
 #include "util/Endian.hpp"
 
+#include <QList>
 #include <QString>
 
 #include <Windows.h>
@@ -13,6 +16,9 @@ namespace Musec
 {
 namespace Native
 {
+// CLSID 字符串的长度（32 位数据 + 4 个横杠 + 2 个花括号，不包含 NULL 终止符）
+constexpr auto CLSIDStringLength = 38;
+
 using SystemTimeType = SYSTEMTIME;
 
 using ThreadMaskType = std::uint64_t;
@@ -69,6 +75,8 @@ bool isDebuggerPresent();
 QString errorMessageFromErrorCode(ErrorCodeType errorCode);
 
 QString getProductVersion(const QString& path);
+
+QList<Musec::Audio::Driver::ASIODriverBasicInfo> enumerateDrivers();
 }
 }
 

@@ -2,12 +2,12 @@
 #define MUSEC_AUDIO_DRIVER_ASIODRIVER
 
 #include "audio/driver/ASIODriverForward.hpp"
+#include "audio/driver/ASIODriverBasicInfo.hpp"
 #include "audio/driver/ASIODriverStreamInfo.hpp"
 
 #include <QString>
 #include <QList>
 
-#include <tuple>
 #include <memory>
 
 namespace Musec
@@ -16,11 +16,6 @@ namespace Audio
 {
 namespace Driver
 {
-using ASIODriverBasicInfo = std::tuple<QString, QString>;
-
-// CLSID 字符串的长度（32 位数据 + 4 个横杠 + 2 个花括号，不包含 NULL 终止符）
-constexpr auto CLSIDStringLength = 38;
-
 constexpr int maxInputChannelCount = 16;
 constexpr int maxOutputChannelCount = 16;
 constexpr int channelCount = maxInputChannelCount + maxOutputChannelCount;
