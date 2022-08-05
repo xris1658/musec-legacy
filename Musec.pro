@@ -261,7 +261,8 @@ LIBS += \
     # avcpp
     avcpp.lib
 
-TRANSLATIONS += i18n/Musec_zh_CN.ts
+TRANSLATIONS += i18n/base.ts \
+                i18n/Musec_zh_CN.ts
 
 CONFIG(debug, debug | release) {
     LIBS += yaml-cppd.lib \

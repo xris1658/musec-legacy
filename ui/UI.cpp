@@ -16,11 +16,4 @@ void setIcon(QWindow* window)
 {
     window->setIcon(mainWindow->icon());
 }
-
-bool loadTranslation(const QString& name)
-{
-    QString translationFileName("Musec_%1.qm");
-    return translator->load(translationFileName.arg(name), QCoreApplication::applicationDirPath())
-        && QCoreApplication::installTranslator(translator);
-}
 }

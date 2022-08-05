@@ -1,10 +1,12 @@
 #include "controller/AppController.hpp"
+#include "controller/ConfigController.hpp"
 #include "controller/LoggingController.hpp"
 #include "entities/EntitiesInitializer.hpp"
 #include "event/EventBase.hpp"
 #include "event/ObjectCreateListener.hpp"
 #include "event/MainWindowEvent.hpp"
 #include "event/SplashScreen.hpp"
+#include "i18n/I18N.hpp"
 #include "model/ModelInitializer.hpp"
 #include "native/Native.hpp"
 #include "ui/FontUtility.hpp"
@@ -73,8 +75,8 @@ int main(int argc, char* argv[]) try
     // 告知启动屏工作线程翻译加载完成
     auto& promiseEnd = Musec::Controller::loadTranslationPromiseEnd();
     QTranslator theTranslator;
-    translator = &theTranslator;
-    promiseEnd.set_value(Musec::UI::loadTranslation(translation));
+    Musec::I18N::translator = &theTranslator;
+    promiseEnd.set_value(Musec::I18N::loadTranslation(translation));
     auto ret = app.exec();
     return ret;
 }

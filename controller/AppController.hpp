@@ -6,6 +6,7 @@
 #include "model/ASIODriverListModel.hpp"
 #include "model/AssetDirectoryListModel.hpp"
 #include "model/PluginListModel.hpp"
+#include "model/TranslationFileModel.hpp"
 
 #include <QString>
 
@@ -48,6 +49,9 @@ Musec::Model::ASIODriverListModel& AppASIODriverList();
 
 // 素材目录列表
 Musec::Model::AssetDirectoryListModel& AppAssetDirectoryList();
+
+// 翻译文件列表
+Musec::Model::TranslationFileModel& AppTranslationFileList();
 
 // 刷新插件列表
 void refreshPluginList(bool rescan);

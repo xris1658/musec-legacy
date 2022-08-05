@@ -176,6 +176,8 @@ set(PROJECT_SOURCES
     event/SplashScreenForward.hpp
     event/SplashScreenWorkerThread.cpp
     event/SplashScreenWorkerThread.hpp
+    i18n/I18N.cpp
+    i18n/I18N.hpp
     math/Integration.cpp
     math/Integration.hpp
     math/QuadraticFunction.cpp
@@ -203,6 +205,8 @@ set(PROJECT_SOURCES
     model/TempoAutomationModel.hpp
     model/TrackListModel.cpp
     model/TrackListModel.hpp
+    model/TranslationFileModel.cpp
+    model/TranslationFileModel.hpp
     native/Native.cpp
     native/Native.hpp
     native/WindowsLibraryRAII.cpp
@@ -300,11 +304,6 @@ target_link_libraries(VST3PluginTestWithQt
                       avcpp::FFmpeg
                       avcpp::avcpp-static)
 
-string(REPLACE "/" "\\" CMAKE_SOURCE_DIR_BACKSLASH ${CMAKE_SOURCE_DIR})
-string(REPLACE "/" "\\" CMAKE_CURRENT_BINARY_DIR_BACKSLASH ${CMAKE_CURRENT_BINARY_DIR})
-
-add_custom_command(TARGET Musec PRE_BUILD COMMAND ${Qt5_DIR}/../../../bin/lrelease.exe ${CMAKE_SOURCE_DIR}/i18n/Musec_zh_CN.ts)
-
-add_custom_command(TARGET Musec POST_BUILD COMMAND copy /B /Y /V ${CMAKE_SOURCE_DIR_BACKSLASH}\\i18n\\Musec_zh_CN.qm ${CMAKE_CURRENT_BINARY_DIR_BACKSLASH}\\Musec_zh_CN.qm)
+add_custom_command(TARGET Musec POST_BUILD COMMAND ${Qt5_DIR}/../../../bin/lrelease.exe ${CMAKE_SOURCE_DIR}/i18n/Musec_zh_CN.ts -qm ${CMAKE_CURRENT_BINARY_DIR}\\Musec_zh_CN.qm)
 
 file(COPY Resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

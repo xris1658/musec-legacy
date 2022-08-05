@@ -40,13 +40,29 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     }
     // 告知主线程在这里加载翻译
     auto& promiseStart = Musec::Controller::loadTranslationPromiseStart();
-    promiseStart.set_value(
-        QString::fromStdString(
-            Musec::Controller::ConfigController::appConfig()
-            ["musec"]["options"]["general"]["language"]
+    auto language = QString::fromStdString(
+        Musec::Controller::ConfigController::appConfig()
+        ["musec"]["options"]["general"]["language"]
             .as<std::string>()
-        )
     );
+    const auto& translationFileList = AppTranslationFileList();
+    auto size = translationFileList.itemCount();
+    bool foundTranslation = false;
+    for(decltype(size) i = 0; i < size; ++i)
+    {
+        using Musec::Model::TranslationFileModel;
+        if(std::get<TranslationFileModel::RoleNames::LanguageRole - Qt::UserRole>(translationFileList[i]) == language)
+        {
+            promiseStart.set_value(std::get<TranslationFileModel::RoleNames::PathRole - Qt::UserRole>(translationFileList[i]));
+            foundTranslation = true;
+            break;
+        }
+    }
+    if(!foundTranslation)
+    {
+        promiseStart.set_value("");
+    }
+    // promiseStart.set_value();
     // 等待主线程加载完成
     auto& promiseEnd = Musec::Controller::loadTranslationPromiseEnd();
     promiseEnd.get_future().get();
@@ -194,6 +210,12 @@ Musec::Model::ASIODriverListModel& AppASIODriverList()
 Musec::Model::AssetDirectoryListModel& AppAssetDirectoryList()
 {
     static Musec::Model::AssetDirectoryListModel ret;
+    return ret;
+}
+
+Musec::Model::TranslationFileModel& AppTranslationFileList()
+{
+    static Musec::Model::TranslationFileModel ret;
     return ret;
 }
 

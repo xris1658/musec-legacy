@@ -10,6 +10,7 @@
 #include "model/PluginListModel.hpp"
 #include "model/TempoAutomationModel.hpp"
 #include "model/TrackListModel.hpp"
+#include "model/TranslationFileModel.hpp"
 
 namespace Musec::Model
 {
@@ -25,6 +26,7 @@ ModelInitializer::ModelInitializer()
     QML_REGISTER_TYPE(PluginSequenceModel, Musec.Models, 1, 0);
     QML_REGISTER_TYPE(TempoAutomationModel, Musec.Models, 1, 0);
     QML_REGISTER_TYPE(TrackListModel, Musec.Models, 1, 0);
+    QML_REGISTER_TYPE(TranslationFileModel, Musec.Models, 1, 0);
 }
 
 void ModelInitializer::initialize()
