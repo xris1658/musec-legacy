@@ -10,4 +10,11 @@ void setSystemTextRendering(bool value)
     appConfig()["musec"]["options"]["general"]["system-render"] = value;
     saveAppConfig();
 }
+
+void setLanguage(const QString& language)
+{
+    using namespace Musec::Controller::ConfigController;
+    appConfig()["musec"]["options"]["general"]["language"] = language.toStdString();
+    saveAppConfig();
+}
 }

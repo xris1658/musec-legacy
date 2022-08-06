@@ -26,7 +26,7 @@ QQC2.ComboBox {
     ToolTip {
         text: currentText
         visible: showToolTip === ComboBox.ShowToolTip.Always? hovered:
-            showToolTip === ComboBox.ShowToolTip.Needed? (popupWidth < width) && hovered:
+            showToolTip === ComboBox.ShowToolTip.Needed? (contentItemAsText.contentWidth < contentItem.width) && hovered:
             false
     }
     delegate: QQC2.ItemDelegate {

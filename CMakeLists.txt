@@ -304,6 +304,6 @@ target_link_libraries(VST3PluginTestWithQt
                       avcpp::FFmpeg
                       avcpp::avcpp-static)
 
-add_custom_command(TARGET Musec POST_BUILD COMMAND ${Qt5_DIR}/../../../bin/lrelease.exe ${CMAKE_SOURCE_DIR}/i18n/Musec_zh_CN.ts -qm ${CMAKE_CURRENT_BINARY_DIR}\\Musec_zh_CN.qm)
+add_custom_command(TARGET Musec POST_BUILD COMMAND ${Qt5_DIR}/../../../bin/lrelease.exe ${CMAKE_SOURCE_DIR}/i18n/Musec_zh_CN.ts -qm ${CMAKE_CURRENT_BINARY_DIR}/Musec_zh_CN.qm)
 
 file(COPY Resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

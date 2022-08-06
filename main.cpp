@@ -76,7 +76,7 @@ int main(int argc, char* argv[]) try
     auto& promiseEnd = Musec::Controller::loadTranslationPromiseEnd();
     QTranslator theTranslator;
     Musec::I18N::translator = &theTranslator;
-    promiseEnd.set_value(Musec::I18N::loadTranslation(translation));
+    promiseEnd.set_value(Musec::I18N::loadTranslationFile(translation));
     auto ret = app.exec();
     return ret;
 }

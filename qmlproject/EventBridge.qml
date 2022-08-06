@@ -42,6 +42,8 @@ QtObject {
     signal playStart();
     signal playStop();
 
+    signal languageSelectionChanged(language: string)
+
     // 收到 C++ 后端的信号
     signal setBootText(newBootText: string)
     onSetBootText: {
@@ -97,5 +99,12 @@ QtObject {
     signal updateUsage(usage: double)
     onUpdateUsage: {
         Objects.mainWindow.cpu = Math.round(usage * 100);
+    }
+
+    signal setLanguageComplete()
+    onSetLanguageComplete: {
+        // 弹出需要重启的对话框
+        messageDialog(Strings.optionSaveRebootPromptText,
+            Strings.applicationName, MDlg.MessageDialog.Icon.Info);
     }
 }

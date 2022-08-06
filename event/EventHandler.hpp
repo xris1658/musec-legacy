@@ -35,6 +35,7 @@ signals:
     void updateArrangement();
     void newPluginWindow();
     void updateUsage(double usage);
+    void setLanguageComplete();
 public slots:
     void onMainWindowOpened();
     void onOptionsWindowOpened();
@@ -62,6 +63,7 @@ public slots:
     void onNewPluginWindowReady();
     void onSetIcon();
     void onScanShortcutChanged(bool newValue);
+    void onLanguageSelectionChanged(const QString& language);
 private:
     std::vector<QMetaObject::Connection> optionsWindowConnection;
 };

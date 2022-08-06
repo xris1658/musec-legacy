@@ -19,6 +19,8 @@ Window {
         pluginSettings.scanning = false;
     }
     // 常规
+    property alias languageList: generalSettings.languageList
+    property alias currentLanguage: generalSettings.currentLanguage
     property alias systemRender: generalSettings.systemRender
     // 音频硬件
     property alias driverList: audioHardwareSelector.driverListModel

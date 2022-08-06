@@ -100,6 +100,10 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      eventBridge,   SIGNAL(newPluginWindow()));
     QObject::connect(this,          SIGNAL(updateUsage(double)),
                      eventBridge,   SIGNAL(updateUsage(double)));
+    QObject::connect(this,          SIGNAL(setLanguageComplete()),
+                     eventBridge,   SIGNAL(setLanguageComplete()));
+
+    optionsWindowConnection.reserve(5);
 }
 
 EventHandler::~EventHandler()
@@ -149,7 +153,32 @@ void EventHandler::onOptionsWindowOpened()
     using namespace Musec::UI;
     using namespace Musec::Event;
     // 常规设置
-    auto systemRender = Musec::Controller::ConfigController::appConfig()["musec"]["options"]["general"]["system-render"].as<bool>();
+    auto& translationList = Musec::Controller::AppTranslationFileList();
+    auto currentLanguage = QString::fromStdString(
+        Musec::Controller::ConfigController::appConfig()
+        ["musec"]["options"]["general"]["language"]
+            .as<std::string>()
+    );
+    auto systemRender = Musec::Controller::ConfigController::appConfig()
+        ["musec"]["options"]["general"]["system-render"]
+            .as<bool>();
+    optionsWindow->setProperty(
+        "languageList",
+        QVariant::fromValue<QObject*>(&translationList)
+    );
+    auto itemCount = translationList.itemCount();
+    for(decltype(itemCount) i = 0; i < itemCount; ++i)
+    {
+        using Musec::Model::TranslationFileModel;
+        if(std::get<TranslationFileModel::RoleNames::LanguageNameRole - Qt::UserRole>(translationList[i]) == currentLanguage)
+        {
+            optionsWindow->setProperty(
+                "currentLanguage",
+                QVariant::fromValue(i)
+            );
+            break;
+        }
+    }
     optionsWindow->setProperty(
         "systemRender",
         QVariant::fromValue(systemRender)
@@ -208,6 +237,12 @@ void EventHandler::onOptionsWindowOpened()
             QObject::connect(
                 eventBridge, SIGNAL(scanShortcutChanged(bool)),
                 this,        SLOT(onScanShortcutChanged(bool))
+            )
+        );
+        optionsWindowConnection.emplace_back(
+            QObject::connect(
+                eventBridge, SIGNAL(languageSelectionChanged(QString)),
+                this,        SLOT(onLanguageSelectionChanged(QString))
             )
         );
     }
@@ -275,13 +310,13 @@ void EventHandler::onDriverASIOSelectionChanged(const QString& clsid)
 {
     if(clsid.length())
     {
-        Controller::ASIODriverController::setASIODriver(clsid);
+        Musec::Controller::ASIODriverController::setASIODriver(clsid);
     }
 }
 
 void EventHandler::onPrepareToQuit()
 {
-    Controller::ASIODriverController::unloadASIODriver();
+    Musec::Controller::ASIODriverController::unloadASIODriver();
     Musec::Controller::AudioEngineController::AppProject().clear();
     readyToQuit();
 }
@@ -386,5 +421,11 @@ void EventHandler::onSetIcon()
 void EventHandler::onScanShortcutChanged(bool newValue)
 {
     Musec::Controller::PluginSettingsController::setScanShortcut(newValue);
+}
+
+void EventHandler::onLanguageSelectionChanged(const QString& language)
+{
+    Musec::Controller::GeneralSettingsController::setLanguage(language);
+    setLanguageComplete();
 }
 }

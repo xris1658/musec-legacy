@@ -633,53 +633,53 @@
 <context>
     <name>GeneralSettings</name>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="26"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="28"/>
         <source>Region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="39"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="41"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="54"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="60"/>
         <source>Appearance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="67"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="73"/>
         <source>Color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="81"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="87"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="96"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="102"/>
         <source>Touch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="111"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="117"/>
         <source>Single instance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="126"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="132"/>
         <source>System font rendering</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="168"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="174"/>
         <source>If applications that improves your font rendering (e.g. MacType) are installed,
 please check this. Otherwise this is not recommended to check.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="184"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="190"/>
         <source>&lt;i&gt;Italic&lt;/i&gt; items are experimental features.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1240,17 +1240,17 @@ If you add dithering devices on the master track, please uncheck this option.</s
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/OptionsWindow.qml" line="54"/>
+        <location filename="../qmlproject/OptionsWindow.qml" line="56"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/OptionsWindow.qml" line="54"/>
+        <location filename="../qmlproject/OptionsWindow.qml" line="56"/>
         <source>Audio Hardware</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/OptionsWindow.qml" line="54"/>
+        <location filename="../qmlproject/OptionsWindow.qml" line="56"/>
         <source>Plugins</source>
         <translation type="unfinished"></translation>
     </message>

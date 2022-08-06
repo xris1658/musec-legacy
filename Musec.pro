@@ -129,6 +129,7 @@ HEADERS += \
     event/SplashScreen.hpp \
     event/SplashScreenForward.hpp \
     event/SplashScreenWorkerThread.hpp \
+    i18n/I18N.hpp \
     math/Integration.hpp \
     math/QuadraticFunction.hpp \
     model/ASIODriverListModel.hpp \
@@ -143,6 +144,7 @@ HEADERS += \
     model/PluginSequenceModel.hpp \
     model/TempoAutomationModel.hpp \
     model/TrackListModel.hpp \
+    model/TranslationFileModel.hpp \
     native/Native.hpp \
     native/WindowsLibraryRAII.hpp \
     ui/FontUtility.hpp \
@@ -210,6 +212,7 @@ SOURCES += \
     event/ObjectCreateListener.cpp \
     event/SplashScreen.cpp \
     event/SplashScreenWorkerThread.cpp \
+    i18n/I18N.cpp \
     main.cpp \
     math/Integration.cpp \
     math/QuadraticFunction.cpp \
@@ -224,6 +227,7 @@ SOURCES += \
     model/PluginSequenceModel.cpp \
     model/TempoAutomationModel.cpp \
     model/TrackListModel.cpp \
+    model/TranslationFileModel.cpp \
     native/Native.cpp \
     native/WindowsLibraryRAII.cpp \
     ui/FontUtility.cpp \
@@ -261,8 +265,7 @@ LIBS += \
     # avcpp
     avcpp.lib
 
-TRANSLATIONS += i18n/base.ts \
-                i18n/Musec_zh_CN.ts
+TRANSLATIONS += i18n/Musec_zh_CN.ts
 
 CONFIG(debug, debug | release) {
     LIBS += yaml-cppd.lib \

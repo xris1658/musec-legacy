@@ -51,7 +51,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     for(decltype(size) i = 0; i < size; ++i)
     {
         using Musec::Model::TranslationFileModel;
-        if(std::get<TranslationFileModel::RoleNames::LanguageRole - Qt::UserRole>(translationFileList[i]) == language)
+        if(std::get<TranslationFileModel::RoleNames::LanguageNameRole - Qt::UserRole>(translationFileList[i]) == language)
         {
             promiseStart.set_value(std::get<TranslationFileModel::RoleNames::PathRole - Qt::UserRole>(translationFileList[i]));
             foundTranslation = true;

@@ -7,6 +7,8 @@ import Musec.Dialogs 1.0 as MDlg
 
 Rectangle {
     id: root
+    property alias languageList: comboBoxLanguage.model
+    property alias currentLanguage: comboBoxLanguage.currentIndex
     property alias systemRender: checkBoxSystemTextRendering.checked
     width: 500
     height: 500
@@ -44,9 +46,13 @@ Rectangle {
         }
         MCtrl.ComboBox {
             id: comboBoxLanguage
-            model: ["简体中文", "繁體中文", "English"]
+            valueRole: "language_name"
+            textRole: "readable_language_name"
             font.family: Constants.font
             width: secondColumnWidth
+            onCurrentValueChanged: {
+                EventBridge.languageSelectionChanged(currentValue);
+            }
         }
         Text {
             width: firstColumnWidth
