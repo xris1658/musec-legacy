@@ -24,6 +24,7 @@ Project::Project(int reserveTrackCount):
     masterTrackAudioBuffer_(audioBufferPool_.memoryBlockSize()),
     pluginGraph_(),
     tracks_(),
+    trackTypes_(),
     masterTrack_(),
     masterTrackGain_(), masterTrackPanning_(),
     masterTrackControls_(),
@@ -33,6 +34,7 @@ Project::Project(int reserveTrackCount):
 {
     audioBuffer_.reserve(reserveTrackCount);
     tracks_.reserve(reserveTrackCount);
+    trackTypes_.reserve(reserveTrackCount);
     gain_.reserve(reserveTrackCount);
     trackMute_.reserve(reserveTrackCount);
     trackSolo_.reserve(reserveTrackCount);
@@ -99,10 +101,13 @@ void Project::insertTrack(std::size_t index, const Musec::Entities::CompleteTrac
 {
     std::lock_guard<std::mutex> lg(mutex_);
     std::shared_ptr<Musec::Audio::Track::ITrack> trackPointer = nullptr;
-    switch(track.getTrackType())
+    auto entityTrackType = track.getTrackType();
+    Musec::Audio::Track::TrackType trackType;
+    switch(entityTrackType)
     {
     case Musec::Entities::CompleteTrack::TrackType::AudioTrack:
     {
+        trackType = Musec::Audio::Track::TrackType::kAudioTrack;
         audioBuffer_.emplace_back(
             std::reinterpret_pointer_cast<float>(audioBufferPool_.lendMemoryBlock())
         );
@@ -115,12 +120,14 @@ void Project::insertTrack(std::size_t index, const Musec::Entities::CompleteTrac
     }
     case Musec::Entities::CompleteTrack::TrackType::MIDITrack:
     {
+        trackType = Musec::Audio::Track::TrackType::kMIDITrack;
         audioBuffer_.emplace_back(std::shared_ptr<float>(nullptr));
         trackPointer = std::make_shared<Musec::Audio::Track::MIDITrack>();
         break;
     }
     case Musec::Entities::CompleteTrack::TrackType::InstrumentTrack:
     {
+        trackType = Musec::Audio::Track::TrackType::kInstrumentTrack;
         audioBuffer_.emplace_back(
             std::reinterpret_pointer_cast<float>(audioBufferPool_.lendMemoryBlock())
         );
@@ -140,6 +147,7 @@ void Project::insertTrack(std::size_t index, const Musec::Entities::CompleteTrac
     }
     trackPointer->setTrackInformation(Musec::Audio::Track::TrackInformation {track.getTrackName(), track.getTrackColor(), track.getHeight()});
     tracks_.insert(tracks_.begin() + index, std::move(trackPointer));
+    trackTypes_.insert(trackTypes_.begin() + index, trackType);
     gain_.insert(gain_.begin() + index, track.getGain());
     panning_.insert(panning_.begin() + index, track.getPanning());
     trackMute_.insert(trackMute_.begin(), track.isTrackMute());
@@ -153,6 +161,7 @@ void Project::eraseTrack(std::size_t index)
     std::lock_guard<std::mutex> lg(mutex_);
     audioBuffer_.erase(audioBuffer_.begin() + index);
     tracks_.erase(tracks_.begin() + index);
+    trackTypes_.erase(trackTypes_.begin() + index);
     gain_.erase(gain_.begin() + index);
     panning_.erase(panning_.begin() + index);
     trackMute_.erase(trackMute_.begin() + index);
@@ -207,7 +216,7 @@ void Project::process()
     // Musec::Audio::Base::AudioBufferViews<float> audioBufferViews(
     //     2, Musec::Audio::Base::AudioBufferView<float>()
     // );
-    Musec::Audio::Base::AudioBufferViews<float> masterTrackAudioBufferViews {
+    std::array<Musec::Audio::Base::AudioBufferView<float>, 2> masterTrackAudioBufferViews {
         Musec::Audio::Base::AudioBufferView<float>(reinterpret_cast<float*>(masterTrackAudioBuffer_.data()), currentBlockSize),
         Musec::Audio::Base::AudioBufferView<float>(reinterpret_cast<float*>(masterTrackAudioBuffer_.data()) + currentBlockSize, currentBlockSize)
     };
@@ -216,13 +225,14 @@ void Project::process()
         auto& track = tracks_[i];
         audioBufferViews[0] = {audioBuffer_[i].get(),                    currentBlockSize};
         audioBufferViews[1] = {audioBuffer_[i].get() + currentBlockSize, currentBlockSize};
-       for(auto& bufferView: audioBufferViews)
-       {
-           bufferView.init();
-       }
-        if (track->trackType() == Musec::Audio::Track::TrackType::kInstrumentTrack)
+        for(auto& bufferView: audioBufferViews)
         {
-            auto instrumentTrack = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(track);
+            bufferView.init();
+        }
+        if(trackTypes_[i] == Musec::Audio::Track::TrackType::kInstrumentTrack)
+        {
+            // 由于上面的判断用于确定轨道类型，因此用 static_cast 向下转换没有问题
+            auto instrumentTrack = static_cast<Musec::Audio::Track::InstrumentTrack*>(track.get());
             const auto& instrument = instrumentTrack->getInstrument();
             if (instrument && (instrument->processing()))
             {
@@ -237,9 +247,9 @@ void Project::process()
                 }
             }
         }
-        else if (track->trackType() == Musec::Audio::Track::TrackType::kAudioTrack)
+        else if (trackTypes_[i] == Musec::Audio::Track::TrackType::kAudioTrack)
         {
-            auto audioTrack = std::static_pointer_cast<Musec::Audio::Track::AudioTrack>(track);
+            auto audioTrack = static_cast<Musec::Audio::Track::AudioTrack*>(track.get());
             const auto& plugins = audioTrack->getPluginSequences()[0];
             for (const auto& audioEffect: plugins)
             {
@@ -249,12 +259,14 @@ void Project::process()
                 }
             }
         }
-        // 按帧操作。
-        // 逐列操纵，因此缓冲区较大时可能出现缓存未命中的问题，日后需要优化。
+        // 按帧操作，因此需要逐列操纵。
+        // 编译器可能将其优化为逐行操纵。这是单线程优化的常见方式。
+        // 如果未优化，则缓冲区较大时可能出现缓存未命中的问题。
         for (auto j = 0; j < currentBlockSize; ++j)
         {
             for (auto k = 0; k < masterTrackAudioBufferViews.size(); ++k)
             {
+                // 前面有将缓冲区置零的代码。
                 if(!trackMute_[i])
                 {
                     if(trackInvertPhase_[i])
@@ -269,20 +281,20 @@ void Project::process()
             }
         }
     }
-    // ll. 246-247
+    // ll. 261-263
     for (auto j = 0; j < currentBlockSize; ++j)
     {
-        for (auto i = 0; i < masterTrackAudioBufferViews.size(); ++i)
+        for (auto & masterTrackAudioBufferView : masterTrackAudioBufferViews)
         {
             if(masterTrackMute())
             {
-                masterTrackAudioBufferViews[i][j] = 0.0;
+                masterTrackAudioBufferView[j] = 0.0;
             }
             else
             {
                 if(masterTrackInvertPhase())
                 {
-                    masterTrackAudioBufferViews[i][j] *= -1;
+                    masterTrackAudioBufferView[j] *= -1;
                 }
             }
         }
@@ -303,6 +315,7 @@ void Project::clear()
     pluginGraph_.clear();
     audioBuffer_.clear();
     tracks_.clear();
+    trackTypes_.clear();
     masterTrack_.clear();
     gain_.clear();
     panning_.clear();

@@ -81,6 +81,7 @@ private:
     Musec::Base::FixedSizeMemoryBlock masterTrackAudioBuffer_;
     Musec::Audio::Engine::Graph<std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>>> pluginGraph_;
     std::vector<std::shared_ptr<Musec::Audio::Track::ITrack>> tracks_;
+    std::vector<Musec::Audio::Track::TrackType> trackTypes_;
     Musec::Audio::Track::AudioTrack masterTrack_;
     double masterTrackGain_;
     double masterTrackPanning_;
