@@ -1,5 +1,5 @@
-#ifndef MUSEC_DKWTP_CHRONO
-#define MUSEC_DKWTP_CHRONO
+#ifndef MUSEC_AUDIO_BASE_CHRONO
+#define MUSEC_AUDIO_BASE_CHRONO
 
 #include <cstddef>
 #include <cstdint>
@@ -48,13 +48,13 @@ public:
         --pulse_;
         return *this;
     }
-    const TimePoint<PPQ> operator--(int)
+    TimePoint<PPQ> operator--(int)
     {
         TimePoint<PPQ> ret = *this;
         operator--();
         return ret;
     }
-    const TimePoint<PPQ> operator++(int)
+    TimePoint<PPQ> operator++(int)
     {
         TimePoint<PPQ> ret = *this;
         operator++();
@@ -242,4 +242,4 @@ TimePoint<PPQ>& TimePoint<PPQ>::operator-=(const Duration<PPQ>& duration)
 }
 }
 
-#endif //MUSEC_DKWTP_CHRONO
+#endif //MUSEC_AUDIO_BASE_CHRONO

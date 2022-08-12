@@ -25,7 +25,7 @@ public:
     };
 public:
     explicit AssetDirectoryListModel(QObject* parent = nullptr);
-    virtual ~AssetDirectoryListModel();
+    ~AssetDirectoryListModel();
 public:
     void setList(const QList<Item>&);
     void setList(QList<Item>&&);

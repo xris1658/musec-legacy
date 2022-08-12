@@ -24,7 +24,7 @@ public:
     };
 public:
     explicit TempoAutomationModel(QObject* parent = nullptr);
-    virtual ~TempoAutomationModel();
+    ~TempoAutomationModel();
 public:
     const TempoAutomation& getTempoAutomation() const;
     void setTempoAutomation(const TempoAutomation& automation);

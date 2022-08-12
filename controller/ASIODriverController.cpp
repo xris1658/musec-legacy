@@ -6,7 +6,6 @@
 #include "controller/AppController.hpp"
 #include "controller/ConfigController.hpp"
 #include "dao/DatabaseDAO.hpp"
-#include "event/EventBase.hpp"
 #include "event/EventHandler.hpp"
 #include "ui/MessageDialog.hpp"
 #include "ui/UI.hpp"

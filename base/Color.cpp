@@ -17,7 +17,6 @@ std::array<std::uint8_t, 3> bgr(const Color& color)
 ColorStringWithoutHashtag rgbToCharWithoutHashtag(const Color& color, bool uppercase)
 {
     std::array<char, 7> ret = {0};
-    std::error_code ec;
     std::to_chars(ret.data(), ret.data() + 2, color.r, 16);
     std::to_chars(ret.data() + 2, ret.data() + 4, color.g, 16);
     std::to_chars(ret.data() + 4, ret.data() + 6, color.b, 16);
@@ -37,8 +36,7 @@ ColorStringWithoutHashtag rgbToCharWithoutHashtag(const Color& color, bool upper
 ColorStringWithHashtag rgbToCharWithHashtag(const Color& color, bool uppercase)
 {
     std::array<char, 8> ret = {0};
-    ret[0] = Hashtag;
-    std::error_code ec;
+    ret[0] = PoundSign;
     std::to_chars(ret.data() + 1, ret.data() + 3, color.r, 16);
     std::to_chars(ret.data() + 3, ret.data() + 5, color.g, 16);
     std::to_chars(ret.data() + 5, ret.data() + 7, color.b, 16);

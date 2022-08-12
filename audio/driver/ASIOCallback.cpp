@@ -15,8 +15,6 @@ bool driverSupportsOutputReady;
 
 void(*functionThatUsesDuration)(std::int64_t) = nullptr;
 
-using BufferSwitchCallbackType = decltype(ASIOCallbacks::bufferSwitch);
-
 namespace Impl
 {
 void onASIOBufferSwitchWithoutTimerClamp(long doubleBufferIndex, ASIOBool directProcess)
@@ -55,7 +53,7 @@ void onASIOBufferSwitchWithoutTimerClamp(long doubleBufferIndex, ASIOBool direct
         }
         for(int i = 0; i < inputCount; ++i)
         {
-            auto buffer = bufferInfoList[inputs[i]].buffers;
+            // auto buffer = bufferInfoList[inputs[i]].buffers;
             // MSB -> BE; LSB -> LE;
             auto type = channelInfoList[i].type;
             switch(type)
@@ -122,7 +120,7 @@ void onASIOBufferSwitchWithoutTimerClamp(long doubleBufferIndex, ASIOBool direct
             case ASIOSTInt16MSB:
             {
                 Base::clip(masterTrackAudioBufferView[i]);
-                int16_t* int16Buffer = reinterpret_cast<int16_t*>(buffer);
+                auto* int16Buffer = reinterpret_cast<int16_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int16Buffer[j] = static_cast<int16_t>(masterTrackAudioBufferView[i][j] * Base::Int16Max);
@@ -136,7 +134,7 @@ void onASIOBufferSwitchWithoutTimerClamp(long doubleBufferIndex, ASIOBool direct
             case ASIOSTInt24MSB:
             {
                 Base::clip(masterTrackAudioBufferView[i]);
-                int24_t* int24Buffer = reinterpret_cast<int24_t*>(buffer);
+                auto* int24Buffer = reinterpret_cast<int24_t*>(buffer);
                 int32_t temp;
                 for(int j = 0; j < bufferSize; ++j)
                 {
@@ -155,7 +153,7 @@ void onASIOBufferSwitchWithoutTimerClamp(long doubleBufferIndex, ASIOBool direct
             case ASIOSTInt32MSB:
             {
                 Base::clip(masterTrackAudioBufferView[i]);
-                int32_t* int32Buffer = reinterpret_cast<int32_t*>(buffer);
+                auto* int32Buffer = reinterpret_cast<int32_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int32Buffer[j] = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int32Max);
@@ -180,7 +178,7 @@ void onASIOBufferSwitchWithoutTimerClamp(long doubleBufferIndex, ASIOBool direct
             }
             case ASIOSTFloat64MSB:
             {
-                double* doubleBuffer = reinterpret_cast<double*>(buffer);
+                auto* doubleBuffer = reinterpret_cast<double*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     doubleBuffer[j] = static_cast<double>(masterTrackAudioBufferView[i][j]);
@@ -194,7 +192,7 @@ void onASIOBufferSwitchWithoutTimerClamp(long doubleBufferIndex, ASIOBool direct
             case ASIOSTInt32MSB16:
             {
                 Base::clip(masterTrackAudioBufferView[i]);
-                int32_t* int32Buffer = reinterpret_cast<int32_t*>(buffer);
+                auto* int32Buffer = reinterpret_cast<int32_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int32Buffer[j] = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int16Max);
@@ -208,7 +206,7 @@ void onASIOBufferSwitchWithoutTimerClamp(long doubleBufferIndex, ASIOBool direct
             case ASIOSTInt32MSB18:
             {
                 Base::clip(masterTrackAudioBufferView[i]);
-                int32_t* int32Buffer = reinterpret_cast<int32_t*>(buffer);
+                auto* int32Buffer = reinterpret_cast<int32_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int32Buffer[j] = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int18Max);
@@ -222,7 +220,7 @@ void onASIOBufferSwitchWithoutTimerClamp(long doubleBufferIndex, ASIOBool direct
             case ASIOSTInt32MSB20:
             {
                 Base::clip(masterTrackAudioBufferView[i]);
-                int32_t* int32Buffer = reinterpret_cast<int32_t*>(buffer);
+                auto* int32Buffer = reinterpret_cast<int32_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int32Buffer[j] = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int20Max);
@@ -236,7 +234,7 @@ void onASIOBufferSwitchWithoutTimerClamp(long doubleBufferIndex, ASIOBool direct
             case ASIOSTInt32MSB24:
             {
                 Base::clip(masterTrackAudioBufferView[i]);
-                int32_t* int32Buffer = reinterpret_cast<int32_t*>(buffer);
+                auto* int32Buffer = reinterpret_cast<int32_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int32Buffer[j] = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int24Max);
@@ -251,7 +249,7 @@ void onASIOBufferSwitchWithoutTimerClamp(long doubleBufferIndex, ASIOBool direct
             case ASIOSTInt16LSB:
             {
                 Base::clip(masterTrackAudioBufferView[i]);
-                int16_t* int16Buffer = reinterpret_cast<int16_t*>(buffer);
+                auto* int16Buffer = reinterpret_cast<int16_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int16Buffer[j] = static_cast<int16_t>(masterTrackAudioBufferView[i][j] * Base::Int16Max);
@@ -265,7 +263,7 @@ void onASIOBufferSwitchWithoutTimerClamp(long doubleBufferIndex, ASIOBool direct
             case ASIOSTInt24LSB:
             {
                 Base::clip(masterTrackAudioBufferView[i]);
-                int24_t* int24Buffer = reinterpret_cast<int24_t*>(buffer);
+                auto* int24Buffer = reinterpret_cast<int24_t*>(buffer);
                 int32_t temp;
                 for(int j = 0; j < bufferSize; ++j)
                 {
@@ -284,7 +282,7 @@ void onASIOBufferSwitchWithoutTimerClamp(long doubleBufferIndex, ASIOBool direct
             case ASIOSTInt32LSB:
             {
                 Base::clip(masterTrackAudioBufferView[i]);
-                int32_t* int32Buffer = reinterpret_cast<int32_t*>(buffer);
+                auto* int32Buffer = reinterpret_cast<int32_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int32Buffer[j] = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int32Max);
@@ -309,7 +307,7 @@ void onASIOBufferSwitchWithoutTimerClamp(long doubleBufferIndex, ASIOBool direct
             }
             case ASIOSTFloat64LSB:
             {
-                double* doubleBuffer = reinterpret_cast<double*>(buffer);
+                auto* doubleBuffer = reinterpret_cast<double*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     doubleBuffer[j] = static_cast<double>(masterTrackAudioBufferView[i][j]);
@@ -323,7 +321,7 @@ void onASIOBufferSwitchWithoutTimerClamp(long doubleBufferIndex, ASIOBool direct
             case ASIOSTInt32LSB16:
             {
                 Base::clip(masterTrackAudioBufferView[i]);
-                int32_t* int32Buffer = reinterpret_cast<int32_t*>(buffer);
+                auto* int32Buffer = reinterpret_cast<int32_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int32Buffer[j] = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int16Max);
@@ -337,7 +335,7 @@ void onASIOBufferSwitchWithoutTimerClamp(long doubleBufferIndex, ASIOBool direct
             case ASIOSTInt32LSB18:
             {
                 Base::clip(masterTrackAudioBufferView[i]);
-                int32_t* int32Buffer = reinterpret_cast<int32_t*>(buffer);
+                auto* int32Buffer = reinterpret_cast<int32_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int32Buffer[j] = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int18Max);
@@ -351,7 +349,7 @@ void onASIOBufferSwitchWithoutTimerClamp(long doubleBufferIndex, ASIOBool direct
             case ASIOSTInt32LSB20:
             {
                 Base::clip(masterTrackAudioBufferView[i]);
-                int32_t* int32Buffer = reinterpret_cast<int32_t*>(buffer);
+                auto* int32Buffer = reinterpret_cast<int32_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int32Buffer[j] = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int20Max);
@@ -365,7 +363,7 @@ void onASIOBufferSwitchWithoutTimerClamp(long doubleBufferIndex, ASIOBool direct
             case ASIOSTInt32LSB24:
             {
                 Base::clip(masterTrackAudioBufferView[i]);
-                int32_t* int32Buffer = reinterpret_cast<int32_t*>(buffer);
+                auto* int32Buffer = reinterpret_cast<int32_t*>(buffer);
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int32Buffer[j] = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int24Max);
@@ -378,13 +376,9 @@ void onASIOBufferSwitchWithoutTimerClamp(long doubleBufferIndex, ASIOBool direct
             }
             // DSD
             case ASIOSTDSDInt8LSB1:
-                break;
             case ASIOSTDSDInt8MSB1:
-                break;
             case ASIOSTDSDInt8NER8:
-                break;
             case ASIOSTLastEntry:
-                break;
             default:
                 break;
             }

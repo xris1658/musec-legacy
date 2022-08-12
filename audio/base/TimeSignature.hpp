@@ -1,5 +1,5 @@
-#ifndef MUSEC_DKWTP_TIMESIGNATURE
-#define MUSEC_DKWTP_TIMESIGNATURE
+#ifndef MUSEC_AUDIO_BASE_TIMESIGNATURE
+#define MUSEC_AUDIO_BASE_TIMESIGNATURE
 
 #include <array>
 #include <cstdint>
@@ -13,8 +13,6 @@ namespace Base
 {
 class TimeSignature
 {
-public:
-    using Literal = std::array<char, 6>;
 public:
     TimeSignature(uint8_t numerator = 4, uint8_t denominator = 4);
     TimeSignature(const TimeSignature&);
@@ -30,8 +28,6 @@ public:
     void setNumerator(uint8_t numerator);
     std::uint8_t getDenominator() const;
     void setDenominator(uint8_t denominator);
-public:
-    Literal toString();
 private:
     std::uint8_t numerator_;
     std::uint8_t denominator_;
@@ -40,4 +36,4 @@ private:
 }
 }
 
-#endif //MUSEC_DKWTP_TIMESIGNATURE
+#endif //MUSEC_AUDIO_BASE_TIMESIGNATURE

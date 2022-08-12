@@ -36,7 +36,7 @@ public:
     };
 public:
     explicit PluginListModel(QObject* parent = nullptr);
-    virtual ~PluginListModel();
+    ~PluginListModel();
 public:
     void setList(const List&);
     void setList(List&&);

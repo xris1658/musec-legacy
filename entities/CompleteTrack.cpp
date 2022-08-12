@@ -1,13 +1,15 @@
 #include "CompleteTrack.hpp"
 
+#include <utility>
+
 namespace Musec::Entities
 {
-CompleteTrack::CompleteTrack(QObject* parent, const QString& trackName, QColor trackColor,
+CompleteTrack::CompleteTrack(QObject* parent, QString trackName, QColor trackColor,
     TrackType trackType, int height, double gain, double panning,
     bool trackMute, bool trackSolo, bool trackInvertPhase, bool trackArmRecording):
     QObject(parent),
-    trackName_(trackName),
-    trackColor_(trackColor),
+    trackName_(std::move(trackName)),
+    trackColor_(std::move(trackColor)),
     trackType_(trackType),
     height_(height),
     gain_(gain),

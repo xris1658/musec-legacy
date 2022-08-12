@@ -7,6 +7,7 @@
 
 #include <QList>
 #include <QString>
+#include <QtGlobal>
 
 #include <Windows.h>
 

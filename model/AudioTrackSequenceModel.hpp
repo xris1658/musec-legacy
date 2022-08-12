@@ -24,7 +24,7 @@ public:
     };
 public:
     explicit AudioTrackSequenceModel(QObject* parent = nullptr);
-    virtual ~AudioTrackSequenceModel();
+    ~AudioTrackSequenceModel();
 public:
     const Musec::Audio::Arrangement::AudioTrackSequence& getTrackSequence() const;
     Musec::Audio::Arrangement::AudioTrackSequence& getTrackSequence();

@@ -244,7 +244,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                                                                     reinterpret_cast<void**>(&component));
                         auto& host = MusecVST3Host::instance();
                         component->initialize(&host);
-                        ProcessSetup setup;
+                        ProcessSetup setup{};
                         setup.processMode = Vst::ProcessModes::kRealtime;
                         setup.sampleRate = 44100.0;
                         setup.maxSamplesPerBlock = 1024;
@@ -274,7 +274,8 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                         {
                             // 此类有事件输入，音频输入和音频输出。
                             // 可能也有事件输出。
-                            // 程序认为这是带事件输入的音频效果器。
+                            // 程序认为这是带事件输入的音频效果器（如 FabFilter Pro-Q 2）
+                            // （也可能是带侧链输入的乐器，如 Surge XT）
                             pluginType = PluginType::TypeAudioFX;
                         }
                         else if(busCounts[1] && busCounts[2])

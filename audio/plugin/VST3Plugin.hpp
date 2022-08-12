@@ -88,7 +88,6 @@ class VST3Plugin:
 {
     using SampleType = float;
     using Base = Musec::Native::WindowsLibraryRAII;
-    using IPluginInterface = Musec::Audio::Plugin::IPlugin<SampleType>;
     using SampleTypePointers = std::vector<SampleType*>;
 public:
 public: // ctor & dtor

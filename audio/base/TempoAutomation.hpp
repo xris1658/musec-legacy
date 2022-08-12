@@ -1,5 +1,5 @@
-#ifndef MUSEC_DKWTP_TEMPOAUTOMATION
-#define MUSEC_DKWTP_TEMPOAUTOMATION
+#ifndef MUSEC_AUDIO_BASE_TEMPOAUTOMATION
+#define MUSEC_AUDIO_BASE_TEMPOAUTOMATION
 
 #include "Automation.hpp"
 #include "Chrono.hpp"
@@ -94,7 +94,7 @@ public:
             }
         }
         auto afterStart = Base::upperBound(from);
-        auto afterEnd = Base::upperBound(to);
+        // auto afterEnd = Base::upperBound(to);
         if (afterStart == Base::cend() /*&& afterEnd == Bae::cend()*/)
         {
             ret = secondElapsed((Base::cend() - 1)->value(), to - from);
@@ -254,4 +254,4 @@ public:
 }
 }
 
-#endif //MUSEC_DKWTP_TEMPOAUTOMATION
+#endif //MUSEC_AUDIO_BASE_TEMPOAUTOMATION

@@ -26,7 +26,7 @@ public:
     };
 public:
     explicit ASIODriverListModel(QObject* parent = nullptr);
-    virtual ~ASIODriverListModel();
+    ~ASIODriverListModel();
 public:
     void setList(const List&);
     void setList(List&&);

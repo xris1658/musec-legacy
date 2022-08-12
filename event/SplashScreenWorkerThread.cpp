@@ -12,11 +12,6 @@ SplashScreenWorkerThread::SplashScreenWorkerThread(SplashScreen* splashScreen, Q
     //
 }
 
-SplashScreenWorkerThread::~SplashScreenWorkerThread()
-{
-    //
-}
-
 void SplashScreenWorkerThread::run()
 {
     Musec::Controller::initApplication(this->splashScreen_);

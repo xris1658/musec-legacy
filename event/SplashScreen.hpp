@@ -14,7 +14,7 @@ class SplashScreen: public QObject
     Q_OBJECT
 public:
     SplashScreen(QObject* parent = nullptr);
-    virtual ~SplashScreen();
+    ~SplashScreen() = default;
 public slots:
     // 对话框已打开，通知应用程序进行初始化
     void onInitDialog();

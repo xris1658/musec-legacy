@@ -22,7 +22,7 @@ public:
     };
 public:
     explicit AutomationModel(QObject* parent = nullptr);
-    virtual ~AutomationModel();
+    ~AutomationModel();
 public:
     const Audio::Base::Automation& getAutomation() const;
     void setAutomation(const Musec::Audio::Base::Automation& automation);

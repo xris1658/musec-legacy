@@ -1,22 +1,21 @@
 #include "LoggingDAO.hpp"
 
+#include "base/Base.hpp"
 #include "native/Native.hpp"
 
 #include <array>
 #include <cstring>
-#include <string>
 
 namespace Musec::DAO::LoggingDAO
 {
-const QString loggingFileName()
+QString loggingFileName()
 {
     // "20220226222547.log"
-    constexpr char suffix[] = ".log";
     auto time = Musec::Native::getLaunchTime();
     auto array = Musec::Native::formatTime(time);
-    constexpr auto length = array.size() - 1 - 3 + sizeof(loggingFileSuffix) - 1;
+    constexpr auto length = array.size() - 1 - 3 + Musec::Base::stackArraySize(loggingFileSuffix) - 1;
     std::array<char, length> fileNameBuffer = {0};
-    std::strcpy(fileNameBuffer.data(), array.data());
+    std::copy(array.begin(), array.end(), fileNameBuffer.begin());
     std::strcpy(fileNameBuffer.data() + sizeof(array) - 1 - 3, loggingFileSuffix);
     return QString::fromLatin1(fileNameBuffer.data());
 }

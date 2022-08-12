@@ -204,7 +204,7 @@ public:
     }
     const Point& at(const std::size_t index) const
     {
-        if(index < 0 || index >= pointCount())
+        if(index >= pointCount())
         {
             throw std::out_of_range("Error: at() out of range");
         }
@@ -324,7 +324,6 @@ public:
     void deletePoint(std::size_t index)
     {
         points_.erase(points_.begin() + index);
-        auto right = begin() + index;
     }
     void setValueOfPoint(std::size_t index, double value)
     {

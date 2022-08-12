@@ -18,7 +18,7 @@ class EventHandler: public QObject
 private:
     EventHandler(QObject* eventBridge, QObject* parent = nullptr);
 public:
-    virtual ~EventHandler();
+    ~EventHandler();
     static EventHandler& instance(QObject* eventBridge);
 public:
     void scanPluginComplete();

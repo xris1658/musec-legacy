@@ -18,8 +18,8 @@ public:
     explicit WindowsLibraryRAII(const QString& path);
     WindowsLibraryRAII(const WindowsLibraryRAII&) = delete;
     WindowsLibraryRAII& operator=(const WindowsLibraryRAII&) = delete;
-    WindowsLibraryRAII(WindowsLibraryRAII&&);
-    WindowsLibraryRAII& operator=(WindowsLibraryRAII&&);
+    WindowsLibraryRAII(WindowsLibraryRAII&&) noexcept;
+    WindowsLibraryRAII& operator=(WindowsLibraryRAII&&) noexcept;
     virtual ~WindowsLibraryRAII() noexcept;
 public:
     HMODULE module() const;

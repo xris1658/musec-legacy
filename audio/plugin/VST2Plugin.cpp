@@ -1,6 +1,5 @@
 #include "VST2Plugin.hpp"
 
-#include "audio/driver/ASIODriver.hpp"
 #include "audio/engine/Project.hpp"
 #include "audio/plugin/VST2PluginParameter.hpp"
 #include "controller/AudioEngineController.hpp"
@@ -8,7 +7,6 @@
 #include "base/PluginBase.hpp"
 #include "native/Native.hpp"
 
-#include <windows.h>
 #include <errhandlingapi.h>
 
 #include <array>
@@ -321,21 +319,21 @@ VST2Plugin::VST2Plugin(const QString& path, bool scanPlugin, VstInt32 shellPlugi
         effect_ = ShellPluginId::instance().getShellPlugin(shellPluginId, true, pluginEntryProc);
     }
     effect_->dispatcher(effect_, effOpen, 0, 0, nullptr, 0);
-    inputsRaw_ = std::vector<SampleType*>(inputCount(), nullptr);
-    outputsRaw_ = std::vector<SampleType*>(outputCount(), nullptr);
+    inputsRaw_ = std::vector<SampleType*>(VST2Plugin::inputCount(), nullptr);
+    outputsRaw_ = std::vector<SampleType*>(VST2Plugin::outputCount(), nullptr);
 }
 
 VST2Plugin::~VST2Plugin()
 {
     if(effect_)
     {
-        if(hasUI())
+        if(VST2Plugin::hasUI())
         {
             uninitializeEditor();
         }
-        stopProcessing();
-        deactivate();
-        uninitialize();
+        VST2Plugin::stopProcessing();
+        VST2Plugin::deactivate();
+        VST2Plugin::uninitialize();
         effect_->dispatcher(effect_, effClose, 0, 0, nullptr, 0);
     }
 }

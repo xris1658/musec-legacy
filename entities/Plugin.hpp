@@ -40,9 +40,9 @@ public:
         bool sidechainEnabled);
     Plugin(Plugin&& rhs) noexcept;
     Plugin& operator=(Plugin&& rhs) noexcept;
-    ~Plugin();
+    ~Plugin() = default;
 public:
-    static Musec::Entities::Plugin fromPlugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin = nullptr);
+    static Musec::Entities::Plugin fromPlugin(const std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>>& plugin = nullptr);
     bool valid() const;
     const QString& getName() const;
     void setName(const QString& name);

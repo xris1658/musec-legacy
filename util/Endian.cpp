@@ -3,11 +3,9 @@
 #include "native/Native.hpp"
 
 #include <algorithm>
-#include <cstdint>
 
 namespace Musec::Util
 {
-
 void reverseEndianness(void* data, std::size_t byteCount)
 {
     std::reverse(reinterpret_cast<std::byte*>(data), reinterpret_cast<std::byte*>(data) + byteCount);

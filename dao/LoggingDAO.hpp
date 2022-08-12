@@ -16,10 +16,10 @@ namespace LoggingDAO
 {
 using LoggerType = std::shared_ptr<spdlog::logger>;
 
-constexpr auto loggingFolderName = "log";
-constexpr auto loggingFileSuffix = ".log";
+constexpr char loggingFolderName[] = "log";
+constexpr char loggingFileSuffix[] = ".log";
 // 根据启动时间获取日志文件名
-const QString loggingFileName();
+QString loggingFileName();
 
 LoggerType& createLogger();
 }

@@ -1,7 +1,7 @@
 #include "SplashScreen.hpp"
 
-#include "controller/AppController.hpp"
-#include "event/EventBase.hpp"
+// #include "controller/AppController.hpp"
+// #include "event/EventBase.hpp"
 #include "ui/UI.hpp"
 
 #include <QCoreApplication>
@@ -19,11 +19,6 @@ SplashScreen::SplashScreen(QObject* parent): QObject(parent), workerThread_(this
                      splashWindow, SIGNAL(closeDialog()));
     QObject::connect(this,         SIGNAL(setBootText(QString)),
                      splashWindow, SIGNAL(setBootText(QString)));
-}
-
-SplashScreen::~SplashScreen()
-{
-    //
 }
 
 void SplashScreen::onInitDialog()

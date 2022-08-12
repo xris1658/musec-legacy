@@ -40,7 +40,7 @@ bool CLAPPlugin::createPlugin(int index)
 {
     if(factory_)
     {
-        auto count = factory_->get_plugin_count(factory_);
+        // auto count = factory_->get_plugin_count(factory_);
         desc_ = factory_->get_plugin_descriptor(factory_, index);
         auto host = new(hostArea) Musec::Audio::Host::CLAPHost(*this);
         plugin_ = factory_->create_plugin(factory_, &(host->host()), desc_->id);
@@ -60,15 +60,15 @@ CLAPPlugin::~CLAPPlugin()
 {
     if(pluginStatus_ == CLAPPluginStatus::Processing)
     {
-        stopProcessing();
+        CLAPPlugin::stopProcessing();
     }
     if(pluginStatus_ == CLAPPluginStatus::Activated)
     {
-        deactivate();
+        CLAPPlugin::deactivate();
     }
     if(pluginStatus_ == CLAPPluginStatus::Initialized)
     {
-        uninitialize();
+        CLAPPlugin::uninitialize();
     }
     pluginStatus_ = CLAPPluginStatus::NoPlugin;
     if(entry_)

@@ -4,8 +4,6 @@
 #include "base/Constants.hpp"
 #include "base/FixedSizeMemoryBlock.hpp"
 
-#include <QtGlobal>
-
 #include <ShlObj_core.h>
 #include <shellapi.h>
 #include <processthreadsapi.h>
@@ -317,7 +315,7 @@ QString getProductVersion(const QString& path)
             }
         }
     }
-    return QString();
+    return {};
 }
 
 QList<Musec::Audio::Driver::ASIODriverBasicInfo> enumerateDrivers()

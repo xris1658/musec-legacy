@@ -12,7 +12,7 @@ namespace Base
 class FixedSizeMemoryBlock
 {
 public:
-    FixedSizeMemoryBlock(std::size_t blockSize = 0):
+    explicit FixedSizeMemoryBlock(std::size_t blockSize = 0):
         blockSize_(blockSize),
         block_(nullptr)
     {

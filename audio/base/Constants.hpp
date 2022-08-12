@@ -1,5 +1,5 @@
-#ifndef MUSEC_CONSTANTS_HPP
-#define MUSEC_CONSTANTS_HPP
+#ifndef MUSEC_AUDIO_BASE_CONSTANTS
+#define MUSEC_AUDIO_BASE_CONSTANTS
 
 #include <cstddef>
 
@@ -25,4 +25,4 @@ constexpr float Int64Max = leftShift<63>() - 1;
 }
 }
 
-#endif //MUSEC_CONSTANTS_HPP
+#endif //MUSEC_AUDIO_BASE_CONSTANTS

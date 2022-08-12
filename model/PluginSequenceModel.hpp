@@ -38,7 +38,7 @@ public:
 public:
     explicit PluginSequenceModel(int trackIndex, QObject* parent = nullptr);
     explicit PluginSequenceModel();
-    virtual ~PluginSequenceModel();
+    ~PluginSequenceModel();
 public:
     void initRoleNames();
     Q_INVOKABLE int itemCount() const;

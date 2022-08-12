@@ -64,20 +64,4 @@ void TimeSignature::setDenominator(uint8_t denominator)
     denominator_ = denominator;
 }
 
-TimeSignature::Literal TimeSignature::toString()
-{
-    TimeSignature::Literal ret = {0};
-    auto [p1, ec1] = std::to_chars(ret.data(),
-                                   ret.data() + ret.size(),
-                                   getNumerator());
-    *p1 = '/';
-    auto [p2, ec2] = std::to_chars(p1 + 1,
-                                   ret.data() + ret.size(),
-                                   getDenominator());
-    if(ec1 != std::errc() || ec2 != std::errc())
-    {
-        std::memset(ret.data(), 0, ret.size());
-    }
-    return ret;
-}
 }

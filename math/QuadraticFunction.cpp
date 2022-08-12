@@ -1,7 +1,6 @@
 #include "QuadraticFunction.hpp"
 
 #include <cmath>
-#include <stdexcept>
 
 namespace Musec::Math
 {

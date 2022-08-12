@@ -3,7 +3,6 @@
 #include "base/Base.hpp"
 
 #include <charconv>
-#include <cstdlib>
 
 namespace Musec::Util
 {

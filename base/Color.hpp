@@ -8,7 +8,7 @@ namespace Musec
 {
 namespace Base
 {
-constexpr char Hashtag = '#';
+constexpr char PoundSign = '#';
 
 using ColorStringWithoutHashtag = std::array<char, 7>;
 using ColorStringWithHashtag = std::array<char, 8>;

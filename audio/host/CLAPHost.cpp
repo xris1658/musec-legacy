@@ -7,7 +7,6 @@
 #include <clap/ext/params.h>
 
 #include <cstring>
-#include <cassert>
 
 namespace Musec::Audio::Host
 {

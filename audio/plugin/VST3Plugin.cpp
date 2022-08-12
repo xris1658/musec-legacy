@@ -10,7 +10,8 @@
 #include <public.sdk/source/common/memorystream.h>
 #include <public.sdk/source/common/memorystream.cpp>
 
-#include <algorithm>
+#include <errhandlingapi.h>
+
 #include <stdexcept>
 
 namespace Musec::Audio::Plugin
@@ -32,15 +33,7 @@ VST3Plugin::VST3Plugin(const QString& path, int classIndex):
     auto pluginFactoryProc = Musec::Native::getExport<Musec::Base::VST3PluginFactoryProc>(*this, "GetPluginFactory");
     if (!pluginFactoryProc)
     {
-        auto error = GetLastError();
-        switch (error)
-        {
-        case ERROR_PROC_NOT_FOUND:
-            break;
-        default:
-            break;
-        }
-        throw std::invalid_argument("");
+        throw GetLastError();
     }
     if (pluginInitProc)
     {
@@ -78,15 +71,15 @@ VST3Plugin::~VST3Plugin()
     }
     if(audioProcessorStatus_ == VST3AudioProcessorStatus::Processing)
     {
-        stopProcessing();
+        VST3Plugin::stopProcessing();
     }
     if(audioProcessorStatus_ == VST3AudioProcessorStatus::Activated)
     {
-        deactivate();
+        VST3Plugin::deactivate();
     }
     if(audioProcessorStatus_ == VST3AudioProcessorStatus::SetupDone)
     {
-        uninitialize();
+        VST3Plugin::uninitialize();
     }
     if(audioProcessorStatus_ == VST3AudioProcessorStatus::Created)
     {
@@ -263,14 +256,7 @@ bool VST3Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
     // ProcessSetup -------------------------------------------------------------------------
     Steinberg::Vst::ProcessSetup setup;
     setup.processMode = Steinberg::Vst::ProcessModes::kRealtime;
-    if constexpr(std::is_same_v<SampleType, float>)
-    {
-        setup.symbolicSampleSize = Steinberg::Vst::SymbolicSampleSizes::kSample32;
-    }
-    else
-    {
-        setup.symbolicSampleSize = Steinberg::Vst::SymbolicSampleSizes::kSample64;
-    }
+    setup.symbolicSampleSize = Steinberg::Vst::SymbolicSampleSizes::kSample32;
     setup.maxSamplesPerBlock = maxSampleCount;
     setup.sampleRate = sampleRate;
     // ProcessSetup -------------------------------------------------------------------------

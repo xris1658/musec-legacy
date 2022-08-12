@@ -25,7 +25,7 @@ public:
     };
 public:
     explicit FolderListModel(QObject* parent = nullptr);
-    virtual ~FolderListModel();
+    ~FolderListModel();
 public:
     void setList(const List&);
     void setList(List&&);

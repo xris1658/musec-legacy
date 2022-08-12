@@ -38,7 +38,7 @@ public:
     };
 public:
     explicit TrackListModel(QObject* parent = nullptr);
-    virtual ~TrackListModel();
+    ~TrackListModel();
 public:
     static constexpr int columnSize();
 public:

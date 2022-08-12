@@ -1,13 +1,12 @@
 #include "MIDISequence.hpp"
 
 #include <algorithm>
-#include <stdexcept>
 
 namespace Musec::Audio::Media
 {
 std::size_t MIDISequence::noteCount() const noexcept
 {
-    return 0;
+    return notes_.size();
 }
 
 std::size_t MIDISequence::automationCount() const noexcept

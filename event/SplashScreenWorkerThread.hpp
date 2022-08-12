@@ -17,7 +17,7 @@ class SplashScreenWorkerThread: public QThread
     Q_OBJECT
 public:
     SplashScreenWorkerThread(SplashScreen* splashScreen, QObject* parent = nullptr);
-    virtual ~SplashScreenWorkerThread();
+    ~SplashScreenWorkerThread() = default;
 protected:
     void run() override;
 private:

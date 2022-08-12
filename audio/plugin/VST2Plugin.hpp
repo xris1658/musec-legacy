@@ -57,7 +57,6 @@ class VST2Plugin:
 {
     using SampleType = float;
     using Base = Musec::Native::WindowsLibraryRAII;
-    using PluginInterface = Musec::Audio::Plugin::IPlugin<SampleType>;
 public:
     VST2Plugin(const QString& path, bool scanPlugin = false, VstInt32 shellPluginId = 0);
     ~VST2Plugin() override;
@@ -88,8 +87,8 @@ public:
     QString getName() const override;
     bool hasUI() override;
     Musec::Base::PluginFormat pluginFormat() override;
-    virtual int parameterCount();
-    virtual IParameter& parameter(int index);
+    int parameterCount() override;
+    IParameter& parameter(int index) override;
 private:
     AEffect* effect_ = nullptr;
     std::vector<SampleType*> inputsRaw_;

@@ -26,7 +26,7 @@ WindowsLibraryRAII::WindowsLibraryRAII(const QString& path)
     }
 }
 
-WindowsLibraryRAII::WindowsLibraryRAII(WindowsLibraryRAII&& rhs): module_(NULL)
+WindowsLibraryRAII::WindowsLibraryRAII(WindowsLibraryRAII&& rhs) noexcept : module_(NULL)
 {
     std::swap(module_, rhs.module_);
 #ifndef NDEBUG
@@ -35,7 +35,7 @@ WindowsLibraryRAII::WindowsLibraryRAII(WindowsLibraryRAII&& rhs): module_(NULL)
 }
 
 WindowsLibraryRAII& WindowsLibraryRAII::operator=(WindowsLibraryRAII&& rhs)
-{
+ noexcept {
     if(module_ != rhs.module_)
     {
         std::swap(module_, rhs.module_);

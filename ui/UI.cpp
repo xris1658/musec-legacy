@@ -1,8 +1,5 @@
 #include "UI.hpp"
 
-#include <future>
-#include <string>
-
 namespace Musec::UI
 {
 QQmlApplicationEngine* engine = nullptr;

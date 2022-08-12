@@ -1,5 +1,7 @@
 #include "Plugin.hpp"
 
+#include <utility>
+
 namespace Musec
 {
 namespace Entities
@@ -16,7 +18,7 @@ Plugin::Plugin(QObject* parent):
 Plugin::Plugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin, const QString& name, bool sidechainExist,
     bool sidechainEnabled):
     QObject(nullptr),
-    plugin_(plugin),
+    plugin_(std::move(plugin)),
     name_(name),
     sidechainExist_(sidechainExist),
     sidechainEnabled_(sidechainEnabled)
@@ -40,20 +42,15 @@ Plugin& Plugin::operator=(Plugin&& rhs) noexcept
     return *this;
 }
 
-Plugin::~Plugin()
-{
-
-}
-
-Musec::Entities::Plugin Plugin::fromPlugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin)
+Musec::Entities::Plugin Plugin::fromPlugin(const std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>>& plugin)
 {
     if(plugin)
     {
-        return Musec::Entities::Plugin(plugin, plugin->getName(), false, false);
+        return {plugin, plugin->getName(), false, false};
     }
     else
     {
-        return Musec::Entities::Plugin();
+        return {};
     }
 }
 

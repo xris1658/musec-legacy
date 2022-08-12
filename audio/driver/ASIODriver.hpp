@@ -101,8 +101,7 @@ namespace std
 {
 template<>
 void swap(Musec::Audio::Driver::ASIODriver& lhs, Musec::Audio::Driver::ASIODriver& rhs)
-    noexcept(std::is_move_constructible_v<Musec::Audio::Driver::ASIODriver>
-        && std::is_move_assignable_v<Musec::Audio::Driver::ASIODriver>);
+    noexcept(std::is_move_assignable_v<Musec::Audio::Driver::ASIODriver>);
 }
 
 #endif // MUSEC_AUDIO_DRIVER_ASIODRIVER

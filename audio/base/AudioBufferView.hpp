@@ -75,9 +75,6 @@ private:
     std::size_t size_;
 };
 
-template<typename SampleType>
-using AudioBufferViews = std::vector<AudioBufferView<SampleType>>;
-
 void clip(AudioBufferView<float>& bufferView);
 
 void clip(AudioBufferView<double>& bufferView);

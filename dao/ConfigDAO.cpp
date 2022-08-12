@@ -31,7 +31,7 @@ YAML::Node loadAppConfig(const QString& path)
     {
         //
     }
-    return YAML::Node();
+    return {};
 }
 
 }

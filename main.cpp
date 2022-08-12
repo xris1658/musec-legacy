@@ -1,5 +1,4 @@
 #include "controller/AppController.hpp"
-#include "controller/ConfigController.hpp"
 #include "controller/LoggingController.hpp"
 #include "entities/EntitiesInitializer.hpp"
 #include "event/EventBase.hpp"
@@ -18,12 +17,10 @@
 #include <QApplication>
 #include <QCoreApplication>
 #include <QFontDatabase>
-#include <QIcon>
 #include <QQmlApplicationEngine>
 #if QT_VERSION_MAJOR < 6
 #include <QTextCodec>
 #endif
-#include <QDebug>
 #include <QUrl>
 #include <QtGlobal>
 
@@ -66,8 +63,8 @@ int main(int argc, char* argv[]) try
     splashWindow = qobject_cast<QQuickWindow*>(theEngine.rootObjects()[0]);
     strings = splashWindow->property("strings").value<QObject*>(); assert(strings);
     SplashScreen splashScreenEventHandler;
-    MainWindowEvent mainWindow(splashScreenEventHandler);
-    mainWindowEvents = &mainWindow;
+    MainWindowEvent mainWindowEvent(splashScreenEventHandler);
+    mainWindowEvents = &mainWindowEvent;
     splashScreenEventHandler.onInitDialog();
     // 等待启动屏工作线程通知，然后加载翻译
     auto& promiseStart = Musec::Controller::loadTranslationPromiseStart();
