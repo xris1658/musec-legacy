@@ -41,6 +41,8 @@ set(RESOURCE_FILE Musec_resource.rc)
 
 qt5_add_resources(QT_RESOURCES ./Musec.qrc)
 
+set(PROJECT_PCH pch.hpp)
+
 set(PROJECT_SOURCES
     ModuleConnector.cpp
     ModuleConnector.hpp
@@ -225,7 +227,7 @@ set(PROJECT_SOURCES
     util/Endian.hpp
     util/Literal.cpp
     util/Literal.hpp
-    util/TimerClamp.hpp)
+    util/TimerClamp.hpp pch.hpp)
 
 set(TEST_COMMON_SOURCES
     test/common/PluginWindowThread.cpp
@@ -242,6 +244,8 @@ set(VST3PLUGINTEST_SOURCES
     test/VST3PluginTestWithQt/main.cpp)
 
 add_executable(Musec main.cpp ${PROJECT_SOURCES} ${RESOURCE_FILE} ${QT_RESOURCES})
+
+target_precompile_headers(Musec PRIVATE ${PROJECT_PCH})
 
 add_executable(AutomationTest ${PROJECT_SOURCES} ${QT_RESOURCES} ${AUTOMATIONTEST_SOURCES})
 
