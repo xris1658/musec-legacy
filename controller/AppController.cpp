@@ -122,10 +122,11 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
                 }
                 catch(std::runtime_error& exception)
                 {
-                   Musec::UI::MessageDialog::messageDialog(strings->property("loadASIODriverErrorText").toString(),
-                                                        Musec::Base::ProductName,
-                                                        Musec::UI::MessageDialog::IconType::Warning);
-                    AppASIODriver() = ASIODriver();
+                   Musec::UI::MessageDialog::messageDialog(
+                       strings->property("loadASIODriverErrorText").toString(),
+                       Musec::Base::ProductName,
+                       Musec::UI::MessageDialog::IconType::Warning);
+                   AppASIODriver() = ASIODriver();
                 }
                 break;
             }

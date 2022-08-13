@@ -19,12 +19,12 @@ namespace Musec::Audio::Plugin
 // VST3Plugin ctor & dtor
 // ------------------------------------------------------------------------------------------
 VST3Plugin::VST3Plugin():
-    VST3Plugin::Base(), VST3Plugin::IPluginInterface()
+    VST3Plugin::Base()
 {
 }
 
 VST3Plugin::VST3Plugin(const QString& path, int classIndex):
-    VST3Plugin::Base(path), VST3Plugin::IPluginInterface()
+    VST3Plugin::Base(path)
 {
     // macOS 和 Linux 平台的入口和出口函数的名字与 Windows 的不同
     // macOS: bundleEntry 和 bundleExit

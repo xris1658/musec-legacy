@@ -167,7 +167,7 @@ private:
     Steinberg::Vst::IXmlRepresentationController* xmlRepresentationController_ = nullptr;
     // 用于 IComponentHandler 的成员
     Steinberg::int32 paramCount_ = 0;
-    Musec::Base::FixedSizeMemoryBlock paramBlock_ = {0};
+    Musec::Base::FixedSizeMemoryBlock paramBlock_ = Musec::Base::FixedSizeMemoryBlock();
     Steinberg::Vst::IConnectionPoint* componentPoint_ = nullptr;
     Steinberg::Vst::IConnectionPoint* editControllerPoint_ = nullptr;
     Steinberg::IPlugView* view_ = nullptr;

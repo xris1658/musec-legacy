@@ -20,7 +20,7 @@ private:
     MusecVST3Host() = default;
 public:
     MusecVST3Host(const MusecVST3Host&) = delete;
-    virtual ~MusecVST3Host() = default;
+    ~MusecVST3Host() = default;
 public:
     DECLARE_FUNKNOWN_METHODS
 public:
