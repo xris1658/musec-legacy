@@ -66,6 +66,18 @@
 #include <QVector>
 #include <QTranslator>
 
+// Windows API
+#include <Windows.h>
+#include <winreg.h>
+#include <winerror.h>
+#include <errhandlingapi.h>
+#include <libloaderapi.h>
+#include <shellapi.h>
+#include <processthreadsapi.h>
+#include <realtimeapiset.h>
+#include <timezoneapi.h>
+#include <combaseapi.h>
+
 // C/C++ 不涉及模板的头文件
 #include <cstring>
 #include <cstdlib>
