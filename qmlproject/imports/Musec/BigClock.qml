@@ -70,15 +70,15 @@ Item {
                         id: cpuIndicatorBackground
                         width: 50
                         height: 18
-                        color: Constants.backgroundColor
+                        color: root.engineRunning? Constants.backgroundColor: Constants.backgroundColor2
                         z: 0
                     }
                     Rectangle {
                         id: cpuIndicatorForeground
                         anchors.left: cpuIndicatorBackground.left
-                        width: cpu * cpuIndicatorBackground.width / 100
+                        width: Math.min(cpu, 100) * cpuIndicatorBackground.width / 100
                         height: 18
-                        color: Constants.bigClockCpuBackColor
+                        color: cpu >= 100? Constants.bigClockCpuOverloadBackColor: Constants.bigClockCpuBackColor
                         z: 1
                     }
                     Text {

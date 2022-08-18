@@ -42,10 +42,11 @@ QtObject {
 //    readonly property color contentColor1:         "#000000"
 //    readonly property color contentColor2:         "#505050"
 
-    readonly property color bigClockColor:         "#001F1F"
-    readonly property color bigClockTextColor:     "#00FF00"
-    readonly property color bigClockAltTextColor:  "#00A000"
-    readonly property color bigClockCpuBackColor:  "#EB6100"
+    readonly property color bigClockColor:                "#001F1F"
+    readonly property color bigClockTextColor:            "#00FF00"
+    readonly property color bigClockAltTextColor:         "#00A000"
+    readonly property color bigClockCpuBackColor:         "#0088FF"
+    readonly property color bigClockCpuOverloadBackColor: "#FF0000"
 
     //顶部大号时钟颜色
 //    readonly property color bigClockColor:         "#18181F"
