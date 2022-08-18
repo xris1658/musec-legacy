@@ -227,7 +227,7 @@ set(PROJECT_SOURCES
     util/Endian.hpp
     util/Literal.cpp
     util/Literal.hpp
-    util/TimerClamp.hpp pch.hpp)
+    util/Stopwatch.hpp pch.hpp)
 
 set(TEST_COMMON_SOURCES
     test/common/PluginWindowThread.cpp

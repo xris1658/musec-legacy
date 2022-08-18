@@ -5,6 +5,7 @@ CONFIG += c++17
 CONFIG += resources_big
 CONFIG += qtquickcompiler
 CONFIG += lrelease embed_translations
+CONFIG += precompile_header
 
 CONFIG(debug, debug | release) {
     CONFIG += qml_debug
@@ -49,6 +50,8 @@ CONFIG(release, debug | release) {
 message(Library directory: $$QMAKE_LIBDIR)
 
 DEFINES += _CRT_SECURE_NO_WARNINGS
+
+PRECOMPILED_HEADER = pch.hpp
 
 HEADERS += \
     ModuleConnector.hpp \
@@ -154,7 +157,7 @@ HEADERS += \
     ui/UI.hpp \
     util/Endian.hpp \
     util/Literal.hpp \
-    util/TimerClamp.hpp
+    util/Stopwatch.hpp
 
 SOURCES += \
     ModuleConnector.cpp \

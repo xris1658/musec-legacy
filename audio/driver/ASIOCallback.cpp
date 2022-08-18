@@ -7,7 +7,7 @@
 #include "controller/AudioEngineController.hpp"
 #include "native/Native.hpp"
 #include "util/Endian.hpp"
-#include "util/TimerClamp.hpp"
+#include "util/Stopwatch.hpp"
 
 namespace Musec::Audio::Driver
 {
@@ -17,7 +17,7 @@ void(*functionThatUsesDuration)(std::int64_t) = nullptr;
 
 namespace Impl
 {
-void onASIOBufferSwitchWithoutTimerClamp(long doubleBufferIndex, ASIOBool directProcess)
+void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
 {
     if(*AppASIODriver())
     {
@@ -412,22 +412,19 @@ long onASIOMessage(long selector,
     long ret = 0;
     switch(selector)
     {
-        case kAsioEngineVersion:
-            ret = 2L;
-            break;
+    case kAsioEngineVersion:
+        return 2L;
     case kAsioSupportsTimeInfo:
-        break;
+        return 1L;
     default:
-        ret = 1L;
-        break;
+        return 1L;
     }
-    return ret;
 }
 
 void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
 {
-    auto timeInNanoSecond = Musec::Util::timerClampVoid<long, ASIOBool>(Impl::onASIOBufferSwitchWithoutTimerClamp,
-        std::forward<long>(doubleBufferIndex), std::forward<ASIOBool>(directProcess));
+    auto timeInNanoSecond = Musec::Util::stopwatchVoid<long, ASIOBool>(
+        Impl::onASIOBufferSwitch, std::forward<long>(doubleBufferIndex), std::forward<ASIOBool>(directProcess));
     if(functionThatUsesDuration)
     {
         functionThatUsesDuration(timeInNanoSecond);
