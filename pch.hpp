@@ -65,6 +65,7 @@
 #include <QByteArray>
 #include <QVector>
 #include <QTranslator>
+#include <QScreen>
 
 // Windows API
 #include <Windows.h>

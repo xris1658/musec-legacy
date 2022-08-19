@@ -23,6 +23,8 @@ extern QQuickWindow* optionsWindow;
 extern QObject* strings;
 
 void setIcon(QWindow* window);
+
+double refreshRateInHertz();
 }
 }
 
