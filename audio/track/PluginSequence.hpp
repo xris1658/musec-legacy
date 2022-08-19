@@ -13,14 +13,11 @@ namespace Audio
 {
 namespace Track
 {
-template<typename SampleType>
-using PluginSequence = std::vector<std::shared_ptr<Musec::Audio::Plugin::IPlugin<SampleType>>>;
+using PluginSequence = std::vector<std::shared_ptr<Musec::Audio::Plugin::IPlugin>>;
 
-template<typename SampleType>
-using PluginSequenceIterator = typename PluginSequence<SampleType>::iterator;
+using PluginSequenceIterator = typename PluginSequence::iterator;
 
-template<typename SampleType>
-using PluginSequenceConstIterator = typename PluginSequence<SampleType>::const_iterator;
+using PluginSequenceConstIterator = typename PluginSequence::const_iterator;
 }
 }
 }

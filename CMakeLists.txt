@@ -96,6 +96,8 @@ set(PROJECT_SOURCES
     audio/plugin/VST2Plugin.hpp
     audio/plugin/VST2PluginParameter.cpp
     audio/plugin/VST2PluginParameter.hpp
+    audio/plugin/VST2PluginPool.cpp
+    audio/plugin/VST2PluginPool.hpp
     audio/plugin/VST3Plugin.cpp
     audio/plugin/VST3Plugin.hpp
     audio/plugin/VST3PluginParameter.cpp
@@ -227,7 +229,8 @@ set(PROJECT_SOURCES
     util/Endian.hpp
     util/Literal.cpp
     util/Literal.hpp
-    util/Stopwatch.hpp pch.hpp)
+    util/Stopwatch.hpp
+    )
 
 set(TEST_COMMON_SOURCES
     test/common/PluginWindowThread.cpp

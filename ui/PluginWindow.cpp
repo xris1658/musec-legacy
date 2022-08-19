@@ -4,10 +4,10 @@
 
 namespace Musec::UI
 {
-std::weak_ptr<Musec::Audio::Plugin::IPlugin<float>> pluginNeedsWindow;
-void createNewPluginWindow(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> pluginNeedsWindow)
+std::weak_ptr<Musec::Audio::Plugin::IPlugin> pluginNeedsWindow;
+void createNewPluginWindow(std::shared_ptr<Musec::Audio::Plugin::IPlugin> pluginNeedsWindow)
 {
-    Musec::UI::pluginNeedsWindow = std::weak_ptr<Musec::Audio::Plugin::IPlugin<float>>(pluginNeedsWindow);
+    Musec::UI::pluginNeedsWindow = std::weak_ptr<Musec::Audio::Plugin::IPlugin>(pluginNeedsWindow);
     Musec::Event::eventHandler->newPluginWindow();
 }
 

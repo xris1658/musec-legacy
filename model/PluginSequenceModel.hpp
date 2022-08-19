@@ -50,8 +50,8 @@ public:
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
     Q_INVOKABLE
     Q_INVOKABLE
-    void insert(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin, int index);
-    void replace(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin, int index);
+    void insert(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, int index);
+    void replace(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, int index);
     void remove(int index);
     void clear();
 protected:

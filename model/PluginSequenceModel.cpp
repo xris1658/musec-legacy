@@ -86,7 +86,7 @@ QVariant PluginSequenceModel::data(const QModelIndex& index, int role) const
     {
         return QVariant();
     }
-    const Musec::Audio::Track::PluginSequence<float>* pluginSequence = nullptr;
+    const Musec::Audio::Track::PluginSequence* pluginSequence = nullptr;
     if(instrumentTrack_)
     {
         pluginSequence = &(instrumentTrack_->getAudioEffectPluginSequences()[0]);
@@ -128,7 +128,7 @@ bool PluginSequenceModel::setData(const QModelIndex& index, const QVariant& valu
     {
         return false;
     }
-    const Musec::Audio::Track::PluginSequence<float>* pluginSequence = nullptr;
+    const Musec::Audio::Track::PluginSequence* pluginSequence = nullptr;
     if(instrumentTrack_)
     {
         pluginSequence = &(instrumentTrack_->getAudioEffectPluginSequences()[0]);
@@ -162,7 +162,7 @@ bool PluginSequenceModel::setData(const QModelIndex& index, const QVariant& valu
     }
 }
 
-void PluginSequenceModel::insert(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin, int index)
+void PluginSequenceModel::insert(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, int index)
 {
     pluginWindowConnections_.insert(pluginWindowConnections_.begin() + index,
         std::make_unique<Musec::Entities::Plugin>(Musec::Entities::Plugin::fromPlugin(plugin)));
@@ -177,7 +177,7 @@ void PluginSequenceModel::insert(std::shared_ptr<Musec::Audio::Plugin::IPlugin<f
     ));
 }
 
-void PluginSequenceModel::replace(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin, int index)
+void PluginSequenceModel::replace(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, int index)
 {
     QObject::disconnect(connections_[index]);
     pluginWindowConnections_[index].reset();

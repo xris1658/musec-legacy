@@ -39,7 +39,7 @@ enum class CLAPPluginStatus: std::int8_t
 
 class CLAPPlugin:
     public Musec::Native::WindowsLibraryRAII,
-    public Musec::Audio::Plugin::IPlugin<float>
+    public Musec::Audio::Plugin::IPlugin
 {
     using SampleType = float;
 public:

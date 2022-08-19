@@ -18,15 +18,14 @@ namespace Audio
 {
 namespace Plugin
 {
-template<typename SampleType>
-class IPlugin: public Musec::Audio::Device::IDevice<SampleType>
+class IPlugin: public Musec::Audio::Device::IDevice
 {
-    using Base = Musec::Audio::Device::IDevice<SampleType>;
+    using Base = Musec::Audio::Device::IDevice;
 public:
-    IPlugin(): IPlugin<SampleType>::Base()
+    IPlugin(): IPlugin::Base()
     {}
-    IPlugin(const IPlugin<SampleType>&) = delete;
-    IPlugin(IPlugin<SampleType>&&) noexcept = default;
+    IPlugin(const IPlugin&) = delete;
+    IPlugin(IPlugin&&) noexcept = default;
     virtual ~IPlugin() override = default;
 public:
     virtual bool initialize(double sampleRate, std::int32_t maxSampleCount) = 0;

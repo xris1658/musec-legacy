@@ -15,17 +15,17 @@ AudioTrack::~AudioTrack()
     pluginSequences_.clear();
 }
 
-const std::vector<Musec::Audio::Track::PluginSequence<float>>& AudioTrack::getPluginSequences() const
+const std::vector<Musec::Audio::Track::PluginSequence>& AudioTrack::getPluginSequences() const
 {
     return pluginSequences_;
 }
 
-void AudioTrack::setPluginSequences(const std::vector<Musec::Audio::Track::PluginSequence<float>>& pluginSequences)
+void AudioTrack::setPluginSequences(const std::vector<Musec::Audio::Track::PluginSequence>& pluginSequences)
 {
     pluginSequences_ = pluginSequences;
 }
 
-void AudioTrack::setPluginSequences(std::vector<Musec::Audio::Track::PluginSequence<float>>&& pluginSequences)
+void AudioTrack::setPluginSequences(std::vector<Musec::Audio::Track::PluginSequence>&& pluginSequences)
 {
     pluginSequences_ = std::move(pluginSequences);
 }

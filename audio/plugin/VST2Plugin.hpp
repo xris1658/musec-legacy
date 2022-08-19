@@ -53,7 +53,7 @@ private:
 
 class VST2Plugin:
     public Musec::Native::WindowsLibraryRAII,
-    public Musec::Audio::Plugin::IPlugin<float>
+    public Musec::Audio::Plugin::IPlugin
 {
     using SampleType = float;
     using Base = Musec::Native::WindowsLibraryRAII;
@@ -91,6 +91,7 @@ public:
     IParameter& parameter(int index) override;
 private:
     AEffect* effect_ = nullptr;
+    VstProcessLevels processLevel_ = kVstProcessLevelUser;
     std::vector<SampleType*> inputsRaw_;
     std::vector<SampleType*> outputsRaw_;
     bool bypass_ = true;

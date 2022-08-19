@@ -35,14 +35,14 @@ public:
     Q_ENUM(PluginType)
 public:
     Plugin(QObject* parent = nullptr);
-    Plugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin,
+    Plugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin,
         const QString& name, bool sidechainExist,
         bool sidechainEnabled);
     Plugin(Plugin&& rhs) noexcept;
     Plugin& operator=(Plugin&& rhs) noexcept;
     ~Plugin() = default;
 public:
-    static Musec::Entities::Plugin fromPlugin(const std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>>& plugin = nullptr);
+    static Musec::Entities::Plugin fromPlugin(const std::shared_ptr<Musec::Audio::Plugin::IPlugin>& plugin = nullptr);
     bool valid() const;
     const QString& getName() const;
     void setName(const QString& name);
@@ -65,7 +65,7 @@ public:
 private:
     void initSignal();
 private:
-    std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin_;
+    std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin_;
     QString name_;
     // bool enabled_;
     bool sidechainExist_;

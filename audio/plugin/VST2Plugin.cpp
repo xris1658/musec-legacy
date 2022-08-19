@@ -135,8 +135,7 @@ VstIntPtr VSTCALLBACK pluginVST2Callback(
 #endif
     // 返回值: VstProcessLevels
     case audioMasterGetCurrentProcessLevel:
-        // TODO
-        ret = VstProcessLevels::kVstProcessLevelUnknown;
+        ret = *reinterpret_cast<VstProcessLevels*>(effect + 1);
         break;
     // 返回值: VstAutomationStates
     case audioMasterGetAutomationState:
@@ -409,6 +408,7 @@ bool VST2Plugin::stopProcessing()
 void VST2Plugin::process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs, int inputCount,
     Musec::Audio::Base::AudioBufferView<SampleType>* outputs, int outputCount)
 {
+    processLevel_ = VstProcessLevels::kVstProcessLevelRealtime;
     for(int i = 0; i < inputCount; ++i)
     {
         inputsRaw_[i] = inputs[i].getSamples();
@@ -427,6 +427,7 @@ void VST2Plugin::process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs
     }
     std::int32_t sampleCount = Musec::Controller::AudioEngineController::getCurrentBlockSize();
     effect_->processReplacing(effect_, inputsRaw_.data(), outputsRaw_.data(), sampleCount);
+    processLevel_ = VstProcessLevels::kVstProcessLevelUser;
 }
 
 bool VST2Plugin::initializeEditor()

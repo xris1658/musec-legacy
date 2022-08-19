@@ -19,7 +19,7 @@ namespace Musec::Model
 {
 namespace Impl
 {
-std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> pluginFromPathAndSubId(const QString& path, int pluginSubId, int format)
+std::shared_ptr<Musec::Audio::Plugin::IPlugin> pluginFromPathAndSubId(const QString& path, int pluginSubId, int format)
 {
     try
     {
@@ -45,7 +45,7 @@ std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> pluginFromPathAndSubId(con
     }
 }
 
-std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> startPluginFromPathAndSubId(const QString& path, int pluginSubId, int format)
+std::shared_ptr<Musec::Audio::Plugin::IPlugin> startPluginFromPathAndSubId(const QString& path, int pluginSubId, int format)
 {
     auto plugin = pluginFromPathAndSubId(path, pluginSubId, format);
     if(!plugin)

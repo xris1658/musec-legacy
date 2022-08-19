@@ -81,7 +81,7 @@ constexpr Steinberg::uint32 BasicProcessContextRequirement =
 
 class VST3Plugin:
     public Musec::Native::WindowsLibraryRAII,
-    public Musec::Audio::Plugin::IPlugin<float>,
+    public Musec::Audio::Plugin::IPlugin,
     public Steinberg::Vst::IComponentHandler,
     public Steinberg::Vst::IComponentHandler2,
     public Steinberg::IPlugFrame

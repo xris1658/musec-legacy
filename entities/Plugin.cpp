@@ -15,7 +15,7 @@ Plugin::Plugin(QObject* parent):
 {
 }
 
-Plugin::Plugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>> plugin, const QString& name, bool sidechainExist,
+Plugin::Plugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, const QString& name, bool sidechainExist,
     bool sidechainEnabled):
     QObject(nullptr),
     plugin_(std::move(plugin)),
@@ -42,7 +42,7 @@ Plugin& Plugin::operator=(Plugin&& rhs) noexcept
     return *this;
 }
 
-Musec::Entities::Plugin Plugin::fromPlugin(const std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>>& plugin)
+Musec::Entities::Plugin Plugin::fromPlugin(const std::shared_ptr<Musec::Audio::Plugin::IPlugin>& plugin)
 {
     if(plugin)
     {

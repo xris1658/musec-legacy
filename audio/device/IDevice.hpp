@@ -11,7 +11,6 @@ namespace Audio
 {
 namespace Device
 {
-template<typename SampleType>
 class IDevice
 {
 public:
@@ -24,8 +23,8 @@ public:
     virtual std::uint8_t inputCount() const = 0;
     virtual std::uint8_t outputCount() const = 0;
 public:
-    virtual void process(Musec::Audio::Base::AudioBufferView<SampleType>* input, int inputCount,
-        Musec::Audio::Base::AudioBufferView<SampleType>* output, int outputCount) = 0;
+    virtual void process(Musec::Audio::Base::AudioBufferView<float>* input, int inputCount,
+        Musec::Audio::Base::AudioBufferView<float>* output, int outputCount) = 0;
 };
 }
 }
