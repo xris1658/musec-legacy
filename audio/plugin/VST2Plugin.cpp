@@ -64,6 +64,7 @@ VstIntPtr VSTCALLBACK pluginVST2Callback(
             ShellPluginId::instance().getId();
         break;
     case audioMasterIdle:
+        effect->dispatcher(effect, AEffectOpcodes::effEditIdle, 0, 0, nullptr, 0.0L);
         break;
 #if kVstVersion < 2400
         case audioMasterPinConnected:
@@ -262,6 +263,7 @@ VstIntPtr VSTCALLBACK pluginVST2Callback(
     case audioMasterGetDirectory:
         break;
     case audioMasterUpdateDisplay:
+        effect->dispatcher(effect, AEffectOpcodes::effEditIdle, 0, 0, nullptr, 0.0);
         break;
     case audioMasterBeginEdit:
         break;
@@ -379,7 +381,7 @@ bool VST2Plugin::uninitialize()
 
 bool VST2Plugin::activate()
 {
-    effect_->dispatcher(effect_, AEffectOpcodes::effMainsChanged,  0, 1, nullptr, 0);
+    effect_->dispatcher(effect_, AEffectOpcodes::effMainsChanged, 0, 1, nullptr, 0);
     activated_ = true;
     return true;
 }
@@ -476,6 +478,7 @@ bool VST2Plugin::attachToWindow(QWindow* window)
         // window->setX(rect->left);
         // window->setY(rect->top);
         Musec::Controller::AudioEngineController::AppProject().addPluginWindowMapping(effect_, window);
+        Musec::Controller::AudioEngineController::AppProject().addVST2Plugin(effect_);
         window_ = window;
         return true;
     }
@@ -491,6 +494,7 @@ bool VST2Plugin::detachWithWindow()
     {
         return true;
     }
+    Musec::Controller::AudioEngineController::AppProject().removeVST2Plugin(effect_);
     effect_->dispatcher(effect_, AEffectOpcodes::effEditClose, 0, 0, nullptr, 0);
     Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(effect_);
     window_ = nullptr;

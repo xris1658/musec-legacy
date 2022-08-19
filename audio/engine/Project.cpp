@@ -32,6 +32,11 @@ Project::Project(int reserveTrackCount):
     trackMute_(), trackSolo_(), trackInvertPhase_(), trackArmRecording_(),
     pluginAndWindow_()
 {
+    static std::thread thread([this]() { vst2PluginIdleFunc(); });
+    if(thread.joinable())
+    {
+        thread.detach();
+    }
     audioBuffer_.reserve(reserveTrackCount);
     tracks_.reserve(reserveTrackCount);
     trackTypes_.reserve(reserveTrackCount);
@@ -196,6 +201,16 @@ void Project::setPluginWindowSize(void* plugin, int width, int height)
     }
 }
 
+void Project::addVST2Plugin(AEffect* plugin)
+{
+    vst2PluginPool_.addPlugin(plugin);
+}
+
+void Project::removeVST2Plugin(AEffect* plugin)
+{
+    vst2PluginPool_.removePlugin(plugin);
+}
+
 const Musec::Base::FixedSizeMemoryBlock& Project::masterTrackAudioBuffer() const
 {
     return masterTrackAudioBuffer_;
@@ -213,9 +228,6 @@ void Project::process()
     masterTrackAudioBuffer_.init();
     std::size_t currentBlockSize = Musec::Controller::AudioEngineController::getCurrentBlockSize();
     std::array<Musec::Audio::Base::AudioBufferView<float>, 2> audioBufferViews;
-    // Musec::Audio::Base::AudioBufferViews<float> audioBufferViews(
-    //     2, Musec::Audio::Base::AudioBufferView<float>()
-    // );
     std::array<Musec::Audio::Base::AudioBufferView<float>, 2> masterTrackAudioBufferViews {
         Musec::Audio::Base::AudioBufferView<float>(reinterpret_cast<float*>(masterTrackAudioBuffer_.data()), currentBlockSize),
         Musec::Audio::Base::AudioBufferView<float>(reinterpret_cast<float*>(masterTrackAudioBuffer_.data()) + currentBlockSize, currentBlockSize)
@@ -231,8 +243,8 @@ void Project::process()
         }
         if(trackTypes_[i] == Musec::Audio::Track::TrackType::kInstrumentTrack)
         {
-            // 由于上面的判断用于确定轨道类型，因此用 static_cast 向下转换没有问题
-            auto instrumentTrack = static_cast<Musec::Audio::Track::InstrumentTrack*>(track.get());
+            // 上面的判断用于确定轨道类型，保证此处向下转换没有问题
+            auto instrumentTrack = reinterpret_cast<Musec::Audio::Track::InstrumentTrack*>(track.get());
             const auto& instrument = instrumentTrack->getInstrument();
             if (instrument && (instrument->processing()))
             {
@@ -249,7 +261,7 @@ void Project::process()
         }
         else if (trackTypes_[i] == Musec::Audio::Track::TrackType::kAudioTrack)
         {
-            auto audioTrack = static_cast<Musec::Audio::Track::AudioTrack*>(track.get());
+            auto audioTrack = reinterpret_cast<Musec::Audio::Track::AudioTrack*>(track.get());
             const auto& plugins = audioTrack->getPluginSequences()[0];
             for (const auto& audioEffect: plugins)
             {
@@ -312,6 +324,7 @@ void Project::process()
 void Project::clear()
 {
     std::lock_guard<std::mutex> lg(mutex_);
+    vst2PluginIdleFuncRunning_ = false;
     pluginGraph_.clear();
     audioBuffer_.clear();
     tracks_.clear();
@@ -344,5 +357,15 @@ std::bitset<4>::reference Project::masterTrackInvertPhase()
 std::bitset<4>::reference Project::masterTrackArmRecording()
 {
     return masterTrackControls_[3];
+}
+
+void Project::vst2PluginIdleFunc()
+{
+    while(vst2PluginIdleFuncRunning_)
+    {
+        vst2PluginPool_.doIdle();
+        // 此时间根据 Serum 的电平表显示决定。
+        std::this_thread::sleep_for(std::chrono::milliseconds(20));
+    }
 }
 }

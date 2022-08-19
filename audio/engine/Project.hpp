@@ -4,6 +4,7 @@
 #include "audio/arrangement/TrackSequence.hpp"
 #include "audio/engine/Graph.hpp"
 #include "audio/plugin/IPlugin.hpp"
+#include "audio/plugin/VST2PluginPool.hpp"
 #include "audio/track/AudioTrack.hpp"
 #include "audio/track/ITrack.hpp"
 #include "base/FixedSizeMemoryPool.hpp"
@@ -15,7 +16,7 @@
 #include <map>
 #include <memory>
 #include <mutex>
-#include <variant>
+#include <set>
 #include <vector>
 
 namespace Musec
@@ -67,6 +68,9 @@ public:
     void removePluginWindowMapping(void* plugin);
     void setPluginWindowSize(void* plugin, int width, int height);
 public:
+    void addVST2Plugin(AEffect* plugin);
+    void removeVST2Plugin(AEffect* plugin);
+public:
     void process();
     const Musec::Base::FixedSizeMemoryBlock& masterTrackAudioBuffer() const;
 private:
@@ -75,11 +79,14 @@ private:
     std::bitset<4>::reference masterTrackInvertPhase();
     std::bitset<4>::reference masterTrackArmRecording();
 private:
+    void vst2PluginIdleFunc();
+private:
+    bool vst2PluginIdleFuncRunning_ = true;
     std::mutex mutex_;
     Musec::Base::FixedSizeMemoryPool audioBufferPool_;
     std::vector<std::shared_ptr<float>> audioBuffer_;
     Musec::Base::FixedSizeMemoryBlock masterTrackAudioBuffer_;
-    Musec::Audio::Engine::Graph<std::shared_ptr<Musec::Audio::Plugin::IPlugin<float>>> pluginGraph_;
+    Musec::Audio::Engine::Graph<std::shared_ptr<Musec::Audio::Plugin::IPlugin>> pluginGraph_;
     std::vector<std::shared_ptr<Musec::Audio::Track::ITrack>> tracks_;
     std::vector<Musec::Audio::Track::TrackType> trackTypes_;
     Musec::Audio::Track::AudioTrack masterTrack_;
@@ -93,6 +100,7 @@ private:
     std::vector<bool> trackInvertPhase_;
     std::vector<bool> trackArmRecording_;
     std::map<void*, QWindow*> pluginAndWindow_;
+    Musec::Audio::Plugin::VST2PluginPool vst2PluginPool_;
 };
 }
 }
