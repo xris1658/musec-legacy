@@ -45,6 +45,12 @@ Window {
             color: "#C0C0C0"
             font.family: Constants.font
             font.pixelSize: 15
+            font.preferShaping: false // Disables ligature
+            // When ligature is enabled and the font is "Noto Sans CJK SC",
+            // "config" will show as "con器g". It might be a bug of
+            // Unicode of "器" is U+5668.
+            // Unicode of "ﬁ" (ligature of "fi") is U+FB01.
+            // For some weird reason, "ligature" is absent in the document.
         }
     }
 }
