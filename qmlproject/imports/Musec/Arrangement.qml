@@ -243,9 +243,10 @@ Item {
                     anchors.top: automationButton.top
                     model: [qsTr("Hide"), qsTr("Show at Top"), qsTr("Show at Bottom")]
                     currentIndex: showMasterTrack
+                    showToolTip: MCtrl.ComboBox.ShowToolTip.Never
                     MCtrl.ToolTip {
                         visible: parent.hovered
-                        text: qsTr("Show Master Track")
+                        text: qsTr("Show Master Track") + ": " + parent.currentText
                     }
                 }
             }

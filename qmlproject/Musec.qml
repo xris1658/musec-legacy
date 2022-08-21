@@ -578,7 +578,7 @@ ApplicationWindow {
             }
             MCtrl.Action {
                 id: actionEnableKeyboard
-                text: qsTr("Map Computer Keyboard To Piano Keyboard")
+                text: qsTr("Map Keyboard")
                 checkable: true
                 checked: false
             }

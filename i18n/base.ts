@@ -1173,7 +1173,7 @@ If you add dithering devices on the master track, please uncheck this option.</s
     </message>
     <message>
         <location filename="../qmlproject/Musec.qml" line="581"/>
-        <source>Map Computer Keyboard To Piano Keyboard</source>
+        <source>Map Keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
