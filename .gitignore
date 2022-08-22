@@ -1,0 +1,48 @@
+# JetBrains IDE
+/.idea
+# Visual Studio
+*.vcxproj
+*.vcxproj.*
+/.vs
+/CMakeSettings.json
+# 生成目录
+/build
+/debug
+/release
+/out
+# Qt NatVis
+qt5.natvis
+# Qt Creator Clangd 缓存
+/.qtc_clangd
+cache
+# 打开项目和生成时 QML 产生的缓存
+*qmlcache*
+*.qmltypes
+# Qt Design Studio 产生的 QML 代码压缩文件
+QtQuick/Studio.zip
+# Qt Linguist 发布的文件
+*.qm
+# 编译数据库
+compile_commands.json
+.qmake.stash
+*.autosave
+# Sourcetrail
+*.srctrlprj
+*.srctrldb
+*.srctrlbm
+*.metainfo
+# 生成时产生的 Makefile
+Makefile
+Makefile.*
+# Qt 项目文件在用户机器上的配置
+*.user
+*.filters
+*.qtds
+# Visual Studio Code
+/.vscode
+/settings.json
+# Windows
+desktop.ini
+Thumbs.db
+# 其他临时文件
+GUID.txt
