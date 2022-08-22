@@ -3,6 +3,8 @@
 
 #include "audio/plugin/IPlugin.hpp"
 #include "audio/plugin/VST3PluginParameter.hpp"
+#include "audio/plugin/VST3PluginComponentHandler.hpp"
+#include "audio/plugin/VST3PluginPlugFrame.hpp"
 #include "base/FixedSizeMemoryBlock.hpp"
 #include "base/PluginBase.hpp"
 #include "native/Native.hpp"
@@ -81,15 +83,11 @@ constexpr Steinberg::uint32 BasicProcessContextRequirement =
 
 class VST3Plugin:
     public Musec::Native::WindowsLibraryRAII,
-    public Musec::Audio::Plugin::IPlugin,
-    public Steinberg::Vst::IComponentHandler,
-    public Steinberg::Vst::IComponentHandler2,
-    public Steinberg::IPlugFrame
+    public Musec::Audio::Plugin::IPlugin
 {
     using SampleType = float;
     using Base = Musec::Native::WindowsLibraryRAII;
     using SampleTypePointers = std::vector<SampleType*>;
-public:
 public: // ctor & dtor
     VST3Plugin();
     VST3Plugin(const QString& path, int classIndex);
@@ -123,22 +121,6 @@ public:
     QString getName() const override;
     bool hasUI() override;
     Musec::Base::PluginFormat pluginFormat() override;
-public: // FUnknown interfaces
-    Steinberg::tresult queryInterface(const Steinberg::TUID iid, void** obj) override;
-    Steinberg::uint32 addRef() override;
-    Steinberg::uint32 release() override;
-public: // IComponentHandler interfaces
-    Steinberg::tresult PLUGIN_API beginEdit(Steinberg::Vst::ParamID id) override;
-    Steinberg::tresult PLUGIN_API performEdit(Steinberg::Vst::ParamID id, Steinberg::Vst::ParamValue valueNormalized) override;
-    Steinberg::tresult PLUGIN_API endEdit(Steinberg::Vst::ParamID id) override;
-    Steinberg::tresult PLUGIN_API restartComponent(Steinberg::int32 flags) override;
-public: // IComponentHandler2 interfaces
-    Steinberg::tresult PLUGIN_API setDirty(Steinberg::TBool state) override;
-    Steinberg::tresult PLUGIN_API requestOpenEditor(Steinberg::FIDString name = Steinberg::Vst::ViewType::kEditor) override;
-    Steinberg::tresult PLUGIN_API startGroupEdit();
-    Steinberg::tresult PLUGIN_API finishGroupEdit();
-public: // IPluginFrame interfaces
-    Steinberg::tresult resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* newSize) override;
 public:
     const SpeakerArrangements& inputSpeakerArrangements();
     const SpeakerArrangements& outputSpeakerArrangements();
@@ -198,6 +180,8 @@ private:
     // 参数 ID 和对 paramBlock_ 对应的索引
     // 有必要把 std::map 换成定容量 AVL 吗？
     std::map<Steinberg::Vst::ParamID, int> paramIdAndIndex_;
+    Musec::Audio::Plugin::VST3PluginComponentHandler componentHandler_;
+    Musec::Audio::Plugin::VST3PluginPlugFrame plugFrame_;
 };
 }
 }

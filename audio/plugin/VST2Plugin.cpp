@@ -2,6 +2,7 @@
 
 #include "audio/engine/Project.hpp"
 #include "audio/plugin/VST2PluginParameter.hpp"
+#include "audio/plugin/VST2PluginShellPluginId.hpp"
 #include "controller/AudioEngineController.hpp"
 #include "base/Constants.hpp"
 #include "base/PluginBase.hpp"
@@ -59,9 +60,9 @@ VstIntPtr VSTCALLBACK pluginVST2Callback(
         break;
     // 加载 VST2 Shell 插件时，用于指定子插件
     case audioMasterCurrentId:
-        ret = (ShellPluginId::instance().getId() == 0) && (!(ShellPluginId::instance().idShouldBeZero()))?
-            effect->uniqueID:
-            ShellPluginId::instance().getId();
+        ret = (VST2PluginShellPluginId::instance().getId() == 0) && (!(VST2PluginShellPluginId::instance().idShouldBeZero()))?
+              effect->uniqueID:
+              VST2PluginShellPluginId::instance().getId();
         break;
     case audioMasterIdle:
         effect->dispatcher(effect, AEffectOpcodes::effEditIdle, 0, 0, nullptr, 0.0L);
@@ -302,13 +303,13 @@ VST2Plugin::VST2Plugin(const QString& path, bool scanPlugin, VstInt32 shellPlugi
     }
     if(scanPlugin)
     {
-        effect_ = ShellPluginId::instance().getShellPlugin(0, false, pluginEntryProc);
+        effect_ = VST2PluginShellPluginId::instance().getShellPlugin(0, false, pluginEntryProc);
         effect_->dispatcher(effect_, effOpen, 0, 0, nullptr, 0);
         auto category = effect_->dispatcher(effect_, effGetPlugCategory, 0, 0, nullptr, 0);
         if(category == kPlugCategUnknown)
         {
             effect_->dispatcher(effect_, effClose, 0, 0, nullptr, 0);
-            effect_ = ShellPluginId::instance().getShellPlugin(0, true, pluginEntryProc);
+            effect_ = VST2PluginShellPluginId::instance().getShellPlugin(0, true, pluginEntryProc);
         }
     }
     else if(shellPluginId == 0)
@@ -317,7 +318,7 @@ VST2Plugin::VST2Plugin(const QString& path, bool scanPlugin, VstInt32 shellPlugi
     }
     else
     {
-        effect_ = ShellPluginId::instance().getShellPlugin(shellPluginId, true, pluginEntryProc);
+        effect_ = VST2PluginShellPluginId::instance().getShellPlugin(shellPluginId, true, pluginEntryProc);
     }
     effect_->dispatcher(effect_, effOpen, 0, 0, nullptr, 0);
     inputsRaw_ = std::vector<SampleType*>(VST2Plugin::inputCount(), nullptr);

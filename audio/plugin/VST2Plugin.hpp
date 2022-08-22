@@ -23,33 +23,7 @@ namespace Audio
 {
 namespace Plugin
 {
-// VST2 插件的入口函数（VSTPluginMain 或 main）
-using VST2PluginEntryProc = AEffect* (*)(audioMasterCallback);
-
 VstIntPtr pluginVST2Callback(AEffect* effect, VstInt32 opcode, VstInt32 index, VstIntPtr value, void* ptr, float opt);
-
-class ShellPluginId
-{
-private:
-    ShellPluginId();
-public:
-    ShellPluginId(const ShellPluginId&) = delete;
-    ShellPluginId(ShellPluginId&&) = delete;
-    ~ShellPluginId() noexcept;
-public:
-    static ShellPluginId& instance();
-public:
-    VstInt32 getId() const;
-    bool idShouldBeZero() const;
-public:
-    AEffect* getShellPlugin(VstInt32 id,
-                            bool idShouldBeZero,
-                            VST2PluginEntryProc pluginEntryProc);
-private:
-    VstInt32 id_ = 0;
-    bool idShouldBeZero_ = true;
-    std::mutex mutex_;
-};
 
 class VST2Plugin:
     public Musec::Native::WindowsLibraryRAII,

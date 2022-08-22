@@ -19,12 +19,11 @@ namespace Musec::Audio::Plugin
 // VST3Plugin ctor & dtor
 // ------------------------------------------------------------------------------------------
 VST3Plugin::VST3Plugin():
-    VST3Plugin::Base()
-{
-}
+    VST3Plugin::Base(), componentHandler_(this), plugFrame_(this)
+{}
 
 VST3Plugin::VST3Plugin(const QString& path, int classIndex):
-    VST3Plugin::Base(path)
+    VST3Plugin::Base(path), componentHandler_(this), plugFrame_(this)
 {
     // macOS 和 Linux 平台的入口和出口函数的名字与 Windows 的不同
     // macOS: bundleEntry 和 bundleExit
@@ -492,7 +491,7 @@ bool VST3Plugin::initializeEditor()
             }
         }
         editControllerStatus_ = VST3EditControllerStatus::Initialized;
-        editController_->setComponentHandler(this);
+        editController_->setComponentHandler(&componentHandler_);
         component_->queryInterface(Steinberg::Vst::IConnectionPoint::iid,
                                    reinterpret_cast<void**>(&componentPoint_));
         editController_->queryInterface(Steinberg::Vst::IConnectionPoint::iid,
@@ -523,7 +522,7 @@ bool VST3Plugin::initializeEditor()
         if (view_)
         {
             view_->addRef();
-            view_->setFrame(this);
+            view_->setFrame(&plugFrame_);
         }
     }
     return true;
@@ -617,107 +616,6 @@ bool VST3Plugin::stopProcessing()
         }
     }
     return false;
-}
-
-Steinberg::tresult VST3Plugin::queryInterface(const Steinberg::int8* iid, void** obj)
-{
-    if(iid == Steinberg::Vst::IComponentHandler::iid
-    || iid == Steinberg::Vst::IComponentHandler2::iid
-    || iid == Steinberg::IPlugFrame::iid
-    || iid == Steinberg::FUnknown::iid)
-    {
-        *obj = this;
-        return Steinberg::kResultOk;
-    }
-    return Steinberg::kNoInterface;
-}
-
-Steinberg::uint32 VST3Plugin::addRef()
-{
-    return 1;
-}
-
-Steinberg::uint32 VST3Plugin::release()
-{
-    return 1;
-}
-
-// VST3Plugin IComponentHandler interfaces
-// ------------------------------------------------------------------------------------------
-Steinberg::tresult VST3Plugin::beginEdit(Steinberg::Vst::ParamID id)
-{
-    if(parameterCount())
-    {
-        auto parameters = reinterpret_cast<VST3PluginParameter*>(paramBlock_.data());
-        for(decltype(paramCount_) i = 0; i < paramCount_; ++i)
-        {
-            auto& parameter = static_cast<VST3PluginParameter&>(this->parameter(i));
-            if(id == parameter.getParameterInfo().id)
-            {
-                paramIdAndIndex_.insert({id, i});
-                return Steinberg::kResultOk;
-            }
-        }
-    }
-    return Steinberg::kInvalidArgument;
-}
-
-Steinberg::tresult VST3Plugin::performEdit(Steinberg::Vst::ParamID id,
-    Steinberg::Vst::ParamValue valueNormalized)
-{
-    editController_->setParamNormalized(id, valueNormalized);
-    // TODO: 用 paramIdAndIndex_ 中对应的索引值对 UI 等进行更新
-    auto index = paramIdAndIndex_[id];
-    return Steinberg::kResultOk;
-}
-
-Steinberg::tresult VST3Plugin::endEdit(Steinberg::Vst::ParamID id)
-{
-    auto index = paramIdAndIndex_[id];
-    paramIdAndIndex_.erase(id);
-    return Steinberg::kResultOk;
-}
-
-Steinberg::tresult VST3Plugin::restartComponent(Steinberg::int32 flags)
-{
-    return Steinberg::kNotImplemented;
-}
-
-// VST3Plugin IComponentHandler2 interfaces
-// ------------------------------------------------------------------------------------------
-Steinberg::tresult VST3Plugin::setDirty(Steinberg::TBool state)
-{
-    return Steinberg::kNotImplemented;
-}
-
-Steinberg::tresult VST3Plugin::requestOpenEditor(Steinberg::FIDString name)
-{
-    if(window_)
-    {
-        window_->showNormal();
-        return Steinberg::kResultOk;
-    }
-    return Steinberg::kResultFalse;
-}
-
-Steinberg::tresult VST3Plugin::startGroupEdit()
-{
-    return Steinberg::kNotImplemented;
-}
-
-Steinberg::tresult VST3Plugin::finishGroupEdit()
-{
-    return Steinberg::kNotImplemented;
-}
-
-Steinberg::tresult VST3Plugin::resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* newSize)
-{
-    Steinberg::ViewRect oldSize; view->getSize(&oldSize);
-    window_->setWidth(newSize->getWidth());
-    window_->setHeight(newSize->getHeight());
-    view->onSize(newSize);
-    Steinberg::ViewRect newSize2; view->getSize(&newSize2);
-    return Steinberg::kResultOk;
 }
 
 const SpeakerArrangements& VST3Plugin::inputSpeakerArrangements()

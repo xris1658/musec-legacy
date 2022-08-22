@@ -91,17 +91,23 @@ set(PROJECT_SOURCES
     audio/plugin/CLAPUtils.hpp
     audio/plugin/IParameter.hpp
     audio/plugin/IPlugin.hpp
-    audio/plugin/ShellPluginId.cpp
     audio/plugin/VST2Plugin.cpp
     audio/plugin/VST2Plugin.hpp
+    audio/plugin/VST2PluginForward.hpp
     audio/plugin/VST2PluginParameter.cpp
     audio/plugin/VST2PluginParameter.hpp
     audio/plugin/VST2PluginPool.cpp
     audio/plugin/VST2PluginPool.hpp
+    audio/plugin/VST2PluginShellPluginId.cpp
+    audio/plugin/VST2PluginShellPluginId.hpp
     audio/plugin/VST3Plugin.cpp
     audio/plugin/VST3Plugin.hpp
+    audio/plugin/VST3PluginComponentHandler.cpp
+    audio/plugin/VST3PluginComponentHandler.hpp
     audio/plugin/VST3PluginParameter.cpp
     audio/plugin/VST3PluginParameter.hpp
+    audio/plugin/VST3PluginPlugFrame.cpp
+    audio/plugin/VST3PluginPlugFrame.hpp
     audio/track/AudioTrack.cpp
     audio/track/AudioTrack.hpp
     audio/track/ITrack.hpp
