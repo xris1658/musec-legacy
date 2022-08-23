@@ -6,6 +6,7 @@ CONFIG += resources_big
 CONFIG += qtquickcompiler
 CONFIG += lrelease embed_translations
 CONFIG += precompile_header
+CONFIG += console
 
 CONFIG(debug, debug | release) {
     CONFIG += qml_debug
