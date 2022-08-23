@@ -21,7 +21,7 @@ enum SampleFormat
     Float
 };
 
-// 非交错
+// Not interleaving
 class AudioSequence: public QObject
 {
     Q_OBJECT

@@ -10,7 +10,7 @@ namespace Util
 enum class Endian
 {
     UnknownEndian,
-    LittleEndian, // 不以 k 开头，因为和 Steinberg VST3 SDK 中的宏定义撞车了
+    LittleEndian,
     BigEndian
 };
 

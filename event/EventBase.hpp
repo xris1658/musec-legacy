@@ -14,7 +14,6 @@ namespace Event
 extern QObject* eventBridge;
 extern Musec::Event::EventHandler* eventHandler;
 
-// 主窗口的事件收发
 extern MainWindowEvent* mainWindowEvents;
 }
 }

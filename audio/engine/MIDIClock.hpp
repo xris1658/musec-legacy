@@ -67,6 +67,7 @@ public:
         playing_ = false;
     }
 public:
+    template<bool AsyncNotify = true>
     void clockFunc()
     {
         Musec::Native::setThreadPriorityToTimeCritical();
@@ -76,8 +77,14 @@ public:
             auto fence = Impl::getCurrentTimeInNanosecond();
             while(playing_)
             {
-                 // notify_ 可能相对费时，因此异步调用
-                 std::async(std::launch::async, notify_, position_);
+                if(AsyncNotify)
+                {
+                    std::async(std::launch::async, notify_, position_);
+                }
+                else
+                {
+                    notify_(position_);
+                }
                 auto delta = tempoAutomation_.secondElapsedInPulse(position_) * 1e9;
                 fence += delta;
                 while(Impl::getCurrentTimeInNanosecond() < fence) { Sleep(0); }
@@ -92,13 +99,9 @@ public:
         return ret;
     }
 private:
-    // 速度自动化
     Musec::Audio::Base::TempoAutomation<PPQ> tempoAutomation_;
-    // 当前所在位置（PPQ）
     Musec::Audio::Base::TimePoint<PPQ> position_;
-    // 是否正在播放
     bool playing_;
-    // 运行播放函数时所在位置（PPQ）
     std::int64_t timePlayStarted_;
     bool aboutToDie_;
     MIDIClockNotifyFunc<PPQ> notify_;

@@ -11,7 +11,7 @@ namespace Audio
 {
 namespace Base
 {
-// 不持有缓冲区内存的音频缓冲区查看器
+// audio buffer view that doesn't hold the buffer.
 template<typename SampleType>
 class AudioBufferView
 {

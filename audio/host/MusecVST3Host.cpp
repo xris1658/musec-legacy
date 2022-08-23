@@ -22,8 +22,7 @@ tresult PLUGIN_API MusecVST3Host::queryInterface(const char* iid_, void** obj)
 {
     QUERY_INTERFACE(iid_, obj, FUnknown::iid, IHostApplication)
     QUERY_INTERFACE(iid_, obj, IHostApplication::iid, IHostApplication)
-
-    // 初始化属性表
+    *obj = nullptr;
     return kNoInterface;
 }
 
@@ -43,13 +42,13 @@ tresult PLUGIN_API MusecVST3Host::createInstance(TUID cid, TUID iid, void** obj)
     auto interfaceId = FUID::fromTUID(iid);
     if(classId == IMessage::iid && interfaceId == IMessage::iid)
     {
-        // TODO: 换用从内存池分配
+        // TODO: Allocate using memory pool
         *obj = new HostMessage;
         return kResultOk;
     }
     else if(classId == IAttributeList::iid && interfaceId == IAttributeList::iid)
     {
-        // TODO: 换用从内存池分配
+        // TODO: Allocate using memory pool
         *obj = new HostAttributeList;
         return kResultOk;
     }

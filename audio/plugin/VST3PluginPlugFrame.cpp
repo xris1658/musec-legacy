@@ -12,6 +12,7 @@ Steinberg::tresult VST3PluginPlugFrame::queryInterface(const Steinberg::int8* ii
 {
     QUERY_INTERFACE(iid, obj, Steinberg::FUnknown::iid, Steinberg::IPlugFrame)
     QUERY_INTERFACE(iid, obj, Steinberg::IPlugFrame::iid, Steinberg::IPlugFrame)
+    *obj = nullptr;
     return Steinberg::kNoInterface;
 }
 
@@ -29,12 +30,14 @@ Steinberg::tresult VST3PluginPlugFrame::resizeView(Steinberg::IPlugView* view, S
 {
     if(auto window = plugin_->window())
     {
+        // Reference: https://steinbergmedia.github.io/vst3_dev_portal/pages/Technical+Documentation/Workflow+Diagrams/Resize+View+Call+Sequence.html#initiated-from-plug-in
         Steinberg::ViewRect oldSize; view->getSize(&oldSize);
-        window->setWidth(newSize->getWidth());
-        window->setHeight(newSize->getHeight());
         view->onSize(newSize);
         Steinberg::ViewRect newSize2; view->getSize(&newSize2);
+        window->setWidth(newSize2.getWidth());
+        window->setHeight(newSize2.getHeight());
         return Steinberg::kResultOk;
     }
+    return Steinberg::kResultFalse;
 }
 }

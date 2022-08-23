@@ -18,7 +18,7 @@ using LoggerType = std::shared_ptr<spdlog::logger>;
 
 constexpr char loggingFolderName[] = "log";
 constexpr char loggingFileSuffix[] = ".log";
-// 根据启动时间获取日志文件名
+
 QString loggingFileName();
 
 LoggerType& createLogger();

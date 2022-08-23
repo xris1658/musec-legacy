@@ -79,7 +79,7 @@
 #include <timezoneapi.h>
 #include <combaseapi.h>
 
-// C/C++ 不涉及模板的头文件
+// C/C++ header without templates
 #include <cstring>
 #include <cstdlib>
 #include <stdexcept>
@@ -91,7 +91,7 @@
 #include <mutex>
 #include <cwchar>
 
-// C/C++ 涉及模板的头文件
+// C/C++ header with templates
 #include <algorithm>
 #include <array>
 #include <vector>

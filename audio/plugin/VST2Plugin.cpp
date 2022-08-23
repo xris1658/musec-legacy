@@ -13,13 +13,14 @@
 #include <array>
 #include <cstdlib>
 
-// HostCanDos 命名空间只放到了源文件下，但是把用到这个命名空间内容的函数放到了别处
-// 为了防止违反 ODR，将相关文件放到另一个命名空间下
+// namespace `HostCanDos` is present only in the source file,
+// but the function using contents in this namespace is at elsewhere.
+// The following namespace is used to deal with ODR.
 namespace VST2AudioEffectX
 {
 #pragma warning(push)
-#pragma warning(disable: 4458) // 局部声明覆盖
-#pragma warning(disable: 4100) // 未引用的形参
+#pragma warning(disable: 4458) // Shadows the local declaration
+#pragma warning(disable: 4100) // Unreferenced parameter
 #include <public.sdk/source/vst2.x/audioeffect.h>
 #include <public.sdk/source/vst2.x/audioeffectx.h>
 #include <public.sdk/source/vst2.x/audioeffect.cpp>
@@ -48,17 +49,18 @@ VstIntPtr VSTCALLBACK pluginVST2Callback(
     VstIntPtr ret = 0;
     switch (opcode)
     {
-        // AudioMasterOpcodes (aeffect.h)
+    // AudioMasterOpcodes (aeffect.h)
 
-    // 插件的参数通过 MIDI 和 GUI 发生了更改
-    // index: 参数编号; opt: 参数值
+    // A parameter of the plugin is adjusted via MIDI or GUI
+    // index: parameter index;
+    // opt: value of the parameter
     case audioMasterAutomate:
         break;
-    // 宿主程序使用的 VST 版本
+    // VST version used by the host application
     case audioMasterVersion:
         ret = kVstVersion; // VST2.4
         break;
-    // 加载 VST2 Shell 插件时，用于指定子插件
+    // Returns the sub plugin ID while a VST2 Shell plugin is being loaded
     case audioMasterCurrentId:
         ret = (VST2PluginShellPluginId::instance().getId() == 0) && (!(VST2PluginShellPluginId::instance().idShouldBeZero()))?
               effect->uniqueID:
@@ -76,12 +78,12 @@ VstIntPtr VSTCALLBACK pluginVST2Callback(
         case audioMasterWantMidi:
             break;
 #endif
-    // 返回值: VstTimeInfo*
+    // Returns VstTimeInfo*
     case audioMasterGetTime:
         // TODO
         ret = NULL;
         break;
-    // ptr: 指向 VstEvents 的指针
+    // ptr: pointer to VstEvents
     case audioMasterProcessEvents:
     {
         // auto events = reinterpret_cast<VstEvents*>(ptr);
@@ -98,7 +100,7 @@ VstIntPtr VSTCALLBACK pluginVST2Callback(
         case audioMasterGetParameterQuantization:
             break;
 #endif
-    // 返回值: 若支持则返回 1
+    // Returns 1 if supported
     case audioMasterIOChanged:
         ret = 1;
         break;
@@ -106,24 +108,20 @@ VstIntPtr VSTCALLBACK pluginVST2Callback(
         case audioMasterNeedIdle:
             break;
 #endif
-    // index: 宽; value: 高; 返回值: 若支持则返回 1
+    // index: width; value: height; returns 1 if supported
     case audioMasterSizeWindow:
         Musec::Controller::AudioEngineController::AppProject().setPluginWindowSize(effect, index, value);
         ret = 1;
         break;
-    // 获取当前采样率
     case audioMasterGetSampleRate:
         ret = Musec::Controller::AudioEngineController::getCurrentSampleRate();
         break;
-    // 获取缓冲区大小
     case audioMasterGetBlockSize:
         ret = Musec::Controller::AudioEngineController::getCurrentBlockSize();
         break;
-    // 获取输入延迟
     case audioMasterGetInputLatency:
         ret = Musec::Controller::AudioEngineController::getInputLatency();
         break;
-    // 获取输出延迟
     case audioMasterGetOutputLatency:
         ret = Musec::Controller::AudioEngineController::getOutputLatency();
         break;
@@ -135,11 +133,11 @@ VstIntPtr VSTCALLBACK pluginVST2Callback(
         case audioMasterWillReplaceOrAccumulate:
             break;
 #endif
-    // 返回值: VstProcessLevels
+    // Returns VstProcessLevels
     case audioMasterGetCurrentProcessLevel:
         ret = *reinterpret_cast<VstProcessLevels*>(effect + 1);
         break;
-    // 返回值: VstAutomationStates
+    // Returns VstAutomationStates
     case audioMasterGetAutomationState:
         // TODO
         ret = VstAutomationStates::kVstAutomationUnsupported;
@@ -160,14 +158,14 @@ VstIntPtr VSTCALLBACK pluginVST2Callback(
         case audioMasterGetOutputSpeakerArrangement:
             break;
 #endif
-    // ptr: 字符串缓冲区, 填入软件厂商的名称
+    // ptr: Character buffer
     case audioMasterGetVendorString:
     {
         constexpr int vendorNameLength = sizeof(Musec::Base::CompanyName) + 1;
         std::strncpy(reinterpret_cast<char*>(ptr), Musec::Base::CompanyName, vendorNameLength);
         break;
     }
-    // ptr: 字符串缓冲区, 填入软件产品的名称
+    // ditto
     case audioMasterGetProductString:
     {
         constexpr int productNameLength = sizeof(Musec::Base::ProductName) + 1;
@@ -183,7 +181,7 @@ VstIntPtr VSTCALLBACK pluginVST2Callback(
         case audioMasterSetIcon:
             break;
 #endif
-    // 此处与 HostCanDos 中的字符串进行比较
+    // Compare with strings in HostCanDos
     case audioMasterCanDo:
     {
         using namespace VST2AudioEffectX::HostCanDos;
@@ -260,7 +258,7 @@ VstIntPtr VSTCALLBACK pluginVST2Callback(
     case audioMasterCloseWindow:
         break;
 #endif
-    // 返回插件所在目录
+    // Get the directory of the plugin
     case audioMasterGetDirectory:
         break;
     case audioMasterUpdateDisplay:
@@ -297,7 +295,6 @@ VST2Plugin::VST2Plugin(const QString& path, bool scanPlugin, VstInt32 shellPlugi
         pluginEntryProc = Musec::Native::getExport<VST2PluginEntryProc>(*this, "main");
         if(!pluginEntryProc)
         {
-            // 抛出异常
             throw GetLastError();
         }
     }
@@ -454,8 +451,8 @@ QString VST2Plugin::getName() const
     {
         return QString();
     }
-    // Sylenth1 和 Ableton SAK 写入的字符个数为 kVstMaxEffectNameLen + 1
-    // VST2 给的最大长度貌似不算空终止符，文档和代码内注释写得也并不清楚，只能靠试错得出结论
+    // Sylenth1 and Ableton SAK write `kVstMaxEffectNameLen + 1` characters, null terminator included
+    // The maximum lengths in VST2 excludes the null terminator.
     std::array<char, kVstMaxEffectNameLen + 1> nameBuffer = {0};
 #ifndef NDEBUG
     std::memset(nameBuffer.data(), 0x7F, nameBuffer.size());

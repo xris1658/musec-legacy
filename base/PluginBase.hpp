@@ -10,25 +10,24 @@ namespace Musec
 {
 namespace Base
 {
-// 插件基本信息：UID，名称，格式，类型
+// UID, name, format, type
 using PluginBasicInfo = std::tuple<int, QString, int, int>;
 
-// 存入数据库的插件信息：路径，UID，名称，格式，类型
+// Path, UID, name, format, type
 using PluginWriteInfo = std::tuple<QString, int, QString, int, int>;
 
-// 从数据库读取的插件信息：ID，路径，UID，名称，格式，类型
+// ID, path, UID, name, format, type
 using PluginReadInfo = std::tuple<int, QString, int, QString, int, int>;
 
-// VST3 插件的初始化函数（InitDll）
+// VST3 plugin initialization entry
 using VST3PluginInitProc = bool(*)();
 
-// VST3 插件的工厂函数（GetPluginFactory）
+// VST3 plugin factory entry (GetPluginFactory)
 using VST3PluginFactoryProc = Steinberg::IPluginFactory*(*)();
 
-// VST3 插件的出口函数（ExitDll）
+// VST3 plugin uninitialization entry
 using VST3PluginExitProc = bool(*)();
 
-// 插件基本信息的字段
 enum PluginBasicInfoField
 {
     BasicFieldUid = 0,
@@ -56,7 +55,6 @@ enum PluginReadInfoField
     ReadFieldType
 };
 
-// 插件的格式（非插件，VST2，VST3，CLAP）
 enum PluginFormat
 {
     FormatNotAPlugin = 0,
@@ -66,7 +64,6 @@ enum PluginFormat
     PluginFormatCount
 };
 
-// 插件的类型（未知，MIDI 效果器，乐器，音频效果器）
 enum PluginType
 {
     TypeUnknown = 0,
@@ -75,13 +72,10 @@ enum PluginType
     TypeAudioFX
 };
 
-// 获取插件的格式
 PluginFormat pluginFormat(const QString& path);
 
-// 扫描一个库文件
 QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path);
 
-// 默认的插件目录列表
 QStringList& defaultPluginDirectoryList();
 }
 }

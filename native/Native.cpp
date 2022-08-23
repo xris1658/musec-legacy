@@ -121,12 +121,10 @@ SystemTimeType getLaunchTime()
     auto getTime = GetProcessTimes(process, processTime, processTime + 1, processTime + 2, processTime + 3);
     if(!getTime)
     {
-        // 异常处理
     }
     SYSTEMTIME ret;
     if(!FileTimeToSystemTime(processTime, &ret))
     {
-        // 异常处理
     }
     return ret;
 }
@@ -232,15 +230,16 @@ ThreadMaskType setThreadMask(ThreadMaskType mask)
 
 std::int64_t currentTimeInNanosecond()
 {
-    // // Ver 1（Windows API）
+    // // Ver 1 (Windows API)
     // auto qpf = Impl::qpf();
     // LARGE_INTEGER qpc;
     // QueryPerformanceCounter(&qpc);
     // return qpc.QuadPart * 1e9 / static_cast<double>(qpf);
-    // Ver 1（现代 C++ API）
-    // std::chrono::steady_clock 在 Windows，MSVC 平台使用 QPC 实现。
+    // Ver 1 (Modern C++ API)
+    // std::chrono::steady_clock is implemented on MSVC using QPC.
     // https://github.com/microsoft/STL/blob/main/stl/inc/__msvc_chrono.hpp#L668
-    // 要保证获取时间的连贯性，用户需要保证此函数所在的线程只会在一个 CPU 核心上运行。
+    // Thread affinity is not set automatically. If you want the time to be continuous, make sure
+    // that this thread only runs on only one CPU core.
     return std::chrono::steady_clock::now().time_since_epoch().count();
 
      // // Ver 2
@@ -270,13 +269,14 @@ QString errorMessageFromErrorCode(ErrorCodeType errorCode)
     {
         if constexpr(std::is_same_v<TCHAR, char>)
         {
-            // 重解转换只是为了屏蔽类型不一致的误报
+            // supress the false warning that mistakenly treats `TCHAR` and `char`
+            // as different types
             auto ptr = reinterpret_cast<char*>(rawErrorString);
             ret = QString(ptr);
         }
         else if constexpr(std::is_same_v<TCHAR, wchar_t>)
         {
-            // 重解转换只是为了屏蔽类型不一致的误报
+            // ditto
             auto ptr = reinterpret_cast<wchar_t*>(rawErrorString);
             ret = QString::fromWCharArray(ptr);
         }
@@ -353,7 +353,6 @@ QList<Musec::Audio::Driver::ASIODriverBasicInfo> enumerateDrivers()
             }
             else
             {
-                // 打开项，读取名称和 ID
                 auto openKeyResult = RegOpenKeyExW(hKey, buffer.data(), 0,
                     KEY_READ | KEY_WOW64_64KEY | KEY_QUERY_VALUE, &subKey);
                 if(openKeyResult != ERROR_SUCCESS)
@@ -378,8 +377,7 @@ QList<Musec::Audio::Driver::ASIODriverBasicInfo> enumerateDrivers()
                     }
                     else
                     {
-                        // 扫描的这个 ASIO 驱动信息有问题，因此不包含在内。
-                        // 要不要在这儿顺便把驱动的名字读出来，然后告知用户？
+                        // The information is invalid. Need to inform the user?
                     }
                 }
             }

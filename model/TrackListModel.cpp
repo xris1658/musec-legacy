@@ -154,7 +154,7 @@ QVariant TrackListModel::data(const QModelIndex& index, int role) const
         {
             return QVariant();
         }
-        // data() 有 const 约束，但指向 const 的指针不能用于 Qt 的元对象系统，因此转走 const
+        // pointer to `const` can't be used in the meta-object system, so we need to remove `const`
         return QVariant::fromValue(const_cast<Musec::Entities::Plugin*>(instruments_[row].get()));
     }
     case RoleNames::PluginListRole:

@@ -28,18 +28,18 @@ int main(int argc, char* argv[]) try
 {
     using namespace Musec::Event;
     using namespace Musec::UI;
-    // 保证在不同缩放比例下不会出现界面缩放导致界面错乱的问题.
-    // 日后需要对 QML 代码进行大量修改，以支持高 DPI.
+    // By default, Musec in high DPI screen is a mess for now. So we have to do this to make the
+    // GUI consistent on every device.
+    // To make sure our GUI doesn't act weird in high DPI screens, QML code needs to be renovated.
     QCoreApplication::setAttribute(Qt::AA_Use96Dpi);
-    // 本程序的 QML 代码中使用 Qt.Labs 中的颜色对话框
-    // (ColorDialog: Qt.Labs.platform)，在 QML Runtime 中
-    // 使用 QColorDialog (Qt Widgets), 而生成应用程序时，
-    // 若应用不带 Qt Widgets 模块, 则先尝试回退至 QML 自立实现
-    // DefaultColorDialog.qml. 若失败, 则在控制台中提示用户
-    // 没有添加颜色对话框的实现.
-    // 为保证平台实现一致, 在项目文件中添加 Qt Widgets 组件
-    // 支持, 并将 QGuiApplicaiton 改为其派生类 QApplication.
-    // (不需要添加 <QColorDialog> 头文件.)
+    // QML code uses color dialog in Qt.Labs (ColorDialog: Qt.Labs.platform).
+    // QML Runtime uses `QColorDialog` in Qt Widgets first.
+    // As for the application, if Qt Widgets is not included, then the application will fall back
+    // to a QML implementation called DefaultColorDialog.qml. If this fails, a message will
+    // be printed in the console, informing that color dialog implementation is absent.
+    // We'd like to use `QColorDialog` in Qt Widgets, so we brought Qt Widgets support in,
+    // and replaced `QCoreApplication` with `QApplication`.
+    // (#include <QColorDialog> is not needed.)
     QApplication app(argc, argv);
     Musec::Controller::LoggingController::AppLogger();
 #if QT_VERSION_MAJOR < 6
@@ -58,7 +58,6 @@ int main(int argc, char* argv[]) try
     LoadQmlComponentListener& loadQmlComponentListener = LoadQmlComponentListener::instance();
     QObject::connect(&theEngine, &QQmlApplicationEngine::objectCreated,
                      &loadQmlComponentListener, &LoadQmlComponentListener::onObjectCreated);
-    // 显示启动屏
     theEngine.load(QUrl("qrc:/qmlproject/SplashScreen.qml"));
     splashWindow = qobject_cast<QQuickWindow*>(theEngine.rootObjects()[0]);
     strings = splashWindow->property("strings").value<QObject*>(); assert(strings);
@@ -66,10 +65,8 @@ int main(int argc, char* argv[]) try
     MainWindowEvent mainWindowEvent(splashScreenEventHandler);
     mainWindowEvents = &mainWindowEvent;
     splashScreenEventHandler.onInitDialog();
-    // 等待启动屏工作线程通知，然后加载翻译
     auto& promiseStart = Musec::Controller::loadTranslationPromiseStart();
     const auto& translation = promiseStart.get_future().get();
-    // 告知启动屏工作线程翻译加载完成
     auto& promiseEnd = Musec::Controller::loadTranslationPromiseEnd();
     QTranslator theTranslator;
     Musec::I18N::translator = &theTranslator;

@@ -14,6 +14,7 @@ Steinberg::tresult VST3PluginComponentHandler::queryInterface(const Steinberg::i
     QUERY_INTERFACE(iid, obj, Steinberg::FUnknown::iid, Steinberg::Vst::IComponentHandler)
     QUERY_INTERFACE(iid, obj, Steinberg::Vst::IComponentHandler::iid, Steinberg::Vst::IComponentHandler)
     QUERY_INTERFACE(iid, obj, Steinberg::Vst::IComponentHandler2::iid, Steinberg::Vst::IComponentHandler2)
+    *obj = nullptr;
     return Steinberg::kNoInterface;
 }
 
@@ -48,7 +49,7 @@ Steinberg::tresult VST3PluginComponentHandler::performEdit(Steinberg::Vst::Param
     Steinberg::Vst::ParamValue valueNormalized)
 {
     plugin_->editController()->setParamNormalized(id, valueNormalized);
-    // TODO: 用 paramIdAndIndex_ 中对应的索引值对 UI 等进行更新
+    // TODO: Update the UI using the corresponding index value stored in `paramIdAndIndex_`
     auto index = paramIdAndIndex_[id];
     return Steinberg::kResultOk;
 }

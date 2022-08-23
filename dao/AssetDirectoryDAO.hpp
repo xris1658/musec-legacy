@@ -9,7 +9,6 @@ namespace Musec
 {
 namespace DAO
 {
-// 建表
 void createAssetDirectoryTable();
 
 void addAssetDirectory(const QString& path, const QString& name);

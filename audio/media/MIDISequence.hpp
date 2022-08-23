@@ -19,14 +19,14 @@ struct Note
     std::int64_t startTime;
     std::int64_t duration;
     std::uint8_t midi;
-    // TODO: 添加关于 MIDI 复音表情（MPE）的内容，
-    // 要启用 VST3 的 MPE 支持，需要添加 VST3 相关的 obj 文件。
+    // TODO: Add MIDI polyphonic expression (MPE) support.
+    // To enable MPE support of VST3 plugins, the corresponding *.obj file is needed.
 };
 
 class MIDISequence
 {
 public:
-    // 将值存储为 double 格式以应对动态精度
+    // Store value as `double` to deal with dynamic precision.
     using AutomationType = Automation;
     static_assert(std::is_same_v<AutomationType::ValueType, double>);
 public:
@@ -50,7 +50,6 @@ public:
     std::uint8_t highestNote() const;
     std::uint8_t lowestNote() const;
 private:
-    // 所有音符
     std::vector<Note> notes_;
     std::array<AutomationType, 128> automations_;
 };

@@ -28,10 +28,6 @@ void removePluginDirectory(const QString& path)
     Musec::DAO::removePluginDirectory(path);
 }
 
-/// 扫描插件
-/// 请务必不要这个函数在 UI 线程上跑，否则扫描 SAK
-/// 或 FabFilter 的插件时会有奇怪的错误出现，原因未知。
-/// 就是这个玩意卡了我三天 :(
 void scanPlugins()
 {
     QFlags<QDir::Filter> scanFileFlags = QDir::Filter::Files | QDir::Filter::Hidden;

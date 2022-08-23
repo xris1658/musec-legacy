@@ -1,7 +1,7 @@
 #ifndef MUSEC_BASE_QMLBASE
 #define MUSEC_BASE_QMLBASE
 
-// 包含 <QtQml> 则编译器会报告一系列不相关的错误（为什么？）
+// If we include <QtQml>, then a lot of errors are emitted by the compiler (why?)
 #include <qqml.h>
 
 #define QML_REGISTER_TYPE(class_name, module_name, major_version, minor_version) \

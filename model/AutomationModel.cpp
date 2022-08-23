@@ -46,7 +46,7 @@ bool AutomationModel::empty() const noexcept
 
 constexpr int AutomationModel::columnSize() noexcept
 {
-    // TODO: 将此数字移入 Automation 所在文件中
+    // TODO: Move this number to the file where `Automation` exists
     return 3;
 }
 
@@ -121,19 +121,17 @@ int AutomationModel::setTimeOfPoint(int index, int time, int indexInEqualTimePoi
     auto newIndex = automation_.ifSetTimeOfPoint(index, time, indexInEqualTimePoint);
     if(newIndex == index)
     {
-        automation_.setTimeOfPoint(index, time, indexInEqualTimePoint);
+        automation_.movePoint(index, time, indexInEqualTimePoint);
         dataChanged(this->index(index), this->index(index), {RoleNames::TimeRole});
     }
     else
     {
         beginResetModel();
 
-        // // destinationChild: 要移动到移动前的哪个元素之前
-        // // 因此向下移需要加一，向上移不需要
-        // // 问题：各个曲线的位置不会自动根据点的次序重新画
+        // // Curves need to be updated
         // beginMoveRows(this->index(0), index, index, this->index(0),
         //     (newIndex > index? newIndex + 1: newIndex));
-        automation_.setTimeOfPoint(index, time, indexInEqualTimePoint);
+        automation_.movePoint(index, time, indexInEqualTimePoint);
         // endMoveRows();
         // dataChanged(this->index(std::min(index, int(newIndex))),
         //     this->index(std::max(index, int(newIndex)))/*, QVector<int>()*/);

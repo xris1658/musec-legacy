@@ -32,7 +32,7 @@ AudioSequence::AudioSequence(double sampleRate, std::uint8_t channelCount, int b
     SampleFormat sampleFormat, std::size_t sampleCountPerChannel):
     sampleRate_(sampleRate),
     channelCount_(channelCount),
-    // 位深度小于 32 一律按整数处理
+    // If the bit-depth is below 32, then asserts that the sample format is integer
     bitDepth_(sampleFormat == SampleFormat::Integer || bitDepth < 32? bitDepth: bitDepth * (-1)),
     sampleCountPerChannel_(sampleCountPerChannel),
     content_(sampleCountPerChannel_ * (bitDepth >> 3) * channelCount)
@@ -159,7 +159,6 @@ std::vector<AudioSequence> loadAudioSequenceFromFile(const QString& path)
             if(codec.isNull())
             {
                 throw std::runtime_error("No codec found.");
-                // 找不到解码器
             }
             audioDecoderContext.setCodec(codec);
             audioDecoderContext.setRefCountedFrames(true);
@@ -218,7 +217,7 @@ std::vector<AudioSequence> loadAudioSequenceFromFile(const QString& path)
                 {
                     for(decltype(count) i = 0; i < count; i += bytesPerSample)
                     {
-                        // j 是声道索引
+                        // j is the index of channels
                         for(int j = 0; j < audioDecoderContext.channels(); ++j)
                         {
                             auto data = reinterpret_cast<const char*>(samples.data(j)) + i;
@@ -230,10 +229,10 @@ std::vector<AudioSequence> loadAudioSequenceFromFile(const QString& path)
                 }
                 else
                 {
-                    // sampleCount % channelCount != 0 怎么办?
+                    // What if `sampleCount % channelCount != 0`? Impossible?
                     for(decltype(count) i = 0; i < count; i += bytesPerSample)
                     {
-                        // j 是声道索引
+                        // j is the index of channels
                         for(int j = 0; j < audioDecoderContext.channels(); ++j)
                         {
                             auto data = reinterpret_cast<const char*>(samples.data()) + i * audioDecoderContext.channels() + j;

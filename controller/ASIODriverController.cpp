@@ -21,21 +21,23 @@ void showASIOErrorMessageDialog(Musec::Audio::Driver::ASIODriver& driver, ASIOEr
     driver->getErrorMessage(errorMessageBuffer);
     if(errorMessageBuffer[0] == 0)
     {
-        Musec::UI::MessageDialog::messageDialog(QString("无法加载 ASIO 驱动程序 %1。\n错误代码 %2：%3")
+        Musec::UI::MessageDialog::messageDialog(
+            Musec::UI::strings->property("loadASIODriverErrorTextWithErrorCode").value<QString>()
                 .arg(name)
                 .arg(error)
                 .arg(Musec::Audio::Driver::Literals::asioErrorMessage(error)),
-            "Musec - 驱动程序警告",
+            Musec::UI::strings->property("driverWarningTitleText").value<QString>(),
             Musec::UI::MessageDialog::IconType::Warning);
     }
     else
     {
-        Musec::UI::MessageDialog::messageDialog(QString("无法加载 ASIO 驱动程序 %1。\n错误代码：%2：%3\n\n以下是驱动程序的错误信息：\n %4")
+        Musec::UI::MessageDialog::messageDialog(
+            Musec::UI::strings->property("loadASIODriverErrorTextWithErrorCodeAndInfo").value<QString>()
                 .arg(name)
                 .arg(error)
                 .arg(Musec::Audio::Driver::Literals::asioErrorMessage(error))
                 .arg(errorMessageBuffer),
-            "Musec - 驱动程序警告",
+            Musec::UI::strings->property("driverWarningTitleText").value<QString>(),
             Musec::UI::MessageDialog::IconType::Warning);
     }
 }
@@ -57,8 +59,10 @@ void loadASIODriver()
         char errorString[124];
         std::memset(errorString, 0, 124);
         driver->getErrorMessage(errorString);
-        Musec::UI::MessageDialog::messageDialog(QString("无法加载 ASIO 驱动程序 %1。程序将以未加载驱动的状态运行。\n\n以下是驱动程序的错误信息：\n %2").arg(name, errorString),
-            "Musec - 驱动程序警告",
+        Musec::UI::MessageDialog::messageDialog(
+            Musec::UI::strings->property("loadASIODriverErrorTextWithInfo").value<QString>()
+                .arg(name, errorString),
+            Musec::UI::strings->property("driverWarningTitleText").value<QString>(),
             Musec::UI::MessageDialog::IconType::Warning);
     }
     auto& appConfig = ConfigController::appConfig();
@@ -80,9 +84,11 @@ void loadASIODriver()
     if(info.outputCount == 0)
     {
         auto name = std::get<Musec::Audio::Driver::ASIODriverField::NameField>(driver.driverInfo());
-        Musec::UI::MessageDialog::messageDialog(QString("当前加载的 ASIO 驱动程序 (%1) 没有输出。").arg(name),
-                                             "Musec - 驱动程序警告",
-                                             Musec::UI::MessageDialog::IconType::Warning);
+        Musec::UI::MessageDialog::messageDialog(
+            Musec::UI::strings->property("loadASIODriverNoOutputText").value<QString>()
+                .arg(name),
+            Musec::UI::strings->property("driverWarningTitleText").value<QString>(),
+            Musec::UI::MessageDialog::IconType::Warning);
         return;
     }
     auto& bufferInfo = getASIOBufferInfoList();
@@ -99,10 +105,11 @@ void loadASIODriver()
         bufferInfo[i].buffers[0] = bufferInfo[i].buffers[1] = nullptr;
     }
     //
-    auto createBuffersResult = driver->createBuffers(bufferInfo.data(),
-                                                     info.inputCount + info.outputCount,
-                                                     Musec::Audio::Driver::getBufferSize(driver).preferredBufferSize,
-                                                     &getCallbacks());
+    auto createBuffersResult = driver->createBuffers(
+        bufferInfo.data(),
+        info.inputCount + info.outputCount,
+        Musec::Audio::Driver::getBufferSize(driver).preferredBufferSize,
+        &getCallbacks());
     if(createBuffersResult != ASE_OK)
     {
         Impl::showASIOErrorMessageDialog(driver, createBuffersResult);
@@ -146,8 +153,6 @@ void setASIODriver(const QString& clsid)
         auto& itemCLSID = std::get<CLSIDField>(item);
         if(itemCLSID.compare(clsid, Qt::CaseInsensitive) == 0)
         {
-            // 防止两个驱动同时加载时同时抢占声卡独占权
-            // 参考：https://github.com/dechamps/FlexASIO/issues/86
             unloadASIODriver();
             try
             {
@@ -161,8 +166,8 @@ void setASIODriver(const QString& clsid)
             catch(std::runtime_error&)
             {
                 Musec::UI::MessageDialog::messageDialog(
-                    "无法加载 ASIO 驱动程序。程序将以未加载音频驱动的方式运行。",
-                    "Musec - 驱动程序错误",
+                    Musec::UI::strings->property("loadASIODriverErrorText").value<QString>(),
+                    Musec::UI::strings->property("driverErrorTitleText").value<QString>(),
                     Musec::UI::MessageDialog::IconType::Error);
                 unloadASIODriver();
             }
@@ -194,7 +199,6 @@ void updateCurrentASIODriverInfo()
     using namespace UI;
     if(optionsWindow)
     {
-        // 获取驱动信息
         const auto& driverStreamInfo = getASIODriverStreamInfo(AppASIODriver());
         optionsWindow->setProperty("bufferSize",
                                    QVariant::fromValue<int>(driverStreamInfo.preferredBufferSize));

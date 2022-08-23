@@ -18,7 +18,7 @@ void createAppConfig()
     configFileNode["musec"]["options"]["general"]["single-instance"] = true;
     configFileNode["musec"]["options"]["general"]["system-render"] = false;
     configFileNode["musec"]["options"]["audio-hardware"]["driver-type"] = "ASIO";
-    configFileNode["musec"]["options"]["audio-hardware"]["driver-id"] = "{00000000-0000-0000-0000-000000000000}"; // 无音频驱动
+    configFileNode["musec"]["options"]["audio-hardware"]["driver-id"] = "{00000000-0000-0000-0000-000000000000}"; // No driver loaded
     configFileNode["musec"]["options"]["audio-hardware"]["sample-rate"] = 44100;
     configFileNode["musec"]["options"]["plugin"]["enable-shortcut"] = true;
 }

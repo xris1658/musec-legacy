@@ -15,7 +15,7 @@ CLAPHost::CLAPHost(Musec::Audio::Plugin::CLAPPlugin& plugin):
     host_
     {
         CLAP_VERSION,
-        this, // 是否指向正在构造的 CLAPHost?
+        this, // Points to the `CLAPHost` that's being constructed
         Musec::Base::ProductName,
         Musec::Base::CompanyName,
         Musec::Base::Url,
@@ -92,8 +92,8 @@ void CLAPHost::hostRequestRestart(const clap_host* host)
     auto hostClass = checkHost(host);
     if(hostClass)
     {
-        // 计划将插件 deactivate -> activate
-        // 是否需要 stopProcessing 和 startProcessing?
+        // Adds a schedule to deactivate -> activate the plugin
+        // Is stopProcessing -> startProcessing needed?
     }
 }
 
@@ -102,7 +102,7 @@ void CLAPHost::hostRequestProcess(const clap_host* host)
     auto hostClass = checkHost(host);
     if(hostClass)
     {
-        // 计划将插件 activate -> startProcessing
+        // Adds a schedule to activate -> startProcessing the plugin
     }
 }
 
@@ -111,9 +111,11 @@ void CLAPHost::hostRequestCallback(const clap_host* host)
     auto hostClass = checkHost(host);
     if(hostClass)
     {
-        // // 计划执行以下代码:
+        // Adds a schedule of the following code:
+        // ```
         // auto clapPlugin = hostClass->plugin_->plugin();
         // clapPlugin->on_main_thread(clapPlugin);
+        // ```
     }
 }
 
@@ -126,7 +128,7 @@ void CLAPHost::hostGUIResizeHintsChanged(const clap_host* host)
         auto clapPluginGUI = hostClass->plugin_->pluginGUI();
         clap_gui_resize_hints resizeHints;
         clapPluginGUI->get_resize_hints(clapPlugin, &resizeHints);
-        // TODO: 使用 resizeHints
+        // TODO: Use resizeHints
     }
 }
 

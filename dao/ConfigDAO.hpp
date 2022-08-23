@@ -10,13 +10,11 @@ namespace Musec
 namespace DAO
 {
 constexpr auto configFileNameWithBackslash = "\\Musec.yml";
-// 设置文件路径（用户文件夹\AppData\Roaming\Musec\Musec.yml）
+// <User folder>\AppData\Roaming\Musec\Musec.yml
 const QString& ConfigFilePath();
 
-// 写入配置文件
 void saveAppConfig(const YAML::Node& node, const QString& path);
 
-// 加载配置文件
 YAML::Node loadAppConfig(const QString& path);
 }
 }

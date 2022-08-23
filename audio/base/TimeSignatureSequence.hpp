@@ -89,7 +89,7 @@ public:
             static_cast<const TimeSignatureSequence<PPQ>&>(*this)[index]
         );
     }
-    // 获取特定时间的节拍
+    // Returns the time signature of the given time
     TimeSignature operator()(const TimePoint<PPQ>& timePoint) const
     {
         if(timePoint.pulse() == 0)

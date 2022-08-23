@@ -74,8 +74,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                     {
                         break;
                     }
-                    // 加载插件，获取插件的信息
-    //                AEffect* subPlugin = pluginEntryProc(pluginVST2Callback);
+                    // AEffect* subPlugin = pluginEntryProc(pluginVST2Callback);
                     auto plugin = Musec::Audio::Plugin::VST2Plugin(path, false, shellPluginId);
                     auto subPlugin = plugin.effect();
                     int pluginType = subPlugin->flags & effFlagsIsSynth?
@@ -90,10 +89,9 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                     );
                 }
             }
-            // 只有插件是否为 Shell 有必要用 effGetPlugCategory。
-            // 有些非 Shell 插件本身能够正常使用，但是 category
-            // 为 kPlugCategUnknown（e.g. Glitch2），因此
-            // 仍然需要通过 flags 确定类型。
+            // `effGetPlugCategory` is needed only if we check if the plugin is a shell plugin.
+            // Some non-shell plugin just leave this at kPlugCategUnknown.
+            // To get the type, simply check `flags` using `effFlagsIsSynth`.
             else/* if(category != kPlugCategUnknown)*/
             {
                 effect->dispatcher(
@@ -135,7 +133,6 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                 switch (error)
                 {
                 case ERROR_PROC_NOT_FOUND:
-                    // 未找到工厂函数，可能不是 VST 插件
                     break;
                 default:
                     break;
@@ -147,11 +144,12 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                 bool initResult = pluginInitProc();
                 if(!initResult)
                 {
-                    // 初始化出现问题
                 }
             }
             auto factory = pluginFactoryProc();
             Steinberg::IPluginFactory2* factory2 = nullptr;
+            // Musec try using IPluginFactory2 to check the type first.
+            // If failed, Musec has to guess the type according to the I/O type and count.
             auto factory2Result = factory->queryInterface(Steinberg::IPluginFactory2_iid, reinterpret_cast<void**>(&factory2));
             if(factory2Result == Steinberg::kResultOk)
             {
@@ -269,40 +267,40 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                         {
                             busCounts[i] = component->getBusCount(mediaTypes[i], busDirections[i]);
                         }
-                        // 没有考虑只有输出，只有输入的插件和只有音频输入和事件输出的插件。可能需要修改。
+                        // Plugins that have only outputs, or only inputs, or only audio inputs and
+                        // event outputs are not taken into account.
                         if(busCounts[0] && busCounts[1] && busCounts[2])
                         {
-                            // 此类有事件输入，音频输入和音频输出。
-                            // 可能也有事件输出。
-                            // 程序认为这是带事件输入的音频效果器（如 FabFilter Pro-Q 2）
-                            // （也可能是带侧链输入的乐器，如 Surge XT）
+                            // This class has event I, audio I and audio O, maybe even event O.
+                            // Musec guesses that the plugin is an audio effect that has
+                            // event input (e.g. FabFilter Pro-Q 2).
+                            // Note that the plugin might be an instrument that has audio I as
+                            // sidechain (e.g. Surge XT).
                             pluginType = PluginType::TypeAudioFX;
                         }
                         else if(busCounts[1] && busCounts[2])
                         {
-                            // 此类有事件输入和音频输出，但没有音频输入。
-                            // 可能也有事件输出。
-                            // 程序认为这是乐器。
+                            // This class has event I and audio O, but no audio I.
+                            // Musec guesses that the plugin is an instrument.
                             pluginType = PluginType::TypeInstrument;
                         }
                         else if(busCounts[0] && busCounts[1])
                         {
-                            // 此类有音频输入和音频输出，但没有事件输入。
-                            // 可能也有事件输出。
-                            // 程序认为这是普通的音频效果器。
+                            // This class has audio I/O, or maybe even event O, but no event I.
+                            // Musec guesses that the plugin is an audio effect.
                             pluginType = PluginType::TypeAudioFX;
                         }
                         else if(busCounts[2] && busCounts[3])
                         {
-                            // 此类有事件输入和事件输出，但没有音频输入和输出。
-                            // 程序认为这是事件处理器，如 MIDI 效果器。
+                            // This class has only event I/O.
+                            // Musec guesses that the plugin is an event processor like MIDI effect.
                             pluginType = PluginType::TypeMidiFX;
                         }
                         else if(busCounts[0] == 0 && busCounts[1] == 0
                                 && busCounts[2] == 0 && busCounts[3] == 0)
                         {
-                            // 此类没有输入和输出。
-                            // 程序认为是加载插件的过程出现了问题。
+                            // This class has no I/O, i.e. isolated.
+                            // Musec cannot figure it out.
                             pluginType = PluginType::TypeUnknown;
                         }
                         component->terminate();

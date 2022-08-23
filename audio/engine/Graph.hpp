@@ -64,7 +64,6 @@ private:
     {
         return nodes_.find(data);
     }
-    // CLion 的分析有问题 - 实际上此处的 findNode 是使用了的
     typename NodeMap::iterator findNode(T* const data)
     {
         return nodes_.find(data);
@@ -74,15 +73,15 @@ public:
     {
         return findNode(data) != nodes_.end();
     }
-    // 添加一个节点，并添加与上游节点和下游节点的直接连接。
-    // 没有附加操作。即使完成这些操作后会引入环，操作仍会正常完成。
-    // 请用户自行检查是否引入环，然后选择是否继续操作。
+    // Adds a node, and directly links this node to the previous and the next node.
+    // The node will be linked even if loops will be introduced.
+    // If needed, please check before calling this function.
     void addNode(T* const data, const std::vector<T*>& prev = {}, const std::vector<T*>& next = {})
     {
         if(!nodeExists(data))
         {
             nodes_.emplace(data, Route {prev, next});
-            // 更新上游节点
+            // Link to the previous point
             for(T* i: prev)
             {
                 auto it = nodes_.find(i);
@@ -95,7 +94,7 @@ public:
                     }
                 }
             }
-            // 更新下游节点
+            // Link to the next point
             for(T* i: next)
             {
                 auto it = nodes_.find(i);
@@ -110,18 +109,17 @@ public:
             }
         }
     }
-    // 移除一个节点与上游节点和下游节点的连接，并移除此节点。
-    // 没有附加操作。即使完成这些操作后有前驱或后继节点被孤立，操作仍会正常完成。
-    // 请用户自行检查是否有节点被孤立，然后手动移除节点。
+    // Removes the link of the given point and the previous & next point, then removes the given point.
+    // The node will be removed even if the previous or next point is isolated.
+    // If needed, please check before calling this function.
     void removeNode(T* const data)
     {
-        // 更新上游节点
-        // 更新下游节点
+        // Remove the link to the previous point
+        // Remove the link to the next point
         nodes_.erase(data);
     }
-    // 在两个节点之间添加直接连接。
-    // 没有附加操作。即使添加直接连接后会引入环，节点之间仍会添加直接连接。
-    // 请用户自行检查是否引入环，然后选择是否添加这一直接连接。
+    // Link the two nodes even if loops will be introduced.
+    // If needed, please check before calling this function.
     void addNodeConnection(T* const from, T* const to)
     {
         auto& next = findNode(from)->second.next_;
@@ -129,9 +127,8 @@ public:
         auto& prev = findNode(to)->second.prev_;
         prev.emplace_back(from);
     }
-    // 移除两个节点之间的直接连接。
-    // 没有附加操作。即使移除连接后节点被孤立，节点也不会从图中移除。
-    // 请用户自行检查节点是否被孤立，然后手动移除节点。
+    // Remove a link of two nodes even if any nodes will be isolated.
+    // If needed, please check before calling this function.
     void removeNodeConnection(T* const from, T* const to)
     {
         auto& next = findNode(from)->second.next_;
@@ -151,7 +148,7 @@ private:
     NodeMap nodes_;
 };
 
-// 检查图中中是否包含一个点到另一个点的直接或间接路径
+// Check if a (direct or indirect) path from one point to another point is included.
 template<typename T>
 bool containsPath(const Graph<T>& graph, T* const from, T* const to)
 {
@@ -175,9 +172,9 @@ bool containsPath(const Graph<T>& graph, T* const from, T* const to)
     return ret;
 }
 
-// 检查添加的点是否会向图引入环
+// Check if a link between `prev` and `next` will introduce loops to the graph.
 template<typename T>
-bool introduceCycle(const Graph<T>& graph, const std::vector<T*>& prev, const std::vector<T*>& next)
+bool introduceLoop(const Graph<T>& graph, const std::vector<T*>& prev, const std::vector<T*>& next)
 {
     return std::any_of(next.begin(), next.end(),
         [&graph, &prev](const auto& nextData)
@@ -192,29 +189,27 @@ bool introduceCycle(const Graph<T>& graph, const std::vector<T*>& prev, const st
     );
 }
 
-// 检查图中是否有环
+// Check if the graph contains loops.
 template<typename T>
-bool containsCycle(const Graph<T>& graph)
+bool containsLoop(const Graph<T>& graph)
 {
-    return std::any_of
-        (
-            graph.begin(), graph.end(), [&graph](const auto& nodePrev)
-            {
-                const auto& prevData = nodePrev.second.prev_;
-                return std::any_of
-                    (
-                        graph.begin(), graph.end(), [&graph, &prevData, &nodePrev](const auto& nodeNext)
-                        {
-                            auto& prevPtr = nodePrev.first;
-                            auto& nextPtr = nodeNext.first;
-                            const auto& nextData = nodeNext.second.next_;
-                            return (prevPtr != nextPtr)
-                                && (containsPath(graph, prevPtr, nextPtr))
-                                && (introduceCycle(graph, prevData, nextData));
-                        }
-                    );
-            }
-        );
+    return std::any_of(
+        graph.begin(), graph.end(), [&graph](const auto& nodePrev)
+        {
+            const auto& prevData = nodePrev.second.prev_;
+            return std::any_of(
+                graph.begin(), graph.end(), [&graph, &prevData, &nodePrev](const auto& nodeNext)
+                {
+                    auto& prevPtr = nodePrev.first;
+                    auto& nextPtr = nodeNext.first;
+                    const auto& nextData = nodeNext.second.next_;
+                    return (prevPtr != nextPtr)
+                        && (containsPath(graph, prevPtr, nextPtr))
+                        && (introduceLoop(graph, prevData, nextData));
+                }
+            );
+        }
+    );
 }
 }
 }

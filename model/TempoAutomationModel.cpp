@@ -115,11 +115,10 @@ void TempoAutomationModel::setValueOfPoint(int index, double value)
 
 int TempoAutomationModel::setTimeOfPoint(int index, int time, int indexInEqualTimePoint)
 {
-    auto ret = automation_.setTimeOfPoint(index, time, indexInEqualTimePoint);
+    auto ret = automation_.movePoint(index, time, indexInEqualTimePoint);
     if(ret != index)
     {
         beginMoveRows(QModelIndex(), index, index, QModelIndex(), ret);
-        // 移动行是否会使 View 同步更新数据？
     }
     auto modelIndex = this->index(ret);
     dataChanged(modelIndex, modelIndex, {RoleNames::TimeRole});

@@ -36,9 +36,9 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     {
         splashScreen->setBootText(strings->property("initConfigText").toString());
         Musec::Controller::initAppData();
-        // 在这里添加打开初次设置窗口的操作
+        // TODO: Opens the welcome window
     }
-    // 告知主线程在这里加载翻译
+    // Notify the main thread to load translation
     auto& promiseStart = Musec::Controller::loadTranslationPromiseStart();
     auto language = QString::fromStdString(
         Musec::Controller::ConfigController::appConfig()
@@ -62,8 +62,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     {
         promiseStart.set_value("");
     }
-    // promiseStart.set_value();
-    // 等待主线程加载完成
+    // Wait for the main thread
     auto& promiseEnd = Musec::Controller::loadTranslationPromiseEnd();
     promiseEnd.get_future().get();
     auto systemRender =
@@ -76,7 +75,6 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     }
     auto& appConfig = Musec::Controller::ConfigController::appConfig();
     splashScreen->setBootText(strings->property("searchingAudioDeviceText").toString());
-    // 加载 ASIO 驱动列表
     decltype(Musec::Audio::Driver::enumerateDrivers()) driverList;
     try
     {
@@ -91,8 +89,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
            Musec::UI::MessageDialog::IconType::Error
         );
     }
-    // 加载 ASIO 驱动
-    // FIXME: 此处获取字符串的代码可能会失败，因为相关字符串可能还没构造好（产生空指针异常）
+    // FIXME: This might fail even if `Strings.qml` is constructed.
     splashScreen->setBootText(strings->property("searchingASIODriverText").toString());
     Musec::Audio::Driver::AppASIODriver();
     auto driverCLSID = QString::fromStdString(
@@ -101,7 +98,6 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     );
     if(driverList.empty())
     {
-        // 没有找到 ASIO 驱动，程序将以音频引擎关闭的状态运行
         Musec::UI::MessageDialog::messageDialog(
            strings->property("noASIODriverFoundText").toString(),
            Musec::Base::ProductName,
@@ -148,34 +144,21 @@ void initAppData()
     QDir roaming(Musec::Native::roamingAppDataFolder());
     roaming.mkdir(Musec::Base::ProductName);
     QDir dir(Musec::Native::dataDirectoryPath());
-    dir.refresh();
-    if(!dir.exists())
-    {
-        // 抛出无法创建文件夹的异常
-    }
-    // 初始化数据库
     Musec::DAO::initDatabase();
-    // 创建配置文件（未完成）
-    // 完成此处内容之前，打开程序会使程序崩溃。
     Musec::Controller::ConfigController::createAppConfig();
     Musec::Controller::ConfigController::saveAppConfig();
-    // 添加一些默认的插件目录（e.g. C:\Program Flies\VstPlugins）
     auto& list = Musec::Base::defaultPluginDirectoryList();
     for(auto& item: list)
     {
         Musec::DAO::addPluginDirectory(item);
     }
-    // 添加自带素材目录（暂无）
 }
 
 void loadAppData()
 {
-    // 读取设置文件
     auto& appConfig = Musec::Controller::ConfigController::appConfig();
-    // 视情况重新扫描插件
     refreshPluginList(false);
     loadAssetDirectoryList();
-    // 视情况重新扫描素材
 }
 
 Musec::Model::PluginListModel& AppPluginList()
@@ -267,11 +250,9 @@ void refreshPluginList(bool rescan)
             setPluginLists();
             eventHandler->scanPluginComplete();
         };
-        // 在新线程上扫描插件（参见 scanPlugins() 的注释）
-        // join 或 detach 均可，因为 scanPluginLambda 会被复制（参见）
-        // 初始化对象时获取的 scanPluginLambda 按 const 左值引用传递？
-        std::thread thread(scanPluginLambda);
-        thread.detach();
+        // scan plugins on a new thread
+        // scanPluginLambda will be copied.
+        std::thread(scanPluginLambda).detach();
     }
     else
     {

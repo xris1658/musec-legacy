@@ -245,14 +245,14 @@ public:
     double operator()(const AutomationPoint::TimeType& time, std::size_t index = 0) const
     {
         auto lower = lowerBound(time);
-        // 给定的时刻在所有点之后
+        // the given time point is at back of all points
         if (lower == points_.cend())
         {
             return points_.crbegin()->value();
         }
         else
         {
-            // 给定的时刻与点重合
+            // the given time point matches a point
             if (lower->time() == time)
             {
                 if (index)
@@ -272,7 +272,7 @@ public:
             else/* if(lower->time() > time)*/
             {
                 // lower->time() != time
-                // 给定的时刻在所有点之前，或与第一个点重合
+                // the given time point is ahead of all points, or matches the first point
                 if (lower == points_.begin())
                 {
                     return lower->value();
@@ -284,9 +284,9 @@ public:
             }
         }
     }
-    // 插入点，并返回点插入的索引。
-    // 如果所在时间点没有其他点存在，则直接插入，忽略第二个参数。
-    // 如果所在时间点有其他点存在，则按照给定的索引值将点插入到合适的位置。
+    // Inserts a point and returns the index of the point inserted.
+    // If there's no point at the given time point, then the second parameter is ignored.
+    // If there are points at the given time point, then the point will be inserted there according to `indexInEqualTimePoint`.
     std::size_t insertPoint(Point point, std::size_t indexInEqualTimePoint = 0)
     {
         point.setValue(std::clamp(point.value(), minValue_, maxValue_));
@@ -356,8 +356,10 @@ public:
         assert(lowerBoundIndex >= 0);
         return lowerBoundIndex;
     }
-    // 更改某点出现的时间，并返回更改后点所在的索引。
-    std::size_t setTimeOfPoint(std::size_t index, AutomationPoint::TimeType time, std::size_t indexInEqualTimePoint = 0)
+    // Move a point, then returns the new index of the point.
+    // There is another parameter `indexInEqualTimePoint`,
+    // meaning that this function is similar with `insertPoint`.
+    std::size_t movePoint(std::size_t index, AutomationPoint::TimeType time, std::size_t indexInEqualTimePoint = 0)
     {
         auto newIndex = ifSetTimeOfPoint(index, time, indexInEqualTimePoint);
         operator[](index).setTime(time);

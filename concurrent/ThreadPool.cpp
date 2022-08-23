@@ -4,13 +4,11 @@ namespace Musec::Concurrent
 {
 ThreadPool::ThreadPool(std::size_t fallbackThreadCount)
 {
-    // 标准库中的设施
-    // Windows + MSVC：返回逻辑处理器数
-    // 部分旧版本的 GCC 没有实现这一函数
+    // Windows + MSVC returns the logic processor count (that count you see in the task manager)
+    // Not implemented in some older versions of GCC
     auto threadCount = std::thread::hardware_concurrency();
     if(!threadCount)
     {
-        // Native 措施（Windows 中查看进程相关性，得出可使用的逻辑处理器数）
         threadCount = Musec::Native::getProcessCPUCoreCount();
         if(!threadCount)
         {

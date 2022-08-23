@@ -148,7 +148,6 @@ std::shared_ptr<void> FixedSizeMemoryPool::lendMemoryBlock()
     }
     expandPool();
     auto& poolRef = pools_.back();
-    // 此处不能用前置自减，因为 end() 返回的是个右值。
     auto iterators = beforeEnd();
     std::size_t blockIndex = 0;
     vacant_.back()[0] = false;

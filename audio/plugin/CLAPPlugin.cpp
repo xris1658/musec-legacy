@@ -76,7 +76,7 @@ CLAPPlugin::~CLAPPlugin()
         entry_->deinit();
         entry_ = nullptr;
     }
-} // 析构 rawInputs_ 时访问了无效的内存，导致错误出现。原因未知。
+}
 
 std::uint8_t CLAPPlugin::inputCount() const
 {
@@ -148,7 +148,7 @@ const clap_plugin_params* CLAPPlugin::pluginParams() const
 bool CLAPPlugin::initialize(double sampleRate, std::int32_t maxSampleCount)
 {
     sampleRate_ = sampleRate;
-    // 为何 CLAP 要在初始化插件时添加最小缓冲区大小？
+    // Why is the maximum buffer size is needed while initializing the CLAP plugin?
     minBlockSize_ = 1;
     maxBlockSize_ = maxSampleCount;
     if(plugin_)
@@ -286,7 +286,8 @@ bool CLAPPlugin::attachToWindow(QWindow* window)
         window->setTitle(getName());
         Musec::Controller::AudioEngineController::AppProject().addPluginWindowMapping(this, window);
         window_ = window;
-        gui_->show(plugin_); // 某些插件实现永远返回 false，因此不检查值
+        // For some reason, some plugins will always return `false` even if the GUI is present
+        gui_->show(plugin_);
         QObject::connect(window_, &QWindow::widthChanged,
             [this](int) { onWindowSizeChanged(); });
         QObject::connect(window_, &QWindow::heightChanged,

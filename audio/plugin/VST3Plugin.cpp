@@ -25,9 +25,6 @@ VST3Plugin::VST3Plugin():
 VST3Plugin::VST3Plugin(const QString& path, int classIndex):
     VST3Plugin::Base(path), componentHandler_(this), plugFrame_(this)
 {
-    // macOS 和 Linux 平台的入口和出口函数的名字与 Windows 的不同
-    // macOS: bundleEntry 和 bundleExit
-    // Linux: ModuleEntry 和 ModuleExit
     auto pluginInitProc = Musec::Native::getExport<Musec::Base::VST3PluginInitProc>(*this, VST3PluginInitName);
     auto pluginFactoryProc = Musec::Native::getExport<Musec::Base::VST3PluginFactoryProc>(*this, "GetPluginFactory");
     if (!pluginFactoryProc)
@@ -36,11 +33,10 @@ VST3Plugin::VST3Plugin(const QString& path, int classIndex):
     }
     if (pluginInitProc)
     {
-        // Windows 平台可省略入口和出口函数的调用，但 macOS 和 Linux 不行
+        // Init and exit call could be omitted on Windows, but not macOS and Linux
         // https://steinbergmedia.github.io/vst3_dev_portal/pages/Technical+Documentation/VST+Module+Architecture/Loading.html
         if (!pluginInitProc())
         {
-            // 初始化出现问题
             throw std::runtime_error("");
         }
     }
@@ -204,7 +200,7 @@ void VST3Plugin::process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs
     auto& processContext = Musec::Audio::Host::MusecVST3Host::AppProcessContext();
     processData_.processContext = &processContext;
     audioProcessor_->process(processData_);
-    // FIXME：IEditController 的函数只能在 UI 线程调用
+    // FIXME: `IEditController` member functions can only be called in the UI process
     // if(editController_)
     // {
     //     auto paramCount = outputParameterChanges_.getParameterCount();
@@ -215,9 +211,6 @@ void VST3Plugin::process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs
     //         Steinberg::int32 sampleOffset = 0;
     //         Steinberg::Vst::ParamValue paramValue;
     //         paramValueQueue->getPoint(i, sampleOffset, paramValue);
-    //         // FIXME: 由于 IEditController 的函数不能在音频处理线程调用，
-    //         //  因此调用 VST3 Host Checker 的相关函数导致堆栈溢出
-    //         //  参考：public.sdk/samples/vst/hostchecker/source/hostcheckercontroller.cpp, ll. 734 - 738
     //         std::thread([=]() { editController_->setParamNormalized(paramId, paramValue); }).detach();
     //     }
     // }
@@ -292,10 +285,11 @@ bool VST3Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
     if(setBusArrangementsResult != Steinberg::kNotImplemented
     && setBusArrangementsResult != Steinberg::kResultOk)
     {
-        // 再次调用 getBusArrangement，用于宿主程序与插件之间协商总线布局
-        // 参考：https://developer.steinberg.help/pages/viewpage.action?pageId=49906849
-        // My plug-in is capable of processing all possible channel configurations
-        // https://developer.steinberg.help/display/VST/Bus+Arrangement+Setting+Sequences
+        // call getBusArrangement again to negotiate bus arrangement between host and plugin
+        // Reference:
+        // - https://developer.steinberg.help/pages/viewpage.action?pageId=49906849
+        // - My plug-in is capable of processing all possible channel configurations
+        //   https://developer.steinberg.help/display/VST/Bus+Arrangement+Setting+Sequences
         for (decltype(outputBusCount) i = 0; i < outputBusCount; ++i)
         {
             getBusArrangementResult = audioProcessor_->getBusArrangement(
@@ -342,7 +336,7 @@ bool VST3Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
     {
         throw std::runtime_error("");
     }
-    // 本人电脑中的 VST3 插件大多不支持获取 RoutingInfo
+    // Many VST3 plugins I'm using don't support this
     // Steinberg::Vst::RoutingInfo inputRoutingInfo = {0, 0, 0};
     // Steinberg::Vst::RoutingInfo outputRoutingInfo = {0, 0, 0};
     // auto getRoutingInfoResult = component_->getRoutingInfo(inputRoutingInfo, outputRoutingInfo);
@@ -581,17 +575,17 @@ bool VST3Plugin::deactivate()
     return false;
 }
 
-// 或许上 RAII 更合适？
+// RAII might be better?
 bool VST3Plugin::startProcessing()
 {
     if(audioProcessorStatus_ == VST3AudioProcessorStatus::Activated)
     {
         auto ret = audioProcessor_->setProcessing(true);
         if(ret == Steinberg::kResultOk
-        // VST3 SDK 中，IAudioProcessor 的实现 AudioEffect
-        // 在调用此函数时只返回 kNotImplemented。
-        // 一些插件厂商直接套用了 AudioEffect 原来的实现，并且没有改动此处的代码。
-        // Steinberg 的文档中没有提醒开发者“需要改动这一处函数”。
+        // In VST3 SDK, this function of `AudioEffect`, the implementation of `IAudioProcessor`
+        // simply returns `kNotImplemented`.
+        // Some plugin vendors uses that implementation without changing the return value.
+        // Seems like many host applications just take this return value as a successful call.
         || ret == Steinberg::kNotImplemented)
         {
             audioProcessorStatus_ = VST3AudioProcessorStatus::Processing;
@@ -601,14 +595,14 @@ bool VST3Plugin::startProcessing()
     return false;
 }
 
-// 或许上 RAII 更合适？
+// RAII might be better?
 bool VST3Plugin::stopProcessing()
 {
     if(audioProcessorStatus_ == VST3AudioProcessorStatus::Processing)
     {
         auto ret = audioProcessor_->setProcessing(false);
         if(ret == Steinberg::kResultOk
-        // 参阅 startProcessing 中的说明
+        // See comments in `startProcessing`
         || ret == Steinberg::kNotImplemented)
         {
             audioProcessorStatus_ = VST3AudioProcessorStatus::Activated;

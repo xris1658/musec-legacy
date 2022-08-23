@@ -44,7 +44,6 @@ double quadraticFunctionInvertIntegration(const QuadraticFunction& function, dou
     using namespace Impl;
     if(function.a == 0)
     {
-        // 一次函数
         return linearFunctionInvertIntegration(function.b, function.c, from, to);
     }
     else if(function.b == 0)

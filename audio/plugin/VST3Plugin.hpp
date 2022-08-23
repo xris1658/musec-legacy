@@ -41,9 +41,11 @@ constexpr char VST3PluginExitName[] = "bundleExit";
 #elif(LINUX)
 constexpr char VST3PluginInitName[] = "ModuleEntry";
 constexpr char VST3PlugiNExitName[] = "ModuleExit";
+#elif
+#error Unabled to determine init and exit name
 #endif
-// VST3 插件音频组件的状态。
-// 参见：https://developer.steinberg.help/display/VST/Audio+Processor+Call+Sequence
+
+// Reference: https://developer.steinberg.help/display/VST/Audio+Processor+Call+Sequence
 enum class VST3AudioProcessorStatus: std::int8_t
 {
     NoAudioProcessor = 0x00,
@@ -56,8 +58,7 @@ enum class VST3AudioProcessorStatus: std::int8_t
     Processing = 0x40
 };
 
-// VST3 插件控制器（用户界面）的状态。
-// 参见：https://developer.steinberg.help/display/VST/Edit+Controller+Call+Sequence
+// Reference: https://developer.steinberg.help/display/VST/Edit+Controller+Call+Sequence
 enum class VST3EditControllerStatus: std::int8_t
 {
     NoEditController = 0x00,
@@ -134,12 +135,12 @@ private:
     Steinberg::PClassInfo classInfo_;
     Steinberg::IPluginFactory* factory_ = nullptr;
     Steinberg::Vst::IComponent* component_ = nullptr;
-    // IAudioProcessor 和扩展接口
+    // IAudioProcessor and extension
     Steinberg::Vst::IAudioProcessor* audioProcessor_ = nullptr;
     Steinberg::Vst::IAudioPresentationLatency* audioPresentationLatency_ = nullptr;
     Steinberg::Vst::IProcessContextRequirements* processContextRequirements_ = nullptr;
     Steinberg::uint32 processContextRequirement_ = BasicProcessContextRequirement;
-    // IEditController 和扩展接口
+    // IEditController and extension
     Steinberg::Vst::IEditController* editController_ = nullptr;
     Steinberg::Vst::IEditController2* editController2_ = nullptr;
     Steinberg::Vst::IMidiMapping* midiMapping_ = nullptr;
@@ -147,7 +148,6 @@ private:
     Steinberg::Vst::INoteExpressionController* noteExpressionController_ = nullptr;
     Steinberg::Vst::IKeyswitchController* keyswitchController_ = nullptr;
     Steinberg::Vst::IXmlRepresentationController* xmlRepresentationController_ = nullptr;
-    // 用于 IComponentHandler 的成员
     Steinberg::int32 paramCount_ = 0;
     Musec::Base::FixedSizeMemoryBlock paramBlock_ = Musec::Base::FixedSizeMemoryBlock();
     Steinberg::Vst::IConnectionPoint* componentPoint_ = nullptr;
@@ -155,31 +155,22 @@ private:
     Steinberg::IPlugView* view_ = nullptr;
     int audioInputBusIndex_ = -1;
     int audioOutputBusIndex_ = -1;
-    // 输入参数改变
     Steinberg::Vst::ParameterChanges inputParameterChanges_;
-    // 输出参数改变
     Steinberg::Vst::ParameterChanges outputParameterChanges_;
-    // IAudioProcessor::process 函数调用的实参
+    // Used for calling `IAudioProcessor::process`
     Steinberg::Vst::ProcessData processData_;
-    // 调用 process 函数时将 data 赋值给 processData_
+    // assign this->data() to processData_ while calling `process`
     std::vector<Steinberg::Vst::AudioBusBuffers> inputs_;
-    // 调用 process 函数时将 data 赋值给 processData_
+    // ditto
     std::vector<Steinberg::Vst::AudioBusBuffers> outputs_;
-    // 输入音频缓冲区的原始数组
     std::vector<std::vector<SampleType*>> inputRaws_;
-    // 输出音频缓冲区的原始数组
     std::vector<std::vector<SampleType*>> outputRaws_;
-    // 各个总线的输入的扬声器布局
     SpeakerArrangements inputSpeakerArrangements_;
-    // 各个总线输出的扬声器布局
     SpeakerArrangements outputSpeakerArrangements_;
     VST3AudioProcessorStatus audioProcessorStatus_ = VST3AudioProcessorStatus::NoAudioProcessor;
     VST3EditControllerStatus editControllerStatus_ = VST3EditControllerStatus::NoEditController;
     EffectAndEditorUnified effectAndEditorUnified_ = EffectAndEditorUnified::NotUnified;
     QWindow* window_ = nullptr;
-    // 参数 ID 和对 paramBlock_ 对应的索引
-    // 有必要把 std::map 换成定容量 AVL 吗？
-    std::map<Steinberg::Vst::ParamID, int> paramIdAndIndex_;
     Musec::Audio::Plugin::VST3PluginComponentHandler componentHandler_;
     Musec::Audio::Plugin::VST3PluginPlugFrame plugFrame_;
 };

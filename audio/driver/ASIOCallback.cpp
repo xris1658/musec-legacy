@@ -111,9 +111,9 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
         {
             using int24_t = int8_t[3];
             auto buffer = bufferInfoList[outputs[i]].buffers[doubleBufferIndex];
-            // buffer[0] 和 buffer[1] 是 ASIO 的双缓冲区地址
-            // 有些驱动程序 (e.g. ASIO4ALL）不使用双缓冲，两个地址相同
-            // 多数驱动程序（FlexASIO）使用双缓冲，两个地址不同
+            // buffer[0] and buffer[1] are the double buffers of ASIO
+            // Some drivers (e.g. ASIO4ALL) don't use double buffering, and buffer[0] == buffer[1]
+            // Most drivers use double buffering, thus buffer[0] == buffer[1]
             switch(channelInfoList[outputs[i]].type)
             {
             // MSB

@@ -2,7 +2,7 @@
 #define MUSEC_AUDIO_DRIVER_ASIODRIVERFORWARD
 
 #pragma warning(push)
-#pragma warning(disable: 4005) // WINDOWS 宏重定义
+#pragma warning(disable: 4005) // `WINDOWS` macro is redefined
 
 #include <combaseapi.h>
 

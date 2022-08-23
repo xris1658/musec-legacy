@@ -216,8 +216,9 @@ const Musec::Base::FixedSizeMemoryBlock& Project::masterTrackAudioBuffer() const
     return masterTrackAudioBuffer_;
 }
 
-// 此函数在 ASIOBufferSwitch 回调中调用，因此无需调整优先级。
-// 如果不由 ASIO 驱动调用，或许应该按照 ASIO 文档提到的，将优先级调成实时 + MMCSS。
+// If the application uses ASIO, then this function is called in the ASIOBufferSwitch callback,
+// then setting the priority of this thread is not needed (because it's done by the driver).
+// If not, the priority of this thread might be set to realtime + MMCSS.
 void Project::process()
 {
     std::lock_guard<std::mutex> lg(mutex_);
@@ -243,7 +244,7 @@ void Project::process()
         }
         if(trackTypes_[i] == Musec::Audio::Track::TrackType::kInstrumentTrack)
         {
-            // 上面的判断用于确定轨道类型，保证此处向下转换没有问题
+            // The `if` expression is used to get the type of the track, so it's okay not to use `dynamic_cast`
             auto instrumentTrack = reinterpret_cast<Musec::Audio::Track::InstrumentTrack*>(track.get());
             const auto& instrument = instrumentTrack->getInstrument();
             if (instrument && (instrument->processing()))
@@ -271,14 +272,15 @@ void Project::process()
                 }
             }
         }
-        // 按帧操作，因此需要逐列操纵。
-        // 编译器可能将其优化为逐行操纵。这是单线程优化的常见方式。
-        // 如果未优化，则缓冲区较大时可能出现缓存未命中的问题。
+        // Operate frame-wise, so traverse by column is used.
+        // The compiler might optimize this to traversing by row. This is a common case of
+        // single-thread optimization.
+        // If not optimized, then it might miss the CPU cache.
         for (auto j = 0; j < currentBlockSize; ++j)
         {
             for (auto k = 0; k < masterTrackAudioBufferViews.size(); ++k)
             {
-                // 前面有将缓冲区置零的代码。
+                // The buffer is filled with 0 before this.
                 if(!trackMute_[i])
                 {
                     if(trackInvertPhase_[i])
@@ -293,7 +295,6 @@ void Project::process()
             }
         }
     }
-    // ll. 261-263
     for (auto j = 0; j < currentBlockSize; ++j)
     {
         for (auto & masterTrackAudioBufferView : masterTrackAudioBufferViews)
@@ -364,7 +365,7 @@ void Project::vst2PluginIdleFunc()
     while(vst2PluginIdleFuncRunning_)
     {
         vst2PluginPool_.doIdle();
-        // 此时间根据 Serum 的电平表显示决定。
+        // This time is determined by watching the dB meter display of Serum, a VST2 synthesizer.
         std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
 }

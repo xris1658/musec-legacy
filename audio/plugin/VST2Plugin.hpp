@@ -8,7 +8,7 @@
 #include "native/WindowsLibraryRAII.hpp"
 
 #pragma warning(push)
-#pragma warning(disable: 4996) // C 风格字符串操纵可能不安全
+#pragma warning(disable: 4996) // C-style string manipulation might be unsafe
 #include <pluginterfaces/vst2.x/aeffect.h>
 #include <pluginterfaces/vst2.x/aeffectx.h>
 #pragma warning(pop)

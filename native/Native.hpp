@@ -17,7 +17,6 @@ namespace Musec
 {
 namespace Native
 {
-// CLSID 字符串的长度（32 位数据 + 4 个横杠 + 2 个花括号，不包含 NULL 终止符）
 constexpr auto CLSIDStringLength = 38;
 
 using SystemTimeType = SYSTEMTIME;
@@ -29,23 +28,23 @@ using SystemTimeStringType = std::array<char, 18>;
 using WindowType = HWND;
 
 using ErrorCodeType = decltype(GetLastError());
-// 漫游用户数据路径（用户文件夹\AppData\Roaming）
+// Usually <User folder>\AppData\Roaming
 const QString& roamingAppDataFolder();
 
-// 程序安装目录（系统盘\Program Files）
+// Usually <System Driver>\Program Files
 const QString& programFilesFolder();
 
-// 本地用户数据路径（用户文件夹\AppData\Local）
+// Usually <User folder>\AppData\Local
 const QString& localAppDataFolder();
 
-// Musec 程序用户数据路径（用户文件夹\AppData\Roaming\Musec）
+// Path to Musec data, usually <User folder>\AppData\Roaming\Musec
 const QString& dataDirectoryPath();
 
 SystemTimeType getCurrentTime();
 
 SystemTimeType getLaunchTime();
 
-// 获取系统时间类型，并转换为YYYYMMDDHHMMSS 格式的字符串
+// Format systen time to YYYYMMDDHHMMSS
 SystemTimeStringType formatTime(const SystemTimeType& time);
 
 void openSpecialCharacterInput();
@@ -58,7 +57,6 @@ ThreadMaskType getMIDIClockThreadAffinity();
 
 ThreadMaskType setThreadMask(ThreadMaskType mask);
 
-// 获取高精度时间
 std::int64_t currentTimeInNanosecond();
 
 void setThreadPriorityToTimeCritical();
@@ -70,7 +68,8 @@ inline constexpr Musec::Util::Endian endian()
             Musec::Util::Endian::UnknownEndian;
 }
 
-// 检测应用自身是否处于调试状态。目前仅用于辅助选择文字渲染。
+// Check if the application is being debugged. Currently only used to decide whether system
+// rendering is enabled.
 bool isDebuggerPresent();
 
 QString errorMessageFromErrorCode(ErrorCodeType errorCode);

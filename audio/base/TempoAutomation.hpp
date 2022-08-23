@@ -28,13 +28,14 @@ class TempoAutomation: public Automation
 public:
     TempoAutomation(): Base(minimumTempo, maximumTempo) {}
 private:
-    // 给定速度和经过的脉冲数，求经过的实际时间，单位为秒。
+    // Returns the elapsed time in second, given the tempo and the elapsed time in pulse
     double secondElapsed(double bpm, const Duration<PPQ>& duration) const
     {
         return duration / (bpm * PPQ) * 60.0;
     }
 private:
-    // 给定一段速度自动化曲线中的一段和启动终止脉冲数，求经过的实际时间。假设启动和终止脉冲在曲线一段的范围内。
+    // Returns the elpased time in second, given a segment of automation curve and the start / stop time point in pulse.
+    // This function assumes that the start / stop point is in the given segment.
     double secondElapsed(typename Base::PointVectorConstIterator left, const TimePoint<PPQ>& from, const TimePoint<PPQ>& to) const
     {
         auto function = Base::getFunction(left);
@@ -58,15 +59,15 @@ private:
         return ret;
     }
 public:
-    // 求曲线的 PPQ 值。
-    std::size_t ppq() const
+    // Returns the PPQ of the point.
+    constexpr std::size_t ppq() const
     {
         return PPQ;
     }
-    // 给定启动和终止脉冲数，求速度自动化经过的实际时间。
+    // Returns the time elapsed in second, given the start and stop time in pulse.
     double secondElapsed(const TimePoint<PPQ>& from, const TimePoint<PPQ>& to) const
     {
-        // from 在 to 的前面，返回 secondElapsed(to, from) * -1
+        // `to` is ahead of `from`
         if(from > to)
         {
             return secondElapsed(to, from) * -1.0;
@@ -127,29 +128,30 @@ public:
         }
         return ret;
     }
-    // 求速度自动化从零到终止脉冲数经过的实际时间。
+    // Returns the time elapsed from 0 in second, given the stop time in pulse.
     double secondElapsedFromZero(const TimePoint<PPQ>& to) const
     {
         return secondElapsed(TimePoint<PPQ>(0), to);
     }
-    // 求速度自动化在某一个脉冲到下一个脉冲经过的实际时间。
+    // Returns the time elapsed in the given pulse in second.
     double secondElapsedInPulse(const TimePoint<PPQ>& pulse) const
     {
         return secondElapsed(pulse, TimePoint<PPQ>(pulse.pulse() + 1));
     }
-    // 给定某个脉冲开始经过一定实际时间后到达的脉冲数。
+    // Returns the time point in pulse, given the start time point in pulse and the time elapsed in second.
     Duration<PPQ> pulseElapsedFrom(const TimePoint<PPQ>& from, double second, double precision = 60.0 / Musec::Audio::Base::maximumTempo / static_cast<double>(PPQ)) const
     {
         if(second == 0)
         {
             return Duration<PPQ>(from.pulse());
         }
-        // from 右侧的点，或者与 from 重合的点
+        // Behind `from`, or matches `from`
         auto lowerBound = Base::lowerBound(from);
         double sec = from == lowerBound->time()? 0: secondElapsed(from, lowerBound->time());
         for(auto i = lowerBound; i != Base::cend() - 1; ++i)
         {
-            auto durationFromThisToNext = secondElapsed(i, i->time(), (i + 1)->time());
+            auto leftTime = i->time();
+            auto durationFromThisToNext = secondElapsed(i, leftTime, (i + 1)->time());
             // --o--o--x--
             if(sec + durationFromThisToNext < second)
             {
@@ -163,11 +165,11 @@ public:
             // --o--x--o--
             else
             {
-                // 点两边的速度值相等，用不着上迭代法
+                // If the tempo of two points are equal, then no iteration is needed.
                 if(i->value() == (i + 1)->value())
                 {
                     auto pulsePerSecond = i->value() * PPQ / 60.0;
-                    return Duration<PPQ>(i->time().pulse() + pulsePerSecond * (second - sec));
+                    return Duration<PPQ>(leftTime.pulse() + pulsePerSecond * (second - sec));
                 }
                 else
                 {
@@ -176,38 +178,36 @@ public:
                     double leftRatio = 0.0;
                     double rightRatio = 1.0;
                     constexpr double half = 0.5;
-                    // 除以 2.0 比乘 0.5 慢
+                    // Dividing by 2.0 is slower than multiplying 0.5
                     double delta = half;
                     // (leftRatio + rightRatio) / 2
                     double ratio = (leftRatio + rightRatio) * half;
-                    // ratio 对应的时间点（浮点）
-                    auto timePoint = i->time() + (pointIteratorAtRight->time() - i->time()) * ratio;
-                    // leftRatio 对应的时间点（浮点）
-                    auto leftRange = i->time() + (pointIteratorAtRight->time() - i->time()) * leftRatio;
-                    // rightRatio 对应的时间点（浮点）
-                    auto rightRange = i->time() + (pointIteratorAtRight->time() - i->time()) * rightRatio;
+                    auto rightTime = pointIteratorAtRight->time() - leftTime;
+                    auto timePoint = leftTime + rightTime * ratio;
+                    auto leftRange = leftTime + rightTime * leftRatio;
+                    auto rightRange = leftTime + rightTime * rightRatio;
                     while(rightRange - leftRange >= 1)
                     {
-                        // 偏右
-                        if(remain - secondElapsed(i, static_cast<double>(i->time()), timePoint) > precision * half)
+                        // Behind the margin of error
+                        if(remain - secondElapsed(i, static_cast<double>(leftTime), timePoint) > precision * half)
                         {
                             leftRatio += delta;
                         }
-                        // 偏左
-                        else if(secondElapsed(i, static_cast<double>(i->time()), timePoint) - remain > precision * half)
+                        // Ahead of
+                        else if(secondElapsed(i, static_cast<double>(leftTime), timePoint) - remain > precision * half)
                         {
                             rightRatio -= delta;
                         }
-                        // 在误差范围内
+                        // Within
                         else
                         {
                             break;
                         }
                         delta *= half;
                         ratio = (leftRatio + rightRatio) * half;
-                        timePoint = i->time() + (pointIteratorAtRight->time() - i->time()) * ratio;
-                        leftRange = i->time() + (pointIteratorAtRight->time() - i->time()) * leftRatio;
-                        rightRange = i->time() + (pointIteratorAtRight->time() - i->time()) * rightRatio;
+                        timePoint = leftTime + rightTime * ratio;
+                        leftRange = leftTime + rightTime * leftRatio;
+                        rightRange = leftTime + rightTime * rightRatio;
                     }
                     auto floor = Duration<PPQ>(std::floor(timePoint));
                     auto ceiling = Duration<PPQ>(std::ceil(timePoint));
@@ -238,13 +238,13 @@ public:
                 }
             }
         }
-        // 脉冲值在最后一个点之后
+        // The pulse is at back of all points
         auto remain = second - sec;
         auto pulsePerSecond = (Base::cend() - 1)->value() * PPQ / 60.0;
         auto ret = Duration<PPQ>(((Base::cend() - 1)->time() - from).duration() + pulsePerSecond * remain);
         return ret;
     }
-    // 求速度自动化在特定时刻下经过的脉冲数。
+    // Returns the time elapsed from 0 in pulse, given the stop time in second.
     Duration<PPQ> pulseAtTimePoint(double second, double precision = 60.0 / Musec::Audio::Base::maximumTempo / static_cast<double>(PPQ)) const
     {
         return pulseElapsedFrom(TimePoint<PPQ>(0U), second, precision);

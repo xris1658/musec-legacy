@@ -74,14 +74,16 @@ public:
     void swap(ASIODriver& rhs);
 private:
     ASIODriverBasicInfo driverInfo_;
-    IASIO* driver_; // 有必要上 shared_ptr 吗？
+    IASIO* driver_; // Is shared_ptr needed?
 };
 
-// ASIO 驱动
-// 注意，由于 IASIO 需要接收窗口的 handle 才能初始化（程序选择的是主窗口，
-// 参见 Musec::Event::EventHandler::onMainWindowOpened()），因此需要在主窗口关闭前
-// 让 IASIO 正常退出，然后再关闭主窗口。否则主窗口比 ASIO 销毁早，从而导致 ASIO
-// 退出时出现问题，有可能导致程序无法退出，或者程序崩溃。
+// Returns the ASIO driver of the application.
+// Remarks:
+// The initialization of `IASIO` needs the handle of a window.
+// Musec uses the main window, see `Musec::Event::EventHandler::onMainWindowOpened()`).
+// Therefore we need to uninitialize `IASIO` before closing the main window.
+// If we try destroying the main window before uninitializing `IASIO`, then the uninitialization
+// will encounter problems. This might make the application unable to exit, or crash the application.
 ASIODriver& AppASIODriver();
 
 ASIOChannelCount getChannelCount(const ASIODriver& driver = AppASIODriver());

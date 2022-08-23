@@ -152,7 +152,6 @@ void EventHandler::onOptionsWindowOpened()
     using namespace Musec::Audio::Driver;
     using namespace Musec::UI;
     using namespace Musec::Event;
-    // 常规设置
     auto& translationList = Musec::Controller::AppTranslationFileList();
     auto currentLanguage = QString::fromStdString(
         Musec::Controller::ConfigController::appConfig()
@@ -183,19 +182,16 @@ void EventHandler::onOptionsWindowOpened()
         "systemRender",
         QVariant::fromValue(systemRender)
     );
-    // 加载插件目录
     auto pluginDirectoryList = Musec::Controller::PluginSettingsController::getPluginDirectoryList();
     mainWindow->setProperty(
         "pluginDirectoryList",
         QVariant::fromValue<QStringList>(pluginDirectoryList)
     );
-    // 加载 ASIO 驱动列表
     std::remove_reference_t<decltype(Musec::Controller::AppASIODriverList())> list;
     mainWindow->setProperty("driverList", QVariant::fromValue<QObject*>(&list));
     auto& driverList = Musec::Controller::AppASIODriverList();
     mainWindow->setProperty("driverList",
         QVariant::fromValue<QObject*>(&driverList));
-    // 查找当前使用的 ASIO 驱动
     QString driverCLSID = Controller::ASIODriverController::getASIODriver();
     auto driverListCount = driverList.itemCount();
     auto driverListBase = driverList.getList();
@@ -212,7 +208,6 @@ void EventHandler::onOptionsWindowOpened()
     mainWindow->setProperty("currentDriver",
         QVariant::fromValue<int>(driverCurrentIndex)
     );
-    // 将选项窗口的事件和 EventHandler 连接起来
     if(optionsWindowConnection.empty())
     {
         optionsWindowConnection.emplace_back(
@@ -324,10 +319,7 @@ void EventHandler::onPrepareToQuit()
 void EventHandler::onSampleRateChanged(int sampleRate)
 {
     using namespace Musec::Audio::Driver;
-    // 使用 decltype 的推导规则进行自动推导。多在编写程序库时使用。
-    // 和单例模式一并使用效果绝佳。
-    // （话说回来这儿直接用 auto& 也没问题。）
-    decltype(auto) driver = AppASIODriver();
+    auto& driver = AppASIODriver();
     if(driver)
     {
         driver->setSampleRate(static_cast<ASIOSampleRate>(sampleRate));
@@ -403,7 +395,7 @@ void EventHandler::onTrackInserted(const QModelIndex& parent, int first, int las
 
 void EventHandler::onTrackAboutToBeRemoved(const QModelIndex &parent, int first, int last)
 {
-    emit updateArrangement();
+    updateArrangement();
 }
 
 void EventHandler::onNewPluginWindowReady()

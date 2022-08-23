@@ -116,7 +116,7 @@ private:
     std::int64_t duration_;
 };
 
-// TimePoint 比较运算符
+// TimePoint comparison
 template<std::size_t PPQ>
 bool operator==(const TimePoint<PPQ>& lhs, const TimePoint<PPQ>& rhs)
 {
@@ -153,7 +153,7 @@ bool operator>=(const TimePoint<PPQ>& lhs, const TimePoint<PPQ>& rhs)
     return !(lhs < rhs);
 }
 
-// Duration 比较运算符
+// Duration comparison
 template<std::size_t PPQ>
 bool operator==(const Duration<PPQ>& lhs, const Duration<PPQ>& rhs)
 {

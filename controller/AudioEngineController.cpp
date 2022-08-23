@@ -53,7 +53,7 @@ long getMaxBlockSize()
         if(ret != 0xcccccccc && ret != 0)
         return ret;
     }
-    return 88200; // 我记得 FlexASIO 的最大采样数是这个
+    return 88200; // Maximum sample count of FlexASIO from what I can tell
 }
 
 long getCurrentBlockSize()
