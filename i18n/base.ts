@@ -1491,7 +1491,7 @@ The error information of the driver is as follows:
         <source>The ASIO driver %1 cannot be loaded. The program will run without loading the ASIO driver.
 
 The error information of the driver is as follows: 
-%4</source>
+%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

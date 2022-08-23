@@ -1552,11 +1552,11 @@ The error information of the driver is as follows:
         <source>The ASIO driver %1 cannot be loaded. The program will run without loading the ASIO driver.
 
 The error information of the driver is as follows: 
-%4</source>
+%2</source>
         <translation>无法加载 ASIO 驱动程序 %1。程序将以未加载 ASIO 驱动程序的状态运行。
 
 以下是驱动程序提供的错误信息：
-%4</translation>
+%2</translation>
     </message>
     <message>
         <location filename="../qmlproject/Strings.qml" line="20"/>
