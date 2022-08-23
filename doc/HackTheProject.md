@@ -66,8 +66,8 @@ Take CLion for example:
 ```
 -DCMAKE_TOOLCHAIN_FILE=<vcpkg directory>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK directory> -DASIOSDK_PATH=<ASIO SDK directory> -DCLAP_SOURCE_DIR=<Path to CLAP SDK> -DCLAP_HELPERS_DIR=<Path to CLAP Helpers> -DCMAKE_MAKE_PROGRAM=<Path to Qt>/Tools/QtCreator/bin/jom/jom.exe
 ```
-- We use JOM from Qt, instead of NMake provided by MSVC. That's because NMake does not do parallel builds. If `jom.exe` is not found, then you can get one at [qt-labs/jom](https://github.com/qt-labs/jom).
-3. Build the target `Musec`.
+- The command above use [JOM](https://github.com/qt-labs/jom) from Qt, which is a build tool that "aimed to be an nmake clone with support for parallel builds". Of course you can use any build system you like.
+1. Build the target `Musec`.
 
 ### Using command-line
 1. Open a command window with Visual Studio environment ready. You can do that by using one of the
@@ -168,7 +168,7 @@ library files) have to be made manually.
   - Manually copy the `Resources` folder to the build path.
 
   You could automatically copy the files by adding custom build processes, but there are some things you should notice:
-  - You can't use `copy` directly to do this, since it is a command you can use in Command Propmt or Powershell instead of an executable, and Qt Creator can't find a program named `copy`. The correct way is to use `cmd` to execute the `copy` command:
+  - You can't use `copy` directly to do this, since it is a command you can use in Command Prompt or Powershell instead of an executable, and Qt Creator can't find a program named `copy`. The correct way is to use `cmd` to execute the `copy` command:
     ```
     cmd /C copy /B /Y <Path to files to copy> <Destination>
     ```
@@ -196,3 +196,11 @@ If you want to use NatVis in CLion:
   - If not, you can find one at [aleksey-nikolaev/natvis-collection](https://github.com/aleksey-nikolaev/natvis-collection) or somewhere else.
 
 The user interface of this project is written in QML and heavily depends on part of the C++ codes (in `entities` and `models`). If someone made a mistake editing the QML files, it can be extremely hard to find the root cause (even with git blame). Some implementation classes of QML are not visualized, so I wrote a NatVis file by myself, which is `qt5-qml.natvis` in the root directory of the project.
+
+## Write everything in C/C++ codes with only ASCII characters while you can
+When I say "everything", I mean comments, text that shows in the log, GUI and so on.
+
+All of the files use UTF-8 encoding without BOM. For some reason, MSVC toolchain will treat them as files using ANSI encoding. So warning C4819 and numerous compilation errors will be emitted potentially if you try compiling the project with code that contains non-ASCII characters.
+
+Writing everything with only ASCII characters basically means writing everything in English. To spread your project more effectively, you'll hope to make your thoughts in the code and comments understandable by developers all around the globe, instead of only developers who can understand whatever language you use in the code. 
+Machine translation might help, but these translations can produce results that don't mean right, or sometimes completely opposite.

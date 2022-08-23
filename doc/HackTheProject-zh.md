@@ -51,8 +51,8 @@
 ```
 -DCMAKE_TOOLCHAIN_FILE=<vcpkg 目录>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK 目录> -DASIOSDK_PATH=<ASIO SDK 目录> -DCLAP_SOURCE_DIR=<CLAP SDK 目录> -DCLAP_HELPERS_DIR=<CLAP Helpers 目录> -DCMAKE_MAKE_PROGRAM=<Qt 目录>/Tools/QtCreator/bin/jom/jom.exe
 ```
-- 我们不使用 MSVC 提供的 NMake，而使用 Qt 的 JOM。因为 NMake 不会进行并行构建。如果没有找到 `jom.exe`，可以到 [qt-labs/jom](https://github.com/qt-labs/jom) 下载一个。
-3. 构建目标 `Musec`。
+- 上方的命令使用了 Qt 的 JOM，一个“目标是作为支持并行构建的 NMake”的生成工具。当然你想用什么生成系统就用哪个。
+1. 构建目标 `Musec`。
 
 ### 使用命令行
 1. 打开配置有 Visual Studio 环境的命令窗口。可以使用以下方式进行这一操作：
@@ -163,8 +163,8 @@
 ## 库编译和源码编译
 我们在生成程序前，先使用 vcpkg 生成了一部分依赖的动态库。使用 qmake 生成前，还需要生成 VST3 SDK 的静态库。有一些依赖是作为源码和项目一齐编译的。
 这三种生成方式各有利弊。
-- 动态库可以由多个程序同时使用，节省内存（如今内存容量飞涨，或许也算不上显著优点了）。缺点是极容易收受到 DLL Hell 的影响。
-- 静态库编译的优点是不会收到 DLL Hell 的影响。缺点是需要尽可能保证库和程序的编译工具链和参数一致，以免编译和运行时出现问题。
+- 动态库可以由多个程序同时共用，节省内存（如今内存容量飞涨，或许也算不上显著优点了）。缺点是极容易受到 DLL Hell 的影响。
+- 静态库编译的优点是不会受到 DLL Hell 的影响。缺点是需要尽可能保证库和程序的编译工具链和参数一致，以免编译和运行时出现问题。
 - 源码编译的优点是可以有效避免库版本带来的问题，缺点是编译时间比库编译长。
 
 建议读者参考这些信息，选择最符合自己需求的方式。
@@ -179,3 +179,10 @@ Visual Studio 和较新版本的 CLion 支持 NatVis，可以基于配置文件�
   - 如果没安装过，可以在 [aleksey-nikolaev/natvis-collection](https://github.com/aleksey-nikolaev/natvis-collection) 上或者别处找一个。
 
 此项目的用户界面使用 QML 编写，重度依赖项目的部分 C++ 代码（`entities` 和 `models` 中的内容）。如果编写 QML 文件时出了错，找到根源可能会极为困难（就算用了 Git 追溯功能也一样）。QML 的某些实现类没有可视化，所以我自己编写了一个 NatVis 文件，就是项目根目录的 `qt5-qml.natvis`。
+
+## 如果可以，编写 C/C++ 代码时一切只用 ASCII 字符
+此处的“一切”指的是注释，出现在日志、GUI 的文本等。
+
+所有的文件均使用不带 BOM 的 UTF-8 编码。由于某些原因，MSVC 工具链会将其视为 ANSI 编码的文件，因此代码带有非 ASCII 字符时，尝试编译项目可能会产生 C4819 警告以及大量的编译错误。
+
+全部使用 ASCII 字符写东西大致意味着全使用英语写东西。要更加高效地推广项目的话，你会希望让全球的开发者都明白你代码的思路，而不是只有理解你代码中使用的语言的开发者才明白。机器翻译或许有用，但是产生的结果可能意思不对，有时甚至完全相反。
