@@ -1,9 +1,9 @@
-注意事项：
-在编写 Model 之后，要在 QML 端使用 Model，请在 `ModelInitializer` 的构造函数中添加注册 Model 的代码：
+Note:  
+If a model is added, and you'd like to make use of it in QML codes, please add model registration codes in constructor of `ModelInitializer`:
 ```cpp
-// 文件：ModelName.hpp
+// File: ModelName.hpp
 class ModelName;
-// 文件：ModelInitializer.cpp
-QML_REGISTER_TYPE(ModelName, Musec.Models, 1, 0);
+// File: ModelInitializer.cpp
+QML_REGISTERTYPE(ModelName, Musec.Models, 1, 0);
 ```
-此操作会在 `Musec.Models 1.0` 中注册相应的 Model 类，在 QML 中的类型名与类名相同。
+This will register `ModelName` class in `Musec.Models 1.0`, and the name in QML is same as the class name.
