@@ -4,10 +4,10 @@ import QtQuick.Window 2.15
 import Musec 1.0
 import Musec.Controls 1.0 as MCtrl
 
-// Qt 6 中移除了 QtQuick.Dialogs 中的 ColorDialog 和 MessageDialog,
-// 此处使用自行实现的 MessageDialog.
-// 讲个笑话: Types in Qt.labs modules are not guaranteed to remain
-// compatible in future versions. - Qt Documentation
+// Qt 6 removed `ColorDialog` and `MessageDialog` in `QtQuick.Dialogs`.
+// To maintain forward compatibility, `MessageDialog` I implemented by myself is used.
+// Fun fact: "Types in Qt.labs modules are not guaranteed to remain
+// compatible in future versions" according to Qt Documentation.
 Window {
     id: root
     // ui/MessageDialog.hpp
@@ -29,10 +29,10 @@ Window {
     minimumWidth: row.width
     x: (screen.width - width) / 2
     y: (screen.height - height) / 2
-    property string message: "对话框消息文字"
+    property string message: "Message Text"
     property alias standardButtons: dialogButtonBox.standardButtons
     signal accepted()
-    title: "对话框示例"
+    title: "Title of dialog"
     signal clicked(button: AbstractButton)
     onClicked: {
         //

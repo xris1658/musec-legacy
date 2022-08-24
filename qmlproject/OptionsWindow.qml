@@ -18,11 +18,10 @@ Window {
     onScanPluginComplete: {
         pluginSettings.scanning = false;
     }
-    // 常规
     property alias languageList: generalSettings.languageList
     property alias currentLanguage: generalSettings.currentLanguage
     property alias systemRender: generalSettings.systemRender
-    // 音频硬件
+
     property alias driverList: audioHardwareSelector.driverListModel
     property alias pluginDirectoryList: pluginSettings.pluginPathListModel
     property alias currentDriver: audioHardwareSelector.currentDriver
@@ -30,7 +29,7 @@ Window {
     property alias inputLatencyInSamples: audioHardwareSelector.inputLatencyInSamples
     property alias outputLatencyInSamples: audioHardwareSelector.outputLatencyInSamples
     property alias sampleRate: audioHardwareSelector.sampleRate
-    // 插件
+
     MCtrl.SplitView {
         orientation: Qt.Horizontal
         anchors.fill: parent

@@ -17,6 +17,6 @@
       }
     </style>
   </defs>
-  <rect id="矩形_1" data-name="矩形 1" class="cls-1" width="16" height="16"/>
-  <path id="乐器_拷贝" data-name="乐器 拷贝" class="cls-2" d="M2,3V13H5V9H4V3H2ZM7,3V9H6v4h4V9H9V3H7Zm5,0V9H11v4h3V3H12Z"/>
+  <rect id="Background" class="cls-1" width="16" height="16"/>
+  <path id="KeyboardIcon" class="cls-2" d="M2,3V13H5V9H4V3H2ZM7,3V9H6v4h4V9H9V3H7Zm5,0V9H11v4h3V3H12Z"/>
 </svg>

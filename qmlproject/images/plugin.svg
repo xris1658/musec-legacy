@@ -17,6 +17,6 @@
       }
     </style>
   </defs>
-  <rect id="矩形_1" data-name="矩形 1" class="cls-1" width="16" height="16"/>
-  <path id="插件图标" class="cls-2" d="M13,7V9H11L7,13H5V11H3V10H5V6H3V5H5V3H7l4,4h2Z"/>
+  <rect id="Background" class="cls-1" width="16" height="16"/>
+  <path id="PlugIcon" class="cls-2" d="M13,7V9H11L7,13H5V11H3V10H5V6H3V5H5V3H7l4,4h2Z"/>
 </svg>

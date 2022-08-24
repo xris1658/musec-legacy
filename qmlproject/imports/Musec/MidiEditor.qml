@@ -203,7 +203,7 @@ Item {
             size: height / pianoKey.height
             active: hovered || pressed
             position: 0.5
-            // 备用
+            // What does that mean? I forgot that.
             Rectangle {
                 anchors.left: parent.left
                 width: 1
@@ -309,7 +309,7 @@ Item {
                 verLineSpacing: verticalLineSpacing
                 horLineCount: Constants.midiValueRange
                 horLineSpacing: horizontalLineSpacing
-                Column { // 用于区分钢琴键黑白的背景
+                Column {
                     anchors.fill: parent
                     z: 1
                     Repeater {
@@ -323,7 +323,7 @@ Item {
                 }
                 ListView {
                     id: noteView
-                    // 未完成
+                    // TODO
                 }
                 MouseArea {
                     anchors.fill: parent

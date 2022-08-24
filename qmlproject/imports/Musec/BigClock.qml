@@ -296,7 +296,7 @@ Item {
                         anchors.fill: parent
                         opacity: 0
                         font.family: Constants.font
-                        model: ["节拍", "十进制", "采样"]
+                        model: [qsTr("Beat"), qsTr("Decimal"), qsTr("Sample")]
                         currentIndex: 0
                     }
                 }

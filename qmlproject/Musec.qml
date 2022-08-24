@@ -61,7 +61,7 @@ ApplicationWindow {
             }
         }
     }
-    // 自定义属性
+
     property string filePath: ""
     property string openedFile: qsTr("Untitled project")
     property bool newProject: true
@@ -70,7 +70,6 @@ ApplicationWindow {
     property bool _fullscreen: false
     property bool playing: false
 
-    // 内置属性
     width: Constants.width
     height: Constants.height
     color: Constants.backgroundColor2
@@ -78,7 +77,6 @@ ApplicationWindow {
     visibility: "Maximized"
     title: (dirty? "*": "") + openedFile + " - Musec"
 
-    // 函数
     function saveProject() {
         // TODO
     }
@@ -110,7 +108,6 @@ ApplicationWindow {
         }
     }
 
-    // 事件
     Component.onCompleted: {
         Objects.mainWindow = mainWindow;
     }
@@ -123,18 +120,16 @@ ApplicationWindow {
         }
     }
 
-    // 对于使用集成显卡绘制的 QML 窗口: 第一次全屏时, 或者全屏时
-    // 焦点失而复得 (e.g. 打开或切换到另一个窗口, 然后关闭这一窗
-    // 口) 后并发生交互 (e.g. 菜单栏项目高亮) 时均会重绘. 此操作
-    // 较为耗时 (1-3s), 容易使用户产生程序运行不流畅的感觉.
-
-    // 解决: 1. 在应用启动时进行一次全屏, 然后取消全屏.
-    // (在 MainWindow::openMainWindow() 中进行不会暴露这一行为.)
-//    Component.onCompleted: {
-//        toggleFullscreen();
-//        toggleFullscreen();
-//    }
-    // 2. 在丢失焦点时使窗口退出全屏, 再次得到焦点时恢复全屏.
+    // If the window is painted by the integrated graphics (e.g. Intel HD Graphics),
+    // the window needs to update graphics when
+    // 1. toggled to full screen for the first time, or
+    // 2. regain focus after losing it in full screen mode.
+    // Updating graphics take about 1-3 seconds.
+    // To make them invisible by the user:
+    // 1. Toggle the main window to full screen, and then quit full screen right after this.
+    // This is done on opening the window.
+    // (Doing this in MainWindow::openMainWindow() won't reveal this operation.)
+    // 2. Quit full screen mode on losing focus, and enter full screen mode on regaining focus.
     onActiveFocusItemChanged: {
         if(activeFocusItem)
         {
@@ -175,13 +170,11 @@ ApplicationWindow {
         }
     }
 
-    // 对话框和连接
     Labs.FileDialog {
         id: fileDialog
-        nameFilters: ["Musec 项目文件 (*.mvr)"]
+        nameFilters: [qsTr("Musec project file (*.mvr)")]
     }
 
-    // 信号
     signal showWindow()
     onShowWindow: {
         showMaximized();
@@ -192,13 +185,11 @@ ApplicationWindow {
         //
     }
 
-    // 轨道信息
     ListModel {
         id: tracks
         dynamicRoles: true
     }
 
-    //菜单栏
     menuBar: MCtrl.MenuBar {
         id: mainMenuBar
         backgroundColor: "#000000"
@@ -616,7 +607,6 @@ ApplicationWindow {
         }
     }
 
-    //顶部的工具栏
     MainBar {
         id: mainBar
         onPlayStart: {
@@ -627,7 +617,6 @@ ApplicationWindow {
         }
     }
 
-    //功能区
     Item {
         id: mainFunctionArea
         anchors.top: mainBar.bottom
@@ -637,7 +626,6 @@ ApplicationWindow {
         anchors.margins: 5
         MCtrl.SplitView { orientation: Qt.Horizontal
             anchors.fill: parent
-                // // 素材
             Item {
                 visible: assetVisible
                 SplitView.preferredWidth: parent.width / 5
@@ -671,11 +659,9 @@ ApplicationWindow {
                     }
                 }
             }
-            // // 编排视图 + 片段编辑器 + 混音器
             MCtrl.SplitView { orientation: Qt.Vertical
                 anchors.top: parent.top
                 anchors.right: parent.right
-                // // 编排视图 + 片段编辑器
                 MCtrl.SplitView {
                     orientation: Qt.Horizontal
                     anchors.left: parent.left
@@ -683,7 +669,6 @@ ApplicationWindow {
                     width: parent.width
                     SplitView.preferredHeight: parent.height * 0.625
                     SplitView.minimumHeight: 20
-                    // 编排视图
                     Item {
                         SplitView.preferredWidth: parent.width * 0.6
                         FunctionArea {
@@ -709,7 +694,6 @@ ApplicationWindow {
                             }
                         }
                     }
-                    // 片段编辑器
                     Item {
                         visible: midiEditorVisible
                         FunctionArea {
@@ -726,7 +710,6 @@ ApplicationWindow {
                         }
                     }
                 }
-                // // 混音器
                 Item {
                     SplitView.minimumHeight: 20
                     visible: mixerVisible
@@ -746,7 +729,6 @@ ApplicationWindow {
             }
         }
     }
-    //状态栏
     Rectangle {
         id: statusBar
         anchors.bottom: parent.bottom

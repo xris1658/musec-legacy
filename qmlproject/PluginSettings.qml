@@ -112,8 +112,7 @@ Rectangle {
                         onAccepted: {
                             let newPath = Constants.directoryFromUrl(folder);
                             EventBridge.pluginDirectoryAdded(String(newPath));
-                            // 不能直接对 pluginPathListModel 进行修改，否则界面中的数据不会更新。
-                            // 貌似 pluginPathListModel 是全局对象？
+                            // If `pluginPathListModel` is changed directly, the UI won't update.
                             var oldModel = pluginPathListModel;
                             oldModel.push(newPath);
                             pluginPathListModel = oldModel;

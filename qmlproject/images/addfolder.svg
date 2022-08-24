@@ -20,6 +20,6 @@
       }
     </style>
   </defs>
-  <path id="文件夹图标" class="cls-2" d="M3,3V13H13V5H7V3H3ZM8,3V4h5V3H8Z"/>
-  <path id="矩形_3" data-name="矩形 3" class="cls-4" d="M4,8H6V6H8V8h2v2H8L7.949,12H6l0-2H4V8Z"/>
+  <path id="FolderIcon" class="cls-2" d="M3,3V13H13V5H7V3H3ZM8,3V4h5V3H8Z"/>
+  <path id="AddIcon" class="cls-4" d="M4,8H6V6H8V8h2v2H8L7.949,12H6l0-2H4V8Z"/>
 </svg>

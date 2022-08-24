@@ -11,7 +11,7 @@ import Musec.Entities 1.0
 QtObject {
     id: eventBridge
     objectName: "eventBridge"
-    // 发往 C++ 后端的信号
+    // Send to C++ backend
     signal prepareToQuit()
     signal optionsWindowOpened()
     signal optionsWindowClosed()
@@ -44,7 +44,7 @@ QtObject {
 
     signal languageSelectionChanged(language: string)
 
-    // 收到 C++ 后端的信号
+    // Receive from C++ backend
     signal setBootText(newBootText: string)
     onSetBootText: {
         Objects.splashScreen.bootText = newBootText;
@@ -76,7 +76,6 @@ QtObject {
 
     signal setSystemTextRenderingComplete()
     onSetSystemTextRenderingComplete: {
-        // 弹出需要重启的对话框
         messageDialog(Strings.optionSaveRebootPromptText,
             Strings.applicationName, MDlg.MessageDialog.Icon.Info);
     }
@@ -103,7 +102,6 @@ QtObject {
 
     signal setLanguageComplete()
     onSetLanguageComplete: {
-        // 弹出需要重启的对话框
         messageDialog(Strings.optionSaveRebootPromptText,
             Strings.applicationName, MDlg.MessageDialog.Icon.Info);
     }

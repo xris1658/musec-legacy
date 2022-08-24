@@ -404,7 +404,7 @@ Window {
                         width: secondColumnWidth
                         height: 80
                         textFormat: Text.RichText
-                        text: qsTr("Use %path as export directory; use %filename as file name without the extension，use %format as extension of the lossless audio file.<br>e.g. the complete path of the exported lossless audio file is <br>%path\\%filename.%format")
+                        text: qsTr("Use %path as export directory; use %filename as file name without the extension, use %format as extension of the lossless audio file.<br>e.g. the complete path of the exported lossless audio file is <br>%path\\%filename.%format")
                         font.family: Constants.font
                         color: Constants.contentColor2
                         wrapMode: Text.Wrap

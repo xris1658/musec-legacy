@@ -24,13 +24,12 @@ Rectangle {
         }
     }
 
-    //大号时钟
     BigClock {
         id: bigClock
         anchors.centerIn: parent
     }
 
-    //走带按钮
+    // Transport button
     Row {
         id: transportButtons
         anchors.verticalCenter: parent.verticalCenter
@@ -228,7 +227,7 @@ Rectangle {
             }
         }
     }
-    //工具按钮
+    // Tool buttons
     Row {
         id: toolButtons
         anchors.verticalCenter: parent.verticalCenter

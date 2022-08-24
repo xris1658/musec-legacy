@@ -185,7 +185,6 @@ Item {
         width: 5
         hoverEnabled: true
         height: parent.height
-        // 鼠标离开 MouseArea 后，即使当前是 pressed，光标也会变回箭头。
         cursorShape: containsMouse || pressed? Qt.SizeHorCursor: Qt.ArrowCursor
         onPressed: {
             mouseInitialX = mouse.x;

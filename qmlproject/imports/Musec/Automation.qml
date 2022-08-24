@@ -128,7 +128,7 @@ Item {
             }
         }
     }
-    // 线向左
+    // From right to left
     Repeater {
         id: paths
         model: root.model
@@ -205,7 +205,7 @@ Item {
             }
         }
     }
-    // 线向右
+    // From left to right
     Shape {
         id: lastToEnd
         width: parent.width

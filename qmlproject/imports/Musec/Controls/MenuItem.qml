@@ -15,7 +15,7 @@ QQC2.MenuItem {
         id: action
     }
 
-    //菜单项文字右边用于显示级联菜单标识符的项目
+    // Cascade menu indicator at right
     arrow: Item {
         anchors.right: parent.right
         anchors.top: parent.top
@@ -37,7 +37,7 @@ QQC2.MenuItem {
             }
         }
     }
-    //菜单项文字左边用于显示选中状态的项目
+    // Menu item checked indicator at left
     indicator: Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
@@ -81,7 +81,7 @@ QQC2.MenuItem {
             }
         }
     }
-    //菜单项文字
+    // Text of menu item
     contentItem: Item {
         height: 20
         Text {
@@ -113,7 +113,7 @@ QQC2.MenuItem {
             verticalAlignment: Text.AlignVCenter
         }
     }
-   //菜单项背景
+   // Background of menu item
     background: Rectangle {
         width: menuItemDelegate.width - 2
         height: menuItemDelegate.height - 2

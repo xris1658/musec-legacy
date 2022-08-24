@@ -50,7 +50,8 @@ Window {
             // "config" will show as "con器g". It might be a bug of
             // Unicode of "器" is U+5668.
             // Unicode of "ﬁ" (ligature of "fi") is U+FB01.
-            // For some weird reason, "ligature" is absent in the document.
+            // For some reason, the word "ligature" is absent from the document,
+            // making it a little harder to turn off ligature.
         }
     }
 }

@@ -56,30 +56,30 @@ Window {
                 model: ListModel {
                     ListElement {
                         parameterId: 1
-                        parameterName: "连续的参数"
-                        shortParameterName: "连参"
+                        parameterName: "Continuous Parameter"
+                        shortParameterName: "Cont."
                         continuous: true
                     }
                     ListElement {
                         parameterId: 2
-                        parameterName: "离散的参数（10 格，显示为水平推子）"
-                        shortParameterName: "离参 10 推子"
+                        parameterName: "Discrete Parameter (10 scales, display as horizontal fader)"
+                        shortParameterName: "Disc. 10 fader"
                         continuous: false
                         stepCount: 10
                         showAsComboBox: false
                     }
                     ListElement {
                         parameterId: 3
-                        parameterName: "离散的参数（10 格，显示为下拉列表）"
-                        shortParameterName: "离参 10 下拉"
+                        parameterName: "Discrete Parameter (10 scales, display as combo box)"
+                        shortParameterName: "Disc. 10 combo"
                         continuous: false
                         stepCount: 10
                         showAsComboBox: true
                     }
                     ListElement {
                         parameterId: 4
-                        parameterName: "离散的参数 (开关)"
-                        shortParameterName: "离参 开关"
+                        parameterName: "Discrete Parameter (Switch)"
+                        shortParameterName: "Disc. Switch"
                         continuous: false
                         parameterIsSwitch: true
                     }

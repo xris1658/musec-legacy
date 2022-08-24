@@ -33,7 +33,7 @@ QQC2.ComboBox {
         id: comboBoxDelegate
         width: comboBox.popupWidth
         height: 20
-        background: Rectangle { // 实现高亮
+        background: Rectangle { // Highlight
             width: comboBoxDelegate.width
             height: comboBoxDelegate.height
             color: comboBox.highlightedIndex === index? Constants.menuHighlightBackgroundColor : Constants.menuBackgroundColor
@@ -100,7 +100,7 @@ QQC2.ComboBox {
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
     }
-    // 控件背景
+    // Background of the control
     background: Rectangle {
         id: _background
         anchors.fill: parent

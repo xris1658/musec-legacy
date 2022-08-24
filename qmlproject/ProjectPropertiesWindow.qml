@@ -7,12 +7,10 @@ import Musec.Controls 1.0 as MCtrl
 Window {
     id: root
 
-    // 自定义属性
     property string fileName
     property string filePath
     property bool newProject
 
-    // 内置属性
     flags: Qt.Dialog
     title: qsTr("Project Properties")
     width: 450

@@ -30,7 +30,7 @@ Item {
         return channelEffectList.itemAtIndex(index);
     }
     signal audioSlotRightClicked(index: int, x: int, y: int)
-    // 乐器操作
+    // Operations of instrument
     signal instrumentSlotDragEventEntered(drag: var)
     onInstrumentSlotDragEventEntered: {
         if(drag.getDataAsString("type") != 2) {
@@ -48,7 +48,7 @@ Item {
     signal instrumentSlotEnabledToggled(instrumentSlotEnabled: bool)
     signal audioEffectSlotVisibleToggled(audioEffectWindowVisible: bool, effectIndex: int)
     signal audioEffectSlotEnabledToggled(audioEffectEnabled: bool, effectIndex: int)
-    // 效果器操作
+    // Operations of audio effect
     signal audioEffectSlotDragEventEntered(drag: var, audioEffectIndex: int)
     onAudioEffectSlotDragEventEntered: {
         if(drag.getDataAsString("type") != 3) {

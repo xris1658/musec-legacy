@@ -20,8 +20,8 @@
       }
     </style>
   </defs>
-  <rect id="矩形_1" data-name="矩形 1" class="cls-1" width="16" height="16"/>
-  <path id="形状_1" data-name="形状 1" class="cls-2" d="M4,3h8V5L9,8l3,3v2H4V11L7,8,4,5V3Z"/>
-  <path id="形状_2" data-name="形状 2" class="cls-3" d="M8,8L5,5h6Z"/>
-  <path id="形状_2_拷贝" data-name="形状 2 拷贝" class="cls-3" d="M8,10l2,2H6Z"/>
+  <rect id="Background" class="cls-1" width="16" height="16"/>
+  <path id="Outside" class="cls-2" d="M4,3h8V5L9,8l3,3v2H4V11L7,8,4,5V3Z"/>
+  <path id="InsideUp" class="cls-3" d="M8,8L5,5h6Z"/>
+  <path id="InsideDown" class="cls-3" d="M8,10l2,2H6Z"/>
 </svg>

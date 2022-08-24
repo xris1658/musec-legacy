@@ -30,10 +30,10 @@ Item {
     property int barCount: 20
     property int position
     signal updateArrangement()
-    // Qt 6 中移除了 QtQuick.Dialogs 中的 ColorDialog 和 MessageDialog,
-    // 此处使用 Qt.labs.platform 中的 ColorDialog 以保证向后兼容.
-    // 讲个笑话: Types in Qt.labs modules are not guaranteed to remain
-    // compatible in future versions. - Qt Documentation
+    // Qt 6 removed `ColorDialog` and `MessageDialog` in `QtQuick.Dialogs`.
+    // To maintain forward compatibility, we use `ColorDialog` in `Qt.labs.platform`.
+    // Fun fact: "Types in Qt.labs modules are not guaranteed to remain
+    // compatible in future versions" according to Qt Documentation.
     property Labs.ColorDialog colorDialog: Labs.ColorDialog {
         property TrackHeader colorDest1
         color: Constants.backgroundColor
@@ -708,7 +708,7 @@ Item {
                         anchors.fill: parent
                         scrollGestureEnabled: true
                         onWheel: {
-                            // 纵向滚动
+                            // Scroll vertically
                             if(wheel.modifiers == Qt.NoModifier)
                             {
                                 vbar.position += 0.1 * wheel.angleDelta.y / 360.0 * (wheel.inverted? 1: -1);
@@ -730,7 +730,7 @@ Item {
                                     hbar.position = 0;
                                 }
                             }
-                            // 横向滚动
+                            // Scroll horizontally
                             else if(wheel.modifiers == Qt.ShiftModifier)
                             {
                                 hbar.position += 0.1 * wheel.angleDelta.y / 540.0 * (wheel.inverted? 1: -1);
@@ -752,7 +752,7 @@ Item {
                                     vbar.position = 0;
                                 }
                             }
-                            // 横向缩放
+                            // Zoom horizontally
                             else if(wheel.modifiers == Qt.ControlModifier) {
                                 let constant = 1250.0;
                                 let multiplier = (wheel.angleDelta.y/* * (wheel.inverted? 1: -1)*/ + constant) / constant;
@@ -768,7 +768,7 @@ Item {
                                     hbar.position = 1.0 - hbar.width / timeline.width;
                                 }
                             }
-                            // 纵向缩放（有这种东西吗？）
+                            // Zoom vertically
                         }
                     }
                     Rectangle {
@@ -910,20 +910,20 @@ Item {
                                             var pluginType = parseInt(drag.getDataAsString("type"));
                                             if(type == CompleteTrack.InstrumentTrack) {
                                                 if(pluginType == 2) {
-                                                    console.log("将乐器应用到乐器轨");
+                                                    console.log("Apply instrument to an instrument track");
                                                 }
                                                 else if(pluginType == 3) {
-                                                    console.log("将效果器放到乐器轨的末尾");
+                                                    console.log("Append an audio effect to an instrument track");
                                                 }
                                             }
                                             else if(type == CompleteTrack.AudioTrack) {
                                                 if(pluginType == 2) {
-                                                    console.log("将乐器应用到音频轨（不允许此操作）");
+                                                    console.log("Apply instrument to an audio track (not allowed)");
                                                     drag.accepted = false;
                                                     return;
                                                 }
                                                 else if(pluginType == 3) {
-                                                    console.log("将效果器放到音频轨的末尾");
+                                                    console.log("Append an audio effect to an audio track");
                                                 }
                                             }
                                         }
@@ -946,18 +946,18 @@ Item {
                                             var pluginType = drop.getDataAsString("type");
                                             if(type == CompleteTrack.InstrumentTrack) {
                                                 if(pluginType == 2) {
-                                                    console.log("将乐器应用到乐器轨");
+                                                    console.log("Apply an instrument to an instrument track");
                                                 }
                                                 else if(pluginType == 3) {
-                                                    console.log("将效果器放到乐器轨的末尾");
+                                                    console.log("Append and audio effect to an audio track");
                                                 }
                                             }
                                             else if(type == CompleteTrack.AudioTrack) {
                                                 if(pluginType == 2) {
-                                                    console.log("将乐器应用到音频轨（不允许此操作）");
+                                                    console.log("Apply instrument to an audio track (not allowed)");
                                                 }
                                                 else if(pluginType == 3) {
-                                                    console.log("将效果器放到音频轨的末尾");
+                                                    console.log("Append an audio effect to an audio track");
                                                 }
                                             }
                                         }

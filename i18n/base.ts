@@ -59,7 +59,7 @@
     <name>Arrangement</name>
     <message>
         <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="40"/>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="556"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="557"/>
         <source>Select Color</source>
         <translation type="unfinished"></translation>
     </message>
@@ -80,7 +80,7 @@
     </message>
     <message>
         <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="105"/>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="273"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="274"/>
         <source>Instrument</source>
         <translation type="unfinished"></translation>
     </message>
@@ -91,7 +91,7 @@
     </message>
     <message>
         <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="117"/>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="286"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="287"/>
         <source>Audio</source>
         <translation type="unfinished"></translation>
     </message>
@@ -127,53 +127,53 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="248"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="249"/>
         <source>Show Master Track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="262"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="263"/>
         <source>Arrangement Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="268"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="269"/>
         <source>Append an &amp;Instrument Track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="281"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="282"/>
         <source>Append an &amp;Audio Track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="311"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="312"/>
         <source>Master</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="556"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="557"/>
         <source>Track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="824"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="825"/>
         <source>MIDI Track Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="829"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="830"/>
         <source>Add MIDI Clip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="834"/>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="839"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="835"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="840"/>
         <source>Audio Track Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="984"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="985"/>
         <source>Drag &amp; Drop plugins or audio clips here</source>
         <translation type="unfinished"></translation>
     </message>
@@ -359,6 +359,24 @@
     </message>
 </context>
 <context>
+    <name>BigClock</name>
+    <message>
+        <location filename="../qmlproject/imports/Musec/BigClock.qml" line="299"/>
+        <source>Beat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/imports/Musec/BigClock.qml" line="299"/>
+        <source>Decimal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/imports/Musec/BigClock.qml" line="299"/>
+        <source>Sample</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Clip</name>
     <message>
         <location filename="../qmlproject/imports/Musec/Clip.qml" line="16"/>
@@ -369,217 +387,217 @@
 <context>
     <name>Constants</name>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="98"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="99"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="99"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="100"/>
         <source>&amp;OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="100"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="101"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="101"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="102"/>
         <source>&amp;Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="102"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="103"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="103"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="104"/>
         <source>&amp;Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="104"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="105"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="105"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="106"/>
         <source>&amp;No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="106"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="107"/>
         <source>Yes to All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="107"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="108"/>
         <source>Yes to &amp;All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="108"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="109"/>
         <source>No to All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="109"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="110"/>
         <source>N&amp;o to All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="110"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="111"/>
         <source>Undo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="111"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="112"/>
         <source>&amp;Undo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="112"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="113"/>
         <source>Redo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="113"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="114"/>
         <source>&amp;Redo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="114"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="115"/>
         <source>Cut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="115"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="116"/>
         <source>Cu&amp;t</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="116"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="117"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="117"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="118"/>
         <source>&amp;Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="118"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="119"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="119"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="120"/>
         <source>&amp;Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="120"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="121"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="121"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="122"/>
         <source>&amp;Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="122"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="123"/>
         <source>Select All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="123"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="124"/>
         <source>Select &amp;All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="124"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="125"/>
         <source>Duplicate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="125"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="126"/>
         <source>&amp;Duplicate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="126"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="127"/>
         <source>Rename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="127"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="128"/>
         <source>Rena&amp;me</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="184"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="185"/>
         <source>Low latency audio driver</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="189"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="190"/>
         <source>Library for manipulating multimedia files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="194"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="195"/>
         <source>C++ wrapper of FFmpeg</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="199"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="200"/>
         <source>Installer framework</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="204"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="205"/>
         <source>MP3 audio encoder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="209"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="210"/>
         <source>Cross-platform application development toolkit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="214"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="215"/>
         <source>Audio resampler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="219"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="220"/>
         <source>Logger</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="224"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="225"/>
         <source>Library for text formatting, dependency of spdlog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="229"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="230"/>
         <source>Light-weight, efficient database engine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="234"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="235"/>
         <source>Modern C++ wrapper of SQLite</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="239"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="240"/>
         <source>Widely used audio plugin framework</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Constants.qml" line="244"/>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="245"/>
         <source>YAML parser and emitter</source>
         <translation type="unfinished"></translation>
     </message>
@@ -907,7 +925,7 @@ If you add dithering devices on the master track, please uncheck this option.</s
     </message>
     <message>
         <location filename="../qmlproject/MixdownWindow.qml" line="407"/>
-        <source>Use %path as export directory; use %filename as file name without the extension，use %format as extension of the lossless audio file.&lt;br&gt;e.g. the complete path of the exported lossless audio file is &lt;br&gt;%path%filename.%format</source>
+        <source>Use %path as export directory; use %filename as file name without the extension, use %format as extension of the lossless audio file.&lt;br&gt;e.g. the complete path of the exported lossless audio file is &lt;br&gt;%path%filename.%format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -952,282 +970,287 @@ If you add dithering devices on the master track, please uncheck this option.</s
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="209"/>
+        <location filename="../qmlproject/Musec.qml" line="175"/>
+        <source>Musec project file (*.mvr)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/Musec.qml" line="200"/>
         <source>&amp;About Musec...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="220"/>
+        <location filename="../qmlproject/Musec.qml" line="211"/>
         <source>About &amp;Qt...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="232"/>
+        <location filename="../qmlproject/Musec.qml" line="223"/>
         <source>&amp;Keyboard Shortcuts...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="233"/>
+        <location filename="../qmlproject/Musec.qml" line="224"/>
         <source>Check for &amp;Updates...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="236"/>
+        <location filename="../qmlproject/Musec.qml" line="227"/>
         <source>&amp;Preferences...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="247"/>
+        <location filename="../qmlproject/Musec.qml" line="238"/>
         <source>E&amp;xit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="255"/>
+        <location filename="../qmlproject/Musec.qml" line="246"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="258"/>
+        <location filename="../qmlproject/Musec.qml" line="249"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="262"/>
+        <location filename="../qmlproject/Musec.qml" line="253"/>
         <source>&amp;Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="266"/>
+        <location filename="../qmlproject/Musec.qml" line="257"/>
         <source>Recent files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="269"/>
+        <location filename="../qmlproject/Musec.qml" line="260"/>
         <source>Empty list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="274"/>
+        <location filename="../qmlproject/Musec.qml" line="265"/>
         <source>Clear list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="279"/>
+        <location filename="../qmlproject/Musec.qml" line="270"/>
         <source>&amp;Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="292"/>
+        <location filename="../qmlproject/Musec.qml" line="283"/>
         <source>Save &amp;As...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="295"/>
+        <location filename="../qmlproject/Musec.qml" line="286"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="302"/>
+        <location filename="../qmlproject/Musec.qml" line="293"/>
         <source>&amp;Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="305"/>
+        <location filename="../qmlproject/Musec.qml" line="296"/>
         <source>&amp;Bounce...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="317"/>
+        <location filename="../qmlproject/Musec.qml" line="308"/>
         <source>Multiple &amp;Tracks...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="321"/>
+        <location filename="../qmlproject/Musec.qml" line="312"/>
         <source>&amp;Packed Project...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="324"/>
+        <location filename="../qmlproject/Musec.qml" line="315"/>
         <source>&amp;MusicXML...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="328"/>
+        <location filename="../qmlproject/Musec.qml" line="319"/>
         <source>&amp;Score...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="333"/>
+        <location filename="../qmlproject/Musec.qml" line="324"/>
         <source>&amp;Project Properties...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="349"/>
+        <location filename="../qmlproject/Musec.qml" line="340"/>
         <source>&amp;Revert to Last Save...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="354"/>
+        <location filename="../qmlproject/Musec.qml" line="345"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="367"/>
+        <location filename="../qmlproject/Musec.qml" line="358"/>
         <source>&amp;History...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="399"/>
+        <location filename="../qmlproject/Musec.qml" line="390"/>
         <source>Jump to Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="403"/>
+        <location filename="../qmlproject/Musec.qml" line="394"/>
         <source>Jump to End</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="409"/>
+        <location filename="../qmlproject/Musec.qml" line="400"/>
         <source>Loop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="415"/>
+        <location filename="../qmlproject/Musec.qml" line="406"/>
         <source>Set Loop In Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="419"/>
+        <location filename="../qmlproject/Musec.qml" line="410"/>
         <source>Set Loop Out Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="424"/>
+        <location filename="../qmlproject/Musec.qml" line="415"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="428"/>
+        <location filename="../qmlproject/Musec.qml" line="419"/>
         <source>&amp;Fullscreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="441"/>
+        <location filename="../qmlproject/Musec.qml" line="432"/>
         <source>&amp;Assets</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="448"/>
+        <location filename="../qmlproject/Musec.qml" line="439"/>
         <source>&amp;Clip Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="455"/>
+        <location filename="../qmlproject/Musec.qml" line="446"/>
         <source>&amp;Mixer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="463"/>
+        <location filename="../qmlproject/Musec.qml" line="454"/>
         <source>&amp;Follow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="470"/>
+        <location filename="../qmlproject/Musec.qml" line="461"/>
         <source>Show &amp;Key Scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="480"/>
+        <location filename="../qmlproject/Musec.qml" line="471"/>
         <source>&amp;Snap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="487"/>
+        <location filename="../qmlproject/Musec.qml" line="478"/>
         <source>Master Track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="512"/>
+        <location filename="../qmlproject/Musec.qml" line="503"/>
         <source>Arrangement Snap Unit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="536"/>
+        <location filename="../qmlproject/Musec.qml" line="527"/>
         <source>Editor Snap Unit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="560"/>
+        <location filename="../qmlproject/Musec.qml" line="551"/>
         <source>Triplets</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="570"/>
+        <location filename="../qmlproject/Musec.qml" line="561"/>
         <source>&amp;Tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="574"/>
+        <location filename="../qmlproject/Musec.qml" line="565"/>
         <source>Metronome</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="581"/>
+        <location filename="../qmlproject/Musec.qml" line="572"/>
         <source>Map Keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="587"/>
+        <location filename="../qmlproject/Musec.qml" line="578"/>
         <source>Tap Tempo...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="600"/>
+        <location filename="../qmlproject/Musec.qml" line="591"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="603"/>
+        <location filename="../qmlproject/Musec.qml" line="594"/>
         <source>&amp;Manual</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="607"/>
+        <location filename="../qmlproject/Musec.qml" line="598"/>
         <source>&amp;Quick Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="611"/>
+        <location filename="../qmlproject/Musec.qml" line="602"/>
         <source>&amp;Register Product</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="614"/>
+        <location filename="../qmlproject/Musec.qml" line="605"/>
         <source>User Support</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="647"/>
+        <location filename="../qmlproject/Musec.qml" line="635"/>
         <source>Assets</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="691"/>
+        <location filename="../qmlproject/Musec.qml" line="676"/>
         <source>Arrangement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="718"/>
+        <location filename="../qmlproject/Musec.qml" line="702"/>
         <source>Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="735"/>
+        <location filename="../qmlproject/Musec.qml" line="718"/>
         <source>Mixer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="771"/>
+        <location filename="../qmlproject/Musec.qml" line="753"/>
         <source>Ready</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1240,17 +1263,17 @@ If you add dithering devices on the master track, please uncheck this option.</s
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/OptionsWindow.qml" line="56"/>
+        <location filename="../qmlproject/OptionsWindow.qml" line="55"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/OptionsWindow.qml" line="56"/>
+        <location filename="../qmlproject/OptionsWindow.qml" line="55"/>
         <source>Audio Hardware</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/OptionsWindow.qml" line="56"/>
+        <location filename="../qmlproject/OptionsWindow.qml" line="55"/>
         <source>Plugins</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1273,42 +1296,42 @@ If you add dithering devices on the master track, please uncheck this option.</s
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/PluginSettings.qml" line="128"/>
+        <location filename="../qmlproject/PluginSettings.qml" line="127"/>
         <source>&amp;Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/PluginSettings.qml" line="166"/>
+        <location filename="../qmlproject/PluginSettings.qml" line="165"/>
         <source>Scanning...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/PluginSettings.qml" line="166"/>
+        <location filename="../qmlproject/PluginSettings.qml" line="165"/>
         <source>&amp;Scan Plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/PluginSettings.qml" line="181"/>
+        <location filename="../qmlproject/PluginSettings.qml" line="180"/>
         <source>Others</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/PluginSettings.qml" line="194"/>
+        <location filename="../qmlproject/PluginSettings.qml" line="193"/>
         <source>Scan Shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/PluginSettings.qml" line="211"/>
+        <location filename="../qmlproject/PluginSettings.qml" line="210"/>
         <source>Plugin Format Priority</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/PluginSettings.qml" line="219"/>
+        <location filename="../qmlproject/PluginSettings.qml" line="218"/>
         <source>VST2 Prior</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/PluginSettings.qml" line="219"/>
+        <location filename="../qmlproject/PluginSettings.qml" line="218"/>
         <source>VST3 Prior</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1316,102 +1339,102 @@ If you add dithering devices on the master track, please uncheck this option.</s
 <context>
     <name>ProjectPropertiesWindow</name>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="17"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="15"/>
         <source>Project Properties</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="41"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="39"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="54"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="52"/>
         <source>File Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="72"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="70"/>
         <source>Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="95"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="93"/>
         <source>&amp;Copy Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="101"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="99"/>
         <source>Sh&amp;ow in Explorer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="110"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="108"/>
         <source>&amp;Metadata</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="123"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="121"/>
         <source>Title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="133"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="131"/>
         <source>Type Project Title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="151"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="149"/>
         <source>Author</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="161"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="159"/>
         <source>Type author</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="179"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="177"/>
         <source>Company</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="189"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="187"/>
         <source>Type company or organization</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="207"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="205"/>
         <source>Genre</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="221"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="219"/>
         <source>Type or select genre</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="255"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="253"/>
         <source>Remarks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="267"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="265"/>
         <source>Type other info...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="287"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="285"/>
         <source>Mixer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="300"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="298"/>
         <source>Panning comp.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="331"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="329"/>
         <source>&amp;Reset</source>
         <translation type="unfinished"></translation>
     </message>

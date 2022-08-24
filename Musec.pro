@@ -256,7 +256,7 @@ RESOURCES += \
 LIBS += \
     sqlite3.lib \  # SQLite 3
     sndfile.lib \  # libsndfile
-    AdvAPI32.lib \ # 注册表相关 API
+    AdvAPI32.lib \ # Registry API
     Shell32.lib \  # SHGetFolderPathW
     ole32.lib \
     version.lib \  # Musec::Native::getProductVersion
@@ -298,7 +298,7 @@ QMAKE_TARGET_DESCRIPTION = "Musec based on Qt $${QT_MAJOR_VERSION}.$${QT_MINOR_V
     (MSVC 2019 $${QT_MSVC_MAJOR_VERSION}.$${QT_MSVC_MINOR_VERSION}.$${QT_MSVC_PATCH_VERSION} 64-bit)"
 QMAKE_TARGET_COPYRIGHT = "Copyright xris1658 2021-2022. All rights reserved."
 QMAKE_TARGET_PRODUCT = "Musec"
-RC_LANG = 0x0804 # 简体中文（中国）
+RC_LANG = 0x0804 # Simplified Chinese (China)
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH = qmlproject/imports
@@ -314,8 +314,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 #msvc:QMAKE_CXXFLAGS += -execution-charset:utf-8
 #msvc:QMAKE_CXXFLAGS += -source-charset:utf-8
 
-# 修改 Release 时使用的异常处理模式
-# 参考链接：
+# Change the exception handling mode Release uses
+# Reference:
 # http://www.databaseforum.info/2/9/f69800e14add61dd.html
 # https://docs.microsoft.com/en-us/cpp/build/reference/eh-exception-handling-model?view=msvc-160
 QMAKE_CXXFLAGS_RELEASE -= /EHsc

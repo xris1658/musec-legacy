@@ -16,7 +16,7 @@ QtObject {
                                              family: myFont.name,
                                              pixelSize: Qt.application.font.pixelSize
                                          })
-    // 通用颜色
+    // General
     readonly property color backgroundColor:       "#333333"
     readonly property color borderColor:           "#666666"
     readonly property color gridColor:             "#151515"
@@ -28,7 +28,7 @@ QtObject {
     readonly property color contentColor2:         "#AFAFAF"
     readonly property color warningTextColor:      "#FFBB00"
 
-    // 时间线颜色
+    // Timeline
     readonly property color timelineBackgroundColor: "#000000"
     readonly property color timelineForegroundColor: Constants.borderColor
 
@@ -48,37 +48,37 @@ QtObject {
     readonly property color bigClockCpuBackColor:         "#0088FF"
     readonly property color bigClockCpuOverloadBackColor: "#FF0000"
 
-    //顶部大号时钟颜色
+    // Big clock
 //    readonly property color bigClockColor:         "#18181F"
 //    readonly property color bigClockTextColor:     "#00FFFF"
 //    readonly property color bigClockAltTextColor:  "#00A0A0"
 
-    //轨道控制颜色（静音、独奏、反相、接入录制）
+    // Track controls (mute, solo, invert phase, arm recording)
     readonly property color muteIndicatorColor:    "#F39700"
     readonly property color soloIndicatorColor:    "#007EFF"
     readonly property color invertIndicatorColor:  "#336633"
     readonly property color recordIndicatorColor:  "#FF0000"
 
-    // 编排视图
+    // Arrangement
     readonly property color automationColor:       "#EC6941"
 
-    //轨道峰值电平 > 0
+    // Peak level > 0
     readonly property color peakAboveZeroColor:    "#F39700"
 
-    //设备启用指示器的颜色
+    // Indicates that a device is enabled or disabled
     readonly property color deviceEnabledColor:    "#F39700"
     readonly property color deviceDisabledColor:   "#505050"
 
-    //电平
+    // dB meter
     readonly property color belowNeg6dBColor: "#00FF00"
     readonly property color below0dBColor:    "#FFFF00"
     readonly property color above0dBColor:    "#FF0000"
     readonly property color levelBackColor:   "#003300"
 
-    //音符
+    // note
     readonly property color noteBackgroundColor: "#80C269"
 
-    // 菜单项颜色
+    // Menu item
 //    readonly property color menuBackgroundColor:           "#FFFFFF"
 //    readonly property color menuSeparatorColor:            "#666666" // Constants.borderColor
 //    readonly property color menuContentColor:              "#000000"
@@ -268,7 +268,7 @@ QtObject {
 
     function directoryFromUrl(directory: string) {
         let ret = String(directory).slice(8); // file:///
-        // QML JS 引擎不支持 String.prototype.replaceAll
+        // QML JS engine does NOT support `String.prototype.replaceAll`
         while (ret.indexOf('/') != -1) {
             ret = ret.replace('/', '\\');
         }

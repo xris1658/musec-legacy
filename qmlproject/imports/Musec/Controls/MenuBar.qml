@@ -13,7 +13,7 @@ QQC2.MenuBar {
         font.family: Constants.font
         font.pointSize: 10
         height: 20
-        // 菜单项内容
+        // Content of menu item
         contentItem: Text {
             anchors.centerIn: menuBarBackground
             text: menuBarItem.text.indexOf('&')>=0?
@@ -25,7 +25,7 @@ QQC2.MenuBar {
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
         }
-        // MenuBar的背景
+        // Background of `MenuBar`
         background: Rectangle {
             id: menuBarBackground
             implicitWidth: contentItem.contentWidth + 10

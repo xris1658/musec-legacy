@@ -10,7 +10,7 @@ Rectangle {
     height: horLineCount * horLineSpacing
     color: Constants.backgroundColor
     clip: true
-    //画竖线
+    // Vertical lines
     Row {
         spacing: verLineSpacing - 1
         anchors.fill: parent
@@ -24,7 +24,7 @@ Rectangle {
             }
         }
     }
-    //画横线
+    // Horizontal lines
     Column {
         spacing: horLineSpacing - 1
         anchors.fill: parent

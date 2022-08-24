@@ -49,7 +49,7 @@ Item {
         Column {
             id: whiteKeys
             width: parent.width
-            height: keyHeight * 12 * 75 / 7 // 75 是白键的数量
+            height: keyHeight * 12 * 75 / 7 // 75 is the number of white keys
             anchors.left: parent.left
             anchors.bottom: parent.bottom
             anchors.fill: parent
