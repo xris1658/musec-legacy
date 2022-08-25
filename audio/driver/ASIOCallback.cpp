@@ -13,8 +13,6 @@ namespace Musec::Audio::Driver
 {
 bool driverSupportsOutputReady;
 
-void(*functionThatUsesDuration)(std::int64_t) = nullptr;
-
 namespace Impl
 {
 void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)

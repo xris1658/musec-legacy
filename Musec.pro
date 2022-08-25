@@ -55,7 +55,6 @@ DEFINES += _CRT_SECURE_NO_WARNINGS
 PRECOMPILED_HEADER = pch.hpp
 
 HEADERS += \
-    ModuleConnector.hpp \
     audio/arrangement/ClipInTrack.hpp \
     audio/arrangement/TrackSequence.hpp \
     audio/base/AudioBufferView.hpp \
@@ -166,7 +165,6 @@ HEADERS += \
     util/Stopwatch.hpp
 
 SOURCES += \
-    ModuleConnector.cpp \
     audio/base/AudioBufferView.cpp \
     audio/base/Automation.cpp \
     audio/base/TimeSignature.cpp \

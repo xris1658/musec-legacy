@@ -44,8 +44,6 @@ qt5_add_resources(QT_RESOURCES ./Musec.qrc)
 set(PROJECT_PCH pch.hpp)
 
 set(PROJECT_SOURCES
-    ModuleConnector.cpp
-    ModuleConnector.hpp
     audio/arrangement/ClipInTrack.hpp
     audio/arrangement/TrackSequence.hpp
     audio/base/AudioBufferView.cpp
