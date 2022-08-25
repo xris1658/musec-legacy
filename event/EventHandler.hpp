@@ -36,6 +36,7 @@ signals:
     void newPluginWindow();
     void updateUsage(double usage);
     void setLanguageComplete();
+    void setRealtimeTimerInterval(int intervalInMilliseconds);
 public slots:
     void onMainWindowOpened();
     void onOptionsWindowOpened();
@@ -64,6 +65,7 @@ public slots:
     void onSetIcon();
     void onScanShortcutChanged(bool newValue);
     void onLanguageSelectionChanged(const QString& language);
+    void onUpdateCPUMeter();
 private:
     std::vector<QMetaObject::Connection> optionsWindowConnection;
 };

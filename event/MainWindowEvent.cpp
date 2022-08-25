@@ -33,6 +33,13 @@ void MainWindowEvent::openMainWindow()
     auto eventBridge = qvariant_cast<QObject*>(splashWindow->property("eventBridge"));
     Musec::Event::eventBridge = eventBridge;
     Musec::Event::eventHandler = &Musec::Event::EventHandler::instance(eventBridge);
+    // auto refreshRate = Musec::UI::refreshRateInHertz();
+
+    // I originally planned to set the interval of the realtime timer according to the refresh rate,
+    // only to realize that QML works suboptimal on integrated graphics device.
+    // There might be a better solution than this.
+    auto interval = 100;
+    eventHandler->setRealtimeTimerInterval(interval);
     QObject::connect(eventHandler, &Musec::Event::EventHandler::updatePluginList,
                      this, &Musec::Event::MainWindowEvent::updatePluginList);
     QObject::connect(this, &Musec::Event::MainWindowEvent::openMainWindowComplete,

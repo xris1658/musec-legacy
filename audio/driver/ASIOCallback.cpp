@@ -425,10 +425,10 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
 {
     auto timeInNanoSecond = Musec::Util::stopwatchVoid<long, ASIOBool>(
         Impl::onASIOBufferSwitch, std::forward<long>(doubleBufferIndex), std::forward<ASIOBool>(directProcess));
-    if(functionThatUsesDuration)
-    {
-        functionThatUsesDuration(timeInNanoSecond);
-    }
+    double blockSize = Musec::Controller::AudioEngineController::getCurrentBlockSize();
+    double sampleRate = Musec::Controller::AudioEngineController::getCurrentSampleRate();
+    auto blockTimeInNanosecond = blockSize * 1e9 / sampleRate;
+    Musec::Controller::AudioEngineController::cpuUsage = timeInNanoSecond / blockTimeInNanosecond;
 }
 
 ASIOCallbacks& getCallbacks()

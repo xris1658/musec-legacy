@@ -16,6 +16,8 @@ namespace Controller
 {
 namespace AudioEngineController
 {
+extern double cpuUsage;
+
 Musec::Audio::Engine::Project& AppProject();
 Musec::Model::TrackListModel& AppTrackListModel();
 void initializeFacility();

@@ -44,6 +44,8 @@ QtObject {
 
     signal languageSelectionChanged(language: string)
 
+    signal updateCPUMeter()
+
     // Receive from C++ backend
     signal setBootText(newBootText: string)
     onSetBootText: {
@@ -104,5 +106,9 @@ QtObject {
     onSetLanguageComplete: {
         messageDialog(Strings.optionSaveRebootPromptText,
             Strings.applicationName, MDlg.MessageDialog.Icon.Info);
+    }
+    signal setRealtimeTimerInterval(intervalInMilliseconds: int)
+    onSetRealtimeTimerInterval: {
+        Objects.mainWindow.setRealtimeTimerInterval(intervalInMilliseconds);
     }
 }

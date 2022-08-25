@@ -7,6 +7,8 @@
 
 namespace Musec::Controller::AudioEngineController
 {
+double cpuUsage = 0.0;
+
 Musec::Audio::Engine::Project& AppProject()
 {
     static Musec::Audio::Engine::Project ret;

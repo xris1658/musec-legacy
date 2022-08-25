@@ -41,6 +41,17 @@ ApplicationWindow {
 
     property alias arrangementPosition: arrangement.position
 
+    onEngineRunningChanged: {
+        if(engineRunning) {
+            console.log("engineRunning == true");
+            realtimeUpdateTimer.start();
+        }
+        else {
+            console.log("engineRunning == false");
+            realtimeUpdateTimer.stop();
+        }
+    }
+
     signal setStatusText(newText: string)
     onSetStatusText: {
         status.text = newText;
@@ -108,6 +119,10 @@ ApplicationWindow {
         }
     }
 
+    function setRealtimeTimerInterval(intervalInMilliseconds: int) {
+        realtimeUpdateTimer.interval = intervalInMilliseconds;
+    }
+
     Component.onCompleted: {
         Objects.mainWindow = mainWindow;
     }
@@ -167,6 +182,16 @@ ApplicationWindow {
                 toggleFullscreen();
             }
             quitAction.trigger();
+        }
+    }
+
+    Timer {
+        id: realtimeUpdateTimer
+        onTriggered: {
+            if(mainWindow.engineRunning) {
+                eventBridge.updateCPUMeter();
+            }
+            start();
         }
     }
 

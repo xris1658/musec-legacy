@@ -42,6 +42,7 @@ void showASIOErrorMessageDialog(Musec::Audio::Driver::ASIODriver& driver, ASIOEr
     }
 }
 }
+
 void loadASIODriver()
 {
     using namespace Audio::Driver;
@@ -189,8 +190,8 @@ void unloadASIODriver()
 {
     using namespace UI;
     using namespace Audio::Driver;
-    AppASIODriver() = ASIODriver();
     mainWindow->setProperty("engineRunning", QVariant::fromValue<bool>(false));
+    AppASIODriver() = ASIODriver();
 }
 
 void updateCurrentASIODriverInfo()

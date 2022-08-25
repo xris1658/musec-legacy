@@ -63,6 +63,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      this,        SLOT(onNewPluginWindowReady()));
     QObject::connect(eventBridge, SIGNAL(setIcon()),
                      this,        SLOT(onSetIcon()));
+    QObject::connect(eventBridge, SIGNAL(updateCPUMeter()),
+                     this,        SLOT(onUpdateCPUMeter()));
     // (this) C++ -> C++ (other)
     QObject::connect(this,             &EventHandler::updatePluginList,
                      mainWindowEvents, &MainWindowEvent::updatePluginList);
@@ -102,8 +104,10 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      eventBridge,   SIGNAL(updateUsage(double)));
     QObject::connect(this,          SIGNAL(setLanguageComplete()),
                      eventBridge,   SIGNAL(setLanguageComplete()));
+    QObject::connect(this,          SIGNAL(setRealtimeTimerInterval(int)),
+                     eventBridge,   SIGNAL(setRealtimeTimerInterval(int)));
 
-    optionsWindowConnection.reserve(5);
+    optionsWindowConnection.reserve(5); // number of connections added in onOptionsWindowOpened()
 }
 
 EventHandler::~EventHandler()
@@ -419,5 +423,11 @@ void EventHandler::onLanguageSelectionChanged(const QString& language)
 {
     Musec::Controller::GeneralSettingsController::setLanguage(language);
     setLanguageComplete();
+}
+
+void EventHandler::onUpdateCPUMeter()
+{
+    auto cpuUsage = Musec::Controller::AudioEngineController::cpuUsage;
+    updateUsage(cpuUsage);
 }
 }
