@@ -246,7 +246,8 @@ SOURCES += \
     ui/Render.cpp \
     ui/UI.cpp \
     util/Endian.cpp \
-    util/Literal.cpp
+    util/Literal.cpp \
+    $$VST3SDK_DIR/public.sdk/source/common/memorystream.cpp
 
 RESOURCES += \
     Musec.qrc
