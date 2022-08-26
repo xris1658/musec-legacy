@@ -250,7 +250,10 @@ set(VST2PLUGINTEST_SOURCES
 set(VST3PLUGINTEST_SOURCES
     test/VST3PluginTestWithQt/main.cpp)
 
-add_executable(Musec main.cpp ${PROJECT_SOURCES} ${RESOURCE_FILE} ${QT_RESOURCES})
+set(VST3_EXTRA_SOURCES
+    ${VST3SDK_SOURCE_DIR}/public.sdk/source/common/memorystream.cpp)
+
+add_executable(Musec main.cpp ${PROJECT_SOURCES} ${RESOURCE_FILE} ${QT_RESOURCES} ${VST3_EXTRA_SOURCES})
 
 target_precompile_headers(Musec PRIVATE ${PROJECT_PCH})
 
@@ -258,7 +261,7 @@ add_executable(AutomationTest ${PROJECT_SOURCES} ${QT_RESOURCES} ${AUTOMATIONTES
 
 add_executable(VST2PluginTestWithQt ${PROJECT_SOURCES} ${TEST_COMMON_SOURCES} ${VST2PLUGINTEST_SOURCES})
 
-add_executable(VST3PluginTestWithQt ${PROJECT_SOURCES} ${TEST_COMMON_SOURCES} ${VST3PLUGINTEST_SOURCES})
+add_executable(VST3PluginTestWithQt ${PROJECT_SOURCES} ${TEST_COMMON_SOURCES} ${VST3PLUGINTEST_SOURCES} ${VST3_EXTRA_SOURCES})
 
 target_compile_definitions(Musec
                            PRIVATE
