@@ -7,8 +7,11 @@
 #include <pluginterfaces/gui/iplugview.h>
 #include <pluginterfaces/vst/vstspeaker.h>
 
+// For some reason, memorystream.cpp is not included in sdk_common library, so I have to solve this
+// by adding the source file as an external source (by adding this to CMakeLists.txt).
+// Before that I `#include`d that file, so the content of the source is recompiled every time
+// VST3Plugin.cpp is recompiled, even if memorystream.cpp is not changed. It's a waste of time.
 #include <public.sdk/source/common/memorystream.h>
-#include <public.sdk/source/common/memorystream.cpp>
 
 #include <errhandlingapi.h>
 
@@ -529,7 +532,6 @@ bool VST3Plugin::uninitializeEditor()
     paramCount_ = 0;
     if(componentPoint_ && editControllerPoint_)
     {
-        using Steinberg::Vst::ConnectionProxy;
         componentPoint_->disconnect(editControllerPoint_);
         editControllerPoint_->disconnect(componentPoint_);
         componentPoint_->release();
