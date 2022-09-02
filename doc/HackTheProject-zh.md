@@ -6,6 +6,15 @@
 
 仓库内有 `CMakeLists.txt` 以及 `Musec.pro`，可以用 CMake 和 qmake 构建项目。
 
+## 为什么你不直接提供二进制程序呢？
+因为我做不到。目前程序仅支持 ASIO，它的许可协议与一些开源许可（如 GPLv3）不兼容。这意味着
+- 如果我不签许可协议（方式是在 ASIO SDK 中随附的文档中签字，然后将文档发给 Steinberg），我只能分发不带 ASIO 支持，因此实际上没有用的程序。
+- 我似乎可以将使用 ASIO 的代码开源，让用户自行构建程序（据我所知，Audacity 运用的就是这种方式）。然而，用户不能将带有 ASIO 的程序分发，除非签了许可协议。
+
+目前我的计划是添加其他音频 API 的支持，如 WASAPI 独占模式，这样我至少可以分发不带 ASIO 支持的程序。
+
+我没完全懂这些法律相关的内容，因此**请别把我的看法当作法律建议！**
+
 ## 安装依赖项、配置环境
 生成环境：Windows 10 64-bit 
 - 下载并安装 Visual Studio 2019。  
@@ -48,11 +57,11 @@
 以 CLion 为例：
 1. 用 CLion 打开项目目录，或者项目内的 `CMakeLists.txt`。
 2. CLion 会提示用户配置 CMake 项目。（以后可以通过 **文件 | 设置 | 构建、执行、部署 | CMake** 进行配置。）将所有使用 Visual Studio 工具链的配置的生成器设为 **NMake Makefiles JOM**，并在 CMake 选项处填写以下内容
-```
--DCMAKE_TOOLCHAIN_FILE=<vcpkg 目录>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK 目录> -DASIOSDK_PATH=<ASIO SDK 目录> -DCLAP_SOURCE_DIR=<CLAP SDK 目录> -DCLAP_HELPERS_DIR=<CLAP Helpers 目录> -DCMAKE_MAKE_PROGRAM=<Qt 目录>/Tools/QtCreator/bin/jom/jom.exe
-```
-- 上方的命令使用了 Qt 的 JOM，一个“目标是作为支持并行构建的 NMake”的生成工具。当然你想用什么生成系统就用哪个。
-1. 构建目标 `Musec`。
+    ```
+    -DCMAKE_TOOLCHAIN_FILE=<vcpkg 目录>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK 目录> -DASIOSDK_PATH=<ASIO SDK 目录> -DCLAP_SOURCE_DIR=<CLAP SDK 目录> -DCLAP_HELPERS_DIR=<CLAP Helpers 目录> -DCMAKE_MAKE_PROGRAM=<Qt 目录>/Tools/QtCreator/bin/jom/jom.exe
+    ```
+    - 上方的命令使用了 Qt 的 JOM，一个“目标是作为支持并行构建的 NMake”的生成工具。当然你想用什么生成系统就用哪个。
+3. 构建目标 `Musec`。
 
 ### 使用命令行
 1. 打开配置有 Visual Studio 环境的命令窗口。可以使用以下方式进行这一操作：
@@ -61,7 +70,7 @@
      "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
      ```
      读者需要将 Visual Studio 的路径换成安装时的路径。
-   - 打开 **Visual Studio 2019** -> **VC** -> **x64 Native Tools Command Prompt for VS 2019**。
+   - 从所有程序中打开 **Visual Studio 2019** -> **VC** -> **x64 Native Tools Command Prompt for VS 2019**。
 2. 使用 CMake 配置并构建项目。使用上一步打开的命令窗口，执行以下命令：
     ```shell
     <cmake.exe 路径> -G "NMake Makefiles" --toolchain <vcpkg 目录>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK 目录> -DASIOSDK_PATH=<ASIO SDK 目录> -DCLAP_SOURCE_DIR=<CLAP SDK 目录> -DCMAKE_MAKE_PROGRAM=<Qt 路径>/Tools/QtCreator/bin/jom/jom.exe -S <Musec 项目目录> -B <项目的生成位置>
@@ -74,7 +83,7 @@
     ```shell
     <cmake.exe 路径> --build <生成目录> --target Musec -j <并行任务数量>
     ```
-    如果程序最后显示 `[100%] Built target Musec`，恭喜你！程序构建成功了。
+如果程序最后显示 `[100%] Built target Musec`，恭喜你！程序构建成功了。
 
 ## 用 <u>qmake</u> 构建项目
 如果用 qmake，构建过程相对棘手一些，因为很多步骤需要手动进行（如构建依赖项、准备库文件等）。
@@ -101,10 +110,9 @@
   - 勾选 **Desktop Qt 5.15.2 MSVC2019 64-bit**，然后点击 **Configure Project** 按钮。
   - 点击 **切换到编辑模式**（左侧边栏的文本图标）或按 Ctrl+2，然后打开 `Musec.pro`。将使用 Variables 注释包围的变量代为相应依赖的路径。
   - 构建项目。
-  - 自行将一些 DLL 文件复制到生成目录。
+  - 自行将一些 DLL 文件复制到生成目录。选择 **切换到项目模式**，用 **编辑构建配置** 后的下拉列表选择相应的构建模式，查看 **Build directory** 中的内容获知构建目录。
     - 对于 Debug 版：
       - DLL 文件的路径为 `<Path to vcpkg>\installed\x64-windows\debug\bin`
-      - 目标路径为 `<Path to Musec>\debug`
       - 以下是要复制的 DLL 文件：
       ```
       avcodec-58.dll
@@ -127,7 +135,6 @@
       ```
     - 对于 Release 版：
       - DLL 文件的路径为 `<Path to vcpkg>\installed\x64-windows\bin`
-      - 目标路径为`<Path to Musec>\release`
       - 以下是要复制的 DLL文件：
       ```
       avcodec-58.dll
