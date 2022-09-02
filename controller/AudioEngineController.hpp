@@ -16,8 +16,6 @@ namespace Controller
 {
 namespace AudioEngineController
 {
-extern double cpuUsage;
-
 Musec::Audio::Engine::Project& AppProject();
 Musec::Model::TrackListModel& AppTrackListModel();
 void initializeFacility();
@@ -31,6 +29,7 @@ long getOutputLatency();
 double getCurrentTempo();
 void fillProcessContext(Steinberg::Vst::ProcessContext& processContext);
 void fillEventTransport(clap_event_transport& eventTransport);
+double getCpuUsage();
 
 template<typename SampleType>
 Musec::Audio::Base::AudioBufferView<SampleType> dummyBufferView()

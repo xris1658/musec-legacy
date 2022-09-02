@@ -16,6 +16,8 @@ namespace Audio
 {
 namespace Driver
 {
+extern double cpuUsage;
+
 constexpr int maxInputChannelCount = 16;
 constexpr int maxOutputChannelCount = 16;
 constexpr int channelCount = maxInputChannelCount + maxOutputChannelCount;

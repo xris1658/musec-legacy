@@ -389,6 +389,8 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
 }
 }
 
+double cpuUsage = 0.0;
+
 ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
                                      long doubleBufferIndex,
                                      ASIOBool directProcess)
@@ -422,11 +424,14 @@ long onASIOMessage(long selector,
 void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
 {
     auto timeInNanoSecond = Musec::Util::stopwatchVoid<long, ASIOBool>(
-        Impl::onASIOBufferSwitch, std::forward<long>(doubleBufferIndex), std::forward<ASIOBool>(directProcess));
-    double blockSize = Musec::Controller::AudioEngineController::getCurrentBlockSize();
-    double sampleRate = Musec::Controller::AudioEngineController::getCurrentSampleRate();
+        Impl::onASIOBufferSwitch,
+        std::forward<long>(doubleBufferIndex), std::forward<ASIOBool>(directProcess));
+    // Do I have to retrieve these values every time?
+    auto& theDriver = Musec::Audio::Driver::AppASIODriver();
+    long blockSize; theDriver->getBufferSize(nullptr, nullptr, &blockSize, nullptr);
+    double sampleRate; theDriver->getSampleRate(&sampleRate);
     auto blockTimeInNanosecond = blockSize * 1e9 / sampleRate;
-    Musec::Controller::AudioEngineController::cpuUsage = timeInNanoSecond / blockTimeInNanosecond;
+    cpuUsage = timeInNanoSecond / blockTimeInNanosecond;
 }
 
 ASIOCallbacks& getCallbacks()

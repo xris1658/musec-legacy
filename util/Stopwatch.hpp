@@ -21,7 +21,7 @@ std::tuple<ReturnType, std::int64_t> stopwatch(Function&& function, Args&&... ar
 }
 
 template<typename... Args>
-std::int64_t stopwatchVoid(Function < void, Args...>&& function, Args&&... args)
+std::int64_t stopwatchVoid(Function<void, Args...>&& function, Args&&... args)
 {
     auto start = Musec::Native::currentTimeInNanosecond();
     std::forward<Function<void, Args...>>(function)(std::forward<Args>(args)...);

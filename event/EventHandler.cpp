@@ -427,7 +427,7 @@ void EventHandler::onLanguageSelectionChanged(const QString& language)
 
 void EventHandler::onUpdateCPUMeter()
 {
-    auto cpuUsage = Musec::Controller::AudioEngineController::cpuUsage;
+    auto cpuUsage = Musec::Controller::AudioEngineController::getCpuUsage();
     updateUsage(cpuUsage);
 }
 }

@@ -16,11 +16,11 @@
 #include <QCoreApplication>
 #include <QFontDatabase>
 #include <QQmlApplicationEngine>
+#include <QUrl>
+#include <QtGlobal>
 #if QT_VERSION_MAJOR < 6
 #include <QTextCodec>
 #endif
-#include <QUrl>
-#include <QtGlobal>
 
 int main(int argc, char* argv[]) try
 {
@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) try
                      &loadQmlComponentListener, &LoadQmlComponentListener::onObjectCreated);
     theEngine.load(QUrl("qrc:/qmlproject/SplashScreen.qml"));
     splashWindow = qobject_cast<QQuickWindow*>(theEngine.rootObjects()[0]);
-    strings = splashWindow->property("strings").value<QObject*>(); assert(strings);
+    strings = splashWindow->property("strings").value<QObject*>();
     SplashScreen splashScreenEventHandler;
     MainWindowEvent mainWindowEvent(splashScreenEventHandler);
     mainWindowEvents = &mainWindowEvent;

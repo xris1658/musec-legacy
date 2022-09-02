@@ -7,8 +7,6 @@
 
 namespace Musec::Controller::AudioEngineController
 {
-double cpuUsage = 0.0;
-
 Musec::Audio::Engine::Project& AppProject()
 {
     static Musec::Audio::Engine::Project ret;
@@ -120,5 +118,10 @@ void fillEventTransport(clap_event_transport& eventTransport)
     eventTransport.flags =
         CLAP_TRANSPORT_HAS_TEMPO;
     eventTransport.tempo = getCurrentTempo();
+}
+
+double getCpuUsage()
+{
+    return Musec::Audio::Driver::cpuUsage;
 }
 }

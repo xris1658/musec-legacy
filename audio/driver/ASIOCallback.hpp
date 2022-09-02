@@ -11,6 +11,8 @@ namespace Audio
 {
 namespace Driver
 {
+extern double cpuUsage;
+
 extern bool driverSupportsOutputReady;
 
 void onASIOBufferSwitch(long doubleBufferIndex,
