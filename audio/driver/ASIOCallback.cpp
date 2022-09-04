@@ -428,8 +428,8 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
         std::forward<long>(doubleBufferIndex), std::forward<ASIOBool>(directProcess));
     // Do I have to retrieve these values every time?
     auto& theDriver = Musec::Audio::Driver::AppASIODriver();
-    long blockSize; theDriver->getBufferSize(nullptr, nullptr, &blockSize, nullptr);
-    double sampleRate; theDriver->getSampleRate(&sampleRate);
+    auto blockSize = getBufferSize().preferredBufferSize;
+    auto sampleRate = getSampleRate();
     auto blockTimeInNanosecond = blockSize * 1e9 / sampleRate;
     cpuUsage = timeInNanoSecond / blockTimeInNanosecond;
 }
