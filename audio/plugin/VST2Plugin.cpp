@@ -317,9 +317,6 @@ VST2Plugin::VST2Plugin(const QString& path, bool scanPlugin, VstInt32 shellPlugi
     {
         effect_ = VST2PluginShellPluginId::instance().getShellPlugin(shellPluginId, true, pluginEntryProc);
     }
-    effect_->dispatcher(effect_, effOpen, 0, 0, nullptr, 0);
-    inputsRaw_ = std::vector<SampleType*>(VST2Plugin::inputCount(), nullptr);
-    outputsRaw_ = std::vector<SampleType*>(VST2Plugin::outputCount(), nullptr);
 }
 
 VST2Plugin::~VST2Plugin()
@@ -333,7 +330,6 @@ VST2Plugin::~VST2Plugin()
         VST2Plugin::stopProcessing();
         VST2Plugin::deactivate();
         VST2Plugin::uninitialize();
-        effect_->dispatcher(effect_, effClose, 0, 0, nullptr, 0);
     }
 }
 
@@ -354,6 +350,39 @@ std::uint8_t VST2Plugin::outputCount() const
 
 bool VST2Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
 {
+    if(effect_->version >= 2300)
+    {
+        VstSpeakerArrangement inputSpeakerArrangement {};
+        VstSpeakerArrangement outputSpeakerArrangement {};
+        effect_->dispatcher(effect_, AEffectXOpcodes::effGetSpeakerArrangement, 0, 0,
+            &outputSpeakerArrangement, static_cast<float>(ToVstPtr(&inputSpeakerArrangement)));
+        if(outputSpeakerArrangement.type != VstSpeakerArrangementType::kSpeakerArrStereo)
+        {
+            outputSpeakerArrangement.type = VstSpeakerArrangementType::kSpeakerArrStereo;
+            outputSpeakerArrangement.numChannels = 2;
+            outputSpeakerArrangement.speakers[0].type = VstSpeakerType::kSpeakerL;
+            outputSpeakerArrangement.speakers[1].type = VstSpeakerType::kSpeakerR;
+            if(!(effect_->flags & VstAEffectFlags::effFlagsIsSynth))
+            {
+                if(inputSpeakerArrangement.type != VstSpeakerArrangementType::kSpeakerArrStereo)
+                {
+                    inputSpeakerArrangement.type = VstSpeakerArrangementType::kSpeakerArrStereo;
+                    inputSpeakerArrangement.numChannels = 2;
+                    inputSpeakerArrangement.speakers[0].type = VstSpeakerType::kSpeakerL;
+                    inputSpeakerArrangement.speakers[1].type = VstSpeakerType::kSpeakerR;
+                }
+            }
+            auto setSpeakerArrangementResult = effect_->dispatcher(effect_, AEffectXOpcodes::effSetSpeakerArrangement, 0, 0,
+                &outputSpeakerArrangement, static_cast<float>(ToVstPtr(&inputSpeakerArrangement)));
+            if(!setSpeakerArrangementResult)
+            {
+                return false;
+            }
+        }
+    }
+    effect_->dispatcher(effect_, effOpen, 0, 0, nullptr, 0);
+    inputsRaw_ = std::vector<SampleType*>(VST2Plugin::inputCount(), nullptr);
+    outputsRaw_ = std::vector<SampleType*>(VST2Plugin::outputCount(), nullptr);
     effect_->dispatcher(effect_, AEffectOpcodes::effSetSampleRate, 0, 0, nullptr, sampleRate);
     effect_->dispatcher(effect_, AEffectOpcodes::effSetBlockSize, 0, maxSampleCount, nullptr, 0);
     initializeEditor();
@@ -374,6 +403,7 @@ bool VST2Plugin::uninitialize()
     uninitializeEditor();
     stopProcessing();
     deactivate();
+    effect_->dispatcher(effect_, effClose, 0, 0, nullptr, 0);
     return true;
 }
 
