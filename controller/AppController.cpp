@@ -231,7 +231,10 @@ void refreshPluginList(bool rescan)
             using namespace Musec::Base;
             auto& pluginType =
                 std::get<PluginListModel::RoleNames::TypeRole - Qt::UserRole>(item);
-            typePluginList[pluginType - 1].append(item);
+            if(pluginType != PluginType::TypeUnknown)
+            {
+                typePluginList[pluginType - 1].append(item);
+            }
         }
         for(int i = 1; i <= 3; ++i)
         {
