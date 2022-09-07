@@ -446,16 +446,12 @@ bool VST3Plugin::initializeEditController()
         auto createEditControllerInstanceResult = factory_->createInstance(
             controllerId, Steinberg::Vst::IEditController::iid,
             reinterpret_cast<void**>(&editController_));
-        if(createEditControllerInstanceResult != Steinberg::kResultOk)
-        {
-            return false;
-        }
-        else
+        if(createEditControllerInstanceResult == Steinberg::kResultOk)
         {
             editControllerStatus_ = VST3EditControllerStatus::Created;
         }
     }
-    else
+    if(!editController_)
     {
         auto queryEditorFromComponentResult = component_->queryInterface(Steinberg::Vst::IEditController::iid,
             reinterpret_cast<void**>(&editController_));
@@ -463,6 +459,10 @@ bool VST3Plugin::initializeEditController()
         {
             editControllerStatus_ = VST3EditControllerStatus::Created;
             effectAndEditorUnified_ = EffectAndEditorUnified::Unified;
+        }
+        else
+        {
+            return false;
         }
     }
     if (editController_)
