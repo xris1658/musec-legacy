@@ -156,8 +156,11 @@ bool CLAPPlugin::initialize(double sampleRate, std::int32_t maxSampleCount)
         if(plugin_->init(plugin_))
         {
             pluginStatus_ = CLAPPluginStatus::Initialized;
-            initializeEditor();
-            return true;
+            if(initializeParameters())
+            {
+                initializeUI();
+                return true;
+            }
         }
     }
     return false;
@@ -165,10 +168,11 @@ bool CLAPPlugin::initialize(double sampleRate, std::int32_t maxSampleCount)
 
 bool CLAPPlugin::uninitialize()
 {
-    if(window_)
+    if(gui_)
     {
-        uninitializeEditor();
+        uninitializeUI();
     }
+    uninitializeParameters();
     if(plugin_)
     {
         plugin_->destroy(plugin_);
@@ -180,10 +184,9 @@ bool CLAPPlugin::uninitialize()
     return true;
 }
 
-bool CLAPPlugin::initializeEditor()
+bool CLAPPlugin::initializeParameters()
 {
     params_ = reinterpret_cast<const clap_plugin_params*>(plugin_->get_extension(plugin_, CLAP_EXT_PARAMS));
-    gui_ = reinterpret_cast<const clap_plugin_gui*>(plugin_->get_extension(plugin_, CLAP_EXT_GUI));
     if(params_)
     {
         auto paramCount = parameterCount();
@@ -197,10 +200,22 @@ bool CLAPPlugin::initializeEditor()
     return params_;
 }
 
-bool CLAPPlugin::uninitializeEditor()
+bool CLAPPlugin::uninitializeParameters()
 {
     detachWithWindow();
     paramBlock_ = {0};
+    return true;
+}
+
+bool CLAPPlugin::initializeUI()
+{
+    gui_ = reinterpret_cast<const clap_plugin_gui*>(plugin_->get_extension(plugin_, CLAP_EXT_GUI));
+    return gui_;
+}
+
+bool CLAPPlugin::uninitializeUI()
+{
+    detachWithWindow();
     return true;
 }
 

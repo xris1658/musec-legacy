@@ -79,8 +79,10 @@ public:
     int parameterCount() override;
     IParameter& parameter(int index) override;
 private:
-    bool initializeEditor();
-    bool uninitializeEditor();
+    bool initializeParameters();
+    bool uninitializeParameters();
+    bool initializeUI();
+    bool uninitializeUI();
     void onWindowSizeChanged();
     void initHost();
 private:
