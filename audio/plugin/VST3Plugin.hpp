@@ -20,6 +20,7 @@
 #include <public.sdk/source/vst/hosting/connectionproxy.h>
 #include <public.sdk/source/vst/hosting/parameterchanges.h>
 
+#include <QMetaObject>
 #include <QString>
 #include <QWindow>
 
@@ -128,8 +129,10 @@ public:
     bool activated() override;
     bool processing() override;
 private:
-    bool initializeEditor();
-    bool uninitializeEditor();
+    bool initializeEditController();
+    bool uninitializeEditController();
+    void initializeWindowSizeConnections();
+    void uninitializeWindowSizeConnections();
     void onWindowSizeChanged();
 private:
     Steinberg::PClassInfo classInfo_;
@@ -173,6 +176,7 @@ private:
     QWindow* window_ = nullptr;
     Musec::Audio::Plugin::VST3PluginComponentHandler componentHandler_;
     Musec::Audio::Plugin::VST3PluginPlugFrame plugFrame_;
+    std::array<QMetaObject::Connection, 2> windowSizeConnections_;
 };
 }
 }

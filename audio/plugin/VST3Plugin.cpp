@@ -65,7 +65,7 @@ VST3Plugin::~VST3Plugin()
 {
     if(editControllerStatus_ == VST3EditControllerStatus::Connected)
     {
-        uninitializeEditor();
+        uninitializeEditController();
     }
     if(audioProcessorStatus_ == VST3AudioProcessorStatus::Processing)
     {
@@ -243,7 +243,7 @@ bool VST3Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
     {
         return false;
     }
-    initializeEditor();
+    initializeEditController();
     audioProcessor_->queryInterface(Steinberg::Vst::IProcessContextRequirements::iid,
         reinterpret_cast<void**>(&processContextRequirements_));
     audioProcessor_->queryInterface(Steinberg::Vst::IAudioPresentationLatency::iid,
@@ -424,7 +424,7 @@ bool VST3Plugin::uninitialize()
 {
     if(editControllerStatus_ == VST3EditControllerStatus::Initialized)
     {
-        uninitializeEditor();
+        uninitializeEditController();
     }
     audioProcessorStatus_ = VST3AudioProcessorStatus::Initialized;
     audioProcessor_->release();
@@ -438,7 +438,7 @@ bool VST3Plugin::uninitialize()
     return ret;
 }
 
-bool VST3Plugin::initializeEditor()
+bool VST3Plugin::initializeEditController()
 {
     Steinberg::TUID controllerId;
     if (component_->getControllerClassId(controllerId) == Steinberg::kResultOk)
@@ -484,7 +484,10 @@ bool VST3Plugin::initializeEditor()
             auto initEditControllerResult = editController_->initialize(&Musec::Audio::Host::MusecVST3Host::instance());
             if(initEditControllerResult != Steinberg::kResultOk)
             {
-                throw std::runtime_error("");
+                // Initialization of edit controller failed. This means that
+                // - The UI cannot be initialized (not a big deal)
+                // - Information of parameters cannot be retrieved (that is not right!)
+                return false;
             }
         }
         editControllerStatus_ = VST3EditControllerStatus::Initialized;
@@ -518,14 +521,13 @@ bool VST3Plugin::initializeEditor()
         view_ = editController_->createView(Steinberg::Vst::ViewType::kEditor);
         if (view_)
         {
-            view_->addRef();
             view_->setFrame(&plugFrame_);
         }
     }
     return true;
 }
 
-bool VST3Plugin::uninitializeEditor()
+bool VST3Plugin::uninitializeEditController()
 {
     detachWithWindow();
     paramBlock_ = Musec::Base::FixedSizeMemoryBlock();
@@ -551,6 +553,20 @@ bool VST3Plugin::uninitializeEditor()
     }
     editControllerStatus_ = VST3EditControllerStatus::Created;
     return true;
+}
+
+void VST3Plugin::initializeWindowSizeConnections()
+{
+    windowSizeConnections_[0] = QObject::connect(window_, &QWindow::widthChanged,
+        [this](int) { onWindowSizeChanged(); });
+    windowSizeConnections_[1] = QObject::connect(window_, &QWindow::heightChanged,
+        [this](int) { onWindowSizeChanged(); });
+}
+
+void VST3Plugin::uninitializeWindowSizeConnections()
+{
+    QObject::disconnect(windowSizeConnections_[0]);
+    QObject::disconnect(windowSizeConnections_[1]);
 }
 
 bool VST3Plugin::activate()
@@ -628,19 +644,16 @@ bool VST3Plugin::attachToWindow(QWindow* window)
 {
     if(view_)
     {
-        window_ = window;
         Steinberg::ViewRect viewRect;
-        view_->getSize(&viewRect);
-        window_->setPosition(viewRect.left, viewRect.top);
-        window_->setWidth(viewRect.getWidth());
-        window_->setHeight(viewRect.getHeight());
+        // Some plugins cannot return a correct size here
+        window_ = window;
         window_->setTitle(classInfo_.name);
         view_->attached(reinterpret_cast<HWND>(window_->winId()), Steinberg::kPlatformTypeHWND);
         Musec::Controller::AudioEngineController::AppProject().addPluginWindowMapping(audioProcessor_, window_);
-        QObject::connect(window_, &QWindow::widthChanged,
-            [this](int) { onWindowSizeChanged(); });
-        QObject::connect(window_, &QWindow::heightChanged,
-            [this](int) { onWindowSizeChanged(); });
+        initializeWindowSizeConnections();
+        view_->getSize(&viewRect);
+        window_->setWidth(viewRect.getWidth());
+        window_->setHeight(viewRect.getHeight());
         return true;
     }
     return false;
@@ -654,6 +667,7 @@ bool VST3Plugin::detachWithWindow()
     }
     if(view_)
     {
+        uninitializeWindowSizeConnections();
         view_->removed();
         Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(audioProcessor_);
         window_ = nullptr;
@@ -681,23 +695,47 @@ void VST3Plugin::onWindowSizeChanged()
 {
     if(view_)
     {
-        auto x = window_->x();
-        auto y = window_->y();
+        uninitializeWindowSizeConnections();
         auto width = window_->width();
         auto height = window_->height();
-        auto newRect = Steinberg::ViewRect(x, y, x + width, y + height);
-        auto oldRect = Steinberg::ViewRect(); view_->getSize(&oldRect);
-        if(view_->checkSizeConstraint(&newRect) != Steinberg::kNotImplemented)
+        // Set `left` and `top` to zero here, so that `right` and `bottom` is width and height
+        // respectively.
+        // I don't set `left` and `top` to the position of the window, because
+        // some plugin vendors will treat `right` and `bottom` as width and height (e.g.
+        // plugins made by DISTRHO Plugin Framework (https://github.com/DISTRHO/DPF)) and completely
+        // ignores `left` and `right` in `IPlugView::checkSizeConstraint`.
+        auto newRect = Steinberg::ViewRect(0, 0, width, height);
+        auto oldRect = Steinberg::ViewRect();
+        view_->getSize(&oldRect);
+        assert(newRect.top <= newRect.bottom && newRect.left <= newRect.right);
+        // QUES: If the plugin supports checking size constraint, and the function tweaked the rectangle
+        // passed in, what should the function return? `Steinberg::kResultFalse`?
+        auto checkSizeConstraintResult = view_->checkSizeConstraint(&newRect);
+        // Some plugins can make this nonsense.
+        if (newRect.top > newRect.bottom || newRect.left > newRect.right)
         {
-            window_->setX(newRect.left);
-            window_->setY(newRect.top);
+            window_->setWidth(width);
+            window_->setHeight(height);
+            initializeWindowSizeConnections();
+            return;
+        }
+        if(checkSizeConstraintResult != Steinberg::kNotImplemented)
+        {
             window_->setWidth(newRect.getWidth());
             window_->setHeight(newRect.getHeight());
             auto onSizeResult = view_->onSize(&newRect);
+            if(onSizeResult == Steinberg::kInvalidArgument)
+            {
+                window_->setWidth(width);
+                window_->setHeight(height);
+            }
+            initializeWindowSizeConnections();
+            return;
         }
         view_->getSize(&newRect);
         window_->setWidth(newRect.getWidth());
         window_->setHeight(newRect.getHeight());
+        initializeWindowSizeConnections();
     }
 }
 
