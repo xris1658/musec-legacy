@@ -20,6 +20,7 @@
         <file>qmlproject/images/addfolder.svg</file>
         <file>qmlproject/images/audioeffect.svg</file>
         <file>qmlproject/images/check.png</file>
+        <file>qmlproject/images/clap-plugin.svg</file>
         <file>qmlproject/images/error.png</file>
         <file>qmlproject/images/expanded-folder.svg</file>
         <file>qmlproject/images/file.svg</file>
@@ -32,6 +33,8 @@
         <file>qmlproject/images/qtlogo-64.png</file>
         <file>qmlproject/images/question.png</file>
         <file>qmlproject/images/show-fader.svg</file>
+        <file>qmlproject/images/vst2-plugin.svg</file>
+        <file>qmlproject/images/vst3-plugin.svg</file>
         <file>qmlproject/images/warning.png</file>
         <file>qmlproject/imports/Musec/Arrangement.qml</file>
         <file>qmlproject/imports/Musec/Assets.qml</file>
@@ -78,5 +81,6 @@
         <file>qmlproject/imports/Musec/Views/qmldir</file>
         <file>qmlproject/imports/Musec/qmldir</file>
         <file>qmlproject/qmldir</file>
+        <file>qmlproject/RemoveRecordingPrompt.qml</file>
     </qresource>
 </RCC>

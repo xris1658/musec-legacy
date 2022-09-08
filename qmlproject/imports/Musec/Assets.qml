@@ -46,6 +46,19 @@ Rectangle {
             border.width: 0
             Row {
                 Item {
+                    width: 16
+                    height: pluginItem.height
+                    Image {
+                        width: 16
+                        height: width
+                        anchors.verticalCenter: parent.verticalCenter
+                        source: format == 1?   "../../images/vst2-plugin.svg":
+                                format == 2?   "../../images/vst3-plugin.svg":
+                                format == 3?   "../../images/clap-plugin.svg":
+                             /* format == 0?*/ "../../images/plugin.svg"
+                    }
+                }
+                Item {
                     width: height
                     height: pluginItem.height
                     Image {
@@ -59,7 +72,7 @@ Rectangle {
                     }
                 }
                 Text {
-                    text: name + " (" + root.getPluginFormatName(format) + ")"
+                    text: name
                     font.family: Constants.font
                     color: Constants.contentColor1
                 }
