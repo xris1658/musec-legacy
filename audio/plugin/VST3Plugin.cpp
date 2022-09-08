@@ -441,11 +441,14 @@ bool VST3Plugin::uninitialize()
 bool VST3Plugin::initializeEditController()
 {
     Steinberg::TUID controllerId;
-    if (component_->getControllerClassId(controllerId) == Steinberg::kResultOk)
+    if (auto getControllerResult = component_->getControllerClassId(controllerId);
+        getControllerResult == Steinberg::kResultOk)
     {
         auto createEditControllerInstanceResult = factory_->createInstance(
             controllerId, Steinberg::Vst::IEditController::iid,
             reinterpret_cast<void**>(&editController_));
+        // Some plugins will simply return `kNoInterface` here, but querying interface from
+        // the `IComponent` will retrieve the `IEditController` correctly.
         if(createEditControllerInstanceResult == Steinberg::kResultOk)
         {
             editControllerStatus_ = VST3EditControllerStatus::Created;
@@ -530,6 +533,12 @@ bool VST3Plugin::initializeEditController()
 bool VST3Plugin::uninitializeEditController()
 {
     detachWithWindow();
+    if(editController2_) { editController2_->release(); }
+    if(midiMapping_) { midiMapping_->release(); }
+    if(editControllerHostEditing_) { editControllerHostEditing_->release(); }
+    if(noteExpressionController_) { noteExpressionController_->release(); }
+    if(keyswitchController_) { keyswitchController_->release(); }
+    if(xmlRepresentationController_) { xmlRepresentationController_->release(); }
     paramBlock_ = Musec::Base::FixedSizeMemoryBlock();
     paramCount_ = 0;
     if(componentPoint_ && editControllerPoint_)
