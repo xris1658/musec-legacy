@@ -1,6 +1,5 @@
 #include "VST2Plugin.hpp"
 
-#include "audio/engine/Project.hpp"
 #include "audio/plugin/VST2PluginParameter.hpp"
 #include "audio/plugin/VST2PluginShellPluginId.hpp"
 #include "controller/AudioEngineController.hpp"
@@ -350,33 +349,39 @@ std::uint8_t VST2Plugin::outputCount() const
 
 bool VST2Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
 {
-    if(effect_->version >= 2300)
+    if(auto version = effect_->dispatcher(effect_, AEffectXOpcodes::effGetVstVersion, 0, 0, nullptr, 0.0f);
+        version >= 2300)
     {
-        VstSpeakerArrangement inputSpeakerArrangement {};
-        VstSpeakerArrangement outputSpeakerArrangement {};
-        effect_->dispatcher(effect_, AEffectXOpcodes::effGetSpeakerArrangement, 0, 0,
-            &outputSpeakerArrangement, static_cast<float>(ToVstPtr(&inputSpeakerArrangement)));
-        if(outputSpeakerArrangement.type != VstSpeakerArrangementType::kSpeakerArrStereo)
+        VstSpeakerArrangement* inputSpeakerArrangement = nullptr;
+        VstSpeakerArrangement* outputSpeakerArrangement = nullptr;
+        if(auto getSpeakerArrangementResult = effect_->dispatcher(
+            effect_, AEffectXOpcodes::effGetSpeakerArrangement, 0,
+            ToVstPtr(&inputSpeakerArrangement), &outputSpeakerArrangement, 0.0f);
+            getSpeakerArrangementResult)
         {
-            outputSpeakerArrangement.type = VstSpeakerArrangementType::kSpeakerArrStereo;
-            outputSpeakerArrangement.numChannels = 2;
-            outputSpeakerArrangement.speakers[0].type = VstSpeakerType::kSpeakerL;
-            outputSpeakerArrangement.speakers[1].type = VstSpeakerType::kSpeakerR;
-            if(!(effect_->flags & VstAEffectFlags::effFlagsIsSynth))
+            if(outputSpeakerArrangement->type != VstSpeakerArrangementType::kSpeakerArrStereo)
             {
-                if(inputSpeakerArrangement.type != VstSpeakerArrangementType::kSpeakerArrStereo)
+                outputSpeakerArrangement->type = VstSpeakerArrangementType::kSpeakerArrStereo;
+                outputSpeakerArrangement->numChannels = 2;
+                outputSpeakerArrangement->speakers[0].type = VstSpeakerType::kSpeakerL;
+                outputSpeakerArrangement->speakers[1].type = VstSpeakerType::kSpeakerR;
+                if(!(effect_->flags & VstAEffectFlags::effFlagsIsSynth))
                 {
-                    inputSpeakerArrangement.type = VstSpeakerArrangementType::kSpeakerArrStereo;
-                    inputSpeakerArrangement.numChannels = 2;
-                    inputSpeakerArrangement.speakers[0].type = VstSpeakerType::kSpeakerL;
-                    inputSpeakerArrangement.speakers[1].type = VstSpeakerType::kSpeakerR;
+                    if(inputSpeakerArrangement->type != VstSpeakerArrangementType::kSpeakerArrStereo)
+                    {
+                        inputSpeakerArrangement->type = VstSpeakerArrangementType::kSpeakerArrStereo;
+                        inputSpeakerArrangement->numChannels = 2;
+                        inputSpeakerArrangement->speakers[0].type = VstSpeakerType::kSpeakerL;
+                        inputSpeakerArrangement->speakers[1].type = VstSpeakerType::kSpeakerR;
+                    }
                 }
-            }
-            auto setSpeakerArrangementResult = effect_->dispatcher(effect_, AEffectXOpcodes::effSetSpeakerArrangement, 0, 0,
-                &outputSpeakerArrangement, static_cast<float>(ToVstPtr(&inputSpeakerArrangement)));
-            if(!setSpeakerArrangementResult)
-            {
-                return false;
+                auto setSpeakerArrangementResult = effect_->dispatcher(
+                    effect_, AEffectXOpcodes::effSetSpeakerArrangement, 0, ToVstPtr(&inputSpeakerArrangement),
+                    &outputSpeakerArrangement, 0.0f);
+                if(!setSpeakerArrangementResult)
+                {
+                    return false;
+                }
             }
         }
     }
@@ -447,7 +452,11 @@ void VST2Plugin::process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs
             inputsRaw_[i + inputCount] = inputs[i].getSamples();
         }
     }
-    for(int i = 0; i < outputCount; ++i)
+    for(int i = inputCount; i < this->inputCount(); ++i)
+    {
+        inputsRaw_[i] = Musec::Controller::AudioEngineController::dummyBufferView<SampleType>().getSamples();
+    }
+    for(int i = 0; i < outputCount && i < this->outputCount(); ++i)
     {
         outputsRaw_[i] = outputs[i].getSamples();
     }
