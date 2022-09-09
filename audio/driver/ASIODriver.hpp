@@ -12,6 +12,15 @@
 
 namespace Musec
 {
+namespace Native
+{
+// Forward declaration
+class ASIODriverImpl;
+}
+}
+
+namespace Musec
+{
 namespace Audio
 {
 namespace Driver
@@ -72,11 +81,8 @@ public:
     operator IASIO*() const;
     IASIO* operator*() const;
     IASIO* operator->() const;
-public:
-    void swap(ASIODriver& rhs);
 private:
-    ASIODriverBasicInfo driverInfo_;
-    IASIO* driver_; // Is shared_ptr needed?
+    std::unique_ptr<Musec::Native::ASIODriverImpl> pImpl_;
 };
 
 // Returns the ASIO driver of the application.
@@ -99,13 +105,6 @@ ASIOSampleRate getSampleRate(const ASIODriver& driver = AppASIODriver());
 ASIODriverStreamInfo getASIODriverStreamInfo(const ASIODriver& driver = AppASIODriver());
 }
 }
-}
-
-namespace std
-{
-template<>
-void swap(Musec::Audio::Driver::ASIODriver& lhs, Musec::Audio::Driver::ASIODriver& rhs)
-    noexcept(std::is_move_assignable_v<Musec::Audio::Driver::ASIODriver>);
 }
 
 #endif // MUSEC_AUDIO_DRIVER_ASIODRIVER

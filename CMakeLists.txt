@@ -215,6 +215,8 @@ set(PROJECT_SOURCES
     model/TrackListModel.hpp
     model/TranslationFileModel.cpp
     model/TranslationFileModel.hpp
+    native/ASIODriverImpl.cpp
+    native/ASIODriverImpl.hpp
     native/Native.cpp
     native/Native.hpp
     native/WindowsLibraryRAII.cpp

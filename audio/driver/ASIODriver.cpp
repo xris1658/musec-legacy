@@ -1,13 +1,8 @@
 #include "ASIODriver.hpp"
 
+#include "native/ASIODriverImpl.hpp"
 #include "native/Native.hpp"
 
-#include <Windows.h>
-#include <winreg.h>
-#include <winerror.h>
-
-#include <stdexcept>
-#include <tuple>
 #include <utility>
 
 namespace Musec::Audio::Driver
@@ -29,62 +24,34 @@ QList<ASIODriverBasicInfo> enumerateDrivers()
     return Musec::Native::enumerateDrivers();
 }
 
-ASIODriver::ASIODriver(): driverInfo_(std::tuple<QString, QString>("", "")), driver_(nullptr) {}
+ASIODriver::ASIODriver(): pImpl_() {}
 
-ASIODriver::ASIODriver(const ASIODriverBasicInfo& info): driverInfo_(info), driver_(nullptr)
+ASIODriver::ASIODriver(const ASIODriverBasicInfo& info): pImpl_(std::make_unique<Musec::Native::ASIODriverImpl>(info))
 {
-    CoInitialize(NULL);
-    wchar_t clsidBuffer[Musec::Native::CLSIDStringLength + 1];
-    const auto& string = std::get<ASIODriverField::CLSIDField>(info);
-    clsidBuffer[string.size()] = L'\0';
-    string.toWCharArray(clsidBuffer);
-    CLSID clsid;
-    auto convertToCLSIDResult = CLSIDFromString(clsidBuffer, &clsid);
-    if(convertToCLSIDResult != NOERROR)
-    {
-        throw std::runtime_error("Load driver info failed.");
-    }
-    auto loadDriverResult = CoCreateInstance(clsid, nullptr,
-        CLSCTX_INPROC_SERVER, clsid,
-        reinterpret_cast<void**>(&driver_)
-    );
-    if(loadDriverResult != S_OK)
-    {
-        throw std::runtime_error("Load driver failed.");
-    }
 }
 
-ASIODriver::ASIODriver(ASIODriver&& rhs) noexcept: driverInfo_(std::tuple<QString, QString>("", "")), driver_(nullptr)
+ASIODriver::ASIODriver(ASIODriver&& rhs) noexcept: pImpl_(std::move(rhs.pImpl_))
 {
-    swap(rhs);
 }
 
 ASIODriver& ASIODriver::operator=(ASIODriver&& rhs) noexcept
 {
-    swap(rhs);
+    pImpl_ = std::move(rhs.pImpl_);
     return *this;
 }
 
 ASIODriver::~ASIODriver()
 {
-    if(driver_)
-    {
-        driver_->stop();
-        driver_->disposeBuffers();
-        driver_->Release();
-        driver_ = nullptr;
-        CoUninitialize();
-    }
 }
 
 ASIODriverBasicInfo ASIODriver::driverInfo() const
 {
-    return driverInfo_;
+    return pImpl_->driverInfo();
 }
 
 IASIO* ASIODriver::driver() const
 {
-    return driver_;
+    return pImpl_->driver();
 }
 
 ASIODriver::operator IASIO*() const
@@ -100,12 +67,6 @@ IASIO* ASIODriver::operator*() const
 IASIO* ASIODriver::operator->() const
 {
     return driver();
-}
-
-void ASIODriver::swap(ASIODriver& rhs)
-{
-    std::swap(driver_, rhs.driver_);
-    std::swap(driverInfo_, rhs.driverInfo_);
 }
 
 ASIODriver& AppASIODriver()
@@ -162,14 +123,5 @@ ASIODriverStreamInfo getASIODriverStreamInfo(const ASIODriver& driver)
         driver->getSampleRate(&ret.sampleRate);
     }
     return ret;
-}
-}
-
-namespace std
-{
-template<> void swap(Musec::Audio::Driver::ASIODriver& lhs, Musec::Audio::Driver::ASIODriver& rhs)
-noexcept(std::is_move_assignable_v<Musec::Audio::Driver::ASIODriver>)
-{
-    lhs.swap(rhs);
 }
 }

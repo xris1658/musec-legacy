@@ -81,6 +81,5 @@
         <file>qmlproject/imports/Musec/Views/qmldir</file>
         <file>qmlproject/imports/Musec/qmldir</file>
         <file>qmlproject/qmldir</file>
-        <file>qmlproject/RemoveRecordingPrompt.qml</file>
     </qresource>
 </RCC>
