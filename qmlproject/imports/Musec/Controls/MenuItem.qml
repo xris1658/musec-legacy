@@ -14,7 +14,18 @@ QQC2.MenuItem {
     action: MCtrl.Action {
         id: action
     }
-
+    function mainTextWidth(): int {
+        return actionText.contentWidth;
+    }
+    function keyTextWidth(): int {
+        return actionShortcut.contentWidth;
+    }
+    function indicatorWidth(): int {
+        return indicator.width;
+    }
+    function arrowWidth(): int {
+        return arrow.width;
+    }
     // Cascade menu indicator at right
     arrow: Item {
         anchors.right: parent.right
