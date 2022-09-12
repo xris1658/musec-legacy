@@ -43,11 +43,9 @@ ApplicationWindow {
 
     onEngineRunningChanged: {
         if(engineRunning) {
-            console.log("engineRunning == true");
             realtimeUpdateTimer.start();
         }
         else {
-            console.log("engineRunning == false");
             realtimeUpdateTimer.stop();
         }
     }
