@@ -51,7 +51,7 @@ ASIODriverBasicInfo ASIODriver::driverInfo() const
 
 IASIO* ASIODriver::driver() const
 {
-    return pImpl_->driver();
+    return pImpl_? pImpl_->driver(): nullptr;
 }
 
 ASIODriver::operator IASIO*() const
