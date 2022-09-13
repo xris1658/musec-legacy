@@ -24,11 +24,11 @@ QQC2.Menu {
             }
         }
         var menuFitWidth = textWidth + shortcutWidth + 2 * 20 + 30;
-        root.width = menuFitWidth;
+        root.implicitWidth = menuFitWidth;
         for(var i = 0; i < root.width; ++i) {
             var item = root.itemAt(i);
             if(item != null) {
-                item.width = menuFitWidth;
+                item.implicitWidth = menuFitWidth;
             }
         }
     }
