@@ -3,6 +3,8 @@
 
 #include <pluginterfaces/vst/ivsteditcontroller.h>
 
+#include <map>
+
 namespace Musec
 {
 namespace Audio

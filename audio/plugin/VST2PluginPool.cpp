@@ -1,5 +1,7 @@
 #include "VST2PluginPool.hpp"
 
+#include <algorithm>
+
 namespace Musec
 {
 namespace Audio

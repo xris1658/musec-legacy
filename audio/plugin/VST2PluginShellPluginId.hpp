@@ -3,6 +3,8 @@
 
 #include "audio/plugin/VST2PluginForward.hpp"
 
+#include <mutex>
+
 namespace Musec
 {
 namespace Audio
