@@ -359,7 +359,8 @@ bool VST2Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
             ToVstPtr(&inputSpeakerArrangement), &outputSpeakerArrangement, 0.0f);
             getSpeakerArrangementResult)
         {
-            if(outputSpeakerArrangement->type != VstSpeakerArrangementType::kSpeakerArrStereo)
+            if(outputSpeakerArrangement
+            && outputSpeakerArrangement->type != VstSpeakerArrangementType::kSpeakerArrStereo)
             {
                 outputSpeakerArrangement->type = VstSpeakerArrangementType::kSpeakerArrStereo;
                 outputSpeakerArrangement->numChannels = 2;
@@ -367,7 +368,8 @@ bool VST2Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
                 outputSpeakerArrangement->speakers[1].type = VstSpeakerType::kSpeakerR;
                 if(!(effect_->flags & VstAEffectFlags::effFlagsIsSynth))
                 {
-                    if(inputSpeakerArrangement->type != VstSpeakerArrangementType::kSpeakerArrStereo)
+                    if(inputSpeakerArrangement
+                    && inputSpeakerArrangement->type != VstSpeakerArrangementType::kSpeakerArrStereo)
                     {
                         inputSpeakerArrangement->type = VstSpeakerArrangementType::kSpeakerArrStereo;
                         inputSpeakerArrangement->numChannels = 2;
