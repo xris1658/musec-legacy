@@ -59,7 +59,7 @@ public:
     }
     void play()
     {
-        timePlayStarted_ = position_;
+        timePlayStarted_ = position_.count();
         playing_ = true;
     }
     void stop()
@@ -95,7 +95,7 @@ public:
 public:
     std::thread& clockThread()
     {
-        static std::thread ret(std::mem_fn(&MIDIClock<PPQ>::clockFunc), this);
+        static std::thread ret(std::mem_fn(&MIDIClock<PPQ>::clockFunc<false>), this);
         return ret;
     }
 private:

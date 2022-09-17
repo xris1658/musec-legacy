@@ -92,7 +92,7 @@ public:
     // Returns the time signature of the given time
     TimeSignature operator()(const TimePoint<PPQ>& timePoint) const
     {
-        if(timePoint.pulse() == 0)
+        if(timePoint.count() == 0)
         {
             return timeSignatureChange_.begin()->timeSignature_;
         }

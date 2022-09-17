@@ -229,6 +229,10 @@ std::size_t Automation::firstPointIndexAtTime(const AutomationPoint::TimeType& t
 
 double Automation::operator()(const AutomationPoint::TimeType& time, std::size_t index) const
 {
+    if(pointCount() == 1)
+    {
+        return operator[](0).value();
+    }
     auto lower = lowerBound(time);
     // the given time point is at back of all points
     if (lower == points_.cend())

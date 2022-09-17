@@ -19,6 +19,6 @@ Musec::Audio::Engine::MIDIClock<Musec::Controller::MIDIClockController::AppPPQ>&
 
 void updateArrangementPositionInUI(Musec::Audio::Base::TimePoint<Musec::Controller::MIDIClockController::AppPPQ> time)
 {
-    Musec::Event::eventHandler->updateArrangementPosition(time.pulse());
+    Musec::Event::eventHandler->updateArrangementPosition(time.count());
 }
 }

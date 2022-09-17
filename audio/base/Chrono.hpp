@@ -25,15 +25,11 @@ public:
     TimePoint& operator=(TimePoint<PPQ>&&) noexcept = default;
     ~TimePoint() noexcept {}
 public:
-    std::int64_t pulse() const
+    inline std::int64_t count() const noexcept
     {
         return pulse_;
     }
-    operator std::int64_t() const
-    {
-        return pulse_;
-    }
-    constexpr std::size_t ppq()
+    inline constexpr std::size_t ppq() const noexcept
     {
         return PPQ;
     }
@@ -83,11 +79,7 @@ public:
     Duration& operator=(Duration<PPQ>&&) noexcept = default;
     ~Duration() noexcept {}
 public:
-    std::int64_t duration() const
-    {
-        return duration_;
-    }
-    operator std::int64_t() const
+    std::int64_t count() const
     {
         return duration_;
     }
@@ -120,7 +112,7 @@ private:
 template<std::size_t PPQ>
 bool operator==(const TimePoint<PPQ>& lhs, const TimePoint<PPQ>& rhs)
 {
-    return lhs.pulse() == rhs.pulse();
+    return lhs.count() == rhs.count();
 }
 
 template<std::size_t PPQ>
@@ -132,7 +124,7 @@ bool operator!=(const TimePoint<PPQ>& lhs, const TimePoint<PPQ>& rhs)
 template<std::size_t PPQ>
 bool operator<(const TimePoint<PPQ>& lhs, const TimePoint<PPQ>& rhs)
 {
-    return lhs.pulse() < rhs.pulse();
+    return lhs.count() < rhs.count();
 }
 
 template<std::size_t PPQ>
@@ -157,7 +149,7 @@ bool operator>=(const TimePoint<PPQ>& lhs, const TimePoint<PPQ>& rhs)
 template<std::size_t PPQ>
 bool operator==(const Duration<PPQ>& lhs, const Duration<PPQ>& rhs)
 {
-    return lhs.duration() == rhs.duration();
+    return lhs.count() == rhs.count();
 }
 
 template<std::size_t PPQ>
@@ -169,7 +161,7 @@ bool operator!=(const Duration<PPQ>& lhs, const Duration<PPQ>& rhs)
 template<std::size_t PPQ>
 bool operator<(const Duration<PPQ>& lhs, const Duration<PPQ>& rhs)
 {
-    return lhs.duration() < rhs.duration();
+    return lhs.count() < rhs.count();
 }
 
 template<std::size_t PPQ>
@@ -194,48 +186,48 @@ bool operator>=(const Duration<PPQ>& lhs, const Duration<PPQ>& rhs)
 template<std::size_t PPQ>
 TimePoint<PPQ> operator+(const TimePoint<PPQ>& lhs, const Duration<PPQ>& rhs)
 {
-    return TimePoint<PPQ>(lhs.pulse() + rhs.duration());
+    return TimePoint<PPQ>(lhs.count() + rhs.count());
 }
 
 // TimePoint - Duration
 template<std::size_t PPQ>
 TimePoint<PPQ> operator-(const TimePoint<PPQ>& lhs, const Duration<PPQ>& rhs)
 {
-    return TimePoint<PPQ>(lhs.pulse() - rhs.duration());
+    return TimePoint<PPQ>(lhs.count() - rhs.count());
 }
 
 // TimePoint - TimePoint
 template<std::size_t PPQ>
 Duration<PPQ> operator-(const TimePoint<PPQ>& lhs, const TimePoint<PPQ>& rhs)
 {
-    return Duration<PPQ>(lhs.pulse() - rhs.pulse());
+    return Duration<PPQ>(lhs.count() - rhs.count());
 }
 
 // Duration + Duration
 template<std::size_t PPQ>
 Duration<PPQ> operator+(const Duration<PPQ>& lhs, const Duration<PPQ>& rhs)
 {
-    return Duration<PPQ>(lhs.duration() + rhs.duration());
+    return Duration<PPQ>(lhs.count() + rhs.count());
 }
 
 // Duration - Duration
 template<std::size_t PPQ>
 Duration<PPQ> operator-(const Duration<PPQ>& lhs, const Duration<PPQ>& rhs)
 {
-    return Duration<PPQ>(lhs.duration() - rhs.duration());
+    return Duration<PPQ>(lhs.count() - rhs.count());
 }
 
 template<std::size_t PPQ>
 TimePoint<PPQ>& TimePoint<PPQ>::operator+=(const Duration<PPQ>& duration)
 {
-    pulse_ += duration.duration();
+    pulse_ += duration.count();
     return *this;
 }
 
 template<std::size_t PPQ>
 TimePoint<PPQ>& TimePoint<PPQ>::operator-=(const Duration<PPQ>& duration)
 {
-    pulse_ -= duration.duration();
+    pulse_ -= duration.count();
     return *this;
 }
 }

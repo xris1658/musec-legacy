@@ -31,7 +31,7 @@ private:
     // Returns the elapsed time in second, given the tempo and the elapsed time in pulse
     double secondElapsed(double bpm, const Duration<PPQ>& duration) const
     {
-        return duration / (bpm * PPQ) * 60.0;
+        return duration.count() / (bpm * PPQ) * 60.0;
     }
 private:
     // Returns the elpased time in second, given a segment of automation curve and the start / stop time point in pulse.
@@ -43,18 +43,7 @@ private:
         function.b *= PPQ;
         function.c *= PPQ;
         double ret = Musec::Math::quadraticFunctionInvertIntegration(
-            function, from, to
-        ) * 60.0;
-        return ret;
-    }
-    double secondElapsed(typename Base::PointVectorConstIterator left, double from, double to) const
-    {
-        auto function = Base::getFunction(left);
-        function.a *= PPQ;
-        function.b *= PPQ;
-        function.c *= PPQ;
-        double ret = Musec::Math::quadraticFunctionInvertIntegration(
-            function, from, to
+            function, from.count(), to.count()
         ) * 60.0;
         return ret;
     }
@@ -77,8 +66,8 @@ public:
             return 0;
         }
         double ret = 0;
-        auto notBeforeStart = Base::lowerBound(from);
-        auto notBeforeEnd = Base::lowerBound(to);
+        auto notBeforeStart = Base::lowerBound(from.count());
+        auto notBeforeEnd = Base::lowerBound(to.count());
         // --from--to--point--
         if (notBeforeStart == notBeforeEnd)
         {
@@ -94,8 +83,8 @@ public:
                 return ret;
             }
         }
-        auto afterStart = Base::upperBound(from);
-        // auto afterEnd = Base::upperBound(to);
+        auto afterStart = Base::upperBound(from.count());
+        // auto afterEnd = Base::upperBound(to.count());
         if (afterStart == Base::cend() /*&& afterEnd == Bae::cend()*/)
         {
             ret = secondElapsed((Base::cend() - 1)->value(), to - from);
@@ -105,7 +94,7 @@ public:
         // Step 1 of 3: from--
         if(notBeforeStart == Base::cbegin())
         {
-            ret += secondElapsed(notBeforeStart->value(), notBeforeStart->time() - from);
+            ret += secondElapsed(notBeforeStart->value(), notBeforeStart->time() - from.count());
         }
         else
         {
@@ -120,7 +109,7 @@ public:
         // Step 3 of 3: --to
         if(notBeforeEnd == Base::cend())
         {
-            ret += secondElapsed(beforeEnd->value(), to - beforeEnd->time());
+            ret += secondElapsed(beforeEnd->value(), to.count() - beforeEnd->time());
         }
         else
         {
@@ -136,17 +125,17 @@ public:
     // Returns the time elapsed in the given pulse in second.
     double secondElapsedInPulse(const TimePoint<PPQ>& pulse) const
     {
-        return secondElapsed(pulse, TimePoint<PPQ>(pulse.pulse() + 1));
+        return secondElapsed(pulse, TimePoint<PPQ>(pulse.count() + 1));
     }
     // Returns the time point in pulse, given the start time point in pulse and the time elapsed in second.
     Duration<PPQ> pulseElapsedFrom(const TimePoint<PPQ>& from, double second, double precision = 60.0 / Musec::Audio::Base::maximumTempo / static_cast<double>(PPQ)) const
     {
         if(second == 0)
         {
-            return Duration<PPQ>(from.pulse());
+            return Duration<PPQ>(from.count());
         }
         // Behind `from`, or matches `from`
-        auto lowerBound = Base::lowerBound(from);
+        auto lowerBound = Base::lowerBound(from.count);
         double sec = from == lowerBound->time()? 0: secondElapsed(from, lowerBound->time());
         for(auto i = lowerBound; i != Base::cend() - 1; ++i)
         {
@@ -169,7 +158,7 @@ public:
                 if(i->value() == (i + 1)->value())
                 {
                     auto pulsePerSecond = i->value() * PPQ / 60.0;
-                    return Duration<PPQ>(leftTime.pulse() + pulsePerSecond * (second - sec));
+                    return Duration<PPQ>(leftTime.count() + pulsePerSecond * (second - sec));
                 }
                 else
                 {
@@ -218,17 +207,17 @@ public:
                     {
                         ret = ceiling;
                     }
-                    auto secondElapsedToRet = secondElapsed(from, TimePoint<PPQ>(ret.duration()));
-                    auto retUp = Duration<PPQ>(ret.duration() + 1);
-                    auto secondElapsedToRetUp = secondElapsed(from, TimePoint<PPQ>(retUp.duration()));
+                    auto secondElapsedToRet = secondElapsed(from, TimePoint<PPQ>(ret.count()));
+                    auto retUp = Duration<PPQ>(ret.count() + 1);
+                    auto secondElapsedToRetUp = secondElapsed(from, TimePoint<PPQ>(retUp.count()));
                     if(std::abs(secondElapsedToRetUp - second) < std::abs(secondElapsedToRet - second))
                     {
                         ret = retUp;
                     }
-                    if(ret.duration() != 0)
+                    if(ret.count() != 0)
                     {
-                        auto retDown = Duration<PPQ>(ret.duration() - 1);
-                        auto secondElapsedToRetDown = secondElapsed(from, TimePoint<PPQ>(retDown.duration()));
+                        auto retDown = Duration<PPQ>(ret.count() - 1);
+                        auto secondElapsedToRetDown = secondElapsed(from, TimePoint<PPQ>(retDown.count()));
                         if(std::abs(secondElapsedToRetDown - second) < std::abs(secondElapsedToRet - second))
                         {
                             ret = retDown;
@@ -241,7 +230,7 @@ public:
         // The pulse is at back of all points
         auto remain = second - sec;
         auto pulsePerSecond = (Base::cend() - 1)->value() * PPQ / 60.0;
-        auto ret = Duration<PPQ>(((Base::cend() - 1)->time() - from).duration() + pulsePerSecond * remain);
+        auto ret = Duration<PPQ>(((Base::cend() - 1)->time() - from).count() + pulsePerSecond * remain);
         return ret;
     }
     // Returns the time elapsed from 0 in pulse, given the stop time in second.
