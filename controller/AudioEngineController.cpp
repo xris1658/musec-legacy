@@ -1,6 +1,8 @@
 #include "AudioEngineController.hpp"
 
 #include "audio/driver/ASIODriver.hpp"
+#include "audio/host/CLAPEvents.hpp"
+#include "audio/host/MusecVST3Host.hpp"
 #include "audio/plugin/CLAPUtils.hpp"
 #include "controller/MIDIClockController.hpp"
 #include "native/Native.hpp"
@@ -94,30 +96,31 @@ long getOutputLatency()
 double getCurrentTempo()
 {
     auto& midiClock = Musec::Controller::MIDIClockController::AppMIDIClock();
-    return midiClock.tempoAutomation()(midiClock.getPosition());
+    return midiClock.tempoAutomation()(midiClock.getPosition().count());
 }
 
-void fillProcessContext(Steinberg::Vst::ProcessContext& processContext)
+void fillPluginContext()
 {
-    using namespace Steinberg;
-    using namespace Steinberg::Vst;
-    processContext.state =
-        ProcessContext::StatesAndFlags::kSystemTimeValid
+    auto currentTempo = getCurrentTempo();
+    auto& processContext = Musec::Audio::Host::MusecVST3Host::AppProcessContext();
+    auto& eventTransport = Musec::Audio::Host::AppCLAPEventTransport();
+    using Steinberg::Vst::ProcessContext;
+    processContext.state = ProcessContext::StatesAndFlags::kSystemTimeValid
         | ProcessContext::StatesAndFlags::kTempoValid;
+    if(Musec::Controller::MIDIClockController::AppMIDIClock().playing())
+    {
+        processContext.state |= ProcessContext::StatesAndFlags::kPlaying;
+    }
     processContext.sampleRate = getCurrentSampleRate();
     processContext.systemTime = Musec::Native::currentTimeInNanosecond();
-    processContext.tempo = getCurrentTempo();
-}
-
-void fillEventTransport(clap_event_transport& eventTransport)
-{
+    processContext.tempo = currentTempo;
     Musec::Audio::Plugin::fillEventHeader(eventTransport, CLAP_EVENT_TRANSPORT);
     auto& header = eventTransport.header;
     header.time = 0;
     header.flags = 0;
     eventTransport.flags =
         CLAP_TRANSPORT_HAS_TEMPO;
-    eventTransport.tempo = getCurrentTempo();
+    eventTransport.tempo = currentTempo;
 }
 
 double getCpuUsage()

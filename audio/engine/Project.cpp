@@ -222,10 +222,9 @@ const Musec::Base::FixedSizeMemoryBlock& Project::masterTrackAudioBuffer() const
 void Project::process()
 {
     std::lock_guard<std::mutex> lg(mutex_);
+    Musec::Controller::AudioEngineController::fillPluginContext();
     auto& processContext = Musec::Audio::Host::MusecVST3Host::AppProcessContext();
     auto& eventTransport = Musec::Audio::Host::AppCLAPEventTransport();
-    Musec::Controller::AudioEngineController::fillProcessContext(processContext);
-    Musec::Controller::AudioEngineController::fillEventTransport(eventTransport);
     masterTrackAudioBuffer_.init();
     std::size_t currentBlockSize = Musec::Controller::AudioEngineController::getCurrentBlockSize();
     std::array<Musec::Audio::Base::AudioBufferView<float>, 2> audioBufferViews;

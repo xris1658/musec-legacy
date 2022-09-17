@@ -27,8 +27,7 @@ long getCurrentBlockSize();
 long getInputLatency();
 long getOutputLatency();
 double getCurrentTempo();
-void fillProcessContext(Steinberg::Vst::ProcessContext& processContext);
-void fillEventTransport(clap_event_transport& eventTransport);
+void fillPluginContext();
 double getCpuUsage();
 
 template<typename SampleType>
