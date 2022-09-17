@@ -9,11 +9,12 @@ namespace Musec::Controller::MIDIClockController
 Musec::Audio::Engine::MIDIClock<Musec::Controller::MIDIClockController::AppPPQ>& AppMIDIClock()
 {
     static Musec::Audio::Engine::MIDIClock<Musec::Controller::MIDIClockController::AppPPQ> ret(updateArrangementPositionInUI);
-//    std::thread& clockThread = ret.clockThread();
-//    if(clockThread.joinable())
-//    {
-//        clockThread.detach();
-//    }
+    // TODO: Synchronize tempo to the MIDI clock
+    std::thread& clockThread = ret.clockThread();
+    if(clockThread.joinable())
+    {
+        clockThread.detach();
+    }
     return ret;
 }
 
