@@ -101,8 +101,20 @@ private:
     QWindow* window_ = nullptr;
     clap_window clapWindow_;
     CLAPPluginStatus pluginStatus_ = CLAPPluginStatus::NoPlugin;
-    clap_audio_buffer processDataInput_;
-    clap_audio_buffer processDataOutput_;
+    clap_audio_buffer processDataInput_ {
+        /*.data32 = */nullptr,
+        /*.data64 = */nullptr,
+        /*.channel_count = */0,
+        /*.latency = */0,
+        /*.constant_mask*/0
+    };
+    clap_audio_buffer processDataOutput_ {
+        /*.data32 = */nullptr,
+        /*.data64 = */nullptr,
+        /*.channel_count = */0,
+        /*.latency = */0,
+        /*.constant_mask*/0
+    };
     clap::helpers::EventList eventInputList_;
     clap::helpers::EventList eventOutputList_;
     std::vector<SampleType*> rawInputs_;
