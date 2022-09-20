@@ -1647,7 +1647,7 @@ The error information of the driver is as follows:
     <message>
         <location filename="../qmlproject/Strings.qml" line="25"/>
         <location filename="../qmlproject/Strings.qml" line="26"/>
-        <source>The operation is done succesfully.</source>
+        <source>The operation is done successfully.</source>
         <translation>操作成功完成。</translation>
     </message>
     <message>

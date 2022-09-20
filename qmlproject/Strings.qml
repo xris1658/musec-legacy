@@ -22,8 +22,8 @@ QtObject {
     readonly property string driverWarningTitleText:                    applicationName + " - " + qsTr("Driver Warning")
     readonly property string driverErrorTitleText:                      applicationName + " - " + qsTr("Driver Error")
 
-    readonly property string asioErrorOkText:                           qsTr("The operation is done succesfully.")
-    readonly property string asioErrorSuccessText:                      qsTr("The operation is done succesfully.")
+    readonly property string asioErrorOkText:                           qsTr("The operation is done successfully.")
+    readonly property string asioErrorSuccessText:                      qsTr("The operation is done successfully.")
     readonly property string asioErrorNotPresentText:                   qsTr("There is no hardware input or output devices, or the devices are not available.")
     readonly property string asioErrorHardwareMalfunctionText:          qsTr("The current hardware is malfunctioning.")
     readonly property string asioErrorInvalidParameterText:             qsTr("The current parameter is invalid. You might need to check settings of the audio driver.")
@@ -36,5 +36,4 @@ QtObject {
     readonly property string loadTranslationFailedText:                 "The specified translation cannot be loaded. The program will show things in English."
 
     readonly property string optionSaveRebootPromptText:                qsTr("The option changes is saved. A restart is required to apply.")
-
 }
