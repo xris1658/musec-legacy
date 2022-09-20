@@ -20,6 +20,8 @@ bool loadTranslationFile(const QString& filePath, const QString& language)
     translator->load(QCoreApplication::applicationDirPath()
         .append(QString("/translations/qt_%1.qm").arg(language)));
     translator->load(QCoreApplication::applicationDirPath()
+        .append(QString("/translations/qtbase_%1.qm").arg(language)));
+    translator->load(QCoreApplication::applicationDirPath()
         .append(QString("/translations/qtquickcontrols_%1.qm").arg(language)));
     translator->load(QCoreApplication::applicationDirPath()
         .append(QString("/translations/qtquickcontrols2_%1.qm").arg(language)));

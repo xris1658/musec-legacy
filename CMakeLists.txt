@@ -323,6 +323,7 @@ add_custom_command(TARGET Musec POST_BUILD COMMAND ${Qt5_DIR}/../../../bin/lrele
 
 file(COPY Resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-file(COPY ${Qt5_DIR}/../../../translations/qt_zh_CN.qm DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY ${Qt5_DIR}/../../../translations/qt_zh_CN.qm DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/translations)
+file(COPY ${Qt5_DIR}/../../../../../Tools/QtDesignStudio/qt5_design_studio_reduced_version/translations/qtbase_zh_CN.qm DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/translations)
 file(COPY ${Qt5_DIR}/../../../../../Tools/QtDesignStudio/qt5_design_studio_reduced_version/translations/qtquickcontrols_zh_CN.qm DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/translations)
 file(COPY ${Qt5_DIR}/../../../../../Tools/QtDesignStudio/qt5_design_studio_reduced_version/translations/qtquickcontrols2_zh_CN.qm DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/translations)
