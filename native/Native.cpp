@@ -23,14 +23,15 @@ namespace Native
 {
 namespace Impl
 {
+template<int CSIDL>
 class SHGetFolderHelper
 {
 private:
-    SHGetFolderHelper(int csidl): csidl_(csidl)
+    SHGetFolderHelper()
     {
         auto getFolderResult = SHGetFolderPathW(
             nullptr,
-            csidl_,
+            CSIDL,
             NULL,
             SHGFP_TYPE_CURRENT,
             path_);
@@ -40,9 +41,9 @@ private:
         }
     }
 public:
-    static SHGetFolderHelper& getFolderHelper(int csidl)
+    static SHGetFolderHelper& getFolderHelper()
     {
-        static SHGetFolderHelper ret(csidl);
+        static SHGetFolderHelper ret;
         return ret;
     }
     const wchar_t* operator()()
@@ -50,14 +51,13 @@ public:
         return path_;
     }
 private:
-    int csidl_;
     wchar_t path_[MAX_PATH];
 };
 
 template<int CSIDL>
 const QString& getFolderAsWCharArray()
 {
-    static auto ret = QString::fromWCharArray(SHGetFolderHelper::getFolderHelper(CSIDL)());
+    static auto ret = QString::fromWCharArray(SHGetFolderHelper<CSIDL>::getFolderHelper()());
     return ret;
 }
 

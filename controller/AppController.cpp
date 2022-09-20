@@ -50,6 +50,8 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     }
     catch(std::exception&)
     {
+        // FIXME: The application will crash if this function is called,
+        //  since Musec::Event::EventHandler is not initialized here.
         Musec::UI::MessageDialog::messageDialog(
            strings->property("enumeratingASIODriverErrorText").toString(),
            Musec::Base::ProductName,

@@ -121,6 +121,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
     }
     else if(format == PluginFormat::FormatVST3)
     {
+        // TODO: Use VST3Plugin here
         try
         {
             WindowsLibraryRAII library(path);
@@ -385,17 +386,17 @@ QStringList& defaultPluginDirectoryList()
     if(!programFilesPath.isEmpty())
     {
         // VST2
-        ret << programFilesPath.append("\\Steinberg\\VstPlugins")
-            << programFilesPath.append("\\VstPlugins")
+        ret << QString(programFilesPath).append("\\Steinberg\\VstPlugins")
+            << QString(programFilesPath).append("\\VstPlugins")
         // VST3
-            << programFilesPath.append("\\Common Files\\VST3");
+            << QString(programFilesPath).append("\\Common Files\\VST3");
     }
     auto localAppDataPath = Musec::Native::localAppDataFolder();
     if(!localAppDataPath.isEmpty())
     {
         // CLAP
-        ret << programFilesPath.append("\\Common Files\\CLAP")
-            << localAppDataPath.append("\\Programs\\Common\\CLAP");
+        ret << QString(programFilesPath).append("\\Common Files\\CLAP")
+            << QString(localAppDataPath).append("\\Programs\\Common\\CLAP");
     }
     return ret;
 }
