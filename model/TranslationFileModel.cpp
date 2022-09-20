@@ -14,7 +14,7 @@ TranslationFileModel::TranslationFileModel(QObject* parent): QAbstractListModel(
     roleNames_[RoleNames::LanguageNameRole] = "language_name";
     roleNames_[RoleNames::ReadableLanguageNameRole] = "readable_language_name";
     QTranslator translator;
-    static QStringList nameFilter {"*.qm"};
+    static QStringList nameFilter {"Musec_*.qm"};
     static QDir appDir(QCoreApplication::applicationDirPath());
     auto entryInfoList = appDir.entryInfoList(nameFilter, QDir::Filter::Files, QDir::SortFlag::Name);
     auto& ret = list_;

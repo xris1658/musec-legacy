@@ -15,7 +15,7 @@ extern QTranslator* translator;
 
 QString readableNameFromLanguageName(const QString& name);
 
-bool loadTranslationFile(const QString& filePath);
+bool loadTranslationFile(const QString& filePath, const QString& language);
 }
 }
 

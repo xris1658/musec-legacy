@@ -17,7 +17,7 @@ namespace Musec
 {
 namespace Controller
 {
-Musec::DAO::LoggingDAO::LoggerType& AppLogger();
+void loadOrInitConfig();
 
 // Between splash screen is opened and main window in opened
 void initApplication(Musec::Event::SplashScreen* splashScreen);
@@ -47,12 +47,6 @@ void refreshPluginList(bool rescan);
 void loadAssetDirectoryList();
 
 void openSpecialCharacterInput();
-
-// Promise used for notification from `SplashScreenWorkThread` to main thread
-std::promise<QString>& loadTranslationPromiseStart();
-
-// Promise used for notification from main thread to `SplashScreenWorkThread`
-std::promise<bool>& loadTranslationPromiseEnd();
 }
 }
 

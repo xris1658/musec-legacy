@@ -23,58 +23,25 @@
 
 namespace Musec::Controller
 {
-void initApplication(Musec::Event::SplashScreen* splashScreen)
+void loadOrInitConfig()
 {
     using namespace Musec::Event;
     auto strings = Musec::UI::strings;
     if(Musec::Controller::findAppData())
     {
-        splashScreen->setBootText(strings->property("loadConfigText").toString());
         Musec::Controller::loadAppData();
     }
     else
     {
-        splashScreen->setBootText(strings->property("initConfigText").toString());
         Musec::Controller::initAppData();
-        // TODO: Opens the welcome window
     }
-    // Notify the main thread to load translation
-    auto& promiseStart = Musec::Controller::loadTranslationPromiseStart();
-    auto language = QString::fromStdString(
-        Musec::Controller::ConfigController::appConfig()
-        ["musec"]["options"]["general"]["language"]
-            .as<std::string>()
-    );
-    const auto& translationFileList = AppTranslationFileList();
-    auto size = translationFileList.itemCount();
-    bool foundTranslation = false;
-    for(decltype(size) i = 0; i < size; ++i)
-    {
-        using Musec::Model::TranslationFileModel;
-        if(std::get<TranslationFileModel::RoleNames::LanguageNameRole - Qt::UserRole>(translationFileList[i]) == language)
-        {
-            promiseStart.set_value(std::get<TranslationFileModel::RoleNames::PathRole - Qt::UserRole>(translationFileList[i]));
-            foundTranslation = true;
-            break;
-        }
-    }
-    if(!foundTranslation)
-    {
-        promiseStart.set_value("");
-    }
-    // Wait for the main thread
-    auto& promiseEnd = Musec::Controller::loadTranslationPromiseEnd();
-    promiseEnd.get_future().get();
-    auto systemRender =
-        Musec::Controller::ConfigController::appConfig()
-        ["musec"]["options"]["general"]["system-render"]
-        .as<bool>();
-    if(systemRender)
-    {
-        Musec::UI::Render::setSystemRender();
-    }
+}
+
+void initApplication(Musec::Event::SplashScreen* splashScreen)
+{
+    using namespace Musec::UI;
     auto& appConfig = Musec::Controller::ConfigController::appConfig();
-    splashScreen->setBootText(strings->property("searchingAudioDeviceText").toString());
+    splashScreen->setBootText("searchingAudioDeviceText");
     decltype(Musec::Audio::Driver::enumerateDrivers()) driverList;
     try
     {
@@ -89,8 +56,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
            Musec::UI::MessageDialog::IconType::Error
         );
     }
-    // FIXME: This might fail even if `Strings.qml` is constructed.
-    splashScreen->setBootText(strings->property("searchingASIODriverText").toString());
+    splashScreen->setBootText("searchingASIODriverText");
     Musec::Audio::Driver::AppASIODriver();
     auto driverCLSID = QString::fromStdString(
         appConfig["musec"]["options"]["audio-hardware"]["driver-id"]
@@ -111,7 +77,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
         {
             if(std::get<ASIODriverField::CLSIDField>(item) == driverCLSID)
             {
-                splashScreen->setBootText(strings->property("loadingASIODriverText").toString());
+                splashScreen->setBootText("loadingASIODriverText");
                 try
                 {
                     AppASIODriver() = ASIODriver(item);
@@ -128,7 +94,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
             }
         }
     }
-    splashScreen->setBootText(strings->property("openingMainWindowText").toString());
+    splashScreen->setBootText("openingMainWindowText");
 }
 
 
@@ -271,18 +237,6 @@ void loadAssetDirectoryList()
 void openSpecialCharacterInput()
 {
     Musec::Native::openSpecialCharacterInput();
-}
-
-std::promise<QString>& loadTranslationPromiseStart()
-{
-    static std::promise<QString> ret;
-    return ret;
-}
-
-std::promise<bool>& loadTranslationPromiseEnd()
-{
-    static std::promise<bool> ret;
-    return ret;
 }
 
 }

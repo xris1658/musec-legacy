@@ -15,7 +15,7 @@ Window {
     signal setBootText(newBootText: string)
 
     onSetBootText: {
-        bootText = newBootText;
+        bootText = strings[newBootText];
     }
 
     width: 810
