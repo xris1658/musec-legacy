@@ -68,26 +68,6 @@ ASIODriverBasicInfo ASIODriverImpl::driverInfo() const
     return driverInfo_;
 }
 
-IASIO* ASIODriverImpl::driver() const
-{
-    return driver_;
-}
-
-ASIODriverImpl::operator IASIO*() const
-{
-    return driver();
-}
-
-IASIO* ASIODriverImpl::operator*() const
-{
-    return driver();
-}
-
-IASIO* ASIODriverImpl::operator->() const
-{
-    return driver();
-}
-
 void ASIODriverImpl::swap(ASIODriverImpl& rhs)
 {
     std::swap(driver_, rhs.driver_);

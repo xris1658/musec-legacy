@@ -23,10 +23,22 @@ public:
     ~ASIODriverImpl();
 public:
     ASIODriverBasicInfo driverInfo() const;
-    inline IASIO* driver() const;
-    operator IASIO*() const;
-    IASIO* operator*() const;
-    IASIO* operator->() const;
+    IASIO* driver() const
+    {
+        return driver_;
+    }
+    operator IASIO*() const
+    {
+        return driver_;
+    }
+    IASIO* operator*() const
+    {
+        return driver_;
+    }
+    IASIO* operator->() const
+    {
+        return driver_;
+    }
 public:
     void swap(ASIODriverImpl& rhs);
 private:
