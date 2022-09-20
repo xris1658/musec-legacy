@@ -1325,6 +1325,11 @@ If you add dithering devices on the master track, please uncheck this option.</s
         <source>Plugins</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../qmlproject/OptionsWindow.qml" line="55"/>
+        <source>Arrangement</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PluginSettings</name>
