@@ -40,6 +40,9 @@ Window {
             SplitView.minimumWidth: 100
             SplitView.maximumWidth: 250
             height: parent.height
+            Keys.onEscapePressed: {
+                root.close();
+            }
             Rectangle {
                 anchors.fill: parent
                 anchors.margins: 5
@@ -70,6 +73,7 @@ Window {
                             anchors.leftMargin: parent.height / 2
                             anchors.right: parent.right
                             anchors.rightMargin: anchors.leftMargin
+                            anchors.verticalCenter: parent.verticalCenter
                             elide: Text.ElideRight
                             color: categoryList.currentIndex == index? Constants.listHighlightContentColor: Constants.contentColor1
                         }

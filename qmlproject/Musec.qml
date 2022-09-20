@@ -253,6 +253,7 @@ ApplicationWindow {
                     EventBridge.setWindowIcon(optionsWindow);
                     optionsWindow.showNormal();
                     EventBridge.optionsWindowOpened();
+                    optionsWindow.requestActivate();
                 }
             }
             MCtrl.MenuSeparator {}
