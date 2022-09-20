@@ -15,10 +15,6 @@ namespace Audio
 {
 namespace Engine
 {
-namespace Impl
-{
-std::int64_t getCurrentTimeInNanosecond();
-}
 template<std::size_t PPQ>
 using MIDIClockNotifyFunc = void(*)(Musec::Audio::Base::TimePoint<PPQ>);
 
@@ -71,23 +67,31 @@ public:
     void clockFunc()
     {
         Musec::Native::setThreadPriorityToTimeCritical();
+        auto fence = Musec::Native::currentTimePointInNanosecond();
+        constexpr auto sleepRate = 0.95;
         while(!aboutToDie_)
         {
-            while(!playing_) { Sleep(0); }
-            auto fence = Impl::getCurrentTimeInNanosecond();
-            while(playing_)
+            if constexpr(AsyncNotify)
             {
-                if(AsyncNotify)
-                {
-                    std::async(std::launch::async, notify_, position_);
-                }
-                else
-                {
-                    notify_(position_);
-                }
-                auto delta = tempoAutomation_.secondElapsedInPulse(position_) * 1e9;
-                fence += delta;
-                while(Impl::getCurrentTimeInNanosecond() < fence) { Sleep(0); }
+                std::async(std::launch::async, notify_, position_);
+            }
+            else
+            {
+                notify_(position_);
+            }
+            auto until = fence + std::chrono::nanoseconds(
+                std::chrono::nanoseconds::rep(tempoAutomation_.secondElapsedInPulse(position_) * sleepRate * 1e9)
+            );
+            fence += std::chrono::nanoseconds(
+                std::chrono::nanoseconds::rep(tempoAutomation_.secondElapsedInPulse(position_) * 1e9)
+            );
+            std::this_thread::sleep_until(until);
+            // Hybrid sleep: Sleep for a while and wake up before the time is up,
+            // then busy sleep until the time is up.
+            // sleepRate indicates how long the thread should sleep for.
+            while(Musec::Native::currentTimePointInNanosecond() < fence) { std::this_thread::yield(); }
+            if(playing())
+            {
                 ++position_;
             }
         }

@@ -112,7 +112,7 @@ void fillPluginContext()
         processContext.state |= ProcessContext::StatesAndFlags::kPlaying;
     }
     processContext.sampleRate = getCurrentSampleRate();
-    processContext.systemTime = Musec::Native::currentTimeInNanosecond();
+    processContext.systemTime = Musec::Native::currentTimeValueInNanosecond();
     processContext.tempo = currentTempo;
     Musec::Audio::Plugin::fillEventHeader(eventTransport, CLAP_EVENT_TRANSPORT);
     auto& header = eventTransport.header;

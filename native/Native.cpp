@@ -180,7 +180,7 @@ SystemTimeStringType formatTime(const SystemTimeType& time)
 
 void openSpecialCharacterInput()
 {
-    ShellExecuteA(nullptr, "open", "charmap.exe", nullptr, nullptr, SW_NORMAL);
+    ShellExecuteW(nullptr, L"open", L"charmap.exe", nullptr, nullptr, SW_NORMAL);
 }
 
 void showFileInExplorer(const QString& path)
@@ -228,7 +228,7 @@ ThreadMaskType setThreadMask(ThreadMaskType mask)
     return ret;
 }
 
-std::int64_t currentTimeInNanosecond()
+std::int64_t currentTimeValueInNanosecond()
 {
     // // Ver 1 (Windows API)
     // auto qpf = Impl::qpf();
@@ -240,12 +240,21 @@ std::int64_t currentTimeInNanosecond()
     // https://github.com/microsoft/STL/blob/main/stl/inc/__msvc_chrono.hpp#L668
     // Thread affinity is not set automatically. If you want the time to be continuous, make sure
     // that this thread only runs on only one CPU core.
-    return std::chrono::steady_clock::now().time_since_epoch().count();
+    // return std::chrono::steady_clock::now().time_since_epoch().count();
+
+    return std::chrono::duration_cast<std::chrono::nanoseconds>(
+        std::chrono::steady_clock::now().time_since_epoch()
+    ).count();
 
      // // Ver 2
      // std::uint64_t ret;
      // QueryInterruptTimePrecise(&ret);
      // return ret * 100;
+}
+
+std::chrono::time_point<std::chrono::steady_clock, std::chrono::nanoseconds> currentTimePointInNanosecond()
+{
+    return std::chrono::time_point_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now());
 }
 
 void setThreadPriorityToTimeCritical()

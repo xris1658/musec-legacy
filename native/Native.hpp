@@ -57,7 +57,9 @@ ThreadMaskType getMIDIClockThreadAffinity();
 
 ThreadMaskType setThreadMask(ThreadMaskType mask);
 
-std::int64_t currentTimeInNanosecond();
+std::int64_t currentTimeValueInNanosecond();
+
+std::chrono::time_point<std::chrono::steady_clock, std::chrono::nanoseconds> currentTimePointInNanosecond();
 
 void setThreadPriorityToTimeCritical();
 

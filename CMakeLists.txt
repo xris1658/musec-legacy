@@ -68,7 +68,6 @@ set(PROJECT_SOURCES
     audio/driver/Literals.cpp
     audio/driver/Literals.hpp
     audio/engine/Graph.hpp
-    audio/engine/MIDIClock.cpp
     audio/engine/MIDIClock.hpp
     audio/engine/Project.cpp
     audio/engine/Project.hpp

@@ -102,7 +102,7 @@ void CLAPPlugin::process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs
 {
     // const auto& eventTransport = Musec::Audio::Host::AppCLAPEventTransport();
     // eventInputList_.push(&(eventTransport.header));
-    processData_.steady_time = Musec::Native::currentTimeInNanosecond();
+    processData_.steady_time = Musec::Native::currentTimeValueInNanosecond();
     processData_.frames_count = Musec::Controller::AudioEngineController::getCurrentBlockSize();
     rawInputs_.resize(this->inputCount());
     rawOutputs_.resize(this->outputCount());

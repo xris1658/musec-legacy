@@ -171,7 +171,6 @@ SOURCES += \
     audio/driver/ASIOCallback.cpp \
     audio/driver/ASIODriver.cpp \
     audio/driver/Literals.cpp \
-    audio/engine/MIDIClock.cpp \
     audio/engine/Project.cpp \
     audio/host/CLAPEvents.cpp \
     audio/host/CLAPHost.cpp \
