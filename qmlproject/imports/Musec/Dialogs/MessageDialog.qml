@@ -37,6 +37,7 @@ Window {
     onClicked: {
         //
     }
+    property DialogButtonBox dialogButtonBox: dialogButtonBox
     Row {
         id: row
         padding: 10

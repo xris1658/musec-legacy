@@ -110,7 +110,7 @@ QQC2.ComboBox {
     }
     popup: Menu {
         width: comboBox.popupWidth
-        y: parent.height
+        y: parent.height - 1
         implicitHeight: contentItem.implicitHeight + 2
         padding: 1
         contentItem: ListView {

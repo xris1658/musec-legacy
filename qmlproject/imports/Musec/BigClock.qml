@@ -24,6 +24,15 @@ Item {
         }
         return ret;
     }
+    function clampBpm(bpm_: double): double {
+        if(bpm_ > 300) {
+            return 300;
+        }
+        else if(bpm_ < 30) {
+            return 30;
+        }
+        return bpm_;
+    }
 
     onBpmChanged: {
         tempoIndicatorBeforePoint.text = getFloorWithWidth(bpm);
@@ -325,6 +334,14 @@ Item {
                         font.styleName: "Condensed SemiBold"
                         font.pointSize: 17
                         height: contentHeight * 0.7
+                        MouseArea {
+                            id: tempoMainMouseArea
+                            anchors.fill: parent
+                            onWheel: {
+                                var newBpm = bpm + wheel.angleDelta.y / 120;
+                                bpm = clampBpm(newBpm);
+                            }
+                        }
                     }
                     Text {
                         id: tempoIndicatorPoint
@@ -336,8 +353,13 @@ Item {
                         font.styleName: "Condensed SemiBold"
                         font.pointSize: 12
                         height: contentHeight * 0.7
+                        MouseArea {
+                            anchors.fill: parent
+                            onWheel: {
+                                tempoMainMouseArea.wheel(wheel);
+                            }
+                        }
                     }
-
                     Text {
                         id: tempoIndicatorAfterPoint
                         anchors.bottom: parent.bottom
@@ -348,6 +370,23 @@ Item {
                         font.styleName: "Condensed SemiBold"
                         font.pointSize: 8
                         height: contentHeight * 0.7
+                        Row {
+                            Repeater {
+                                model: 3
+                                MouseArea {
+                                    width: tempoIndicatorAfterPoint.contentWidth / 3
+                                    height: tempoIndicatorAfterPoint.contentHeight
+                                    onWheel: {
+                                        var newBpm = bpm + wheel.angleDelta.y / 1200 / Math.pow(10, index);
+                                        // Fix circumstances like 127.999 -> 127.000
+                                        // (when `bpm` is a value in [127.9995, 128)).
+                                        newBpm = Math.round(newBpm * 1000) / 1000.0;
+                                        bpm = clampBpm(newBpm);
+                                    }
+                                }
+                            }
+
+                        }
                     }
                 }
 
