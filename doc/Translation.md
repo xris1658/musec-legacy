@@ -1,3 +1,6 @@
+| English | [简体中文](./Translation-zh.md) |
+| ------- | ------------------------------- |
+
 # Translation
 This file covers the translation status of this project, as well as methods to add translations and so on.
 

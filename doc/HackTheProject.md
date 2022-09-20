@@ -1,5 +1,5 @@
 | English | [简体中文](./HackTheProject-zh.md) |
-|---------|--------------------------------|
+| ------- | ---------------------------------- |
 
 # Hack The Project
 This file is for those who wants to build the application from the source code, or maybe modifying the code.
