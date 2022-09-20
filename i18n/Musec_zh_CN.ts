@@ -184,6 +184,54 @@
     </message>
 </context>
 <context>
+    <name>ArrangementSettings</name>
+    <message>
+        <location filename="../qmlproject/ArrangementSettings.qml" line="24"/>
+        <source>Automation</source>
+        <translation>自动化</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/ArrangementSettings.qml" line="37"/>
+        <source>Moving point behavior</source>
+        <translation>移动点行为</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/ArrangementSettings.qml" line="46"/>
+        <source>Leap</source>
+        <translation>跨越</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/ArrangementSettings.qml" line="46"/>
+        <source>Erase</source>
+        <translation>抹除</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/ArrangementSettings.qml" line="46"/>
+        <source>Limit</source>
+        <translation>受限</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/ArrangementSettings.qml" line="51"/>
+        <source>Grid</source>
+        <translation>网格</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/ArrangementSettings.qml" line="64"/>
+        <source>Scale</source>
+        <translation>刻度</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/ArrangementSettings.qml" line="72"/>
+        <source>Time Linear</source>
+        <translation>与实际时间成线性</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/ArrangementSettings.qml" line="72"/>
+        <source>Beat Linear</source>
+        <translation>与节拍成线性</translation>
+    </message>
+</context>
+<context>
     <name>Assets</name>
     <message>
         <location filename="../qmlproject/imports/Musec/Assets.qml" line="127"/>

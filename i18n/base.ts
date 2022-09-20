@@ -179,6 +179,54 @@
     </message>
 </context>
 <context>
+    <name>ArrangementSettings</name>
+    <message>
+        <location filename="../qmlproject/ArrangementSettings.qml" line="24"/>
+        <source>Automation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/ArrangementSettings.qml" line="37"/>
+        <source>Moving point behavior</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/ArrangementSettings.qml" line="46"/>
+        <source>Leap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/ArrangementSettings.qml" line="46"/>
+        <source>Erase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/ArrangementSettings.qml" line="46"/>
+        <source>Limit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/ArrangementSettings.qml" line="51"/>
+        <source>Grid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/ArrangementSettings.qml" line="64"/>
+        <source>Scale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/ArrangementSettings.qml" line="72"/>
+        <source>Time Linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/ArrangementSettings.qml" line="72"/>
+        <source>Beat Linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Assets</name>
     <message>
         <location filename="../qmlproject/imports/Musec/Assets.qml" line="37"/>

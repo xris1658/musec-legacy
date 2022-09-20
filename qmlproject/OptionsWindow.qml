@@ -52,7 +52,7 @@ Window {
                     interactive: false
                     highlightMoveDuration: 0
                     highlightResizeDuration: 0
-                    model: [qsTr("General"), qsTr("Audio Hardware"), qsTr("Plugins")]
+                    model: [qsTr("General"), qsTr("Audio Hardware"), qsTr("Plugins"), qsTr("Arrangement")]
                     delegate: Item {
                         id: itemDelegate
                         width: parent.width
@@ -99,6 +99,9 @@ Window {
                     }
                     PluginSettings {
                         id: pluginSettings
+                    }
+                    ArrangementSettings {
+                        id: arrangementSettings
                     }
                 }
             }
