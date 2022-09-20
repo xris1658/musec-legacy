@@ -62,7 +62,7 @@ Item {
                     anchors.centerIn: parent
                     text: "3"
                     color: triplets? Constants.backgroundColor: Constants.contentColor1
-                    font.family: "Noto Sans Mono Condensed"
+                    font.family: Constants.myMonoFont.name
                     font.styleName: "SemiBold"
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
@@ -90,7 +90,7 @@ Item {
                 contentItem: Text {
                     anchors.centerIn: parent
                     text: "SCALE"
-                    font.family: "Noto Sans Mono Condensed"
+                    font.family: Constants.myMonoFont.name
                     font.styleName: "SemiBold"
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter

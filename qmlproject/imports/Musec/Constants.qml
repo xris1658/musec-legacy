@@ -7,6 +7,7 @@ QtObject {
     readonly property int height: 900
 
     readonly property FontLoader myFont: FontLoader { name: "Noto Sans CJK SC" }
+    readonly property FontLoader myFontBold: FontLoader { name: "Noto Sans CJK SC Bold" }
     readonly property FontLoader myMonoFont: FontLoader { name: "Noto Sans Mono Condensed" }
 
     property alias fontDirectory: directoryFontLoader.fontDirectory

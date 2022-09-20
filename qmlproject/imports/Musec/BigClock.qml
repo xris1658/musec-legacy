@@ -95,7 +95,7 @@ Item {
                         text: root.engineRunning? cpu + "%": "OFF"
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
-                        font.family: "Noto Sans Mono Condensed"
+                        font.family: Constants.myMonoFont.name
                         font.bold: true
                         font.pointSize: 12
                         color: Constants.contentColor1
@@ -106,7 +106,7 @@ Item {
                     text: "CPU"
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: Constants.bigClockAltTextColor
-                    font.family: "Noto Sans Mono Condensed"
+                    font.family: Constants.myMonoFont.name
                     font.pointSize: 8
                     font.capitalization: Font.AllUppercase
                 }
@@ -209,7 +209,7 @@ Item {
                     text: "KEY SIG."
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: Constants.bigClockAltTextColor
-                    font.family: "Noto Sans Mono Condensed"
+                    font.family: Constants.myMonoFont.name
                     font.pointSize: 8
                     font.capitalization: Font.AllUppercase
                 }
@@ -250,7 +250,7 @@ Item {
                     text: "LOOP"
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: Constants.bigClockAltTextColor
-                    font.family: "Noto Sans Mono Condensed"
+                    font.family: Constants.myMonoFont.name
                     font.pointSize: 8
                     font.capitalization: Font.AllUppercase
                 }
@@ -296,7 +296,7 @@ Item {
                     text: textTimeFormat.get(comboTimeFormat.currentIndex).name
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: Constants.bigClockAltTextColor
-                    font.family: "Noto Sans Mono Condensed"
+                    font.family: Constants.myMonoFont.name
                     font.pointSize: 8
                     font.capitalization: Font.AllUppercase
 
@@ -394,7 +394,7 @@ Item {
                     text: "TEMPO"
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: Constants.bigClockAltTextColor
-                    font.family: "Noto Sans Mono Condensed"
+                    font.family: Constants.myMonoFont.name
                     font.pointSize: 8
                     font.capitalization: Font.AllUppercase
                 }
@@ -424,7 +424,7 @@ Item {
                         anchors.rightMargin: 2
                         text: timeSignatureIndicatorNumeratorComboBox.currentText
                         color: Constants.bigClockTextColor
-                        font.family: "Noto Sans Mono Condensed"
+                        font.family: Constants.myMonoFont.name
                         font.bold: true
                         font.pointSize: 12
                         MCtrl.ComboBox {
@@ -442,7 +442,7 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                         text: "/"
                         color: Constants.bigClockTextColor
-                        font.family: "Noto Sans Mono Condensed"
+                        font.family: Constants.myMonoFont.name
                         font.pointSize: 17
                     }
                     Text {
@@ -453,7 +453,7 @@ Item {
                         anchors.bottomMargin: -6
                         text: timeSignatureIndicatorDenominatorComboBox.currentText
                         color: Constants.bigClockTextColor
-                        font.family: "Noto Sans Mono Condensed"
+                        font.family: Constants.myMonoFont.name
                         font.bold: true
                         font.pointSize: 12
                         MCtrl.ComboBox {
@@ -470,7 +470,7 @@ Item {
                     text: "TIME SIG."
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: Constants.bigClockAltTextColor
-                    font.family: "Noto Sans Mono Condensed"
+                    font.family: Constants.myMonoFont.name
                     font.pointSize: 8
                     font.capitalization: Font.AllUppercase
                 }

@@ -34,7 +34,7 @@ Item {
                         anchors.rightMargin: 5
                         anchors.verticalCenter: parent.verticalCenter
                         text: (num % 12 == 0) ? "C" + (num - (num % 12)) / 12 : ""
-                        font.family: "Noto Sans Mono Condensed"
+                        font.family: Constants.myMonoFont.name
                         font.bold: true
                     }
                 }

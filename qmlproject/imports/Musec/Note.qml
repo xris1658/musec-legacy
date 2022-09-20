@@ -64,7 +64,7 @@ Item {
         anchors.left: parent.left
         anchors.leftMargin: 3
         text: (Constants.dynamicKeyName.get(noteMidiNum % 12).sharp) + ((noteMidiNum - noteMidiNum % 12) / 12)
-        font.family: "Noto Sans Mono Condensed"
+        font.family: Constants.myMonoFont.name
         font.bold: true
         font.pixelSize: control.height - 2
         color: "#000000"

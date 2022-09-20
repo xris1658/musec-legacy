@@ -54,7 +54,8 @@ Window {
                     Text {
                         text: qsTr("About Qt")
                         color: Constants.contentColor1
-                        font.family: "Noto Sans CJK SC Bold"
+                        font.family: Constants.myFont.name
+                        font.bold: true
                         font.pixelSize: 20
                     }
                     Text {

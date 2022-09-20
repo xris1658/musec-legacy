@@ -49,7 +49,7 @@ Rectangle {
                     anchors.bottom: parent.bottom
                     anchors.topMargin: 0
                     text: index + 1
-                    font.family: "Noto Sans Mono Condensed"
+                    font.family: Constants.myMonoFont.name
                     color: Constants.borderColor
                 }
             }
