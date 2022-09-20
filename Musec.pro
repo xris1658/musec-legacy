@@ -153,6 +153,7 @@ HEADERS += \
     model/TempoAutomationModel.hpp \
     model/TrackListModel.hpp \
     model/TranslationFileModel.hpp \
+    native/ASIODriverImpl.hpp \
     native/Native.hpp \
     native/WindowsLibraryRAII.hpp \
     ui/FontUtility.hpp \
@@ -237,6 +238,7 @@ SOURCES += \
     model/TempoAutomationModel.cpp \
     model/TrackListModel.cpp \
     model/TranslationFileModel.cpp \
+    native/ASIODriverImpl.cpp \
     native/Native.cpp \
     native/WindowsLibraryRAII.cpp \
     ui/FontUtility.cpp \
