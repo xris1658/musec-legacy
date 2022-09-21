@@ -43,7 +43,7 @@ Window {
                 if(down) {
                     // TODO: Retrieve current time from the C++ backend
                     var now_ = Date.now();
-                    if(variables.clickedInterval) {
+                    if(variables.clickedInterval != 0) {
                         variables.now = now_;
                         root.bpm = 60000.0 * variables.clickedInterval / (variables.now - variables.start);
                     }
@@ -51,6 +51,11 @@ Window {
                         variables.start = now_;
                     }
                     ++variables.clickedInterval;
+                    if(variables.clickedInterval > 1) {
+                        if(root.bpm > 300 || root.bpm < 30) {
+                            variables.clickedInterval = 0;
+                        }
+                    }
                 }
             }
         }
@@ -60,7 +65,7 @@ Window {
             Text {
                 id: bpmText
                 anchors.centerIn: parent
-                text: bpm.toFixed(3);
+                text: variables.clickedInterval > 1? root.bpm.toFixed(3): "..."
                 font.family: "Noto Sans Mono"
                 font.styleName: "Condensed"
                 font.bold: true
@@ -81,14 +86,16 @@ Window {
                 MCtrl.Button {
                     id: buttonRound
                     text: qsTr("&Round")
+                    enabled: variables.clickedInterval > 1
                     onClicked: {
                         bpm = Math.round(bpm);
-                        variables.clickedInterval = 0;
                     }
                 }
                 MCtrl.Button {
                     text: qsTr("&Apply and Close")
+                    enabled: variables.clickedInterval > 1
                     onClicked: {
+                        root.bpm = 0.001 * Math.floor(root.bpm * 1000);
                         Objects.mainWindow.bpm = root.bpm;
                         root.close();
                     }
