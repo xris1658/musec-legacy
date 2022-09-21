@@ -100,7 +100,7 @@ Item {
             text: qsTr("Insert &Instrument Track Above")
             onTriggered: {
                 let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
-                    root, null);
+                    root, "");
                 completeTrack.trackColor = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
                 completeTrack.trackName = qsTr("Instrument");
                 completeTrack.trackType = CompleteTrack.InstrumentTrack;
@@ -112,7 +112,7 @@ Item {
             text: qsTr("Insert &Audio Track Above")
             onTriggered: {
                 let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
-                    root, null);
+                    root, "");
                 completeTrack.trackColor = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
                 completeTrack.trackName = qsTr("Audio");
                 completeTrack.trackType = CompleteTrack.AudioTrack;
@@ -269,7 +269,7 @@ Item {
                         text: qsTr("Append an &Instrument Track")
                         onTriggered: {
                             let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
-                                root, null);
+                                root, "");
                             completeTrack.trackColor = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
                             completeTrack.trackName = qsTr("Instrument");
                             completeTrack.trackType = CompleteTrack.InstrumentTrack;
@@ -282,7 +282,7 @@ Item {
                         text: qsTr("Append an &Audio Track")
                         onTriggered: {
                             let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
-                                root, null);
+                                root, "");
                             completeTrack.trackColor = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
                             completeTrack.trackName = qsTr("Audio");
                             completeTrack.trackType = CompleteTrack.AudioTrack;

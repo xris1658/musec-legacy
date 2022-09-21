@@ -389,7 +389,7 @@ Item {
                     onDoubleClicked: {
                         var note = 127 - (mouseY - mouseY % pianoKey.keyHeight) / pianoKey.keyHeight;
                         var item = Qt.createQmlObject("import Musec 1.0; Note {}",
-                            contentArea, null
+                            contentArea, ""
                         );
                         var _x = mouseX - contentArea.x + contentAreaRect.x;
                         item.x = _x - _x % verticalLineSpacing + 1;
