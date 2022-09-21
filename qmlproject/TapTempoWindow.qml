@@ -39,16 +39,19 @@ Window {
             text: "TAP"
             width: root.width - 10 * 2
             height: width
-            onClicked: {
-                var now_ = Date.now();
-                if(variables.clickedInterval) {
-                    variables.now = now_;
-                    root.bpm = 60000.0 * variables.clickedInterval / (variables.now - variables.start);
+            onDownChanged: {
+                if(down) {
+                    // TODO: Retrieve current time from the C++ backend
+                    var now_ = Date.now();
+                    if(variables.clickedInterval) {
+                        variables.now = now_;
+                        root.bpm = 60000.0 * variables.clickedInterval / (variables.now - variables.start);
+                    }
+                    else {
+                        variables.start = now_;
+                    }
+                    ++variables.clickedInterval;
                 }
-                else {
-                    variables.start = now_;
-                }
-                ++variables.clickedInterval;
             }
         }
         Item {
