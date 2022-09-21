@@ -86,7 +86,7 @@ Item {
                         anchors.fill: parent
                         hoverEnabled: true
                         acceptedButtons: Qt.LeftButton | Qt.RightButton
-                        onClicked: {
+                        onClicked: (mouse) => {
                             if(mouse.button & Qt.LeftButton) {
                                 expandableItemButton.clicked();
                             }

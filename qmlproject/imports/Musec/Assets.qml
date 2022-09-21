@@ -26,7 +26,7 @@ Rectangle {
     signal renameAssetDirectory(id: int, name: string)
     signal removeAssetDirectory(id: int)
     signal setNewAssetDirectoryId(newId: int)
-    onSetNewAssetDirectoryId: {
+    onSetNewAssetDirectoryId: (newId) => {
         assetDirectoryListModel.setProperty(assetDirectoryListModel.count - 1, "id", newId);
     }
 
@@ -258,7 +258,7 @@ Rectangle {
                 anchors.fill: parent
                 acceptedButtons: Qt.RightButton
                 hoverEnabled: true
-                onClicked: {
+                onClicked: (mouse) => {
                     assetsSearchBox.selectStart = assetsSearchBox.selectionStart;
                     assetsSearchBox.selectEnd = assetsSearchBox.selectionEnd;
                     assetsSearchBox.curPos = assetsSearchBox.cursorPosition;
@@ -266,7 +266,7 @@ Rectangle {
                     assetsSearchBox.cursorPosition = assetsSearchBox.curPos;
                     assetsSearchBox.select(assetsSearchBox.selectStart, assetsSearchBox.selectEnd);
                 }
-                onPressAndHold: {
+                onPressAndHold: (mouse) => {
                     if (mouse.source === Qt.MouseEventNotSynthesized) {
                         assetsSearchBox.selectStart = assetsSearchBox.selectionStart;
                         assetsSearchBox.selectEnd = assetsSearchBox.selectionEnd;
@@ -437,7 +437,7 @@ Rectangle {
                                                                              Constants.contentColor1
                                         }
                                     }
-                                    onClicked: {
+                                    onClicked: (mouse) => {
                                         if(mouse.button == Qt.LeftButton) {
                                             rightColumn.currentIndex = 0;
                                             directoryContent.currentIndex = index;

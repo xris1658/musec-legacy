@@ -32,13 +32,13 @@ Item {
     signal audioSlotRightClicked(index: int, x: int, y: int)
     // Operations of instrument
     signal instrumentSlotDragEventEntered(drag: var)
-    onInstrumentSlotDragEventEntered: {
+    onInstrumentSlotDragEventEntered: (drag) => {
         if(drag.getDataAsString("type") != 2) {
             drag.accepted = false;
         }
     }
     signal instrumentSlotDragEventDropped(drop: var)
-    onInstrumentSlotDragEventDropped: {
+    onInstrumentSlotDragEventDropped: (drop) => {
         var format = parseInt(drop.getDataAsString("format"));
         var path = drop.getDataAsString("path");
         var pluginSubId = parseInt(drop.getDataAsString("uid"));
@@ -50,40 +50,40 @@ Item {
     signal audioEffectSlotEnabledToggled(audioEffectEnabled: bool, effectIndex: int)
     // Operations of audio effect
     signal audioEffectSlotDragEventEntered(drag: var, audioEffectIndex: int)
-    onAudioEffectSlotDragEventEntered: {
+    onAudioEffectSlotDragEventEntered: (drag, audioEffectIndex) => {
         if(drag.getDataAsString("type") != 3) {
             drag.accepted = false;
         }
     }
     signal audioEffectSlotDragEventDropped(drop: var, audioEffectIndex: int)
-    onAudioEffectSlotDragEventDropped: {
+    onAudioEffectSlotDragEventDropped: (drop, audioEffectIndex) => {
         var format = parseInt(drop.getDataAsString("format"));
         var path = drop.getDataAsString("path");
         var pluginSubId = parseInt(drop.getDataAsString("uid"));
         replaceEffect(path, pluginSubId, format, audioEffectIndex);
     }
     signal betweenAudioEffectSlotDragEventEntered(drag: var, audioEffectIndex: int)
-    onBetweenAudioEffectSlotDragEventEntered: {
+    onBetweenAudioEffectSlotDragEventEntered: (drag, audioEffectIndex) => {
         if(drag.getDataAsString("type") != 3) {
             drag.accepted = false;
         }
     }
 
     signal betweenAudioEffectSlotDragEventDropped(drop: var, audioEffectIndex: int)
-    onBetweenAudioEffectSlotDragEventDropped: {
+    onBetweenAudioEffectSlotDragEventDropped: (drop, audioEffectIndex) => {
         var format = parseInt(drop.getDataAsString("format"));
         var path = drop.getDataAsString("path");
         var pluginSubId = parseInt(drop.getDataAsString("uid"));
         insertEffect(path, pluginSubId, format, audioEffectIndex);
     }
     signal blankAreaDragEventEntered(drag: var)
-    onBlankAreaDragEventEntered: {
+    onBlankAreaDragEventEntered: (drag) => {
         if(drag.getDataAsString("type") != 3 && root.channelType != CompleteTrack.InstrumentTrack) {
             drag.accepted = false;
         }
     }
     signal blankAreaDragEventDropped(drop: var)
-    onBlankAreaDragEventDropped: {
+    onBlankAreaDragEventDropped: (drop) => {
         var format = parseInt(drop.getDataAsString("format"));
         var path = drop.getDataAsString("path");
         var pluginSubId = parseInt(drop.getDataAsString("uid"));
@@ -147,10 +147,10 @@ Item {
                         sidechainExist: root.instrumentSidechainExist
                         sidechainEnabled: root.instrumentSidechainEnabled
                         editorVisible: root.instrumentEditorVisible
-                        onEntered: {
+                        onEntered: (drag) => {
                             root.instrumentSlotDragEventEntered(drag);
                         }
-                        onDropped: {
+                        onDropped: (drop) => {
                             root.instrumentSlotDragEventDropped(drop);
                         }
                         onClicked: {
@@ -160,7 +160,7 @@ Item {
                             console.log(!slotEnabled);
                             root.instrumentSlotEnabledToggled(!slotEnabled);
                         }
-                        onRightClicked: {
+                        onRightClicked: (x, y) => {
                             root.instrumentSlot = instrumentButton;
                             root.instrumentSlotRightClicked(x, y);
                         }
@@ -176,10 +176,10 @@ Item {
                         sidechainExist: sidechain_exist
                         sidechainEnabled: sidechain_enabled
                         editorVisible: window_visible
-                        onEntered: {
+                        onEntered: (drag) => {
                             root.audioEffectSlotDragEventEntered(drag, index);
                         }
-                        onDropped: {
+                        onDropped: (drop) => {
                             root.audioEffectSlotDragEventDropped(drop, index);
                         }
                         onClicked: {
@@ -188,7 +188,7 @@ Item {
                         onEnabledButtonClicked: {
                             processing = !slotEnabled;
                         }
-                        onRightClicked: {
+                        onRightClicked: (x, y) => {
                             root.audioSlotRightClicked(index, x, y);
                         }
                     }
@@ -202,10 +202,10 @@ Item {
                             anchors.fill: parent
                             color: betweenMixerSlot.containsDrag? Constants.mouseOverElementColor: "transparent"
                         }
-                        onEntered: {
+                        onEntered: (drag) => {
                             root.betweenAudioEffectSlotDragEventEntered(drag, index);
                         }
-                        onDropped: {
+                        onDropped: (drop) => {
                             root.betweenAudioEffectSlotDragEventDropped(drop, index);
                         }
                     }
@@ -223,10 +223,10 @@ Item {
                     DropArea {
                         id: channelEffectDropArea
                         anchors.fill: parent
-                        onEntered: {
+                        onEntered: (drag) => {
                             root.blankAreaDragEventEntered(drag);
                         }
-                        onDropped: {
+                        onDropped: (drop) => {
                             root.blankAreaDragEventDropped(drop);
                         }
                     }

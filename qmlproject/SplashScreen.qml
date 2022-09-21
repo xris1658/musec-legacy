@@ -14,7 +14,7 @@ Window {
     property alias bootText: text_.text
     signal setBootText(newBootText: string)
 
-    onSetBootText: {
+    onSetBootText: (newBootText) => {
         bootText = strings[newBootText];
     }
 

@@ -61,7 +61,7 @@ Window {
                                        .arg(homepage)
                                 visible: hover.hovered
                             }
-                            onLinkActivated: {
+                            onLinkActivated: (link) => {
                                 Qt.openUrlExternally(link);
                             }
                         }

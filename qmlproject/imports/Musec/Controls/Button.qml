@@ -46,9 +46,6 @@ QQC2.Button {
             press();
         }
     }
-//    Keys.onEscapePressed: {
-//        down = false;
-//    }
 
     Keys.onReleased: {
         if(control.activeFocus && down) {

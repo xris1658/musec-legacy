@@ -146,7 +146,7 @@ Item {
                 keyHeight: horizontalLineSpacing
                 MouseArea {
                     anchors.fill: parent
-                    onWheel: {
+                    onWheel: (wheel) => {
                         vbar.position += 0.1 * wheel.angleDelta.y / 1080.0 * (wheel.inverted? 1: -1);
                         if(vbar.position > 1 - vbar.size)
                         {
@@ -262,7 +262,7 @@ Item {
                 }
                 MouseArea {
                     anchors.fill: parent
-                    onWheel: {
+                    onWheel: (wheel) => {
                         hbar.position -= 0.1 * wheel.angleDelta.y / 540.0 * (wheel.inverted? -1: 1);
                         if(hbar.position > 1 - hbar.size)
                         {
@@ -328,7 +328,7 @@ Item {
                 MouseArea {
                     anchors.fill: parent
                     scrollGestureEnabled: true
-                    onWheel: {
+                    onWheel: (wheel) => {
                         if(wheel.modifiers == Qt.NoModifier)
                         {
                             vbar.position += 0.1 * wheel.angleDelta.y / 1080.0 * (wheel.inverted? 1: -1);
@@ -386,14 +386,14 @@ Item {
                             }
                         }
                     }
-                    onDoubleClicked: {
-                        var note = 127 - (mouseY - mouseY % pianoKey.keyHeight) / pianoKey.keyHeight;
+                    onDoubleClicked: (mouse) => {
+                        var note = 127 - (mouse.y - mouse.y % pianoKey.keyHeight) / pianoKey.keyHeight;
                         var item = Qt.createQmlObject("import Musec 1.0; Note {}",
                             contentArea, ""
                         );
-                        var _x = mouseX - contentArea.x + contentAreaRect.x;
+                        var _x = mouse.x- contentArea.x + contentAreaRect.x;
                         item.x = _x - _x % verticalLineSpacing + 1;
-                        item.y = mouseY - mouseY % pianoKey.keyHeight + 1;
+                        item.y = mouse.y - mouse.y % pianoKey.keyHeight + 1;
                         item.width = verticalLineSpacing - 1;
                         item.height = pianoKey.keyHeight - 1;
                         item.noteMidiNum = note;

@@ -51,7 +51,7 @@ Rectangle {
         }
     }
     signal instrumentSlotRightClicked(trackIndex: int, x: int, y: int)
-    onInstrumentSlotRightClicked: {
+    onInstrumentSlotRightClicked: (trackIndex, x, y) => {
         instrumentSlotOptions.parent = (trackChannelList.itemAtIndex(trackIndex).mixerChannelOfThis.instrumentSlot);
         instrumentSlotOptions.trackIndex = trackIndex;
         instrumentSlotOptions.x = x;
@@ -60,7 +60,7 @@ Rectangle {
     }
 
     signal audioEffectSlotRightClicked(trackIndex: int, audioEffectIndex: int, x: int, y: int)
-    onAudioEffectSlotRightClicked: {
+    onAudioEffectSlotRightClicked: (trackIndex, audioEffectIndex, x, y) => {
         audioEffectSlotOptions.parent = trackIndex == -1? masterChannel.getAudioEffectSlot(audioEffectIndex): trackChannelList.itemAtIndex(trackIndex).mixerChannelOfThis.getAudioEffectSlot(audioEffectIndex);
         audioEffectSlotOptions.trackIndex = trackIndex;
         audioEffectSlotOptions.effectIndex = audioEffectIndex;
@@ -156,22 +156,22 @@ Rectangle {
             channelSolo: root.tracks.masterTrackSolo
             channelInverted: root.tracks.masterTrackInvertPhase
             channelArmRecording: root.tracks.masterTrackArmRecording
-            onSetMute: {
+            onSetMute: (newMute) => {
                 root.tracks.masterTrackMute = newMute;
             }
-            onSetSolo: {
+            onSetSolo: (newSolo) => {
                 root.tracks.masterTrackSolo = newSolo;
             }
-            onSetInvertPhase: {
+            onSetInvertPhase: (newInvertPhase) => {
                 root.tracks.masterTrackInvertPhase = newInvertPhase;
             }
-            onSetArmRecording: {
+            onSetArmRecording: (newArmRecording) => {
                 root.tracks.masterTrackArmRecording = newArmRecording;
             }
-            onInsertEffect: {
+            onInsertEffect: (pluginPath, pluginSubId, pluginFormat, effectIndex) => {
                 root.tracks.insertEffectMasterTrack(pluginFormat, pluginPath, pluginSubId, effectIndex);
             }
-            onReplaceEffect: {
+            onReplaceEffect: (pluginPath, pluginSubId, pluginFormat, effectIndex) => {
                 root.tracks.replaceEffectMasterTrack(pluginFormat, pluginPath, pluginSubId, effectIndex);
             }
             onAudioSlotRightClicked: (audioEffectIndex, menuX, menuY) => {
@@ -255,26 +255,26 @@ Rectangle {
                     onSetArmRecording: (newArmRecording) => {
                                            armRecording = newArmRecording;
                                        }
-                    onLoadInstrument: {
+                    onLoadInstrument: (pluginPath, pluginSubId, pluginFormat) => {
                         tracks.loadInstrument(index, pluginFormat, pluginPath, pluginSubId);
                     }
-                    onInsertEffect: {
+                    onInsertEffect: (pluginPath, pluginSubId, pluginFormat, effectIndex) => {
                         tracks.insertEffect(index, pluginFormat, pluginPath, pluginSubId, effectIndex);
                     }
-                    onReplaceEffect: {
+                    onReplaceEffect: (pluginPath, pluginSucId, pluginFormat, effectIndex) => {
                         tracks.replaceEffect(index, pluginFormat, pluginPath, pluginSubId, effectIndex);
                     }
-                    onInstrumentSlotVisibleToggled: {
+                    onInstrumentSlotVisibleToggled: (instrumentWindowVisibie) => {
                         if(instrument) {
                             instrument.windowVisible = instrumentWindowVisible;
                         }
                     }
-                    onInstrumentSlotEnabledToggled: {
+                    onInstrumentSlotEnabledToggled: (instrumentSlotEnabled) => {
                         if(instrument) {
                             instrument.processing = instrumentSlotEnabled;
                         }
                     }
-                    onInstrumentSlotRightClicked: {
+                    onInstrumentSlotRightClicked: (x, y) => {
                         root.instrumentSlotRightClicked(index, x, y);
                     }
                     onAudioSlotRightClicked: (audioEffectIndex, menuX, menuY) => {

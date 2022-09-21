@@ -337,7 +337,7 @@ Item {
                         MouseArea {
                             id: tempoMainMouseArea
                             anchors.fill: parent
-                            onWheel: {
+                            onWheel: (wheel) => {
                                 var newBpm = bpm + wheel.angleDelta.y / 120;
                                 bpm = clampBpm(newBpm);
                             }
@@ -355,7 +355,7 @@ Item {
                         height: contentHeight * 0.7
                         MouseArea {
                             anchors.fill: parent
-                            onWheel: {
+                            onWheel: (wheel) => {
                                 tempoMainMouseArea.wheel(wheel);
                             }
                         }
@@ -376,7 +376,7 @@ Item {
                                 MouseArea {
                                     width: tempoIndicatorAfterPoint.contentWidth / 3
                                     height: tempoIndicatorAfterPoint.contentHeight
-                                    onWheel: {
+                                    onWheel: (wheel) => {
                                         var newBpm = bpm + wheel.angleDelta.y / 1200 / Math.pow(10, index);
                                         // Fix circumstances like 127.999 -> 127.000
                                         // (when `bpm` is a value in [127.9995, 128)).

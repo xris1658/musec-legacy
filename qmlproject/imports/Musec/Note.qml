@@ -75,7 +75,7 @@ Item {
         property int initialX: 0
         property int initialY: 0
         property bool settingVelocity: false
-        onPressed: {
+        onPressed: (mouse) => {
             settingVelocity = mouse.modifiers & Qt.AltModifier;
             if(settingVelocity) {
                 initialY = 0;
@@ -89,10 +89,10 @@ Item {
         onReleased: {
             settingVelocity = false;
         }
-        onMouseXChanged: {
+        onMouseXChanged: (mouse) => {
             if(pressed) {
                 if(settingVelocity) {
-                    var delta = mouseY - initialY;
+                    var delta = mouse.y - initialY;
                     control.velocity -= delta;
                     if(control.velocity > Constants.maxVelocity) {
                         control.velocity = Constants.maxVelocity;
@@ -102,7 +102,7 @@ Item {
                     }
                 }
                 else {
-                    var contentAreaCoordinate = control.mapToItem(control.parent, mouseX, mouseY);
+                    var contentAreaCoordinate = control.mapToItem(control.parent, mouse.x, mouse.y);
                     var delta = contentAreaCoordinate.x - initialX;
                     control.x += delta;
                     if(control.x < 0) {
@@ -115,7 +115,7 @@ Item {
         onMouseYChanged: {
             if(pressed) {
                 if(settingVelocity) {
-                    control.velocity -= mouseY - initialY;
+                    control.velocity -= mouse.y - initialY;
                     if(control.velocity > Constants.maxVelocity) {
                         control.velocity = Constants.maxVelocity;
                     }
@@ -124,16 +124,16 @@ Item {
                     }
                 }
                 else {
-                    if(mouseY > control.height) {
-                        var down = Math.floor(mouseY / (control.height + 1));
+                    if(mouse.y > control.height) {
+                        var down = Math.floor(mouse.y / (control.height + 1));
                         if(control.noteMidiNum - down < 0) {
                             down = control.noteMidiNum;
                         }
                         control.y += (down * (control.height + 1));
                         control.noteMidiNum -= down;
                     }
-                    if(mouseY < 0) {
-                        var up = Math.floor((1 - mouseY + control.height) / (control.height + 1));
+                    if(mouse.y < 0) {
+                        var up = Math.floor((1 - mouse.y + control.height) / (control.height + 1));
                         if(control.noteMidiNum + up > Constants.midiValueRange - 1) {
                             up = Constants.midiValueRange - 1 - control.noteMidiNum;
                         }
@@ -155,10 +155,10 @@ Item {
         height: parent.height
         hoverEnabled: true
         cursorShape: containsMouse || pressed? Qt.SizeHorCursor: Qt.ArrowCursor
-        onPressed: {
+        onPressed: (mouse) => {
             mouseInitialX = mouse.x;
         }
-        onMouseXChanged: {
+        onMouseXChanged: (mouse) => {
             if(pressed) {
                 mouseDeltaX = mouse.x - mouseInitialX;
                 control.x += mouseDeltaX;
@@ -171,10 +171,10 @@ Item {
                 mouseInitialX = 0;
             }
         }
-        onClicked: {
+        onClicked: (mouse) => {
             noteMouseArea.clicked(mouse);
         }
-        onDoubleClicked: {
+        onDoubleClicked: (mouse) => {
             noteMouseArea.doubleClicked(mouse);
         }
         z: 2
@@ -186,20 +186,20 @@ Item {
         hoverEnabled: true
         height: parent.height
         cursorShape: containsMouse || pressed? Qt.SizeHorCursor: Qt.ArrowCursor
-        onPressed: {
+        onPressed: (mouse) => {
             mouseInitialX = mouse.x;
         }
-        onMouseXChanged: {
+        onMouseXChanged: (mouse) => {
             if(pressed) {
                 mouseDeltaX = mouse.x - mouseInitialX;
                 control.width += mouseDeltaX;
                 mouseInitialX = 0;
             }
         }
-        onClicked: {
+        onClicked: (mouse) => {
             noteMouseArea.clicked(mouse);
         }
-        onDoubleClicked: {
+        onDoubleClicked: (mouse) => {
             noteMouseArea.doubleClicked(mouse);
         }
         z: 2

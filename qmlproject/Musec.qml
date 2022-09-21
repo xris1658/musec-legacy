@@ -51,7 +51,7 @@ ApplicationWindow {
     }
 
     signal setStatusText(newText: string)
-    onSetStatusText: {
+    onSetStatusText: (newText) => {
         status.text = newText;
     }
 
@@ -125,7 +125,7 @@ ApplicationWindow {
         Objects.mainWindow = mainWindow;
     }
 
-    onVisibilityChanged: {
+    onVisibilityChanged: (visibility) => {
         if(visibility != 5/*FullScreen*/)
         {
             if(visibility == 4/*Maximized*/) maximized = true;
@@ -163,7 +163,7 @@ ApplicationWindow {
     }
 
     signal trackInserted(index: int)
-    onTrackInserted: {
+    onTrackInserted: (index) => {
         arrangement.appendTrackComplete(index);
     }
 
@@ -173,7 +173,7 @@ ApplicationWindow {
         close();
     }
 
-    onClosing: {
+    onClosing: (close) => {
         if(!canClose) {
             close.accepted = false;
             if(_fullscreen) {
@@ -671,13 +671,13 @@ ApplicationWindow {
                         onOpenSpecialCharacterInput: {
                             EventBridge.openSpecialCharacterInput();
                         }
-                        onAddAssetDirectory: {
+                        onAddAssetDirectory: (directory) => {
                             EventBridge.addAssetDirectory(directory);
                         }
-                        onRenameAssetDirectory: {
+                        onRenameAssetDirectory: (id, name) => {
                             EventBridge.renameAssetDirectory(id, name);
                         }
-                        onRemoveAssetDirectory: {
+                        onRemoveAssetDirectory: (id) => {
                             EventBridge.removeAssetDirectory(id);
                         }
                     }
@@ -709,10 +709,10 @@ ApplicationWindow {
                                 y: parent.y
                                 loop: actionLoop.checked
                                 position: 0
-                                onAppendTrack: {
+                                onAppendTrack: (track) => {
                                     eventBridge.appendTrack(track);
                                 }
-                                onInsertTrack: {
+                                onInsertTrack: (track, index) => {
                                     eventBridge.insertTrack(track, index);
                                 }
                             }

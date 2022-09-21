@@ -56,7 +56,7 @@ MCtrl.Button {
             id: nameMouseAreaRect
             anchors.fill: parent
         }
-        onClicked: {
+        onClicked: (mouse) => {
             if(mouse.button == Qt.LeftButton) {
                 root.clicked();
             }
@@ -101,16 +101,16 @@ MCtrl.Button {
     DropArea {
         id: dropArea
         anchors.fill: parent
-        onEntered: {
+        onEntered: (drag) => {
             root.entered(drag);
         }
         onExited: {
             root.exited();
         }
-        onDropped: {
+        onDropped: (drop) => {
             root.dropped(drop);
         }
-        onPositionChanged: {
+        onPositionChanged: (drag) => {
             root.positionChanged(drag);
         }
     }

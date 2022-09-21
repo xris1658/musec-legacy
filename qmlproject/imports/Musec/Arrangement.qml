@@ -40,7 +40,7 @@ Item {
         title: qsTr("Select Color")
         modality: Qt.WindowModal
         onAccepted: {
-            colorDest1.setColor(this.currentColor);
+            colorDest1.setColor(currentColor);
         }
     }
     property ListModel trackClipboard: ListModel {
@@ -301,9 +301,9 @@ Item {
                     anchors.fill: parent
                     anchors.margins: 0
                     anchors.rightMargin: 6
-                    onClicked: {
-                        arrangementOptions.x = mouseX;
-                        arrangementOptions.y = mouseY;
+                    onClicked: (mouse) => {
+                        arrangementOptions.x = mouse.x;
+                        arrangementOptions.y = mouse.y;
                         arrangementOptions.open();
                     }
                 }
@@ -346,12 +346,12 @@ Item {
                             return dragEvent.getDataAsString("itemType") == "plugin"
                                     && parseInt(dragEvent.getDataAsString("type")) == 3;
                         }
-                        onEntered: {
+                        onEntered: (drag) => {
                             if(!checkDragEvent(drag)) {
                                 drag.accepted = false;
                             }
                         }
-                        onDropped: {
+                        onDropped: (drop) => {
                             if(checkDragEvent(drop)) {
                                 console.log(drop.getDataAsString("pluginId"));
                             }
@@ -417,12 +417,12 @@ Item {
                             color: Constants.mouseOverElementColor
                             opacity: parent.containsDrag? 0.6: 0
                         }
-                        onEntered: {
+                        onEntered: (drag) => {
                             if(!checkDragEvent(drag)) {
                                 drag.accepted = false;
                             }
                         }
-                        onDropped: {
+                        onDropped: (drop) => {
                             if(checkDragEvent(drop)) {
                                 var type = parseInt(drop.getDataAsString("type"));
                                 if(type == 2) {
@@ -478,7 +478,7 @@ Item {
                             console.log(model.index);
                             tracks.removeTrack(model.index);
                         }
-                        onRenameComplete: {
+                        onRenameComplete: (newName) => {
                             trackname = newName;
                         }
                         onSetMute: (newMute) => {
@@ -548,7 +548,7 @@ Item {
                             width: parent.width - 3 * 20
                             height: 20
                             acceptedButtons: Qt.LeftButton | Qt.RightButton
-                            onClicked: {
+                            onClicked: (mouse) => {
                                 if(mouse.button == Qt.RightButton) {
                                     trackOptions.parent = trackHeader;
                                     trackOptions.trackIndex = trackHeader.trackIndex;
@@ -556,8 +556,8 @@ Item {
                                     colorDialog.colorDest1 = trackHeader;
                                     colorDialog.title = qsTr("Select Color") + " - " + qsTr("Track") + trackHeader.trackIndex + ": " + trackHeader.trackName
                                     colorDialog.color = trackHeader.trackColor;
-                                    trackOptions.x = mouseX;
-                                    trackOptions.y = mouseY;
+                                    trackOptions.x = mouse.x;
+                                    trackOptions.y = mouse.y;
                                     trackOptions.open();
                                 }
                             }
@@ -575,12 +575,12 @@ Item {
                                 color: Constants.mouseOverElementColor
                                 opacity: parent.containsDrag? 0.6: 0
                             }
-                            onEntered: {
+                            onEntered: (drag) => {
                                 if(!checkDragEvent(drag)) {
                                     drag.accepted = false;
                                 }
                             }
-                            onDropped: {
+                            onDropped: (drop) => {
                                 if(checkDragEvent(drop)) {
                                     console.log("Append a plugin to track") + ": ";
                                     console.log(drop.getDataAsString("type"), drop.getDataAsString("pluginId"));
@@ -674,7 +674,7 @@ Item {
                         }
                         MouseArea {
                             anchors.fill: parent
-                            onWheel: {
+                            onWheel: (wheel) => {
                                 hbar.position -= 0.1 * wheel.angleDelta.y / 540.0 * (wheel.inverted? -1: 1);
                                 if(hbar.position > 1 - hbar.size)
                                 {
@@ -707,7 +707,7 @@ Item {
                         id: contentAreaMouseArea
                         anchors.fill: parent
                         scrollGestureEnabled: true
-                        onWheel: {
+                        onWheel: (wheel) => {
                             // Scroll vertically
                             if(wheel.modifiers == Qt.NoModifier)
                             {
@@ -866,7 +866,7 @@ Item {
                                         anchors.fill: parent
                                         hoverEnabled: false
                                         acceptedButtons: Qt.LeftButton | Qt.RightButton
-                                        onClicked: {
+                                        onClicked: (mouse) => {
                                             if(mouse.button == Qt.RightButton) {
                                                 contentArea.menuAtTrackIndex = index;
                                                 var pointOfTrackDropArea = trackDropArea.mapToItem(contentArea, mouse.x, mouse.y);
@@ -903,7 +903,7 @@ Item {
                                         color: Constants.mouseOverElementColor
                                         opacity: parent.containsDrag? 0.6: 0
                                     }
-                                    onEntered: {
+                                    onEntered: (drag) => {
                                         var itemType = drag.getDataAsString("itemType");
                                         if(itemType == "plugin") {
                                             console.log("type:", type);
@@ -939,7 +939,7 @@ Item {
                                             trackDropIndicator.visible = true;
                                         }
                                     }
-                                    onDropped: {
+                                    onDropped: (drop) => {
                                         var itemType = drop.getDataAsString("itemType");
                                         if(itemType == "plugin") {
                                             console.log("type:", type);
@@ -967,7 +967,7 @@ Item {
                                             trackDropIndicator.visible = false;
                                         }
                                     }
-                                    onPositionChanged: {
+                                    onPositionChanged: (drag) => {
                                         trackDropIndicator.x = drag.x;
                                     }
                                 }
@@ -995,9 +995,9 @@ Item {
                                             color: Constants.mouseOverElementColor
                                             opacity: parent.containsDrag? 0.6: 0
                                         }
-                                        onEntered: {
+                                        onEntered: (drag) => {
                                         }
-                                        onDropped: {
+                                        onDropped: (drop) => {
                                             if(drop.getDataAsString("itemType") == "plugin") {
                                                 blankHeaderDropArea.dropped(drop);
                                             }

@@ -34,7 +34,7 @@ Window {
     signal accepted()
     title: "Title of dialog"
     signal clicked(button: AbstractButton)
-    onClicked: {
+    onClicked: (button) => {
         //
     }
     property DialogButtonBox dialogButtonBox: dialogButtonBox

@@ -59,8 +59,8 @@ Item {
     }
     MouseArea {
         anchors.fill: parent
-        onDoubleClicked: {
-            root.model.insertPoint(xToTime(mouseX), yToValue(mouseY), 0, 0);
+        onDoubleClicked: (mouse) => {
+            root.model.insertPoint(xToTime(mouse.x), yToValue(mouse.y), 0, 0);
         }
     }
     Repeater {
@@ -82,7 +82,7 @@ Item {
                 border.color: color
                 radius: root.pointRadius
             }
-            onDoubleClicked: {
+            onDoubleClicked: (mouse) => {
                 var oldIndex = index;
                 var oldCount = root.model.count();
                 root.model.deletePoint(index);
@@ -95,14 +95,13 @@ Item {
                     paths.itemAt(oldIndex).updateY();
                 }
             }
-            onPressed: {
-                initialX = mouseX;
-                initialY = mouseY;
+            onPressed: (mouse) => {
+                initialX = mouse.x;
+                initialY = mouse.y;
             }
-            onMouseXChanged: {
+            onMouseXChanged: (mouse) => {
                 if(pressed) {
-                    console.log(mouseX);
-                    var delta = mouseX - initialX;
+                    var delta = mouse.x - initialX;
                     var newTime = root.xToTime(x + width / 2 + delta);
                     if(newTime < 0) {
                         newTime = 0;
@@ -113,9 +112,9 @@ Item {
                     }
                 }
             }
-            onMouseYChanged: {
+            onMouseYChanged: (mouse) => {
                 if(pressed) {
-                    var delta = mouseY - initialY;
+                    var delta = mouse.y - initialY;
                     var newValue = root.yToValue(y + delta + height / 2);
                     if(newValue > root.model.maxValue()) {
                         newValue = root.model.maxValue();

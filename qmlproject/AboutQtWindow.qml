@@ -83,7 +83,7 @@ Window {
                         anchors.left: parent.left
                         anchors.right: parent.right
                         wrapMode: Text.Wrap
-                        onLinkActivated: {
+                        onLinkActivated: (link) => {
                             Qt.openUrlExternally(link);
                         }
                     }

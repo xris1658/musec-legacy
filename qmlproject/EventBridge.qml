@@ -48,15 +48,15 @@ QtObject {
 
     // Receive from C++ backend
     signal setBootText(newBootText: string)
-    onSetBootText: {
+    onSetBootText: (newBootText) => {
         Objects.splashScreen.bootText = newBootText;
     }
     signal setStatusText(newText: string)
-    onSetStatusText: {
+    onSetStatusText: (newText) => {
         Objects.mainWindow.setStatusText(newText);
     }
     signal updateArrangementPosition(position: int)
-    onUpdateArrangementPosition: {
+    onUpdateArrangementPosition: (position) => {
         Objects.mainWindow.arrangementPosition = position;
     }
     signal requestExplorerViewComplete();
@@ -64,7 +64,7 @@ QtObject {
         Objects.mainWindow.explorerViewOnRequest.requestExplorerViewComplete();
     }
     signal messageDialog(message: string, title: string, icon: int);
-    onMessageDialog: {
+    onMessageDialog: (message, title, icon) => {
         var component = Qt.createComponent("./imports/Musec/Dialogs/MessageDialog.qml");
         if(component.status == Component.Ready) {
             var rebootPrompt = component.createObject(eventBridge);
@@ -83,7 +83,7 @@ QtObject {
     }
 
     signal trackInserted(index: int)
-    onTrackInserted: {
+    onTrackInserted: (index) => {
         Objects.mainWindow.trackInserted(index);
     }
 
@@ -98,7 +98,7 @@ QtObject {
     }
 
     signal updateUsage(usage: double)
-    onUpdateUsage: {
+    onUpdateUsage: (usage) => {
         Objects.mainWindow.cpu = Math.round(usage * 100);
     }
 
@@ -108,7 +108,7 @@ QtObject {
             Strings.applicationName, MDlg.MessageDialog.Icon.Info);
     }
     signal setRealtimeTimerInterval(intervalInMilliseconds: int)
-    onSetRealtimeTimerInterval: {
+    onSetRealtimeTimerInterval: (intervalInMilliseconds) => {
         Objects.mainWindow.setRealtimeTimerInterval(intervalInMilliseconds);
     }
 }
