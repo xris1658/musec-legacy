@@ -43,7 +43,9 @@
 #include <QCoreApplication>
 #include <QFontDatabase>
 #include <QQmlApplicationEngine>
+#if QT_VERSION_MAJOR < 6
 #include <QTextCodec>
+#endif
 #include <QUrl>
 #include <QtGlobal>
 #include <QString>
