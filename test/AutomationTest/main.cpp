@@ -12,7 +12,8 @@
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
-    Musec::Model::ModelInitializer::initialize();
+    using namespace Musec::Model;
+    qmlRegisterType<Musec::Model::AutomationModel>("Musec.Models", 1, 0, "AutomationModel");
     QQmlApplicationEngine engine;
     Musec::Audio::Base::Automation automation;
     automation.insertPoint({0, 0.0, 0.0});

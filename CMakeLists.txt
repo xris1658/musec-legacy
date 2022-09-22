@@ -242,6 +242,12 @@ set(TEST_COMMON_SOURCES
     test/common/PluginWindowThread.hpp)
 
 set(AUTOMATIONTEST_SOURCES
+    audio/base/Automation.cpp
+    audio/base/Automation.hpp
+    math/QuadraticFunction.cpp
+    math/QuadraticFunction.hpp
+    model/AutomationModel.cpp
+    model/AutomationModel.hpp
     test/AutomationTest/main.cpp
     test/AutomationTest/AutomationTest.qrc)
 
@@ -258,7 +264,7 @@ add_executable(Musec main.cpp ${PROJECT_SOURCES} ${RESOURCE_FILE} ${QT_RESOURCES
 
 target_precompile_headers(Musec PRIVATE ${PROJECT_PCH})
 
-add_executable(AutomationTest ${PROJECT_SOURCES} ${QT_RESOURCES} ${AUTOMATIONTEST_SOURCES})
+add_executable(AutomationTest ${QT_RESOURCES} ${AUTOMATIONTEST_SOURCES})
 
 add_executable(VST2PluginTestWithQt ${PROJECT_SOURCES} ${TEST_COMMON_SOURCES} ${VST2PLUGINTEST_SOURCES})
 
@@ -287,15 +293,7 @@ target_link_libraries(Musec
                       avcpp::avcpp-static)
 
 target_link_libraries(AutomationTest
-                      Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets
-                      version
-                      base pluginterfaces sdk_common sdk_hosting
-                      unofficial::sqlite3::sqlite3
-                      yaml-cpp
-                      fmt::fmt
-                      spdlog::spdlog
-                      avcpp::FFmpeg
-                      avcpp::avcpp-static)
+                      Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets)
 
 target_link_libraries(VST2PluginTestWithQt
                       Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets
