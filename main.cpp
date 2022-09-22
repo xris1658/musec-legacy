@@ -97,6 +97,9 @@ int main(int argc, char* argv[]) try
     SplashScreen splashScreenEventHandler;
     MainWindowEvent mainWindowEvent(splashScreenEventHandler);
     mainWindowEvents = &mainWindowEvent;
+    auto eventBridge_ = qvariant_cast<QObject*>(splashWindow->property("eventBridge"));
+    Musec::Event::eventBridge = eventBridge_;
+    Musec::Event::eventHandler = &Musec::Event::EventHandler::instance(eventBridge_);
     splashScreenEventHandler.onInitDialog();
     auto ret = app.exec();
     return ret;

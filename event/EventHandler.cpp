@@ -82,18 +82,15 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      this,
                      &EventHandler::onTrackAboutToBeRemoved);
     // C++ -> QML
-    QObject::connect(this,          SIGNAL(signalScanPluginComplete()),
-                     optionsWindow, SIGNAL(scanPluginComplete()));
-    QObject::connect(this,          SIGNAL(readyToQuit()),
-                     mainWindow,    SIGNAL(readyToQuit()));
-    QObject::connect(this,          SIGNAL(setStatusText(QString)),
-                     mainWindow,    SIGNAL(setStatusText(QString)));
+
     QObject::connect(this,          SIGNAL(setSystemTextRenderingComplete()),
                      eventBridge,   SIGNAL(setSystemTextRenderingComplete()));
     QObject::connect(this,          SIGNAL(updateArrangementPosition(int)),
                      eventBridge,   SIGNAL(updateArrangementPosition(int)));
     QObject::connect(this,          SIGNAL(messageDialog(QString, QString, int)),
                      eventBridge,   SIGNAL(messageDialog(QString, QString, int)));
+    QObject::connect(this,          SIGNAL(messageDialogNonModal(QString, QString, int)),
+                     eventBridge,   SIGNAL(messageDialogNonModal(QString, QString, int)));
     QObject::connect(this,          SIGNAL(requestExplorerViewComplete()),
                      eventBridge,   SIGNAL(requestExplorerViewComplete()));
     QObject::connect(this,          SIGNAL(updateArrangement()),
@@ -429,5 +426,21 @@ void EventHandler::onUpdateCPUMeter()
 {
     auto cpuUsage = Musec::Controller::AudioEngineController::getCpuUsage();
     updateUsage(cpuUsage);
+}
+
+void EventHandler::connectToMainWindow()
+{
+    using namespace Musec::UI;
+    QObject::connect(this,          SIGNAL(readyToQuit()),
+                     mainWindow,    SIGNAL(readyToQuit()));
+    QObject::connect(this,          SIGNAL(setStatusText(QString)),
+                     mainWindow,    SIGNAL(setStatusText(QString)));
+}
+
+void EventHandler::connectToOptionsWindow()
+{
+    using namespace Musec::UI;
+    QObject::connect(this,          SIGNAL(signalScanPluginComplete()),
+                     optionsWindow, SIGNAL(scanPluginComplete()));
 }
 }

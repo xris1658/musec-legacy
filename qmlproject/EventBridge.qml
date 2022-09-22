@@ -67,15 +67,27 @@ QtObject {
     onMessageDialog: (message, title, icon) => {
         var component = Qt.createComponent("./imports/Musec/Dialogs/MessageDialog.qml");
         if(component.status == Component.Ready) {
-            var rebootPrompt = component.createObject(eventBridge);
-            rebootPrompt.message = message;
-            rebootPrompt.title = title;
-            rebootPrompt.standardButtons = DialogButtonBox.Ok;
-            rebootPrompt.icon = icon;
-            rebootPrompt.showNormal();
+            var dialog = component.createObject(eventBridge);
+            dialog.message = message;
+            dialog.title = title;
+            dialog.standardButtons = DialogButtonBox.Ok;
+            dialog.icon = icon;
+            dialog.showNormal();
         }
     }
-
+    signal messageDialogNonModal(message: string, title: string, icon: int);
+    onMessageDialogNonModal: (message, title, icon) => {
+        var component = Qt.createComponent("./imports/Musec/Dialogs/MessageDialog.qml");
+        if(component.status == Component.Ready) {
+            var dialog = component.createObject(eventBridge);
+            dialog.message = message;
+            dialog.title = title;
+            dialog.standardButtons = DialogButtonBox.Ok;
+            dialog.icon = icon;
+            dialog.modality = Qt.NonModal;
+            dialog.showNormal();
+        }
+    }
     signal setSystemTextRenderingComplete()
     onSetSystemTextRenderingComplete: {
         messageDialog(Strings.optionSaveRebootPromptText,

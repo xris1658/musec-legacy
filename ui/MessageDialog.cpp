@@ -8,4 +8,8 @@ void messageDialog(const QString& message, const QString& title, int icon)
 {
     Musec::Event::eventHandler->messageDialog(message, title, icon);
 }
+void messageDialogNonModal(const QString& message, const QString& title, int icon)
+{
+    Musec::Event::eventHandler->messageDialogNonModal(message, title, icon);
+}
 }

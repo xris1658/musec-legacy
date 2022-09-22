@@ -13,7 +13,7 @@ SplashScreen::SplashScreen(QObject* parent): QObject(parent), workerThread_(this
     using namespace Musec::UI;
     // C++ -> C++
     QObject::connect(&workerThread_, &SplashScreenWorkerThread::finished,
-                     this,          &SplashScreen::openMainWindow);
+                     this,           &SplashScreen::openMainWindow);
     // C++ -> QML
     QObject::connect(this,         SIGNAL(closeDialog()),
                      splashWindow, SIGNAL(closeDialog()));

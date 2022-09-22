@@ -30,9 +30,9 @@ void MainWindowEvent::openMainWindow()
     mainWindow = qobject_cast<QQuickWindow*>(engine->rootObjects()[1]);
     mainWindow->setIcon(QIcon(":/qmlproject/images/Musec-image-2.ico"));
     optionsWindow = mainWindow->findChild<QQuickWindow*>("optionsWindow");
-    auto eventBridge = qvariant_cast<QObject*>(splashWindow->property("eventBridge"));
-    Musec::Event::eventBridge = eventBridge;
-    Musec::Event::eventHandler = &Musec::Event::EventHandler::instance(eventBridge);
+
+    Musec::Event::eventHandler->connectToMainWindow();
+    Musec::Event::eventHandler->connectToOptionsWindow();
     // auto refreshRate = Musec::UI::refreshRateInHertz();
 
     // I originally planned to set the interval of the realtime timer according to the refresh rate,

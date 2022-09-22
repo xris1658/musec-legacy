@@ -21,6 +21,7 @@ enum IconType
 };
 
 void messageDialog(const QString& message, const QString& title, int icon);
+void messageDialogNonModal(const QString& message, const QString& title, int icon);
 }
 }
 }

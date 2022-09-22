@@ -52,7 +52,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     {
         // FIXME: The application will crash if this function is called,
         //  since Musec::Event::EventHandler is not initialized here.
-        Musec::UI::MessageDialog::messageDialog(
+        Musec::UI::MessageDialog::messageDialogNonModal(
            strings->property("enumeratingASIODriverErrorText").toString(),
            Musec::Base::ProductName,
            Musec::UI::MessageDialog::IconType::Error
@@ -66,7 +66,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     );
     if(driverList.empty())
     {
-        Musec::UI::MessageDialog::messageDialog(
+        Musec::UI::MessageDialog::messageDialogNonModal(
            strings->property("noASIODriverFoundText").toString(),
            Musec::Base::ProductName,
            Musec::UI::MessageDialog::IconType::Warning
@@ -86,7 +86,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
                 }
                 catch(std::runtime_error& exception)
                 {
-                   Musec::UI::MessageDialog::messageDialog(
+                   Musec::UI::MessageDialog::messageDialogNonModal(
                        strings->property("loadASIODriverErrorText").toString(),
                        Musec::Base::ProductName,
                        Musec::UI::MessageDialog::IconType::Warning);

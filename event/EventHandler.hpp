@@ -31,6 +31,7 @@ signals:
     void readyToQuit();
     void updateArrangementPosition(int position);
     void messageDialog(const QString& message, const QString& title, int icon);
+    void messageDialogNonModal(const QString& message, const QString& title, int icon);
     void requestExplorerViewComplete();
     void updateArrangement();
     void newPluginWindow();
@@ -66,6 +67,9 @@ public slots:
     void onScanShortcutChanged(bool newValue);
     void onLanguageSelectionChanged(const QString& language);
     void onUpdateCPUMeter();
+public:
+    void connectToMainWindow();
+    void connectToOptionsWindow();
 private:
     std::vector<QMetaObject::Connection> optionsWindowConnection;
 };
