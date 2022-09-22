@@ -59,7 +59,7 @@ Window {
                         font.pixelSize: 20
                     }
                     Text {
-                        text: qsTr("This program uses Qt version %1.").arg("5.15.2")
+                        text: qsTr("This program uses Qt version %1.").arg(Strings.qtVersion)
                         color: Constants.contentColor1
                         font: Constants.font
                         anchors.left: parent.left

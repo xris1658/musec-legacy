@@ -68,6 +68,7 @@ QtObject {
         var component = Qt.createComponent("./imports/Musec/Dialogs/MessageDialog.qml");
         if(component.status == Component.Ready) {
             var dialog = component.createObject(eventBridge);
+            setWindowIcon(dialog);
             dialog.message = message;
             dialog.title = title;
             dialog.standardButtons = DialogButtonBox.Ok;
@@ -80,6 +81,7 @@ QtObject {
         var component = Qt.createComponent("./imports/Musec/Dialogs/MessageDialog.qml");
         if(component.status == Component.Ready) {
             var dialog = component.createObject(eventBridge);
+            setWindowIcon(dialog);
             dialog.message = message;
             dialog.title = title;
             dialog.standardButtons = DialogButtonBox.Ok;

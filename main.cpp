@@ -94,6 +94,7 @@ int main(int argc, char* argv[]) try
     theEngine.load(QUrl("qrc:/qmlproject/SplashScreen.qml"));
     splashWindow = qobject_cast<QQuickWindow*>(theEngine.rootObjects()[0]);
     strings = splashWindow->property("strings").value<QObject*>();
+    strings->setProperty("qtVersion", QVariant::fromValue(QString(qVersion())));
     SplashScreen splashScreenEventHandler;
     MainWindowEvent mainWindowEvent(splashScreenEventHandler);
     mainWindowEvents = &mainWindowEvent;

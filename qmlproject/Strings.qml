@@ -36,4 +36,6 @@ QtObject {
     readonly property string loadTranslationFailedText:                 "The specified translation cannot be loaded. The program will show things in English."
 
     readonly property string optionSaveRebootPromptText:                qsTr("The option changes is saved. A restart is required to apply.")
+
+    property string qtVersion
 }
