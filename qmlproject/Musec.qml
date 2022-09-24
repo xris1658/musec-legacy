@@ -64,7 +64,7 @@ ApplicationWindow {
         id: optionsWindow
         objectName: "optionsWindow"
         visible: false
-        onVisibilityChanged: {
+        onVisibilityChanged: (visibility) => {
             if(visibility == 0) {
                 EventBridge.optionsWindowClosed();
             }
