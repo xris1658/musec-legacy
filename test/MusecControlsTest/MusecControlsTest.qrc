@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="test">
+        <file>MusecControlsTest.qml</file>
+    </qresource>
+</RCC>

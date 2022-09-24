@@ -251,6 +251,10 @@ set(AUTOMATIONTEST_SOURCES
     test/AutomationTest/main.cpp
     test/AutomationTest/AutomationTest.qrc)
 
+set(MUSECCONTROLSTEST_SOURCES
+    test/MusecControlsTest/main.cpp
+    test/MusecControlsTest/MusecControlsTest.qrc)
+
 set(VST2PLUGINTEST_SOURCES
     test/VST2PluginTestWithQt/main.cpp)
 
@@ -265,6 +269,8 @@ add_executable(Musec main.cpp ${PROJECT_SOURCES} ${RESOURCE_FILE} ${QT_RESOURCES
 target_precompile_headers(Musec PRIVATE ${PROJECT_PCH})
 
 add_executable(AutomationTest ${QT_RESOURCES} ${AUTOMATIONTEST_SOURCES})
+
+add_executable(MusecControlsTest ${QT_RESOURCES} ${MUSECCONTROLSTEST_SOURCES})
 
 add_executable(VST2PluginTestWithQt ${PROJECT_SOURCES} ${TEST_COMMON_SOURCES} ${VST2PLUGINTEST_SOURCES})
 
@@ -293,6 +299,9 @@ target_link_libraries(Musec
                       avcpp::avcpp-static)
 
 target_link_libraries(AutomationTest
+                      Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets)
+
+target_link_libraries(MusecControlsTest
                       Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets)
 
 target_link_libraries(VST2PluginTestWithQt
