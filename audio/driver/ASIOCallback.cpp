@@ -3,11 +3,14 @@
 #include "audio/base/Constants.hpp"
 #include "audio/driver/ASIODriver.hpp"
 #include "base/Base.hpp"
+#include "concurrent/ButlerThread.hpp"
 #include "controller/ASIODriverController.hpp"
 #include "controller/AudioEngineController.hpp"
 #include "native/Native.hpp"
 #include "util/Endian.hpp"
 #include "util/Stopwatch.hpp"
+
+#include <future>
 
 namespace Musec::Audio::Driver
 {
@@ -409,12 +412,16 @@ long onASIOMessage(long selector,
                    void* message,
                    double* opt)
 {
+    using namespace Musec::Concurrent;
     long ret = 0;
     switch(selector)
     {
     case kAsioEngineVersion:
         return 2L;
     case kAsioSupportsTimeInfo:
+        return 1L;
+    case kAsioResetRequest:
+        ButlerThread::instance().addTask(ButlerTaskType::ResetASIODriver);
         return 1L;
     default:
         return 1L;

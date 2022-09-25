@@ -27,6 +27,10 @@ void openASIODriverControlPanel();
 void unloadASIODriver();
 
 void updateCurrentASIODriverInfo();
+
+void allocateASIODriverBuffer();
+
+void startASIODriver();
 }
 }
 }

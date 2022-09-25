@@ -3,6 +3,7 @@
 #include "audio/driver/ASIOCallback.hpp"
 #include "audio/driver/ASIODriver.hpp"
 #include "audio/driver/Literals.hpp"
+#include "concurrent/ButlerThread.hpp"
 #include "controller/AppController.hpp"
 #include "controller/ConfigController.hpp"
 #include "dao/DatabaseDAO.hpp"
@@ -49,6 +50,7 @@ void loadASIODriver()
     // using namespace Musec::DAO;
     using namespace UI;
     auto& driver = AppASIODriver();
+    Musec::Concurrent::ButlerThread::instance();
     if(!driver)
     {
         return;
@@ -92,49 +94,8 @@ void loadASIODriver()
             Musec::UI::MessageDialog::IconType::Warning);
         return;
     }
-    auto& bufferInfo = getASIOBufferInfoList();
-    for(int i = 0; i < info.inputCount; ++i)
-    {
-        bufferInfo[i].isInput = ASIOTrue;
-        bufferInfo[i].channelNum = i;
-        bufferInfo[i].buffers[0] = bufferInfo[i].buffers[1] = nullptr;
-    }
-    for(int i = info.inputCount; i < info.inputCount + info.outputCount; ++i)
-    {
-        bufferInfo[i].isInput = ASIOFalse;
-        bufferInfo[i].channelNum = i - info.inputCount;
-        bufferInfo[i].buffers[0] = bufferInfo[i].buffers[1] = nullptr;
-    }
-    //
-    auto createBuffersResult = driver->createBuffers(
-        bufferInfo.data(),
-        info.inputCount + info.outputCount,
-        Musec::Audio::Driver::getBufferSize(driver).preferredBufferSize,
-        &getCallbacks());
-    if(createBuffersResult != ASE_OK)
-    {
-        Impl::showASIOErrorMessageDialog(driver, createBuffersResult);
-        return;
-    }
-    auto& channelInfoList = getASIOChannelInfoList();
-    for(int i = 0; i < info.inputCount + info.outputCount; ++i)
-    {
-        channelInfoList[i].channel = bufferInfo[i].channelNum;
-        channelInfoList[i].isInput = bufferInfo[i].isInput;
-        auto getChannelInfoResult = driver->getChannelInfo(&(channelInfoList[i]));
-        if(getChannelInfoResult != ASE_OK)
-        {
-            Impl::showASIOErrorMessageDialog(driver, getChannelInfoResult);
-        }
-    }
-    Musec::Audio::Driver::driverSupportsOutputReady = (driver->outputReady() == ASE_OK);
-    auto startResult = driver->start();
-    if(startResult != ASE_OK)
-    {
-        Impl::showASIOErrorMessageDialog(driver, startResult);
-    }
-    mainWindow->setProperty("engineRunning", QVariant::fromValue<bool>(true));
-    updateCurrentASIODriverInfo();
+    allocateASIODriverBuffer();
+    startASIODriver();
 }
 
 QString getASIODriver()
@@ -210,6 +171,62 @@ void updateCurrentASIODriverInfo()
         optionsWindow->setProperty("sampleRate",
                                    QVariant::fromValue<double>(driverStreamInfo.sampleRate));
     }
+}
+
+void allocateASIODriverBuffer()
+{
+    using namespace Musec::Audio::Driver;
+    auto& driver = AppASIODriver();
+    auto& bufferInfo = getASIOBufferInfoList();
+    auto info = Musec::Audio::Driver::getChannelCount(driver);
+    for(int i = 0; i < info.inputCount; ++i)
+    {
+        bufferInfo[i].isInput = ASIOTrue;
+        bufferInfo[i].channelNum = i;
+        bufferInfo[i].buffers[0] = bufferInfo[i].buffers[1] = nullptr;
+    }
+    for(int i = info.inputCount; i < info.inputCount + info.outputCount; ++i)
+    {
+        bufferInfo[i].isInput = ASIOFalse;
+        bufferInfo[i].channelNum = i - info.inputCount;
+        bufferInfo[i].buffers[0] = bufferInfo[i].buffers[1] = nullptr;
+    }
+    auto createBuffersResult = driver->createBuffers(
+        bufferInfo.data(),
+        info.inputCount + info.outputCount,
+        Musec::Audio::Driver::getBufferSize(driver).preferredBufferSize,
+        &getCallbacks());
+    if(createBuffersResult != ASE_OK)
+    {
+        Impl::showASIOErrorMessageDialog(driver, createBuffersResult);
+        return;
+    }
+    auto& channelInfoList = getASIOChannelInfoList();
+    for(int i = 0; i < info.inputCount + info.outputCount; ++i)
+    {
+        channelInfoList[i].channel = bufferInfo[i].channelNum;
+        channelInfoList[i].isInput = bufferInfo[i].isInput;
+        auto getChannelInfoResult = driver->getChannelInfo(&(channelInfoList[i]));
+        if(getChannelInfoResult != ASE_OK)
+        {
+            Impl::showASIOErrorMessageDialog(driver, getChannelInfoResult);
+        }
+    }
+}
+
+void startASIODriver()
+{
+    using namespace Musec::Audio::Driver;
+    using namespace Musec::UI;
+    auto& driver = AppASIODriver();
+    Musec::Audio::Driver::driverSupportsOutputReady = (driver->outputReady() == ASE_OK);
+    auto startResult = driver->start();
+    if(startResult != ASE_OK)
+    {
+        Impl::showASIOErrorMessageDialog(driver, startResult);
+    }
+    mainWindow->setProperty("engineRunning", QVariant::fromValue<bool>(true));
+    updateCurrentASIODriverInfo();
 }
 
 }

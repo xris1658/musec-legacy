@@ -37,11 +37,7 @@ add_definitions(${Qt5Widgets_DEFINITIONS} ${QtQml_DEFINITIONS} ${${Qt5Quick_DEFI
 
 add_compile_options(/W4 /Zc:wchar_t)
 
-set(RESOURCE_FILE Musec_resource.rc)
-
 qt5_add_resources(QT_RESOURCES ./Musec.qrc)
-
-set(PROJECT_PCH pch.hpp)
 
 set(PROJECT_SOURCES
     audio/arrangement/ClipInTrack.hpp
@@ -118,6 +114,7 @@ set(PROJECT_SOURCES
     audio/util/Util.hpp
     base/AssetDirectoryBase.hpp
     base/Base.hpp
+    base/CircularDeque.hpp
     base/Color.cpp
     base/Color.hpp
     base/Constants.hpp
@@ -128,6 +125,8 @@ set(PROJECT_SOURCES
     base/PluginBase.cpp
     base/PluginBase.hpp
     base/QmlBase.hpp
+    concurrent/ButlerThread.cpp
+    concurrent/ButlerThread.hpp
     concurrent/ThreadPool.cpp
     concurrent/ThreadPool.hpp
     controller/ASIODriverController.cpp
@@ -236,6 +235,10 @@ set(PROJECT_SOURCES
     util/Literal.hpp
     util/Stopwatch.hpp
     )
+
+set(RESOURCE_FILE Musec_resource.rc)
+
+set(PROJECT_PCH pch.hpp)
 
 set(TEST_COMMON_SOURCES
     test/common/PluginWindowThread.cpp
