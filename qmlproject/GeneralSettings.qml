@@ -105,11 +105,10 @@ Rectangle {
             horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignVCenter
         }
-        MCtrl.CheckBox {
+        MCtrl.Switch {
             id: checkBoxTouchSupport
-            width: 16
+            width: 24
             height: 16
-            tristate: false
             checked: false
         }
         Text {
@@ -120,11 +119,10 @@ Rectangle {
             horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignVCenter
         }
-        MCtrl.CheckBox {
+        MCtrl.Switch {
             id: checkBoxSingleInstance
-            width: 16
+            width: 24
             height: 16
-            tristate: false
             checked: true
         }
         Text {
@@ -138,11 +136,10 @@ Rectangle {
         }
         Row {
             spacing: checkBoxSystemTextRendering.width / 2
-            MCtrl.CheckBox {
+            MCtrl.Switch {
                 id: checkBoxSystemTextRendering
-                width: 16
+                width: 24
                 height: 16
-                tristate: false
                 onCheckedChanged: {
                     EventBridge.systemTextRenderingChanged(checked);
                 }
