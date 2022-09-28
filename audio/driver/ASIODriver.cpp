@@ -1,8 +1,8 @@
 #include "ASIODriver.hpp"
 
 #include "native/ASIODriverImpl.hpp"
-#include "native/Native.hpp"
 
+#include <array>
 #include <utility>
 
 namespace Musec::Audio::Driver
@@ -19,9 +19,9 @@ ASIOChannelInfoList& getASIOChannelInfoList()
     return ret;
 }
 
-QList<ASIODriverBasicInfo> enumerateDrivers()
+QList<ASIODriverBasicInfo> enumerateASIODriverInfo()
 {
-    return Musec::Native::enumerateDrivers();
+    return Musec::Native::enumerateASIODriverInfo();
 }
 
 ASIODriver::ASIODriver(): pImpl_() {}

@@ -42,10 +42,10 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     using namespace Musec::UI;
     auto& appConfig = Musec::Controller::ConfigController::appConfig();
     splashScreen->setBootText("searchingAudioDeviceText");
-    decltype(Musec::Audio::Driver::enumerateDrivers()) driverList;
+    decltype(Musec::Audio::Driver::enumerateASIODriverInfo()) driverList;
     try
     {
-        driverList = Musec::Audio::Driver::enumerateDrivers();
+        driverList = Musec::Audio::Driver::enumerateASIODriverInfo();
         AppASIODriverList().setList(driverList);
     }
     catch(std::exception&)

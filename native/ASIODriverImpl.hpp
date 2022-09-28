@@ -10,6 +10,9 @@ namespace Musec
 namespace Native
 {
 using namespace Musec::Audio::Driver;
+
+QList<Musec::Audio::Driver::ASIODriverBasicInfo> enumerateASIODriverInfo();
+
 // ASIO driver pImpl class
 class ASIODriverImpl
 {

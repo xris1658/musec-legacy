@@ -15,6 +15,74 @@ namespace Musec::Native
 {
 using namespace Musec::Audio::Driver;
 
+QList<Musec::Audio::Driver::ASIODriverBasicInfo> enumerateASIODriverInfo()
+{
+    QList<Musec::Audio::Driver::ASIODriverBasicInfo> ret;
+    constexpr auto driverNameSize = 256;
+    std::array<wchar_t, driverNameSize> buffer = {0};
+    HKEY hKey;
+    auto findKeyResult = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
+        L"SOFTWARE\\ASIO", 0, KEY_READ | KEY_WOW64_64KEY, &hKey);
+    if(findKeyResult != ERROR_SUCCESS)
+    {
+        throw std::runtime_error("Can't enumerate ASIO drivers.");
+    }
+    DWORD numSubKey;
+    auto queryInfoKeyResult = RegQueryInfoKeyW(hKey, NULL, NULL, NULL,
+        &numSubKey, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+    if(queryInfoKeyResult != ERROR_SUCCESS)
+    {
+        throw std::runtime_error("Can't enumerate ASIO drivers.");
+    }
+    if(numSubKey > 0)
+    {
+        ret.reserve(numSubKey);
+        for(decltype(numSubKey) i = 0; i < numSubKey; ++i)
+        {
+            DWORD driverNameLength = driverNameSize;
+            HKEY subKey;
+            auto enumKeyExResult = RegEnumKeyExW(hKey, i,
+                buffer.data(), &driverNameLength, NULL, NULL, NULL, NULL);
+            if(enumKeyExResult != ERROR_SUCCESS
+               && enumKeyExResult != ERROR_MORE_DATA)
+            {
+                throw std::runtime_error("A error occured while enumerating ASIO drivers.");
+            }
+            else
+            {
+                auto openKeyResult = RegOpenKeyExW(hKey, buffer.data(), 0,
+                    KEY_READ | KEY_WOW64_64KEY | KEY_QUERY_VALUE, &subKey);
+                if(openKeyResult != ERROR_SUCCESS)
+                {
+                    throw std::runtime_error("A error occured while enumerating ASIO drivers.");
+                }
+                else
+                {
+                    const wchar_t name[] = L"CLSID";
+                    std::array<wchar_t, CLSIDStringLength + 1> clsidBuffer = {0};
+                    DWORD clsidBufferLength;
+                    auto getValueResult = RegGetValueW(subKey, NULL, name,
+                        RRF_RT_REG_SZ, NULL, clsidBuffer.data(), &clsidBufferLength);
+                    if(getValueResult == ERROR_SUCCESS && clsidBufferLength == clsidBuffer.size() * sizeof(wchar_t))
+                    {
+                        ret.append(
+                            std::make_tuple(
+                                QString::fromWCharArray(buffer.data()),
+                                QString::fromWCharArray(clsidBuffer.data())
+                            )
+                        );
+                    }
+                    else
+                    {
+                        // The information is invalid. Need to inform the user?
+                    }
+                }
+            }
+        }
+    }
+    return ret;
+}
+
 ASIODriverImpl::ASIODriverImpl(): driverInfo_(std::tuple<QString, QString>("", "")), driver_(nullptr) {}
 
 ASIODriverImpl::ASIODriverImpl(const ASIODriverBasicInfo& info): driverInfo_(info), driver_(nullptr)

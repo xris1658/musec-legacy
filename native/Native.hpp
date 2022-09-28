@@ -78,8 +78,6 @@ bool isDebuggerPresent();
 QString errorMessageFromErrorCode(ErrorCodeType errorCode);
 
 QString getProductVersion(const QString& path);
-
-QList<Musec::Audio::Driver::ASIODriverBasicInfo> enumerateDrivers();
 }
 }
 
