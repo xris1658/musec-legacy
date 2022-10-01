@@ -5,6 +5,7 @@
 #include "audio/plugin/VST3PluginParameter.hpp"
 #include "audio/plugin/VST3PluginComponentHandler.hpp"
 #include "audio/plugin/VST3PluginPlugFrame.hpp"
+#include "audio/plugin/VST3SpeakerGroupCollection.hpp"
 #include "base/FixedSizeMemoryBlock.hpp"
 #include "base/PluginBase.hpp"
 #include "native/Native.hpp"
@@ -102,8 +103,12 @@ public:
     Steinberg::Vst::IEditController* editController() const;
     Steinberg::IPlugView* getView() const;
 public: // IDevice interfaces
-    std::uint8_t inputCount() const override;
-    std::uint8_t outputCount() const override;
+    std::uint8_t audioInputCount() const override;
+    std::uint8_t audioOutputCount() const override;
+    const SpeakerArrangements& inputSpeakerArrangements();
+    const SpeakerArrangements& outputSpeakerArrangements();
+    const ISpeakerGroupCollection& audioInputSpeakerGroupCollection() const override;
+    const ISpeakerGroupCollection& audioOutputSpeakerGroupCollection() const override;
     void process(Audio::Base::AudioBufferView<SampleType>* inputs, int inputCount,
         Audio::Base::AudioBufferView<SampleType>* outputs, int outputCount) override;
 public: // IPlugin interfaces
@@ -124,8 +129,6 @@ public:
     bool hasUI() override;
     Musec::Base::PluginFormat pluginFormat() override;
 public:
-    const SpeakerArrangements& inputSpeakerArrangements();
-    const SpeakerArrangements& outputSpeakerArrangements();
     bool activated() override;
     bool processing() override;
 private:
@@ -170,6 +173,8 @@ private:
     std::vector<std::vector<SampleType*>> outputRaws_;
     SpeakerArrangements inputSpeakerArrangements_;
     SpeakerArrangements outputSpeakerArrangements_;
+    Musec::Audio::Plugin::VST3SpeakerGroupCollection inputSpeakerGroupCollection_;
+    Musec::Audio::Plugin::VST3SpeakerGroupCollection outputSpeakerGroupCollection_;
     VST3AudioProcessorStatus audioProcessorStatus_ = VST3AudioProcessorStatus::NoAudioProcessor;
     VST3EditControllerStatus editControllerStatus_ = VST3EditControllerStatus::NoEditController;
     EffectAndEditorUnified effectAndEditorUnified_ = EffectAndEditorUnified::NotUnified;

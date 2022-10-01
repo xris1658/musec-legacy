@@ -3,12 +3,14 @@
 
 #include "audio/base/Automation.hpp"
 #include "audio/host/CLAPHost.hpp"
+#include "audio/plugin/CLAPSpeakerGroupCollection.hpp"
 #include "audio/plugin/IPlugin.hpp"
 #include "base/FixedSizeMemoryBlock.hpp"
 #include "native/WindowsLibraryRAII.hpp"
 
 #include <clap/ext/audio-ports.h>
 #include <clap/ext/gui.h>
+#include <clap/ext/note-ports.h>
 #include <clap/ext/params.h>
 #include <clap/entry.h>
 #include <clap/plugin.h>
@@ -51,8 +53,10 @@ public:
     CLAPPlugin(const QString& path, int index);
     ~CLAPPlugin() override;
 public:
-    std::uint8_t inputCount() const override;
-    std::uint8_t outputCount() const override;
+    std::uint8_t audioInputCount() const override;
+    std::uint8_t audioOutputCount() const override;
+    const ISpeakerGroupCollection& audioInputSpeakerGroupCollection() const override;
+    const ISpeakerGroupCollection& audioOutputSpeakerGroupCollection() const override;
     void process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs, int inputCount,
         Musec::Audio::Base::AudioBufferView<SampleType>* outputs, int outputCount) override;
 public:
@@ -93,6 +97,7 @@ private:
     const clap_plugin_factory* factory_ = nullptr;
     const clap_plugin_descriptor* desc_ = nullptr;
     const clap_plugin_gui* gui_ = nullptr;
+    const clap_plugin_note_ports* notePorts_ = nullptr;
     const clap_plugin_params* params_ = nullptr;
     double sampleRate_;
     std::uint32_t minBlockSize_;
@@ -115,6 +120,8 @@ private:
         /*.latency = */0,
         /*.constant_mask*/0
     };
+    CLAPSpeakerGroupCollection inputSpeakerGroupCollection_;
+    CLAPSpeakerGroupCollection outputSpeakerGroupCollection_;
     clap::helpers::EventList eventInputList_;
     clap::helpers::EventList eventOutputList_;
     std::vector<SampleType*> rawInputs_;

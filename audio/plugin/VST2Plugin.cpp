@@ -2,6 +2,7 @@
 
 #include "audio/plugin/VST2PluginParameter.hpp"
 #include "audio/plugin/VST2PluginShellPluginId.hpp"
+#include "audio/plugin/VST2SpeakerGroupCollection.hpp"
 #include "controller/AudioEngineController.hpp"
 #include "base/Constants.hpp"
 #include "base/PluginBase.hpp"
@@ -337,12 +338,12 @@ AEffect* VST2Plugin::effect() const
     return effect_;
 }
 
-std::uint8_t VST2Plugin::inputCount() const
+std::uint8_t VST2Plugin::audioInputCount() const
 {
     return static_cast<std::uint8_t>(effect_->numInputs);
 }
 
-std::uint8_t VST2Plugin::outputCount() const
+std::uint8_t VST2Plugin::audioOutputCount() const
 {
     return static_cast<std::uint8_t>(effect_->numOutputs);
 }
@@ -385,11 +386,15 @@ bool VST2Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
                     return false;
                 }
             }
+            // effGetSpeakerArrangement can return multiple speaker arrangements.
+            // TODO: How to get the number of speaker arrangements?
+            inputSpeakerGroupCollection_ = {inputSpeakerArrangement, 1};
+            outputSpeakerGroupCollection_ = {outputSpeakerArrangement, 1};
         }
     }
     effect_->dispatcher(effect_, effOpen, 0, 0, nullptr, 0);
-    inputsRaw_ = std::vector<SampleType*>(VST2Plugin::inputCount(), nullptr);
-    outputsRaw_ = std::vector<SampleType*>(VST2Plugin::outputCount(), nullptr);
+    inputsRaw_ = std::vector<SampleType*>(VST2Plugin::audioInputCount(), nullptr);
+    outputsRaw_ = std::vector<SampleType*>(VST2Plugin::audioOutputCount(), nullptr);
     effect_->dispatcher(effect_, AEffectOpcodes::effSetSampleRate, 0, 0, nullptr, sampleRate);
     effect_->dispatcher(effect_, AEffectOpcodes::effSetBlockSize, 0, maxSampleCount, nullptr, 0);
     initializeEditor();
@@ -406,6 +411,8 @@ bool VST2Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
 
 bool VST2Plugin::uninitialize()
 {
+    inputSpeakerGroupCollection_ = {};
+    outputSpeakerGroupCollection_ = {};
     paramBlock_ = Musec::Base::FixedSizeMemoryBlock();
     uninitializeEditor();
     stopProcessing();
@@ -454,11 +461,11 @@ void VST2Plugin::process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs
             inputsRaw_[i + inputCount] = inputs[i].getSamples();
         }
     }
-    for(int i = inputCount; i < this->inputCount(); ++i)
+    for(int i = inputCount; i < this->audioInputCount(); ++i)
     {
         inputsRaw_[i] = Musec::Controller::AudioEngineController::dummyBufferView<SampleType>().getSamples();
     }
-    for(int i = 0; i < outputCount && i < this->outputCount(); ++i)
+    for(int i = 0; i < outputCount && i < this->audioOutputCount(); ++i)
     {
         outputsRaw_[i] = outputs[i].getSamples();
     }
@@ -573,6 +580,18 @@ IParameter& VST2Plugin::parameter(int index)
 bool VST2Plugin::processing()
 {
     return !bypass_;
+}
+
+// Exceeds lifetime?
+const Musec::Audio::Device::ISpeakerGroupCollection& VST2Plugin::audioInputSpeakerGroupCollection() const
+{
+    return inputSpeakerGroupCollection_;
+}
+
+// Exceeds lifetime?
+const Musec::Audio::Device::ISpeakerGroupCollection& VST2Plugin::audioOutputSpeakerGroupCollection() const
+{
+    return outputSpeakerGroupCollection_;
 }
 // ------------------------------------------------------------------------------------------
 }

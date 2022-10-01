@@ -3,6 +3,7 @@
 
 #include "audio/plugin/IParameter.hpp"
 #include "audio/plugin/IPlugin.hpp"
+#include "audio/plugin/VST2SpeakerGroupCollection.hpp"
 #include "base/FixedSizeMemoryBlock.hpp"
 #include "base/PluginBase.hpp"
 #include "native/WindowsLibraryRAII.hpp"
@@ -23,6 +24,7 @@ namespace Audio
 {
 namespace Plugin
 {
+
 VstIntPtr pluginVST2Callback(AEffect* effect, VstInt32 opcode, VstInt32 index, VstIntPtr value, void* ptr, float opt);
 
 class VST2Plugin:
@@ -37,8 +39,10 @@ public:
 public:
     AEffect* effect() const;
 public:
-    std::uint8_t inputCount() const override;
-    std::uint8_t outputCount() const override;
+    std::uint8_t audioInputCount() const override;
+    std::uint8_t audioOutputCount() const override;
+    const Musec::Audio::Device::ISpeakerGroupCollection& audioInputSpeakerGroupCollection() const override;
+    const Musec::Audio::Device::ISpeakerGroupCollection& audioOutputSpeakerGroupCollection() const override;
     void process(Musec::Audio::Base::AudioBufferView<SampleType>* input, int inputCount,
         Musec::Audio::Base::AudioBufferView<SampleType>* output, int outputCount) override;
 public:
@@ -72,6 +76,8 @@ private:
     bool activated_ = false;
     QWindow* window_ = nullptr;
     Musec::Base::FixedSizeMemoryBlock paramBlock_;
+    VST2SpeakerGroupCollection inputSpeakerGroupCollection_;
+    VST2SpeakerGroupCollection outputSpeakerGroupCollection_;
 };
 }
 }

@@ -54,6 +54,8 @@ set(PROJECT_SOURCES
     audio/base/TimeSignatureSequence.hpp
     audio/device/IDevice.hpp
     audio/device/IDevice.hpp
+    audio/device/ISpeakerGroup.hpp
+    audio/device/ISpeakerGroupCollection.hpp
     audio/driver/ASIOCallback.cpp
     audio/driver/ASIOCallback.hpp
     audio/driver/ASIODriver.cpp
@@ -81,6 +83,10 @@ set(PROJECT_SOURCES
     audio/plugin/CLAPPlugin.hpp
     audio/plugin/CLAPPluginParameter.cpp
     audio/plugin/CLAPPluginParameter.hpp
+    audio/plugin/CLAPSpeakerGroup.cpp
+    audio/plugin/CLAPSpeakerGroup.hpp
+    audio/plugin/CLAPSpeakerGroupCollection.cpp
+    audio/plugin/CLAPSpeakerGroupCollection.hpp
     audio/plugin/CLAPUtils.hpp
     audio/plugin/IParameter.hpp
     audio/plugin/IPlugin.hpp
@@ -93,6 +99,10 @@ set(PROJECT_SOURCES
     audio/plugin/VST2PluginPool.hpp
     audio/plugin/VST2PluginShellPluginId.cpp
     audio/plugin/VST2PluginShellPluginId.hpp
+    audio/plugin/VST2SpeakerGroup.cpp
+    audio/plugin/VST2SpeakerGroup.hpp
+    audio/plugin/VST2SpeakerGroupCollection.cpp
+    audio/plugin/VST2SpeakerGroupCollection.hpp
     audio/plugin/VST3Plugin.cpp
     audio/plugin/VST3Plugin.hpp
     audio/plugin/VST3PluginComponentHandler.cpp
@@ -101,6 +111,10 @@ set(PROJECT_SOURCES
     audio/plugin/VST3PluginParameter.hpp
     audio/plugin/VST3PluginPlugFrame.cpp
     audio/plugin/VST3PluginPlugFrame.hpp
+    audio/plugin/VST3SpeakerGroup.cpp
+    audio/plugin/VST3SpeakerGroup.hpp
+    audio/plugin/VST3SpeakerGroupCollection.cpp
+    audio/plugin/VST3SpeakerGroupCollection.hpp
     audio/track/AudioTrack.cpp
     audio/track/AudioTrack.hpp
     audio/track/ITrack.hpp

@@ -78,7 +78,7 @@ CLAPPlugin::~CLAPPlugin()
     }
 }
 
-std::uint8_t CLAPPlugin::inputCount() const
+std::uint8_t CLAPPlugin::audioInputCount() const
 {
     auto features = desc_->features;
     for(int j = 0; features[j]; ++j)
@@ -92,7 +92,7 @@ std::uint8_t CLAPPlugin::inputCount() const
     return 2;
 }
 
-std::uint8_t CLAPPlugin::outputCount() const
+std::uint8_t CLAPPlugin::audioOutputCount() const
 {
     return 2;
 }
@@ -104,9 +104,9 @@ void CLAPPlugin::process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs
     // eventInputList_.push(&(eventTransport.header));
     processData_.steady_time = Musec::Native::currentTimeValueInNanosecond();
     processData_.frames_count = Musec::Controller::AudioEngineController::getCurrentBlockSize();
-    rawInputs_.resize(this->inputCount());
-    rawOutputs_.resize(this->outputCount());
-    processData_.audio_inputs_count = this->inputCount()? 1: 0;
+    rawInputs_.resize(this->audioInputCount());
+    rawOutputs_.resize(this->audioOutputCount());
+    processData_.audio_inputs_count = this->audioInputCount()? 1: 0;
     processData_.audio_outputs_count = 1;
     for(int i = 0; i < inputBufferCount; ++i)
     {
@@ -116,8 +116,8 @@ void CLAPPlugin::process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs
     {
         rawOutputs_[i] = outputs[i].getSamples();
     }
-    processDataInput_.channel_count = inputCount();
-    processDataOutput_.channel_count = outputCount();
+    processDataInput_.channel_count = audioInputCount();
+    processDataOutput_.channel_count = audioOutputCount();
     processDataInput_.data32 = rawInputs_.data();
     processDataOutput_.data32 = rawOutputs_.data();
     processData_.audio_inputs = &processDataInput_;
@@ -156,6 +156,8 @@ bool CLAPPlugin::initialize(double sampleRate, std::int32_t maxSampleCount)
         if(plugin_->init(plugin_))
         {
             pluginStatus_ = CLAPPluginStatus::Initialized;
+            inputSpeakerGroupCollection_ = {plugin_, audioPorts_, true};
+            outputSpeakerGroupCollection_ = {plugin_, audioPorts_, false};
             if(initializeParameters())
             {
                 initializeUI();
@@ -172,6 +174,8 @@ bool CLAPPlugin::uninitialize()
     {
         uninitializeUI();
     }
+    inputSpeakerGroupCollection_ = {};
+    outputSpeakerGroupCollection_ = {};
     uninitializeParameters();
     if(plugin_)
     {
@@ -186,7 +190,7 @@ bool CLAPPlugin::uninitialize()
 
 bool CLAPPlugin::initializeParameters()
 {
-    params_ = reinterpret_cast<const clap_plugin_params*>(plugin_->get_extension(plugin_, CLAP_EXT_PARAMS));
+    params_ = reinterpret_cast<decltype(params_)>(plugin_->get_extension(plugin_, CLAP_EXT_PARAMS));
     if(params_)
     {
         auto paramCount = parameterCount();
@@ -209,7 +213,7 @@ bool CLAPPlugin::uninitializeParameters()
 
 bool CLAPPlugin::initializeUI()
 {
-    gui_ = reinterpret_cast<const clap_plugin_gui*>(plugin_->get_extension(plugin_, CLAP_EXT_GUI));
+    gui_ = reinterpret_cast<decltype(gui_)>(plugin_->get_extension(plugin_, CLAP_EXT_GUI));
     return gui_;
 }
 
@@ -223,6 +227,7 @@ bool CLAPPlugin::activate()
 {
     if(plugin_)
     {
+        notePorts_ = reinterpret_cast<decltype(notePorts_)>(plugin_->get_extension(plugin_, CLAP_EXT_NOTE_PORTS));
         audioPorts_ = reinterpret_cast<decltype(audioPorts_)>(plugin_->get_extension(plugin_, CLAP_EXT_AUDIO_PORTS));
         processDataInput_.latency = 0;
         processDataOutput_.latency = 0;
@@ -388,6 +393,16 @@ void CLAPPlugin::initHost()
 bool CLAPPlugin::processing()
 {
     return pluginStatus_ >= CLAPPluginStatus::Processing;
+}
+
+const ISpeakerGroupCollection& CLAPPlugin::audioInputSpeakerGroupCollection() const
+{
+    return inputSpeakerGroupCollection_;
+}
+
+const ISpeakerGroupCollection& CLAPPlugin::audioOutputSpeakerGroupCollection() const
+{
+    return outputSpeakerGroupCollection_;
 }
 
 }

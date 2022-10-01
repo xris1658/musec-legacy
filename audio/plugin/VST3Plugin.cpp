@@ -118,7 +118,7 @@ Steinberg::Vst::IEditController* VST3Plugin::editController() const
 
 // VST3Plugin IDevice interfaces
 // ------------------------------------------------------------------------------------------
-std::uint8_t VST3Plugin::inputCount() const
+std::uint8_t VST3Plugin::audioInputCount() const
 {
     std::uint8_t ret = 0;
     for (auto& arrangement: inputSpeakerArrangements_)
@@ -128,7 +128,7 @@ std::uint8_t VST3Plugin::inputCount() const
     return ret;
 }
 
-std::uint8_t VST3Plugin::outputCount() const
+std::uint8_t VST3Plugin::audioOutputCount() const
 {
     std::uint8_t ret = 0;
     for (auto& arrangement: outputSpeakerArrangements_)
@@ -313,8 +313,8 @@ bool VST3Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
             }
         }
         setBusArrangementsResult = audioProcessor_->setBusArrangements(
-            inputSpeakerArrangements_.data(), inputSpeakerArrangements_.size(), outputSpeakerArrangements_.data(),
-            outputSpeakerArrangements_.size());
+            inputSpeakerArrangements_.data(), inputSpeakerArrangements_.size(),
+            outputSpeakerArrangements_.data(), outputSpeakerArrangements_.size());
         if (setBusArrangementsResult != Steinberg::kResultOk)
         {
             return false;
@@ -344,6 +344,8 @@ bool VST3Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
     // Steinberg::Vst::RoutingInfo outputRoutingInfo = {0, 0, 0};
     // auto getRoutingInfoResult = component_->getRoutingInfo(inputRoutingInfo, outputRoutingInfo);
     Steinberg::Vst::BusInfo busInfo;
+    inputSpeakerGroupCollection_ = {component_, audioProcessor_, Steinberg::Vst::BusDirections::kInput};
+    outputSpeakerGroupCollection_ = {component_, audioProcessor_, Steinberg::Vst::BusDirections::kOutput};
     for(int i = 0; i < inputBusCount; ++i)
     {
         auto getBusInfoResult = component_->getBusInfo(Steinberg::Vst::MediaTypes::kAudio,
@@ -426,6 +428,8 @@ bool VST3Plugin::uninitialize()
     {
         uninitializeEditController();
     }
+    inputSpeakerGroupCollection_ = {};
+    outputSpeakerGroupCollection_ = {};
     audioProcessorStatus_ = VST3AudioProcessorStatus::Initialized;
     audioProcessor_->release();
     auto terminateComponentResult = component_->terminate();
@@ -795,5 +799,15 @@ IParameter& VST3Plugin::parameter(int index)
 bool VST3Plugin::processing()
 {
     return audioProcessorStatus_ >= VST3AudioProcessorStatus::Processing;
+}
+
+const ISpeakerGroupCollection& VST3Plugin::audioInputSpeakerGroupCollection() const
+{
+    return inputSpeakerGroupCollection_;
+}
+
+const ISpeakerGroupCollection& VST3Plugin::audioOutputSpeakerGroupCollection() const
+{
+    return outputSpeakerGroupCollection_;
 }
 }
