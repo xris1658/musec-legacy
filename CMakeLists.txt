@@ -79,6 +79,11 @@ set(PROJECT_SOURCES
     audio/media/AudioSequence.hpp
     audio/media/MIDISequence.cpp
     audio/media/MIDISequence.hpp
+    audio/midi/MIDIInputDevice.cpp
+    audio/midi/MIDIInputDevice.hpp
+    audio/midi/MIDIMessage.cpp
+    audio/midi/MIDIMessage.hpp
+    audio/midi/MIDIMessageCast.hpp
     audio/plugin/CLAPPlugin.cpp
     audio/plugin/CLAPPlugin.hpp
     audio/plugin/CLAPPluginParameter.cpp
@@ -214,6 +219,8 @@ set(PROJECT_SOURCES
     model/FileListModel.hpp
     model/FolderListModel.cpp
     model/FolderListModel.hpp
+    model/MIDIInputDeviceListModel.cpp
+    model/MIDIInputDeviceListModel.hpp
     model/ModelBase.hpp
     model/ModelInitializer.cpp
     model/ModelInitializer.hpp
@@ -229,6 +236,10 @@ set(PROJECT_SOURCES
     model/TranslationFileModel.hpp
     native/ASIODriverImpl.cpp
     native/ASIODriverImpl.hpp
+    native/MIDIInputDeviceImpl.cpp
+    native/MIDIInputDeviceImpl.hpp
+    native/MIDIMessageImpl.cpp
+    native/MIDIMessageImpl.hpp
     native/Native.cpp
     native/Native.hpp
     native/WindowsLibraryRAII.cpp
@@ -307,6 +318,7 @@ target_link_options(Musec
 target_link_libraries(Musec
                       Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets
                       version # Windows API
+                      windowsapp # WinRT API
                       base pluginterfaces sdk_common sdk_hosting # VST3
                       unofficial::sqlite3::sqlite3
                       yaml-cpp
@@ -324,6 +336,7 @@ target_link_libraries(MusecControlsTest
 target_link_libraries(VST2PluginTestWithQt
                       Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets
                       version
+                      windowsapp
                       base pluginterfaces sdk_common sdk_hosting
                       unofficial::sqlite3::sqlite3
                       yaml-cpp
@@ -335,6 +348,7 @@ target_link_libraries(VST2PluginTestWithQt
 target_link_libraries(VST3PluginTestWithQt
                       Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets
                       version
+                      windowsapp
                       base pluginterfaces sdk_common sdk_hosting
                       unofficial::sqlite3::sqlite3
                       yaml-cpp
