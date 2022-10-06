@@ -61,7 +61,7 @@ Rectangle {
         }
         Text {
             width: firstColumnWidth
-            text: qsTr("Scale")
+            text: qsTr("Linear scale unit")
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -69,7 +69,7 @@ Rectangle {
         }
         MCtrl.ComboBox {
             id: comboBoxColor
-            model: [qsTr("Time Linear"), qsTr("Beat Linear")]
+            model: [qsTr("Time"), qsTr("Beat")]
             font.family: Constants.font
             width: secondColumnWidth
         }

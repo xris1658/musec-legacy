@@ -325,17 +325,17 @@
     </message>
     <message>
         <location filename="../qmlproject/ArrangementSettings.qml" line="64"/>
-        <source>Scale</source>
+        <source>Linear scale unit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qmlproject/ArrangementSettings.qml" line="72"/>
-        <source>Time Linear</source>
+        <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qmlproject/ArrangementSettings.qml" line="72"/>
-        <source>Beat Linear</source>
+        <source>Beat</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

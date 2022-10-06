@@ -389,14 +389,15 @@ QStringList& defaultPluginDirectoryList()
         ret << QString(programFilesPath).append("\\Steinberg\\VstPlugins")
             << QString(programFilesPath).append("\\VstPlugins")
         // VST3
-            << QString(programFilesPath).append("\\Common Files\\VST3");
+            << QString(programFilesPath).append("\\Common Files\\VST3")
+        // CLAP
+            << QString(programFilesPath).append("\\Common Files\\CLAP");
     }
     auto localAppDataPath = Musec::Native::localAppDataFolder();
     if(!localAppDataPath.isEmpty())
     {
         // CLAP
-        ret << QString(programFilesPath).append("\\Common Files\\CLAP")
-            << QString(localAppDataPath).append("\\Programs\\Common\\CLAP");
+        ret << QString(localAppDataPath).append("\\Programs\\Common\\CLAP");
     }
     return ret;
 }

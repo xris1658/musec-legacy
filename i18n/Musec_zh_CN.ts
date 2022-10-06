@@ -330,18 +330,18 @@
     </message>
     <message>
         <location filename="../qmlproject/ArrangementSettings.qml" line="64"/>
-        <source>Scale</source>
-        <translation>刻度</translation>
+        <source>Linear scale unit</source>
+        <translation>均匀刻度单位</translation>
     </message>
     <message>
         <location filename="../qmlproject/ArrangementSettings.qml" line="72"/>
-        <source>Time Linear</source>
-        <translation>与实际时间成线性</translation>
+        <source>Time</source>
+        <translation>时间</translation>
     </message>
     <message>
         <location filename="../qmlproject/ArrangementSettings.qml" line="72"/>
-        <source>Beat Linear</source>
-        <translation>与节拍成线性</translation>
+        <source>Beat</source>
+        <translation>节拍</translation>
     </message>
 </context>
 <context>
