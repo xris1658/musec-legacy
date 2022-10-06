@@ -2,6 +2,119 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN" sourcelanguage="en">
 <context>
+    <name>ASIOSampleTypeName</name>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="12"/>
+        <source>16-Bit Integer MSB</source>
+        <translation>16 位整数（大端序）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="14"/>
+        <source>24-Bit Integer MSB</source>
+        <translation>24 位整数（大端序）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="16"/>
+        <source>32-Bit Integer MSB</source>
+        <translation>32 位整数（大端序）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="18"/>
+        <source>IEEE-754 32-Bit Float MSB</source>
+        <translation>IEEE-754 32 位浮点数（大端序）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="20"/>
+        <source>IEEE-754 64-Bit Float MSB</source>
+        <translation>IEEE-754 64 位浮点数（大端序）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="22"/>
+        <source>16-Bit Integer MSB inside 32-Bit</source>
+        <translation>32 位内含 16 位整数（大端序）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="24"/>
+        <source>18-Bit Integer MSB inside 32-Bit</source>
+        <translation>32 位内含 18 位整数（大端序）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="26"/>
+        <source>20-Bit Integer MSB inside 32-Bit</source>
+        <translation>32 位内含 20 位整数（大端序）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="28"/>
+        <source>24-Bit Integer MSB inside 32-Bit</source>
+        <translation>32 位内含 24 位整数（大端序）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="30"/>
+        <source>16-Bit Integer LSB</source>
+        <translation>16 位整数（小端序）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="32"/>
+        <source>24-Bit Integer LSB</source>
+        <translation>24 位整数（小端序）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="34"/>
+        <source>32-Bit Integer LSB</source>
+        <translation>32 位整数（小端序）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="36"/>
+        <source>IEEE-754 32-Bit Float LSB</source>
+        <translation>IEEE-754 32 位浮点数（小端序）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="38"/>
+        <source>IEEE-754 64-Bit Float LSB</source>
+        <translation>IEEE-754 64 位浮点数（小端序）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="40"/>
+        <source>16-Bit Integer LSB inside 32-Bit</source>
+        <translation>32 位内含 16 位整数（小端序）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="42"/>
+        <source>18-Bit Integer LSB inside 32-Bit</source>
+        <translation>32 位内含 18 位整数（小端序）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="44"/>
+        <source>20-Bit Integer LSB inside 32-Bit</source>
+        <translation>32 位内含 20 位整数（小端序）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="46"/>
+        <source>24-Bit Integer LSB inside 32-Bit</source>
+        <translation>32 位内含 24 位整数（小端序）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="48"/>
+        <source>DSD 1-Bit (8 samples per byte, first sample in LSB)</source>
+        <translation>DSD 1 位（每字节 8 个采样，首个采样在最低有效位）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="50"/>
+        <source>DSD 1-Bit (8 samples per byte, first sample in MSB)</source>
+        <translation>DSD 1 位（每字节 8 个采样，首个采样在最高有效位）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="52"/>
+        <source>DSD 8-Bit (1 sample per type, no endianness required)</source>
+        <translation>DSD 8 位（每字节 1 个采样，无需字节序）</translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="54"/>
+        <source>Unknown sample type</source>
+        <translation>未知采样类型</translation>
+    </message>
+</context>
+<context>
     <name>AboutQtWindow</name>
     <message>
         <location filename="../qmlproject/AboutQtWindow.qml" line="10"/>

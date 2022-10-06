@@ -2,6 +2,119 @@
 <!DOCTYPE TS>
 <TS version="2.1" sourcelanguage="en_US">
 <context>
+    <name>ASIOSampleTypeName</name>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="12"/>
+        <source>16-Bit Integer MSB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="14"/>
+        <source>24-Bit Integer MSB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="16"/>
+        <source>32-Bit Integer MSB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="18"/>
+        <source>IEEE-754 32-Bit Float MSB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="20"/>
+        <source>IEEE-754 64-Bit Float MSB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="22"/>
+        <source>16-Bit Integer MSB inside 32-Bit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="24"/>
+        <source>18-Bit Integer MSB inside 32-Bit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="26"/>
+        <source>20-Bit Integer MSB inside 32-Bit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="28"/>
+        <source>24-Bit Integer MSB inside 32-Bit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="30"/>
+        <source>16-Bit Integer LSB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="32"/>
+        <source>24-Bit Integer LSB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="34"/>
+        <source>32-Bit Integer LSB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="36"/>
+        <source>IEEE-754 32-Bit Float LSB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="38"/>
+        <source>IEEE-754 64-Bit Float LSB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="40"/>
+        <source>16-Bit Integer LSB inside 32-Bit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="42"/>
+        <source>18-Bit Integer LSB inside 32-Bit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="44"/>
+        <source>20-Bit Integer LSB inside 32-Bit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="46"/>
+        <source>24-Bit Integer LSB inside 32-Bit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="48"/>
+        <source>DSD 1-Bit (8 samples per byte, first sample in LSB)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="50"/>
+        <source>DSD 1-Bit (8 samples per byte, first sample in MSB)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="52"/>
+        <source>DSD 8-Bit (1 sample per type, no endianness required)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../audio/driver/ASIOSampleTypeName.cpp" line="54"/>
+        <source>Unknown sample type</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AboutQtWindow</name>
     <message>
         <location filename="../qmlproject/AboutQtWindow.qml" line="10"/>
