@@ -66,10 +66,14 @@ HEADERS += \
     audio/base/TimeSignatureSequence.hpp \
     audio/device/IDevice.hpp \
     audio/device/IDevice.hpp \
+    audio/device/ISpeakerGroup.hpp \
+    audio/device/ISpeakerGroupCollection.hpp \
     audio/driver/ASIOCallback.hpp \
     audio/driver/ASIODriver.hpp \
+    audio/driver/ASIODriverBasicInfo.hpp \
     audio/driver/ASIODriverForward.hpp \
     audio/driver/ASIODriverStreamInfo.hpp \
+    audio/driver/ASIOSampleTypeName.hpp \
     audio/driver/Literals.hpp \
     audio/engine/Graph.hpp \
     audio/engine/MIDIClock.hpp \
@@ -79,8 +83,13 @@ HEADERS += \
     audio/host/MusecVST3Host.hpp \
     audio/media/AudioSequence.hpp \
     audio/media/MIDISequence.hpp \
+    audio/midi/MIDIInputDevice.hpp \
+    audio/midi/MIDIMessage.hpp \
+    audio/midi/MIDIMessageCast.hpp \
     audio/plugin/CLAPPlugin.hpp \
     audio/plugin/CLAPPluginParameter.hpp \
+    audio/plugin/CLAPSpeakerGroup.hpp \
+    audio/plugin/CLAPSpeakerGroupCollection.hpp \
     audio/plugin/CLAPUtils.hpp \
     audio/plugin/IParameter.hpp \
     audio/plugin/IPlugin.hpp \
@@ -89,19 +98,24 @@ HEADERS += \
     audio/plugin/VST2PluginParameter.hpp \
     audio/plugin/VST2PluginPool.hpp \
     audio/plugin/VST2PluginShellPluginId.hpp \
+    audio/plugin/VST2SpeakerGroup.hpp \
+    audio/plugin/VST2SpeakerGroupCollection.hpp \
     audio/plugin/VST3Plugin.hpp \
     audio/plugin/VST3PluginComponentHandler.hpp \
-    audio/plugin/VST3PluginPlugFrame.hpp \
     audio/plugin/VST3PluginParameter.hpp \
+    audio/plugin/VST3PluginPlugFrame.hpp \
+    audio/plugin/VST3SpeakerGroup.hpp \
+    audio/plugin/VST3SpeakerGroupCollection.hpp \
     audio/track/AudioTrack.hpp \
-    audio/track/ITrack.hpp \
     audio/track/InstrumentTrack.hpp \
+    audio/track/ITrack.hpp \
     audio/track/MIDITrack.hpp \
     audio/track/PluginSequence.hpp \
     audio/track/TrackInformation.hpp \
     audio/util/Util.hpp \
     base/AssetDirectoryBase.hpp \
     base/Base.hpp \
+    base/CircularDeque.hpp \
     base/Color.hpp \
     base/Constants.hpp \
     base/FileBase.hpp \
@@ -109,9 +123,10 @@ HEADERS += \
     base/FolderBase.hpp \
     base/PluginBase.hpp \
     base/QmlBase.hpp \
+    concurrent/ButlerThread.hpp \
     concurrent/ThreadPool.hpp \
-    controller/ASIODriverController.hpp \
     controller/AppController.hpp \
+    controller/ASIODriverController.hpp \
     controller/AssetController.hpp \
     controller/AssetDirectoryController.hpp \
     controller/AudioEngineController.hpp \
@@ -140,12 +155,14 @@ HEADERS += \
     i18n/I18N.hpp \
     math/Integration.hpp \
     math/QuadraticFunction.hpp \
+    model/ASIOChannelInfoListModel.hpp \
     model/ASIODriverListModel.hpp \
     model/AssetDirectoryListModel.hpp \
     model/AudioTrackSequenceModel.hpp \
     model/AutomationModel.hpp \
     model/FileListModel.hpp \
     model/FolderListModel.hpp \
+    model/MIDIInputDeviceListModel.hpp \
     model/ModelBase.hpp \
     model/ModelInitializer.hpp \
     model/PluginListModel.hpp \
@@ -154,6 +171,8 @@ HEADERS += \
     model/TrackListModel.hpp \
     model/TranslationFileModel.hpp \
     native/ASIODriverImpl.hpp \
+    native/MIDIInputDeviceImpl.hpp \
+    native/MIDIMessageImpl.hpp \
     native/Native.hpp \
     native/WindowsLibraryRAII.hpp \
     ui/FontUtility.hpp \
@@ -166,11 +185,13 @@ HEADERS += \
     util/Stopwatch.hpp
 
 SOURCES += \
+    main.cpp \
     audio/base/AudioBufferView.cpp \
     audio/base/Automation.cpp \
     audio/base/TimeSignature.cpp \
     audio/driver/ASIOCallback.cpp \
     audio/driver/ASIODriver.cpp \
+    audio/driver/ASIOSampleTypeName.cpp \
     audio/driver/Literals.cpp \
     audio/engine/Project.cpp \
     audio/host/CLAPEvents.cpp \
@@ -178,16 +199,25 @@ SOURCES += \
     audio/host/MusecVST3Host.cpp \
     audio/media/AudioSequence.cpp \
     audio/media/MIDISequence.cpp \
+    audio/midi/MIDIInputDevice.cpp \
+    audio/midi/MIDIMessage.cpp \
+    audio/midi/MIDIMessageCast.cpp \
     audio/plugin/CLAPPlugin.cpp \
     audio/plugin/CLAPPluginParameter.cpp \
+    audio/plugin/CLAPSpeakerGroup.cpp \
+    audio/plugin/CLAPSpeakerGroupCollection.cpp \
     audio/plugin/VST2Plugin.cpp \
     audio/plugin/VST2PluginParameter.cpp \
     audio/plugin/VST2PluginPool.cpp \
     audio/plugin/VST2PluginShellPluginId.cpp \
+    audio/plugin/VST2SpeakerGroup.cpp \
+    audio/plugin/VST2SpeakerGroupCollection.cpp \
     audio/plugin/VST3Plugin.cpp \
     audio/plugin/VST3PluginComponentHandler.cpp \
     audio/plugin/VST3PluginParameter.cpp \
     audio/plugin/VST3PluginPlugFrame.cpp \
+    audio/plugin/VST3SpeakerGroup.cpp \
+    audio/plugin/VST3SpeakerGroupCollection.cpp \
     audio/track/AudioTrack.cpp \
     audio/track/InstrumentTrack.cpp \
     audio/track/MIDITrack.cpp \
@@ -195,9 +225,10 @@ SOURCES += \
     base/Color.cpp \
     base/FixedSizeMemoryPool.cpp \
     base/PluginBase.cpp \
+    concurrent/ButlerThread.cpp \
     concurrent/ThreadPool.cpp \
-    controller/ASIODriverController.cpp \
     controller/AppController.cpp \
+    controller/ASIODriverController.cpp \
     controller/AssetController.cpp \
     controller/AssetDirectoryController.cpp \
     controller/AudioEngineController.cpp \
@@ -223,15 +254,16 @@ SOURCES += \
     event/SplashScreen.cpp \
     event/SplashScreenWorkerThread.cpp \
     i18n/I18N.cpp \
-    main.cpp \
     math/Integration.cpp \
     math/QuadraticFunction.cpp \
+    model/ASIOChannelInfoListModel.cpp \
     model/ASIODriverListModel.cpp \
     model/AssetDirectoryListModel.cpp \
     model/AudioTrackSequenceModel.cpp \
     model/AutomationModel.cpp \
     model/FileListModel.cpp \
     model/FolderListModel.cpp \
+    model/MIDIInputDeviceListModel.cpp \
     model/ModelInitializer.cpp \
     model/PluginListModel.cpp \
     model/PluginSequenceModel.cpp \
@@ -239,6 +271,8 @@ SOURCES += \
     model/TrackListModel.cpp \
     model/TranslationFileModel.cpp \
     native/ASIODriverImpl.cpp \
+    native/MIDIInputDeviceImpl.cpp \
+    native/MIDIMessageImpl.cpp \
     native/Native.cpp \
     native/WindowsLibraryRAII.cpp \
     ui/FontUtility.cpp \
@@ -260,6 +294,8 @@ LIBS += \
     Shell32.lib \  # SHGetFolderPathW
     ole32.lib \
     version.lib \  # Musec::Native::getProductVersion
+    # WinRT API
+    windowsapp.lib \
     # VST3 SDK
     sdk.lib \
     base.lib \
