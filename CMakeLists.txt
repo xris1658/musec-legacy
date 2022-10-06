@@ -83,6 +83,7 @@ set(PROJECT_SOURCES
     audio/midi/MIDIInputDevice.hpp
     audio/midi/MIDIMessage.cpp
     audio/midi/MIDIMessage.hpp
+    audio/midi/MIDIMessageCast.cpp
     audio/midi/MIDIMessageCast.hpp
     audio/plugin/CLAPPlugin.cpp
     audio/plugin/CLAPPlugin.hpp
