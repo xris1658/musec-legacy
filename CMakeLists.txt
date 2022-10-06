@@ -63,6 +63,8 @@ set(PROJECT_SOURCES
     audio/driver/ASIODriverBasicInfo.hpp
     audio/driver/ASIODriverForward.hpp
     audio/driver/ASIODriverStreamInfo.hpp
+    audio/driver/ASIOSampleTypeName.cpp
+    audio/driver/ASIOSampleTypeName.hpp
     audio/driver/Literals.cpp
     audio/driver/Literals.hpp
     audio/engine/Graph.hpp
@@ -208,6 +210,8 @@ set(PROJECT_SOURCES
     math/Integration.hpp
     math/QuadraticFunction.cpp
     math/QuadraticFunction.hpp
+    model/ASIOChannelInfoListModel.cpp
+    model/ASIOChannelInfoListModel.hpp
     model/ASIODriverListModel.cpp
     model/ASIODriverListModel.hpp
     model/AssetDirectoryListModel.cpp
