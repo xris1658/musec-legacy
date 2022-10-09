@@ -1,8 +1,9 @@
 #ifndef MUSEC_MODEL_ASIOCHANNELINFOLISTMODEL
 #define MUSEC_MODEL_ASIOCHANNELINFOLISTMODEL
 
-#include "audio/driver/ASIODriver.hpp"
 #include "model/ModelBase.hpp"
+
+#include <common/asio.h>
 
 #include <QAbstractListModel>
 #include <QList>
@@ -18,7 +19,6 @@ public:
     enum RoleNames
     {
         ChannelIndexRole = Qt::UserRole, // ASIOChannelInfo::channel
-        IsInputRole,                     // ASIOChannelInfo::isInput
         IsActiveRole,                    // ASIOChannelInfo::isActive
         GroupRole,                       // ASIOChannelInfo::channelGroup
         SampleTypeRole,                  // ASIOChannelInfo::type
@@ -35,7 +35,7 @@ public:
     static constexpr int columnSize();
     Q_INVOKABLE bool empty() const noexcept;
 public:
-    virtual int rowCount(const QModelIndex&) const override;
+    int rowCount(const QModelIndex&) const override;
     int columnCount(const QModelIndex&) const override;
     QVariant data(const QModelIndex& index, int role) const override;
 protected:

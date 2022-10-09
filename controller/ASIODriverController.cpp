@@ -170,6 +170,8 @@ void updateCurrentASIODriverInfo()
                                    QVariant::fromValue<int>(driverStreamInfo.outputLatencyInSamples));
         optionsWindow->setProperty("sampleRate",
                                    QVariant::fromValue<double>(driverStreamInfo.sampleRate));
+        optionsWindow->setProperty("outputChannelList",
+                                   QVariant::fromValue<QObject*>(&outputChannelInfoList()));
     }
 }
 
@@ -212,6 +214,8 @@ void allocateASIODriverBuffer()
             Impl::showASIOErrorMessageDialog(driver, getChannelInfoResult);
         }
     }
+    inputChannelInfoList().setList(channelInfoList.data(), info.inputCount);
+    outputChannelInfoList().setList(channelInfoList.data() + info.inputCount, info.outputCount);
 }
 
 void startASIODriver()
@@ -227,6 +231,18 @@ void startASIODriver()
     }
     mainWindow->setProperty("engineRunning", QVariant::fromValue<bool>(true));
     updateCurrentASIODriverInfo();
+}
+
+Musec::Model::ASIOChannelInfoListModel& inputChannelInfoList()
+{
+    static Musec::Model::ASIOChannelInfoListModel ret;
+    return ret;
+}
+
+Musec::Model::ASIOChannelInfoListModel& outputChannelInfoList()
+{
+    static Musec::Model::ASIOChannelInfoListModel ret;
+    return ret;
 }
 
 }

@@ -1,5 +1,7 @@
 #include "ASIOChannelInfoListModel.hpp"
 
+#include "audio/driver/ASIOSampleTypeName.hpp"
+
 namespace Musec::Model
 {
 ASIOChannelInfoListModel::ASIOChannelInfoListModel(QObject* parent):
@@ -9,7 +11,6 @@ ASIOChannelInfoListModel::ASIOChannelInfoListModel(QObject* parent):
 {
     roleNames_.reserve(columnSize());
     roleNames_[RoleNames::ChannelIndexRole] = "channel_index";
-    roleNames_[RoleNames::IsInputRole] = "is_input";
     roleNames_[RoleNames::IsActiveRole] = "is_active";
     roleNames_[RoleNames::GroupRole] = "group";
     roleNames_[RoleNames::SampleTypeRole] = "sample_type";
@@ -59,6 +60,7 @@ int ASIOChannelInfoListModel::columnCount(const QModelIndex&) const
 
 QVariant ASIOChannelInfoListModel::data(const QModelIndex& index, int role) const
 {
+    using namespace Musec::Audio::Driver;
     int row = index.row();
     if(row < 0 || row >= itemCount())
     {
@@ -68,12 +70,12 @@ QVariant ASIOChannelInfoListModel::data(const QModelIndex& index, int role) cons
     {
     case ChannelIndexRole:
         return QVariant::fromValue(channelInfoList_[row].channel);
-    case IsInputRole:
-        return QVariant::fromValue(channelInfoList_[row].isInput);
     case IsActiveRole:
         return QVariant::fromValue(channelInfoList_[row].isActive);
     case GroupRole:
         return QVariant::fromValue(channelInfoList_[row].channelGroup);
+    case SampleTypeRole:
+        return QVariant::fromValue(getASIOSampleTypeName(channelInfoList_[row].type));
     case NameRole:
         return QVariant::fromValue(QString(channelInfoList_[row].name));
     default:

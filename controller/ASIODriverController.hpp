@@ -6,6 +6,7 @@
 #include "audio/driver/ASIOCallback.hpp"
 #include "dao/DatabaseDAO.hpp"
 #include "event/EventBase.hpp"
+#include "model/ASIOChannelInfoListModel.hpp"
 #include "ui/UI.hpp"
 
 #include <QString>
@@ -31,6 +32,10 @@ void updateCurrentASIODriverInfo();
 void allocateASIODriverBuffer();
 
 void startASIODriver();
+
+Musec::Model::ASIOChannelInfoListModel& inputChannelInfoList();
+
+Musec::Model::ASIOChannelInfoListModel& outputChannelInfoList();
 }
 }
 }

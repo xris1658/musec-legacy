@@ -12,6 +12,7 @@ Rectangle {
     color: Constants.backgroundColor
     property alias driverListModel: comboBoxDriver.model
     property alias currentDriver: comboBoxDriver.currentIndex
+    property alias outputChannelListModel: comboBoxLeftOutput.model
     property int bufferSize: 512
     property int inputLatencyInSamples: 512
     property int outputLatencyInSamples: 512
@@ -53,6 +54,7 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
         }
         Item {
+            id: secondColumn
             width: 320
             height: 20
         }
@@ -67,7 +69,7 @@ Rectangle {
         }
         MCtrl.ComboBox {
             id: comboBoxDriver
-            width: 150
+            width: secondColumn.width
             height: 20
             font.family: Constants.font
             textRole: "name"
@@ -138,25 +140,29 @@ Rectangle {
             visible: root.driverLoadedAndWorking()
         }
         Item {
-            width: 320
+            width: openDriverSettingsButton.width
             height: 20
             visible: root.driverLoadedAndWorking()
-        }
-        Text {
-            width: 100
-            text: qsTr("Input Device") + ": "
-            font.family: Constants.font
-            color: Constants.contentColor1
-            horizontalAlignment: Text.AlignRight
-            verticalAlignment: Text.AlignVCenter
-            visible: root.driverLoadedAndWorking()
-        }
-        MCtrl.ComboBox {
-            id: comboBoxInputDevice
-            width: openDriverSettingsButton.width
-            model: ["Microphone", "Stereo Mix"]
-            font.family: Constants.font
-            visible: root.driverLoadedAndWorking()
+            Text {
+                width: parent.width / 2
+                height: parent.height
+                anchors.left: parent.left
+                text: qsTr("L")
+                font.family: Constants.font
+                color: Constants.contentColor1
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+            Text {
+                width: parent.width / 2
+                height: parent.height
+                anchors.right: parent.right
+                text: qsTr("R")
+                font.family: Constants.font
+                color: Constants.contentColor1
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
         }
         Text {
             width: 100
@@ -167,12 +173,31 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
             visible: root.driverLoadedAndWorking()
         }
-        MCtrl.ComboBox {
-            id: comboBoxOutputDevice
-            width: openDriverSettingsButton.width
-            model: ["Speaker", "Headphone"]
-            font.family: Constants.font
+        Item {
+            width: secondColumn.width
+            height: 20
             visible: root.driverLoadedAndWorking()
+            MCtrl.ComboBox {
+                id: comboBoxLeftOutput
+                width: parent.width / 2 - 2
+                anchors.left: parent.left
+                textRole: "name"
+                valueRole: "channel_index"
+                onCurrentValueChanged: {
+                    //
+                }
+            }
+            MCtrl.ComboBox {
+                id: comboBoxRightOutput
+                width: parent.width / 2 - 2
+                anchors.right: parent.right
+                model: comboBoxLeftOutput.model
+                textRole: "name"
+                valueRole: "channel_index"
+                onCurrentValueChanged: {
+                    //
+                }
+            }
         }
         Text {
             width: 100
