@@ -97,9 +97,24 @@ Window {
                     currentIndex: categoryList.currentIndex
                     GeneralSettings {
                         id: generalSettings
+                        onLanguageSelectionChanged: {
+                            EventBridge.languageSelectionChanged(currentLanguage);
+                        }
+                        onSystemRenderChanged: {
+                            EventBridge.systemTextRenderingChanged(systemRender);
+                        }
                     }
                     AudioHardwareSelector {
                         id: audioHardwareSelector
+                        onDriverASIOSelectionChanged: {
+                            EventBridge.driverASIOSelectionChanged(currentSelectionValue);
+                        }
+                        onSampleRateChanged: {
+                            EventBridge.sampleRateChanged(sampleRate);
+                        }
+                        onOpenASIODriverControlPanel: {
+                            EventBridge.openASIODriverControlPanel();
+                        }
                     }
                     PluginSettings {
                         id: pluginSettings

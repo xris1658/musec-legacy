@@ -16,6 +16,9 @@ Rectangle {
     color: Constants.backgroundColor
     property int firstColumnWidth: 125
     property int secondColumnWidth: 100
+
+    signal languageSelectionChanged(currentLanguage: string)
+
     Grid {
         columns: 2
         columnSpacing: 10
@@ -51,7 +54,7 @@ Rectangle {
             font.family: Constants.font
             width: secondColumnWidth
             onCurrentValueChanged: {
-                EventBridge.languageSelectionChanged(currentValue);
+                languageSelectionChanged(currentValue);
             }
         }
         Text {
@@ -140,9 +143,6 @@ Rectangle {
                 id: checkBoxSystemTextRendering
                 width: 24
                 height: 16
-                onCheckedChanged: {
-                    EventBridge.systemTextRenderingChanged(checked);
-                }
             }
             MCtrl.Button {
                 id: systemTextRenderingInfoButton

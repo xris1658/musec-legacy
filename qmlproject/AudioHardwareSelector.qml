@@ -20,6 +20,9 @@ Rectangle {
         return comboBoxDriver.count != 0 && currentDriver != -1;
     }
 
+    signal driverASIOSelectionChanged(currentSelectionValue: string)
+    signal openASIODriverControlPanel()
+
     onSampleRateChanged: {
         for(var i = 0; i < comboBoxSampleRate.count; ++i) {
             if(sampleRate == parseFloat(comboBoxSampleRate.model[i])) {
@@ -73,7 +76,7 @@ Rectangle {
                          currentIndex == -1? qsTr("No driver loaded"):
                          currentText
             onCurrentValueChanged: {
-                EventBridge.driverASIOSelectionChanged(currentValue);
+                driverASIOSelectionChanged(currentValue);
             }
         }
         Text {
@@ -97,7 +100,6 @@ Rectangle {
                 font.family: Constants.font
                 onCurrentTextChanged: {
                     root.sampleRate = parseInt(currentText);
-                    EventBridge.sampleRateChanged(root.sampleRate);
                 }
             }
             Text {
@@ -121,7 +123,7 @@ Rectangle {
             height: 20
             enabled: root.driverLoadedAndWorking();
             onClicked: {
-                EventBridge.openASIODriverControlPanel();
+                openASIODriverControlPanel();
             }
         }
         Text {
