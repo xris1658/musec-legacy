@@ -361,7 +361,8 @@ Item {
                 Item {
                     id: masterTrackHeader
                     width: parent.width
-                    height: showMasterTrackButton.currentIndex != 0? masterTrackHeight: 0
+                    height: visible? masterTrackHeight: 0
+                    visible: showMasterTrackButton.currentIndex == 1
                     anchors.top: parent.top
                     z: 2
                 }
@@ -592,7 +593,8 @@ Item {
                 Item {
                     id: masterTrackFooter
                     width: parent.width
-                    height: showMasterTrackButton.currentIndex == 2? masterTrackHeight: 0
+                    height: visible? masterTrackHeight: 0
+                    visible: showMasterTrackButton.currentIndex == 2
                     anchors.bottom: parent.bottom
                     z: 2
                 }
