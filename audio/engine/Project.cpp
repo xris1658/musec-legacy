@@ -26,7 +26,7 @@ Project::Project(int reserveTrackCount):
     tracks_(),
     trackTypes_(),
     masterTrack_(),
-    masterTrackGain_(), masterTrackPanning_(),
+    masterTrackGain_(1.0), masterTrackPanning_(),
     masterTrackControls_(),
     gain_(), panning_(),
     trackMute_(), trackSolo_(), trackInvertPhase_(), trackArmRecording_(),

@@ -177,6 +177,9 @@ Rectangle {
             onAudioSlotRightClicked: (audioEffectIndex, menuX, menuY) => {
                 root.audioEffectSlotRightClicked(-1, audioEffectIndex, menuX, menuY);
             }
+            onSetGain: (newGain) => {
+                root.tracks.masterTrackGain = newGain;
+            }
         }
         Rectangle {
             id: masterChannelRightBorder
