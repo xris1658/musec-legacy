@@ -305,6 +305,7 @@ void Project::process()
             }
             else
             {
+                masterTrackAudioBufferView[j] *= masterTrackGain_;
                 if(masterTrackInvertPhase())
                 {
                     masterTrackAudioBufferView[j] *= -1;
