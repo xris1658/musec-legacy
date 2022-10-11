@@ -282,6 +282,7 @@ void Project::process()
                 // The buffer is filled with 0 before this.
                 if(!trackMute_[i])
                 {
+                    audioBufferViews[k][j] *= gain_[i];
                     if(trackInvertPhase_[i])
                     {
                         masterTrackAudioBufferViews[k][j] -= audioBufferViews[k][j];

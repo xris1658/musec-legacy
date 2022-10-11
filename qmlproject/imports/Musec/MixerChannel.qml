@@ -115,6 +115,7 @@ Item {
     signal setSolo(newSolo: bool)
     signal setInvertPhase(newInvertPhase: bool)
     signal setArmRecording(newArmRecording: bool)
+    signal setGain(newGain: double)
     Column {
         width: parent.width
         height: parent.height
@@ -410,17 +411,20 @@ Item {
                             topPadding: 5
                             id: mixerChannelSlider
                             implicitThickness: 4
-                            handleImplicitThickness: 12
-                            handleImplicitLength: 16
+                            handleImplicitThickness: 8
+                            handleImplicitLength: 12
                             anchors.horizontalCenter: parent.horizontalCenter
                             orientation: Qt.Vertical
                             width: 20
                             height: parent.height
-                            from: -96
+                            from: -144
                             to: 6
+                            live: true
+                            stepSize: 1
                             value: 20 * Math.log10(gain)
                             onValueChanged: {
-                                gain = Math.pow(10.0, value * 0.05);
+                                var newGain = Math.pow(10.0, value * 0.05);
+                                setGain(newGain);
                             }
                         }
                     }
@@ -460,8 +464,9 @@ Item {
                                 }
                                 font.family: Constants.font
                                 onAccepted: {
-                                    gain = text.length == 0? 1.0: Math.pow(10.0, text * 0.05);
+                                    var newGain = text.length == 0? 1.0: Math.pow(10.0, text * 0.05);
                                     gainTextInputPopup.visible = false;
+                                    setGain(newGain);
                                 }
                             }
                         }
@@ -535,7 +540,7 @@ Item {
                 Item {
                     id: mixerChannelIndex
                     width: channelNumber? 30: 0
-                    height: channelInfoHeight
+                    height: channelInfo.height
                     clip: true
                     Text {
                         id: textInfoIndex
@@ -549,13 +554,19 @@ Item {
                 }
                 Item {
                     width: root.width - mixerChannelIndex.width
-                    height: channelInfoHeight
+                    height: channelInfo.height
                     Text {
                         anchors.centerIn: parent
                         text: channelName
                         font.family: Constants.font
                         color: textInfoIndex.color
                     }
+                }
+                Item {
+                    id: mixerChannelType
+                    width: channelNumber? height: 0
+                    height: channelInfo.height
+                    clip: true
                 }
             }
         }

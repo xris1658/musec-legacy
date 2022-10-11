@@ -234,6 +234,7 @@ Rectangle {
                     channelNumber: index + 1
                     effectVisible: root.effectVisible
                     gainAndMeterVisible: root.gainAndMeterVisible
+                    gain: channel_gain
                     channelMuted: mute
                     channelSolo: solo
                     channelInverted: invertPhase
@@ -255,6 +256,9 @@ Rectangle {
                     onSetArmRecording: (newArmRecording) => {
                                            armRecording = newArmRecording;
                                        }
+                    onSetGain: (newGain) => {
+                                   channel_gain = newGain;
+                               }
                     onLoadInstrument: (pluginPath, pluginSubId, pluginFormat) => {
                         tracks.loadInstrument(index, pluginFormat, pluginPath, pluginSubId);
                     }
@@ -264,7 +268,7 @@ Rectangle {
                     onReplaceEffect: (pluginPath, pluginSucId, pluginFormat, effectIndex) => {
                         tracks.replaceEffect(index, pluginFormat, pluginPath, pluginSubId, effectIndex);
                     }
-                    onInstrumentSlotVisibleToggled: (instrumentWindowVisibie) => {
+                    onInstrumentSlotVisibleToggled: (instrumentWindowVisible) => {
                         if(instrument) {
                             instrument.windowVisible = instrumentWindowVisible;
                         }

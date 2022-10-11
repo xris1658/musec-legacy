@@ -34,6 +34,7 @@ public:
         ArmRecordingRole,
         InstrumentRole,
         PluginListRole,
+        ChannelGainRole,
         kRoleNamesCount
     };
 public:

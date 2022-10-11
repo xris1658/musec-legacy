@@ -92,6 +92,7 @@ TrackListModel::TrackListModel(QObject* parent):
     roleNames_[RoleNames::ArmRecordingRole] = "armRecording";
     roleNames_[RoleNames::InstrumentRole] = "instrument";
     roleNames_[RoleNames::PluginListRole] = "plugin_list";
+    roleNames_[RoleNames::ChannelGainRole] = "channel_gain";
 }
 
 TrackListModel::~TrackListModel()
@@ -135,6 +136,7 @@ QVariant TrackListModel::data(const QModelIndex& index, int role) const
     case RoleNames::NameRole:
         return QVariant::fromValue(information.name);
     case RoleNames::TypeRole:
+        // TODO: Save the track type, instead of retrieving it from the track
         return QVariant::fromValue(Musec::Base::underlyingValue(track.track->trackType()));
     case RoleNames::ColorRole:
         return QVariant::fromValue(information.color);
@@ -169,6 +171,8 @@ QVariant TrackListModel::data(const QModelIndex& index, int role) const
             return QVariant::fromValue(pluginSequences_[row].get());
         }
     }
+    case RoleNames::ChannelGainRole:
+        return QVariant(track.gain);
     default:
         return QVariant();
     }
@@ -220,6 +224,10 @@ bool TrackListModel::setData(const QModelIndex& index, const QVariant& value, in
             break;
         case RoleNames::ArmRecordingRole:
             trackRef.trackArmRecording = value.value<bool>();
+            ret = true;
+            break;
+        case RoleNames::ChannelGainRole:
+            trackRef.gain = value.value<double>();
             ret = true;
             break;
         }
