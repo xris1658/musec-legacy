@@ -420,8 +420,8 @@ Item {
                             from: -144
                             to: 6
                             live: true
-                            stepSize: 1
                             value: 20 * Math.log10(gain)
+                            snapMode: Slider.NoSnap
                             onValueChanged: {
                                 var newGain = Math.pow(10.0, value * 0.05);
                                 setGain(newGain);
