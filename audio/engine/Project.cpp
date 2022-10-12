@@ -237,6 +237,7 @@ void Project::process()
         auto& track = tracks_[i];
         audioBufferViews[0] = {audioBuffer_[i].get(),                    currentBlockSize};
         audioBufferViews[1] = {audioBuffer_[i].get() + currentBlockSize, currentBlockSize};
+        // TODO: Add audio arm recording here
         for(auto& bufferView: audioBufferViews)
         {
             bufferView.init();

@@ -114,7 +114,7 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
             auto buffer = bufferInfoList[outputs[i]].buffers[doubleBufferIndex];
             // buffer[0] and buffer[1] are the double buffers of ASIO
             // Some drivers (e.g. ASIO4ALL) don't use double buffering, and buffer[0] == buffer[1]
-            // Most drivers use double buffering, thus buffer[0] == buffer[1]
+            // Most drivers use double buffering, thus buffer[0] != buffer[1]
             switch(channelInfoList[outputs[i]].type)
             {
             // MSB

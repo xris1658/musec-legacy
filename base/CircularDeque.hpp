@@ -156,7 +156,7 @@ public:
         {
             throw std::overflow_error("deque is full");
         }
-        new(&(data_((start_ + count_) % Capacity))) T(std::forward<Args>(args)...);
+        new(&operator[]((start_ + count_) % Capacity)) T(std::forward<Args>(args)...);
         ++count_;
     }
     void popBack()

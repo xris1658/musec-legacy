@@ -35,11 +35,11 @@ public:
     static constexpr int columnSize();
     Q_INVOKABLE bool empty() const noexcept;
 public:
-    virtual int rowCount(const QModelIndex&) const override;
-    virtual int columnCount(const QModelIndex&) const override;
-    virtual QVariant data(const QModelIndex&, int) const override;
+    int rowCount(const QModelIndex&) const override;
+    int columnCount(const QModelIndex&) const override;
+    QVariant data(const QModelIndex&, int) const override;
 protected:
-    virtual RoleNamesType roleNames() const override;
+    RoleNamesType roleNames() const override;
 private:
     List list_;
     RoleNamesType roleNames_;
