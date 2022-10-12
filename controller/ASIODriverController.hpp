@@ -36,6 +36,8 @@ void startASIODriver();
 Musec::Model::ASIOChannelInfoListModel& inputChannelInfoList();
 
 Musec::Model::ASIOChannelInfoListModel& outputChannelInfoList();
+
+void resetASIODriver();
 }
 }
 }

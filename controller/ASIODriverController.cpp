@@ -11,6 +11,8 @@
 #include "ui/MessageDialog.hpp"
 #include "ui/UI.hpp"
 
+#include <QDebug>
+
 namespace Musec::Controller::ASIODriverController
 {
 namespace Impl
@@ -157,8 +159,24 @@ void unloadASIODriver()
 
 void updateCurrentASIODriverInfo()
 {
-    using namespace Audio::Driver;
+    using namespace Musec::Audio::Driver;
     using namespace UI;
+    auto& driver = AppASIODriver();
+    auto info = Musec::Audio::Driver::getChannelCount(driver);
+    auto& channelInfoList = getASIOChannelInfoList();
+    auto& bufferInfo = getASIOBufferInfoList();
+    for(int i = 0; i < info.inputCount + info.outputCount; ++i)
+    {
+        channelInfoList[i].channel = bufferInfo[i].channelNum;
+        channelInfoList[i].isInput = bufferInfo[i].isInput;
+        auto getChannelInfoResult = driver->getChannelInfo(&(channelInfoList[i]));
+        if(getChannelInfoResult != ASE_OK)
+        {
+            Impl::showASIOErrorMessageDialog(driver, getChannelInfoResult);
+        }
+    }
+    inputChannelInfoList().setList(channelInfoList.data(), info.inputCount);
+    outputChannelInfoList().setList(channelInfoList.data() + info.inputCount, info.outputCount);
     if(optionsWindow)
     {
         const auto& driverStreamInfo = getASIODriverStreamInfo(AppASIODriver());
@@ -172,6 +190,10 @@ void updateCurrentASIODriverInfo()
                                    QVariant::fromValue<double>(driverStreamInfo.sampleRate));
         optionsWindow->setProperty("outputChannelList",
                                    QVariant::fromValue<QObject*>(&outputChannelInfoList()));
+        optionsWindow->setProperty("leftOutputChannel",
+                                   QVariant::fromValue<int>(0));
+        optionsWindow->setProperty("rightOutputChannel",
+                                   QVariant::fromValue<int>(1));
     }
 }
 
@@ -203,19 +225,7 @@ void allocateASIODriverBuffer()
         Impl::showASIOErrorMessageDialog(driver, createBuffersResult);
         return;
     }
-    auto& channelInfoList = getASIOChannelInfoList();
-    for(int i = 0; i < info.inputCount + info.outputCount; ++i)
-    {
-        channelInfoList[i].channel = bufferInfo[i].channelNum;
-        channelInfoList[i].isInput = bufferInfo[i].isInput;
-        auto getChannelInfoResult = driver->getChannelInfo(&(channelInfoList[i]));
-        if(getChannelInfoResult != ASE_OK)
-        {
-            Impl::showASIOErrorMessageDialog(driver, getChannelInfoResult);
-        }
-    }
-    inputChannelInfoList().setList(channelInfoList.data(), info.inputCount);
-    outputChannelInfoList().setList(channelInfoList.data() + info.inputCount, info.outputCount);
+    updateCurrentASIODriverInfo();
 }
 
 void startASIODriver()
@@ -230,7 +240,6 @@ void startASIODriver()
         Impl::showASIOErrorMessageDialog(driver, startResult);
     }
     mainWindow->setProperty("engineRunning", QVariant::fromValue<bool>(true));
-    updateCurrentASIODriverInfo();
 }
 
 Musec::Model::ASIOChannelInfoListModel& inputChannelInfoList()
@@ -243,6 +252,12 @@ Musec::Model::ASIOChannelInfoListModel& outputChannelInfoList()
 {
     static Musec::Model::ASIOChannelInfoListModel ret;
     return ret;
+}
+
+void resetASIODriver()
+{
+    const auto& info = Musec::Audio::Driver::AppASIODriver().driverInfo();
+    setASIODriver(std::get<Musec::Audio::Driver::ASIODriverField::CLSIDField>(info));
 }
 
 }

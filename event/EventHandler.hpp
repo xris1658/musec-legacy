@@ -38,6 +38,7 @@ signals:
     void updateUsage(double usage);
     void setLanguageComplete();
     void setRealtimeTimerInterval(int intervalInMilliseconds);
+    void resetASIODriver();
 public slots:
     void onMainWindowOpened();
     void onOptionsWindowOpened();
@@ -67,6 +68,7 @@ public slots:
     void onScanShortcutChanged(bool newValue);
     void onLanguageSelectionChanged(const QString& language);
     void onUpdateCPUMeter();
+    void onResetASIODriver();
 public:
     void connectToMainWindow();
     void connectToOptionsWindow();

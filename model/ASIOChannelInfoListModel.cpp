@@ -24,8 +24,10 @@ ASIOChannelInfoListModel::~ASIOChannelInfoListModel()
 
 void ASIOChannelInfoListModel::setList(ASIOChannelInfo* const channelInfoList, int channelCount)
 {
+    beginResetModel();
     channelInfoList_ = channelInfoList;
     channelCount_ = channelCount;
+    endResetModel();
 }
 
 ASIOChannelInfo* ASIOChannelInfoListModel::getList() const

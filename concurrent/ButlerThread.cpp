@@ -2,6 +2,7 @@
 
 #include "audio/driver/ASIODriver.hpp"
 #include "controller/ASIODriverController.hpp"
+#include "event/EventBase.hpp"
 
 namespace Musec::Concurrent
 {
@@ -13,9 +14,11 @@ void doTask();
 template<>
 void doTask<ButlerTaskType::ResetASIODriver>()
 {
-    using namespace Musec::Audio::Driver;
-    auto info = AppASIODriver().driverInfo();
-    Musec::Controller::ASIODriverController::setASIODriver(std::get<1>(info));
+    Musec::Event::eventHandler->resetASIODriver();
+    // using namespace Musec::Audio::Driver;
+    // auto info = AppASIODriver().driverInfo();
+    // // To update ASIO channel info, it might be better to let this run on the main thread
+    // Musec::Controller::ASIODriverController::setASIODriver(std::get<1>(info));
 }
 
 template<>
@@ -52,12 +55,20 @@ void ButlerThread::butlerThreadFunc()
     {
         std::lock_guard<std::mutex> lg(mutex_);
         cv_.wait(mutex_, [this]() { return (!taskQueue_.empty()) || aboutToQuit_; });
-        auto size = taskQueue_.size();
-        for(decltype(size) i = 0; i < size; ++i)
+        if(aboutToQuit_)
         {
-            taskQueue_.front()();
-            taskQueue_.popFront();
+            taskQueue_.clear();
         }
+        else
+        {
+            auto size = taskQueue_.size();
+            for(decltype(size) i = 0; i < size; ++i)
+            {
+                taskQueue_.front()();
+                taskQueue_.popFront();
+            }
+        }
+        std::this_thread::yield();
     }
 }
 

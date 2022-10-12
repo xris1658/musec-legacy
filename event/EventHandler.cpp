@@ -65,6 +65,10 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      this,        SLOT(onSetIcon()));
     QObject::connect(eventBridge, SIGNAL(updateCPUMeter()),
                      this,        SLOT(onUpdateCPUMeter()));
+    // (this) C++ -> C++ (this)
+    QObject::connect(this, &EventHandler::resetASIODriver,
+                     this, &EventHandler::onResetASIODriver,
+                     Qt::ConnectionType::BlockingQueuedConnection);
     // (this) C++ -> C++ (other)
     QObject::connect(this,             &EventHandler::updatePluginList,
                      mainWindowEvents, &MainWindowEvent::updatePluginList);
@@ -426,6 +430,11 @@ void EventHandler::onUpdateCPUMeter()
 {
     auto cpuUsage = Musec::Controller::AudioEngineController::getCpuUsage();
     updateUsage(cpuUsage);
+}
+
+void EventHandler::onResetASIODriver()
+{
+    Musec::Controller::ASIODriverController::resetASIODriver();
 }
 
 void EventHandler::connectToMainWindow()
