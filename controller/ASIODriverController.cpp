@@ -1,13 +1,10 @@
 #include "ASIODriverController.hpp"
 
-#include "audio/driver/ASIOCallback.hpp"
 #include "audio/driver/ASIODriver.hpp"
 #include "audio/driver/Literals.hpp"
 #include "concurrent/ButlerThread.hpp"
 #include "controller/AppController.hpp"
 #include "controller/ConfigController.hpp"
-#include "dao/DatabaseDAO.hpp"
-#include "event/EventHandler.hpp"
 #include "ui/MessageDialog.hpp"
 #include "ui/UI.hpp"
 
@@ -49,7 +46,6 @@ void showASIOErrorMessageDialog(Musec::Audio::Driver::ASIODriver& driver, ASIOEr
 void loadASIODriver()
 {
     using namespace Audio::Driver;
-    // using namespace Musec::DAO;
     using namespace UI;
     auto& driver = AppASIODriver();
     Musec::Concurrent::ButlerThread::instance();

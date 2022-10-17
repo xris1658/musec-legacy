@@ -13,6 +13,8 @@ Rectangle {
     property alias driverListModel: comboBoxDriver.model
     property alias currentDriver: comboBoxDriver.currentIndex
     property alias outputChannelListModel: comboBoxLeftOutput.model
+    property alias leftOutputChannel: comboBoxLeftOutput.currentIndex
+    property alias rightOutputChannel: comboBoxRightOutput.currentIndex
     property int bufferSize: 512
     property int inputLatencyInSamples: 512
     property int outputLatencyInSamples: 512

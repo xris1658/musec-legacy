@@ -1,13 +1,11 @@
 #ifndef MUSEC_CONTROLLER_ASIODRIVERCONTROLLER
 #define MUSEC_CONTROLLER_ASIODRIVERCONTROLLER
 
-#include "controller/AppController.hpp"
-#include "controller/ConfigController.hpp"
+// QUES: Moving the following line to ASIODrvierController.cpp generates C2664,
+// indicating that ASIOSampleRate and double are not same
 #include "audio/driver/ASIOCallback.hpp"
-#include "dao/DatabaseDAO.hpp"
-#include "event/EventBase.hpp"
+
 #include "model/ASIOChannelInfoListModel.hpp"
-#include "ui/UI.hpp"
 
 #include <QString>
 

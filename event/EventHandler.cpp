@@ -1,11 +1,13 @@
 #include "EventHandler.hpp"
 
+#include "audio/driver/ASIOCallback.hpp"
 #include "audio/driver/ASIODriver.hpp"
 #include "controller/ASIODriverController.hpp"
 #include "controller/AppController.hpp"
 #include "controller/AssetController.hpp"
 #include "controller/AssetDirectoryController.hpp"
 #include "controller/AudioEngineController.hpp"
+#include "controller/ConfigController.hpp"
 #include "controller/GeneralSettingsController.hpp"
 #include "controller/MIDIClockController.hpp"
 #include "controller/PluginSettingsController.hpp"
@@ -68,7 +70,7 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
     // (this) C++ -> C++ (this)
     QObject::connect(this, &EventHandler::resetASIODriver,
                      this, &EventHandler::onResetASIODriver,
-                     Qt::ConnectionType::BlockingQueuedConnection);
+                     Qt::ConnectionType::QueuedConnection);
     // (this) C++ -> C++ (other)
     QObject::connect(this,             &EventHandler::updatePluginList,
                      mainWindowEvents, &MainWindowEvent::updatePluginList);
