@@ -206,6 +206,7 @@ set(PROJECT_SOURCES
     event/SplashScreenWorkerThread.hpp
     i18n/I18N.cpp
     i18n/I18N.hpp
+    math/Constants.hpp
     math/Integration.cpp
     math/Integration.hpp
     math/QuadraticFunction.cpp
