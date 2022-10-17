@@ -26,6 +26,7 @@ class CompleteTrack: public QObject
     Q_PROPERTY(bool      trackSolo         MEMBER trackSolo_         READ isTrackSolo         WRITE setTrackSolo         NOTIFY trackSoloChanged        )
     Q_PROPERTY(bool      trackInvertPhase  MEMBER trackInvertPhase_  READ isTrackInvertPhase  WRITE setTrackInvertPhase  NOTIFY trackInvertPhaseChanged )
     Q_PROPERTY(bool      trackArmRecording MEMBER trackArmRecording_ READ isTrackArmRecording WRITE setTrackArmRecording NOTIFY trackArmRecordingChanged)
+    Q_PROPERTY(bool      trackMonoDownMix  MEMBER trackMonoDownMix_  READ isTrackMonoDownMix  WRITE setTrackMonoDownMix  NOTIFY trackMonoDownMixChanged )
     QML_ELEMENT
 public:
     enum TrackType
@@ -41,7 +42,8 @@ public:
         TrackType trackType = TrackType::AudioTrack,
         int height = 60, double gain = 1.0, double panning = 0.0,
         bool trackMute = false, bool trackSolo = false,
-        bool trackInvertPhase = false, bool trackArmRecording = false);
+        bool trackInvertPhase = false, bool trackArmRecording = false,
+        bool trackMonoDownMix = false);
 public:
     const QString& getTrackName() const;
     void setTrackName(const QString& trackName);
@@ -63,6 +65,8 @@ public:
     void setTrackInvertPhase(bool trackInvertPhase);
     bool isTrackArmRecording() const;
     void setTrackArmRecording(bool trackArmRecording);
+    bool isTrackMonoDownMix() const;
+    void setTrackMonoDownMix(bool trackMonoDownMix);
 signals:
     void trackNameChanged();
     void trackColorChanged();
@@ -74,6 +78,7 @@ signals:
     void trackSoloChanged();
     void trackInvertPhaseChanged();
     void trackArmRecordingChanged();
+    void trackMonoDownMixChanged();
 private:
     QString trackName_;
     QColor trackColor_;
@@ -85,6 +90,7 @@ private:
     bool trackSolo_;
     bool trackInvertPhase_;
     bool trackArmRecording_;
+    bool trackMonoDownMix_;
 };
 }
 }

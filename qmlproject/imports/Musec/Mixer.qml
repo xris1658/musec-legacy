@@ -162,6 +162,7 @@ Rectangle {
             channelSolo: root.tracks.masterTrackSolo
             channelInverted: root.tracks.masterTrackInvertPhase
             channelArmRecording: root.tracks.masterTrackArmRecording
+            channelMonoDownMix: root.tracks.masterTrackMonoDownMix
             onSetMute: (newMute) => {
                 root.tracks.masterTrackMute = newMute;
             }
@@ -173,6 +174,9 @@ Rectangle {
             }
             onSetArmRecording: (newArmRecording) => {
                 root.tracks.masterTrackArmRecording = newArmRecording;
+            }
+            onSetMonoDownMix: (newMonoDownMix) => {
+                root.tracks.masterTrackMonoDownMix = newMonoDownMix;
             }
             onInsertEffect: (pluginPath, pluginSubId, pluginFormat, effectIndex) => {
                 root.tracks.insertEffectMasterTrack(pluginFormat, pluginPath, pluginSubId, effectIndex);
@@ -254,6 +258,7 @@ Rectangle {
                     channelSolo: solo
                     channelInverted: invertPhase
                     channelArmRecording: armRecording
+                    channelMonoDownMix: monoDownMix
                     instrumentEnabled: instrument? instrument.processing: false
                     instrumentName: instrument? instrument.name: ""
                     instrumentSidechainExist: instrument? instrument.sidechainExist: false
@@ -271,6 +276,9 @@ Rectangle {
                     onSetArmRecording: (newArmRecording) => {
                                            armRecording = newArmRecording;
                                        }
+                    onSetMonoDownMix: (newMonoDownMix) => {
+                                          monoDownMix = newMonoDownMix;
+                                      }
                     onSetGain: (newGain) => {
                                    channel_gain = newGain;
                                }

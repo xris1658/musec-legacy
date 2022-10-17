@@ -6,7 +6,8 @@ namespace Musec::Entities
 {
 CompleteTrack::CompleteTrack(QObject* parent, QString trackName, QColor trackColor,
     TrackType trackType, int height, double gain, double panning,
-    bool trackMute, bool trackSolo, bool trackInvertPhase, bool trackArmRecording):
+    bool trackMute, bool trackSolo, bool trackInvertPhase, bool trackArmRecording,
+    bool trackMonoDownMix):
     QObject(parent),
     trackName_(std::move(trackName)),
     trackColor_(std::move(trackColor)),
@@ -17,7 +18,8 @@ CompleteTrack::CompleteTrack(QObject* parent, QString trackName, QColor trackCol
     trackMute_(trackMute),
     trackSolo_(trackSolo),
     trackInvertPhase_(trackInvertPhase),
-    trackArmRecording_(trackArmRecording)
+    trackArmRecording_(trackArmRecording),
+    trackMonoDownMix_(trackMonoDownMix)
 {
 
 }
@@ -120,5 +122,15 @@ bool CompleteTrack::isTrackArmRecording() const
 void CompleteTrack::setTrackArmRecording(bool trackArmRecording)
 {
     trackArmRecording_ = trackArmRecording;
+}
+
+bool CompleteTrack::isTrackMonoDownMix() const
+{
+    return trackMonoDownMix_;
+}
+
+void CompleteTrack::setTrackMonoDownMix(bool trackMonoDownMix)
+{
+    trackMonoDownMix_ = trackMonoDownMix;
 }
 }

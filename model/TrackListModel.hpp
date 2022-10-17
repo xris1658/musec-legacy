@@ -21,6 +21,7 @@ class TrackListModel: public QAbstractListModel
     Q_PROPERTY(bool   masterTrackSolo         READ getMasterTrackSolo         WRITE setMasterTrackSolo         NOTIFY masterTrackSoloChanged        )
     Q_PROPERTY(bool   masterTrackInvertPhase  READ getMasterTrackInvertPhase  WRITE setMasterTrackInvertPhase  NOTIFY masterTrackInvertPhaseChanged )
     Q_PROPERTY(bool   masterTrackArmRecording READ getMasterTrackArmRecording WRITE setMasterTrackArmRecording NOTIFY masterTrackArmRecordingChanged)
+    Q_PROPERTY(bool   masterTrackMonoDownMix  READ getMasterTrackMonoDownMix  WRITE setMasterTrackMonoDownMix  NOTIFY masterTrackMonoDownMixChanged )
 public:
     enum RoleNames
     {
@@ -32,6 +33,7 @@ public:
         SoloRole,
         InvertPhaseRole,
         ArmRecordingRole,
+        MonoDownMixRole,
         InstrumentRole,
         PluginListRole,
         ChannelGainRole,
@@ -81,6 +83,8 @@ public:
     void setMasterTrackInvertPhase(bool invertPhase);
     bool getMasterTrackArmRecording() const;
     void setMasterTrackArmRecording(bool armRecording);
+    bool getMasterTrackMonoDownMix() const;
+    void setMasterTrackMonoDownMix(bool monoDownMix);
 signals:
     void masterTrackGainChanged();
     void masterTrackPanningChanged();
@@ -88,6 +92,7 @@ signals:
     void masterTrackSoloChanged();
     void masterTrackInvertPhaseChanged();
     void masterTrackArmRecordingChanged();
+    void masterTrackMonoDownMixChanged();
 protected:
     virtual RoleNamesType roleNames() const override;
 private:

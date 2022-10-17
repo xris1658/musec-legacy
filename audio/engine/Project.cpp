@@ -29,7 +29,7 @@ Project::Project(int reserveTrackCount):
     masterTrackGain_(1.0), masterTrackPanning_(),
     masterTrackControls_(),
     gain_(), panning_(),
-    trackMute_(), trackSolo_(), trackInvertPhase_(), trackArmRecording_(),
+    trackMute_(), trackSolo_(), trackInvertPhase_(), trackArmRecording_(), trackMonoDownMix_(),
     pluginAndWindow_()
 {
     static std::thread thread([this]() { vst2PluginIdleFunc(); });
@@ -45,6 +45,7 @@ Project::Project(int reserveTrackCount):
     trackSolo_.reserve(reserveTrackCount);
     trackInvertPhase_.reserve(reserveTrackCount);
     trackArmRecording_.reserve(reserveTrackCount);
+    trackMonoDownMix_.reserve(reserveTrackCount);
     auto seq = masterTrack_.getPluginSequences();
     seq.emplace_back();
     masterTrack_.setPluginSequences(std::move(seq));
@@ -70,7 +71,8 @@ Project::TrackRef Project::at(std::size_t index)
         trackMute_[index],
         trackSolo_[index],
         trackInvertPhase_[index],
-        trackArmRecording_[index]
+        trackArmRecording_[index],
+        trackMonoDownMix_[index]
     };
 }
 
@@ -84,7 +86,8 @@ Project::TrackRef Project::operator[](std::size_t index)
         trackMute_[index],
         trackSolo_[index],
         trackInvertPhase_[index],
-        trackArmRecording_[index]
+        trackArmRecording_[index],
+        trackMonoDownMix_[index]
     };
 }
 
@@ -98,7 +101,8 @@ Project::MasterTrackRef Project::masterTrackRef()
         masterTrackMute(),
         masterTrackSolo(),
         masterTrackInvertPhase(),
-        masterTrackArmRecording()
+        masterTrackArmRecording(),
+        masterTrackMonoDownMix()
     };
 }
 
@@ -159,6 +163,7 @@ void Project::insertTrack(std::size_t index, const Musec::Entities::CompleteTrac
     trackSolo_.insert(trackSolo_.begin(), track.isTrackSolo());
     trackInvertPhase_.insert(trackInvertPhase_.begin(), track.isTrackInvertPhase());
     trackArmRecording_.insert(trackArmRecording_.begin(), track.isTrackArmRecording());
+    trackMonoDownMix_.insert(trackMonoDownMix_.begin(), track.isTrackMonoDownMix());
 }
 
 void Project::eraseTrack(std::size_t index)
@@ -173,6 +178,7 @@ void Project::eraseTrack(std::size_t index)
     trackSolo_.erase(trackSolo_.begin() + index);
     trackInvertPhase_.erase(trackInvertPhase_.begin() + index);
     trackArmRecording_.erase(trackArmRecording_.begin() + index);
+    trackMonoDownMix_.erase(trackMonoDownMix_.begin() + index);
 }
 
 void Project::addPluginWindowMapping(void* plugin, QWindow* window)
@@ -278,6 +284,11 @@ void Project::process()
         // If not optimized, then it might miss the CPU cache.
         for (auto j = 0; j < currentBlockSize; ++j)
         {
+            if(trackMonoDownMix_[i])
+            {
+                audioBufferViews[0][j] = audioBufferViews[1][j] =
+                    (audioBufferViews[0][j] + audioBufferViews[1][j]) * 0.5;
+            }
             for (auto k = 0; k < masterTrackAudioBufferViews.size(); ++k)
             {
                 // The buffer is filled with 0 before this.
@@ -298,7 +309,12 @@ void Project::process()
     }
     for (auto j = 0; j < currentBlockSize; ++j)
     {
-        for (auto & masterTrackAudioBufferView : masterTrackAudioBufferViews)
+        if(masterTrackMonoDownMix())
+        {
+            masterTrackAudioBufferViews[0][j] = masterTrackAudioBufferViews[1][j] =
+                (masterTrackAudioBufferViews[0][j] + masterTrackAudioBufferViews[1][j]) * 0.5;
+        }
+        for (auto& masterTrackAudioBufferView : masterTrackAudioBufferViews)
         {
             if(masterTrackMute())
             {
@@ -342,24 +358,29 @@ void Project::clear()
     pluginAndWindow_.clear();
 }
 
-std::bitset<4>::reference Project::masterTrackMute()
+Project::MasterTrackControlType::reference Project::masterTrackMute()
 {
     return masterTrackControls_[0];
 }
 
-std::bitset<4>::reference Project::masterTrackSolo()
+Project::MasterTrackControlType::reference Project::masterTrackSolo()
 {
     return masterTrackControls_[1];
 }
 
-std::bitset<4>::reference Project::masterTrackInvertPhase()
+Project::MasterTrackControlType::reference Project::masterTrackInvertPhase()
 {
     return masterTrackControls_[2];
 }
 
-std::bitset<4>::reference Project::masterTrackArmRecording()
+Project::MasterTrackControlType::reference Project::masterTrackArmRecording()
 {
     return masterTrackControls_[3];
+}
+
+Project::MasterTrackControlType::reference Project::masterTrackMonoDownMix()
+{
+    return masterTrackControls_[4];
 }
 
 void Project::vst2PluginIdleFunc()

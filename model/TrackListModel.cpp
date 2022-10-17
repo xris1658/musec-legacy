@@ -90,6 +90,7 @@ TrackListModel::TrackListModel(QObject* parent):
     roleNames_[RoleNames::SoloRole] = "solo";
     roleNames_[RoleNames::InvertPhaseRole] = "invertPhase";
     roleNames_[RoleNames::ArmRecordingRole] = "armRecording";
+    roleNames_[RoleNames::MonoDownMixRole] = "monoDownMix";
     roleNames_[RoleNames::InstrumentRole] = "instrument";
     roleNames_[RoleNames::PluginListRole] = "plugin_list";
     roleNames_[RoleNames::ChannelGainRole] = "channel_gain";
@@ -150,6 +151,8 @@ QVariant TrackListModel::data(const QModelIndex& index, int role) const
         return QVariant::fromValue(static_cast<bool>(track.trackInvertPhase));
     case RoleNames::ArmRecordingRole:
         return QVariant::fromValue(static_cast<bool>(track.trackArmRecording));
+    case RoleNames::MonoDownMixRole:
+        return QVariant::fromValue(static_cast<bool>(track.trackMonoDownMix));
     case RoleNames::InstrumentRole:
     {
         if(track.track->trackType() != Musec::Audio::Track::kInstrumentTrack)
@@ -224,6 +227,10 @@ bool TrackListModel::setData(const QModelIndex& index, const QVariant& value, in
             break;
         case RoleNames::ArmRecordingRole:
             trackRef.trackArmRecording = value.value<bool>();
+            ret = true;
+            break;
+        case RoleNames::MonoDownMixRole:
+            trackRef.trackMonoDownMix = value.value<bool>();
             ret = true;
             break;
         case RoleNames::ChannelGainRole:
@@ -557,5 +564,16 @@ void TrackListModel::setMasterTrackArmRecording(bool armRecording)
 {
     projectMasterTrackRef_.trackArmRecording = armRecording;
     masterTrackArmRecordingChanged();
+}
+
+bool TrackListModel::getMasterTrackMonoDownMix() const
+{
+    return projectMasterTrackRef_.trackMonoDownMix;
+}
+
+void TrackListModel::setMasterTrackMonoDownMix(bool monoDownMix)
+{
+    projectMasterTrackRef_.trackMonoDownMix  = monoDownMix;
+    masterTrackMonoDownMixChanged();
 }
 }

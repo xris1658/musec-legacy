@@ -30,6 +30,7 @@ Item {
     property bool channelSolo: false
     property bool channelInverted: false
     property bool channelArmRecording: false
+    property bool channelMonoDownMix: false
     property real panning: 0.0
     property real stereo: 1.0
     property real gain: 1.00
@@ -113,6 +114,7 @@ Item {
     signal setSolo(newSolo: bool)
     signal setInvertPhase(newInvertPhase: bool)
     signal setArmRecording(newArmRecording: bool)
+    signal setMonoDownMix(newMonoDownMix: bool)
     signal setGain(newGain: double)
     Column {
         width: parent.width
@@ -374,22 +376,26 @@ Item {
                 Item {
                     width: root.width / 2
                     height: 20
-                    Rectangle {
+                    MCtrl.Button {
                         anchors.centerIn: parent
                         width: parent.width - 2
                         height: parent.height - 2
-                        color: "transparent"
                         border.width: 1
                         border.color: Constants.borderColor
+                        color: root.channelMonoDownMix? Constants.contentColor1: Constants.backgroundColor
+                        contentItem: Text {
+                            anchors.centerIn: parent
+                            text: qsTr("Mono")
+                            font.family: Constants.font
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+                            color: root.channelMonoDownMix? Constants.backgroundColor: Constants.contentColor1
+                        }
                         z: 2
                         clip: true
-                    }
-                    Text {
-                        anchors.centerIn: parent
-                        color: Constants.contentColor1
-                        font.family: Constants.font
-                        text: stereo == 0? "Mono" : stereo * 100 + "%"
-                        z: 1
+                        onClicked: {
+                            root.setMonoDownMix(!root.channelMonoDownMix);
+                        }
                     }
                 }
             }
@@ -543,7 +549,6 @@ Item {
                     Text {
                         id: textInfoIndex
                         anchors.centerIn: parent
-                        anchors.verticalCenterOffset: 1
                         text: channelNumber
                         font.family: "Noto Sans Mono"
                         font.styleName: "Condensed SemiBold"
@@ -553,18 +558,16 @@ Item {
                 Item {
                     width: root.width - mixerChannelIndex.width
                     height: channelInfo.height
+                    clip: true
                     Text {
+                        width: parent.width
                         anchors.centerIn: parent
                         text: channelName
                         font.family: Constants.font
                         color: textInfoIndex.color
+                        horizontalAlignment: Text.AlignHCenter
+                        elide: Text.ElideRight
                     }
-                }
-                Item {
-                    id: mixerChannelType
-                    width: channelNumber? height: 0
-                    height: channelInfo.height
-                    clip: true
                 }
             }
         }

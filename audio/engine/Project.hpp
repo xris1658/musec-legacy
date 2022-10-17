@@ -28,6 +28,7 @@ namespace Engine
 constexpr int initialReserveTrackCount = 16;
 class Project
 {
+    using MasterTrackControlType = std::bitset<5>;
 public:
     struct TrackRef
     {
@@ -38,16 +39,18 @@ public:
         std::vector<bool>::reference trackSolo;
         std::vector<bool>::reference trackInvertPhase;
         std::vector<bool>::reference trackArmRecording;
+        std::vector<bool>::reference trackMonoDownMix;
     };
     struct MasterTrackRef
     {
         Musec::Audio::Track::AudioTrack& masterTrack;
         double& gain;
         double& panning;
-        std::bitset<4>::reference trackMute;
-        std::bitset<4>::reference trackSolo;
-        std::bitset<4>::reference trackInvertPhase;
-        std::bitset<4>::reference trackArmRecording;
+        MasterTrackControlType::reference trackMute;
+        MasterTrackControlType::reference trackSolo;
+        MasterTrackControlType::reference trackInvertPhase;
+        MasterTrackControlType::reference trackArmRecording;
+        MasterTrackControlType::reference trackMonoDownMix;
     };
 public:
     Project(int reserveTrackCount = initialReserveTrackCount);
@@ -74,10 +77,11 @@ public:
     void process();
     const Musec::Base::FixedSizeMemoryBlock& masterTrackAudioBuffer() const;
 private:
-    std::bitset<4>::reference masterTrackMute();
-    std::bitset<4>::reference masterTrackSolo();
-    std::bitset<4>::reference masterTrackInvertPhase();
-    std::bitset<4>::reference masterTrackArmRecording();
+    MasterTrackControlType::reference masterTrackMute();
+    MasterTrackControlType::reference masterTrackSolo();
+    MasterTrackControlType::reference masterTrackInvertPhase();
+    MasterTrackControlType::reference masterTrackArmRecording();
+    MasterTrackControlType::reference masterTrackMonoDownMix();
 private:
     void vst2PluginIdleFunc();
 private:
@@ -92,13 +96,14 @@ private:
     Musec::Audio::Track::AudioTrack masterTrack_;
     double masterTrackGain_;
     double masterTrackPanning_;
-    std::bitset<4> masterTrackControls_;
+    MasterTrackControlType masterTrackControls_;
     std::vector<double> gain_;
     std::vector<double> panning_;
     std::vector<bool> trackMute_;
     std::vector<bool> trackSolo_;
     std::vector<bool> trackInvertPhase_;
     std::vector<bool> trackArmRecording_;
+    std::vector<bool> trackMonoDownMix_;
     std::map<void*, QWindow*> pluginAndWindow_;
     Musec::Audio::Plugin::VST2PluginPool vst2PluginPool_;
 };
