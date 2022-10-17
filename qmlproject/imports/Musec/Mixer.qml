@@ -268,7 +268,7 @@ Rectangle {
                     onInsertEffect: (pluginPath, pluginSubId, pluginFormat, effectIndex) => {
                         tracks.insertEffect(index, pluginFormat, pluginPath, pluginSubId, effectIndex);
                     }
-                    onReplaceEffect: (pluginPath, pluginSucId, pluginFormat, effectIndex) => {
+                    onReplaceEffect: (pluginPath, pluginSubId, pluginFormat, effectIndex) => {
                         tracks.replaceEffect(index, pluginFormat, pluginPath, pluginSubId, effectIndex);
                     }
                     onInstrumentSlotVisibleToggled: (instrumentWindowVisible) => {
