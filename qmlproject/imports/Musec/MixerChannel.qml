@@ -5,7 +5,6 @@ import QtQml.Models 2.15
 
 import Musec 1.0
 import Musec.Controls 1.0 as MCtrl
-import Musec.Entities 1.0
 
 Item {
     id: root
@@ -16,12 +15,30 @@ Item {
         anchors.fill: parent
         color: Constants.backgroundColor
     }
+    enum ChannelType {
+        AudioTrack,
+        InstrumentTrack
+    }
     property bool instrumentEnabled
     property string instrumentName
     property bool instrumentSidechainExist: false
     property bool instrumentSidechainEnabled: false
     property bool instrumentEditorVisible: false
     property alias effectListModel: channelEffectList.model
+    property int channelType
+    property bool channelMuted: false
+    property bool channelSolo: false
+    property bool channelInverted: false
+    property bool channelArmRecording: false
+    property real panning: 0.0
+    property real stereo: 1.0
+    property real gain: 1.00
+    property real peak: 0.00
+    property string channelName
+    property color channelColor
+    property int channelNumber: 0
+    property alias effectVisible: channelEffects.visible
+    property alias gainAndMeterVisible: channelGainAndPeak.visible
     readonly property int channelInfoHeight: 20
     readonly property int channelEffectListFooterMinimumHeight: 20
     property Item instrumentSlot
@@ -77,11 +94,6 @@ Item {
         insertEffect(path, pluginSubId, format, audioEffectIndex);
     }
     signal blankAreaDragEventEntered(drag: var)
-    onBlankAreaDragEventEntered: (drag) => {
-        if(drag.getDataAsString("type") != 3 && root.channelType != CompleteTrack.InstrumentTrack) {
-            drag.accepted = false;
-        }
-    }
     signal blankAreaDragEventDropped(drop: var)
     onBlankAreaDragEventDropped: (drop) => {
         var format = parseInt(drop.getDataAsString("format"));
@@ -97,20 +109,6 @@ Item {
     signal loadInstrument(pluginPath: string, pluginSubId: int, pluginFormat: int)
     signal insertEffect(pluginPath: string, pluginSubId: int, pluginFormat: int, effectIndex: int)
     signal replaceEffect(pluginPath: string, pluginSubId: int, pluginFormat: int, effectIndex: int)
-    property int channelType
-    property bool channelMuted: false
-    property bool channelSolo: false
-    property bool channelInverted: false
-    property bool channelArmRecording: false
-    property real panning: 0.0
-    property real stereo: 1.0
-    property real gain: 1.00
-    property real peak: 0.00
-    property string channelName
-    property color channelColor
-    property int channelNumber: 0
-    property alias effectVisible: channelEffects.visible
-    property alias gainAndMeterVisible: channelGainAndPeak.visible
     signal setMute(newMute: bool)
     signal setSolo(newSolo: bool)
     signal setInvertPhase(newInvertPhase: bool)
@@ -139,7 +137,7 @@ Item {
                     height: channelEffectList.headerHeight + channelEffectList.spacing
                     MixerSlot {
                         id: instrumentButton
-                        visible: root.channelType == CompleteTrack.InstrumentTrack
+                        visible: root.channelType == MixerChannel.ChannelType.InstrumentTrack
                         anchors.left: parent.left
                         anchors.fill: parent
                         anchors.bottomMargin: channelEffectList.spacing
