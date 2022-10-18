@@ -1,8 +1,9 @@
 #ifndef MUSEC_AUDIO_UTIL
 #define MUSEC_AUDIO_UTIL
 
-#include <cstdint>
 #include "math/Constants.hpp"
+
+#include <cstdint>
 
 namespace Musec
 {
@@ -10,15 +11,14 @@ namespace Audio
 {
 namespace Util
 {
-constexpr double A4Frequency = 440.0;
-
 enum class PanLaw
 {
     k0,
     kN3,
-    kN3Comp,
     kN6
 };
+
+constexpr double A4Frequency = 440.0;
 
 template<typename T>
 struct StereoChannelScaleCollection
@@ -46,6 +46,7 @@ long double decibelToScale(long double decibel);
 template<typename T, PanLaw PL>
 StereoChannelScaleCollection<T> fromPanning(T panning)
 {
+    static_assert(std::is_floating_point_v<T>);
     if constexpr(PL == PanLaw::k0)
     {
         return panning < 0?
@@ -55,18 +56,11 @@ StereoChannelScaleCollection<T> fromPanning(T panning)
     else if constexpr(PL == PanLaw::kN3)
     {
         T left = std::cos(T(0.5) * Musec::Math::Pi<T> * (panning * 0.5 + 0.5)) * Musec::Math::Sqrt2<T>;
-        return {left, 1 - left * left};
-    }
-    else if constexpr(PL == PanLaw::kN3Comp)
-    {
-        auto ret = fromPanning<T, PanLaw::kN3>(panning);
-        ret.left *= Musec::Math::Sqrt2<T>;
-        ret.right *= Musec::Math::Sqrt2<T>;
-        return ret;
+        return {left, std::sqrt(1 - left * left)};
     }
     else if constexpr(PL == PanLaw::kN6)
     {
-        return {T(-0.5) * panning + T(0.5), T(0.5) * panning + T(0.5)};
+        return {T(0.5) - T(0.5) * panning, T(0.5) + T(0.5) * panning};
     }
 }
 }
