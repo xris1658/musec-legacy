@@ -153,6 +153,7 @@ HEADERS += \
     event/SplashScreenForward.hpp \
     event/SplashScreenWorkerThread.hpp \
     i18n/I18N.hpp \
+    math/Constants.hpp \
     math/Integration.hpp \
     math/QuadraticFunction.hpp \
     model/ASIOChannelInfoListModel.hpp \
@@ -171,6 +172,7 @@ HEADERS += \
     model/TrackListModel.hpp \
     model/TranslationFileModel.hpp \
     native/ASIODriverImpl.hpp \
+    native/CompilerSpecific.hpp \
     native/MIDIInputDeviceImpl.hpp \
     native/MIDIMessageImpl.hpp \
     native/Native.hpp \
