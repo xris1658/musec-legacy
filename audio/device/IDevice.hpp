@@ -3,6 +3,7 @@
 
 #include "audio/base/AudioBufferView.hpp"
 #include "audio/device/ISpeakerGroupCollection.hpp"
+#include "native/CompilerSpecific.hpp"
 
 #include <vector>
 
@@ -12,7 +13,7 @@ namespace Audio
 {
 namespace Device
 {
-class IDevice
+MUSEC_INTERFACE IDevice
 {
 public:
     IDevice()

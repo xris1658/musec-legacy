@@ -1,6 +1,8 @@
 #ifndef MUSEC_AUDIO_PLUGIN_IPARAMETER
 #define MUSEC_AUDIO_PLUGIN_IPARAMETER
 
+#include "native/CompilerSpecific.hpp"
+
 #include <QString>
 
 #include <cstdint>
@@ -23,7 +25,7 @@ enum ParameterSupportFlags: std::int32_t
     SupportDefaultValue = 1 << 6
 };
 
-class IParameter
+MUSEC_INTERFACE IParameter
 {
 public:
     virtual QString name() const = 0;

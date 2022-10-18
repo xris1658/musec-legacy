@@ -2,6 +2,7 @@
 #define MUSEC_AUDIO_DEVICE_ISPEAKERGROUPCOLLECTION
 
 #include "audio/device/ISpeakerGroup.hpp"
+#include "native/CompilerSpecific.hpp"
 
 #include <cstdint>
 
@@ -11,7 +12,7 @@ namespace Audio
 {
 namespace Device
 {
-class ISpeakerGroupCollection
+MUSEC_INTERFACE ISpeakerGroupCollection
 {
 public:
     virtual std::uint8_t speakerGroupCount() const = 0;

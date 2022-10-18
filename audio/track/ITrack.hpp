@@ -2,6 +2,7 @@
 #define MUSEC_AUDIO_TRACK_ITRACK
 
 #include "audio/track/TrackInformation.hpp"
+#include "native/CompilerSpecific.hpp"
 
 #include <QObject>
 
@@ -18,7 +19,7 @@ enum TrackType
     kInstrumentTrack
 };
 
-class ITrack
+MUSEC_INTERFACE ITrack
 {
 public:
     ITrack() {}

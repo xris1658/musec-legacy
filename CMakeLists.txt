@@ -242,6 +242,7 @@ set(PROJECT_SOURCES
     model/TranslationFileModel.hpp
     native/ASIODriverImpl.cpp
     native/ASIODriverImpl.hpp
+    native/CompilerSpecific.hpp
     native/MIDIInputDeviceImpl.cpp
     native/MIDIInputDeviceImpl.hpp
     native/MIDIMessageImpl.cpp

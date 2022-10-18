@@ -1,0 +1,10 @@
+#ifndef MUSEC_NATIVE_COMPILERSPECIFIC
+#define MUSEC_NATIVE_COMPILERSPECIFIC
+
+#ifdef _MSC_VER
+#define MUSEC_INTERFACE class __declspec(novtable)
+#else
+#define MUSEC_INTERFACE class
+#endif
+
+#endif //MUSEC_NATIVE_COMPILERSPECIFIC

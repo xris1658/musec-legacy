@@ -1,6 +1,8 @@
 #ifndef MUSEC_AUDIO_DEVICE_ISPEAKERGROUP
 #define MUSEC_AUDIO_DEVICE_ISPEAKERGROUP
 
+#include "native/CompilerSpecific.hpp"
+
 #include <QString>
 
 namespace Musec
@@ -27,7 +29,7 @@ enum SpeakerGroupType
     SpeakerGroupStereo
 };
 
-class ISpeakerGroup
+MUSEC_INTERFACE ISpeakerGroup
 {
 public:
     virtual QString name() const = 0;

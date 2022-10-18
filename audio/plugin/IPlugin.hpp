@@ -1,10 +1,10 @@
 #ifndef MUSEC_AUDIO_PLUGIN_IPLUGIN
 #define MUSEC_AUDIO_PLUGIN_IPLUGIN
 
-#include "audio/base/AudioBufferView.hpp"
 #include "audio/device/IDevice.hpp"
 #include "audio/plugin/IParameter.hpp"
 #include "base/PluginBase.hpp"
+#include "native/CompilerSpecific.hpp"
 
 #include <QString>
 #include <QWindow>
@@ -18,15 +18,8 @@ namespace Audio
 {
 namespace Plugin
 {
-class IPlugin: public Musec::Audio::Device::IDevice
+MUSEC_INTERFACE IPlugin: public Musec::Audio::Device::IDevice
 {
-    using Base = Musec::Audio::Device::IDevice;
-public:
-    IPlugin(): IPlugin::Base()
-    {}
-    IPlugin(const IPlugin&) = delete;
-    IPlugin(IPlugin&&) noexcept = default;
-    virtual ~IPlugin() override = default;
 public:
     virtual bool initialize(double sampleRate, std::int32_t maxSampleCount) = 0;
     virtual bool uninitialize() = 0;
