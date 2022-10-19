@@ -49,6 +49,7 @@
         <file>qmlproject/imports/Musec/Controls/Button.qml</file>
         <file>qmlproject/imports/Musec/Controls/CheckBox.qml</file>
         <file>qmlproject/imports/Musec/Controls/ComboBox.qml</file>
+        <file>qmlproject/imports/Musec/Controls/Dial.qml</file>
         <file>qmlproject/imports/Musec/Controls/Menu.qml</file>
         <file>qmlproject/imports/Musec/Controls/MenuBar.qml</file>
         <file>qmlproject/imports/Musec/Controls/MenuItem.qml</file>

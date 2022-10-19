@@ -4,6 +4,7 @@ Action 1.0 Action.qml
 Button 1.0 Button.qml
 CheckBox 1.0 CheckBox.qml
 ComboBox 1.0 ComboBox.qml
+Dial 1.0 Dial.qml
 Menu 1.0 Menu.qml
 MenuBar 1.0 MenuBar.qml
 MenuItem 1.0 MenuItem.qml

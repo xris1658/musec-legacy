@@ -49,12 +49,16 @@ Window {
                 orientation: Qt.Horizontal
                 width: 160
                 height: 40
+                lengthPadding: 5
+                thicknessPadding: 5
             }
             MCtrl.Slider {
                 anchors.right: parent.right
                 orientation: Qt.Vertical
                 width: 40
                 height: 160
+                lengthPadding: 5
+                thicknessPadding: 5
             }
         }
         Rectangle {
@@ -77,6 +81,17 @@ Window {
                     checkState: Qt.PartiallyChecked
                     text: "PartiallyChecked"
                 }
+            }
+        }
+        Rectangle {
+            width: 200
+            height: 160
+            color: "transparent"
+            border.color: "#CCCCCC"
+            MCtrl.Dial {
+                anchors.centerIn: parent
+                width: 40
+                height: 40
             }
         }
     }
