@@ -6,13 +6,17 @@ import Musec 1.0
 QQC2.Dial {
     id: control
     opacity: enabled? 1: 0.5
+    property int diameter: 0
+    width: diameter
+    height: diameter
+    hoverEnabled: true
     background: Rectangle {
-        width: Math.min(control.width, control.height)
-        height: width
-        radius: width / 2
+        width: diameter
+        height: diameter
+        radius: diameter / 2
         x: (control.width - width) / 2
         y: (parent.height - height) / 2
-        color: Constants.backgroundColor
+        color: control.pressed? Constants.backgroundColor2: control.hovered? Constants.mouseOverElementColor: Constants.backgroundColor
         border.width: 1
         border.color: Constants.borderColor
     }

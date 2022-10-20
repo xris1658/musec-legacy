@@ -349,8 +349,8 @@ Item {
                     width: root.width / 2
                     height: 20
                     MCtrl.Dial {
-                        anchors.fill: parent
-                        anchors.margins: 1
+                        anchors.centerIn: parent
+                        diameter: parent.height - 2
                         from: -1.0
                         to: 1.0
                         value: root.panning

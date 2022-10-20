@@ -43,7 +43,7 @@ QQC2.Button {
     }
     Keys.onSpacePressed: {
         if(control.activeFocus && (!down)) {
-            press();
+            control.press();
         }
     }
 
