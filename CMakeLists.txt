@@ -249,6 +249,7 @@ set(PROJECT_SOURCES
     native/MIDIMessageImpl.hpp
     native/Native.cpp
     native/Native.hpp
+    native/WinRTForward.hpp
     native/WindowsLibraryRAII.cpp
     native/WindowsLibraryRAII.hpp
     ui/FontUtility.cpp

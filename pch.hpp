@@ -1,6 +1,8 @@
 #ifndef MUSEC_PCH
 #define MUSEC_PCH
 
+#include "native/WinRTForward.hpp"
+
 // SQLite / sqlite_modern_cpp
 #include <sqlite_modern_cpp.h>
 
