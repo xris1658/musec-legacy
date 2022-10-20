@@ -116,6 +116,7 @@ Item {
     signal setArmRecording(newArmRecording: bool)
     signal setMonoDownMix(newMonoDownMix: bool)
     signal setGain(newGain: double)
+    signal setPanning(newPanning: double)
     Column {
         width: parent.width
         height: parent.height
@@ -347,30 +348,17 @@ Item {
                 Item {
                     width: root.width / 2
                     height: 20
-                    Rectangle {
-                        anchors.centerIn: parent
-                        width: parent.width - 2
-                        height: parent.height - 2
-                        color: "transparent"
-                        border.width: 1
-                        border.color: Constants.borderColor
-                        z: 2
-                        clip: true
-                    }
-                    Rectangle {
-                        color: "#1D2088"
-                        width: panning>0? parent.width * panning / 2 : parent.width * panning / -2
-                        height: parent.height - 2
-                        x: panning>0? parent.width / 2: parent.width / 2 - width
-                        y: 1
-                        z: 0
-                    }
-                    Text {
-                        anchors.centerIn: parent
-                        color: Constants.contentColor1
-                        font.family: Constants.font
-                        text: panning == 0? "C" : panning < 0? panning * -100 + "L" : panning * 100 + "R"
-                        z: 1
+                    MCtrl.Dial {
+                        anchors.fill: parent
+                        anchors.margins: 1
+                        from: -1.0
+                        to: 1.0
+                        value: root.panning
+                        inputMode: MCtrl.Dial.Vertical
+                        live: true
+                        onValueChanged: {
+                            root.setPanning(value);
+                        }
                     }
                 }
                 Item {
@@ -424,7 +412,7 @@ Item {
                             from: -144
                             to: 6
                             live: true
-                            value: 20 * Math.log10(gain)
+                            value: 20 * Math.log10(root.gain)
                             snapMode: Slider.NoSnap
                             onValueChanged: {
                                 var newGain = Math.pow(10.0, value * 0.05);

@@ -190,6 +190,9 @@ Rectangle {
             onSetGain: (newGain) => {
                 root.tracks.masterTrackGain = newGain;
             }
+            onSetPanning: (newPanning) => {
+                root.tracks.masterTrackPanning = newPanning;
+            }
             onBlankAreaDragEventEntered: (drag) => {
                 if(drag.getDataAsString("type") != 3 && root.channelType != MixerChannel.ChannelType.InstrumentTrack) {
                     drag.accepted = false;
@@ -254,6 +257,7 @@ Rectangle {
                     effectVisible: root.effectVisible
                     gainAndMeterVisible: root.gainAndMeterVisible
                     gain: channel_gain
+                    panning: channel_panning
                     channelMuted: mute
                     channelSolo: solo
                     channelInverted: invertPhase
@@ -282,6 +286,10 @@ Rectangle {
                     onSetGain: (newGain) => {
                                    channel_gain = newGain;
                                }
+                    onSetPanning: (newPanning) => {
+                                      channel_panning = newPanning;
+                                  }
+
                     onLoadInstrument: (pluginPath, pluginSubId, pluginFormat) => {
                         tracks.loadInstrument(index, pluginFormat, pluginPath, pluginSubId);
                     }

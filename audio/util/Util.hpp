@@ -43,24 +43,43 @@ float decibelToScale(float decibel);
 
 long double decibelToScale(long double decibel);
 
-template<typename T, PanLaw PL>
+template<typename T, PanLaw panLaw>
 StereoChannelScaleCollection<T> fromPanning(T panning)
 {
     static_assert(std::is_floating_point_v<T>);
-    if constexpr(PL == PanLaw::k0)
+    if constexpr(panLaw == PanLaw::k0)
     {
         return panning < 0?
             StereoChannelScaleCollection<T>{T(1), T(1) + panning}:
             StereoChannelScaleCollection<T>{T(1) - panning, T(1)};
     }
-    else if constexpr(PL == PanLaw::kN3)
+    else if constexpr(panLaw == PanLaw::kN3)
     {
-        T left = std::cos(T(0.5) * Musec::Math::Pi<T> * (panning * 0.5 + 0.5)) * Musec::Math::Sqrt2<T>;
+        T left = std::cos(T(0.25) * Musec::Math::pi<T>() * (panning + 1));
         return {left, std::sqrt(1 - left * left)};
     }
-    else if constexpr(PL == PanLaw::kN6)
+    else if constexpr(panLaw == PanLaw::kN6)
     {
         return {T(0.5) - T(0.5) * panning, T(0.5) + T(0.5) * panning};
+    }
+    return {1, 1};
+}
+
+template<typename T, PanLaw panLaw>
+T compensateFromPanLaw()
+{
+    static_assert(std::is_floating_point_v<T>);
+    if constexpr(panLaw == PanLaw::k0)
+    {
+        return 1;
+    }
+    else if constexpr(panLaw == PanLaw::kN3)
+    {
+        return Musec::Math::sqrt2<T>();
+    }
+    else if constexpr(panLaw == PanLaw::kN6)
+    {
+        return 2;
     }
 }
 }

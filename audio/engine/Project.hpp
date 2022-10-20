@@ -7,6 +7,7 @@
 #include "audio/plugin/VST2PluginPool.hpp"
 #include "audio/track/AudioTrack.hpp"
 #include "audio/track/ITrack.hpp"
+#include "audio/util/Util.hpp"
 #include "base/FixedSizeMemoryPool.hpp"
 #include "entities/CompleteTrack.hpp"
 
@@ -76,6 +77,10 @@ public:
 public:
     void process();
     const Musec::Base::FixedSizeMemoryBlock& masterTrackAudioBuffer() const;
+public:
+    Musec::Audio::Util::PanLaw getPanLaw();
+    bool isCompensate();
+    void setPanLaw(Musec::Audio::Util::PanLaw panLaw, bool compensate = true);
 private:
     MasterTrackControlType::reference masterTrackMute();
     MasterTrackControlType::reference masterTrackSolo();
@@ -106,6 +111,10 @@ private:
     std::vector<bool> trackMonoDownMix_;
     std::map<void*, QWindow*> pluginAndWindow_;
     Musec::Audio::Plugin::VST2PluginPool vst2PluginPool_;
+    Musec::Audio::Util::PanLaw panLaw_;
+    bool compensate_;
+    Musec::Audio::Util::StereoChannelScaleCollection<float>(*getScale_)(float);
+    float (*getCompensate_)();
 };
 }
 }

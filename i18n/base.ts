@@ -172,7 +172,7 @@
     <name>Arrangement</name>
     <message>
         <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="40"/>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="557"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="558"/>
         <source>Select Color</source>
         <translation type="unfinished"></translation>
     </message>
@@ -265,28 +265,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="557"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="558"/>
         <source>Track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="825"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="827"/>
         <source>MIDI Track Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="830"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="832"/>
         <source>Add MIDI Clip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="835"/>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="840"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="837"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="842"/>
         <source>Audio Track Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="985"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="987"/>
         <source>Drag &amp; Drop plugins or audio clips here</source>
         <translation type="unfinished"></translation>
     </message>
@@ -425,88 +425,93 @@
 <context>
     <name>AudioHardwareSelector</name>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="45"/>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="59"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="51"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="66"/>
         <source>Driver</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="72"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="79"/>
         <source>No ASIO driver found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="73"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="80"/>
         <source>No driver loaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="82"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="89"/>
         <source>Sample Rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="104"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="110"/>
         <source>Hz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="120"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="126"/>
         <source>Open Driver Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="130"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="136"/>
         <source>Hardware I/O</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="145"/>
-        <source>Input Device</source>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="152"/>
+        <source>L</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="161"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="162"/>
+        <source>R</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="171"/>
         <source>Output Device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="178"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="207"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="194"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="223"/>
         <source>Buffer size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="205"/>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="227"/>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="249"/>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="271"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="234"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="256"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="278"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="300"/>
         <source>sample(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="216"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="245"/>
         <source>Input latency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="227"/>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="249"/>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="271"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="256"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="278"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="300"/>
         <source>ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="238"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="267"/>
         <source>Output latency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="260"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="289"/>
         <source>Sum latency</source>
         <translation type="unfinished"></translation>
     </message>
@@ -812,42 +817,42 @@
 <context>
     <name>GeneralSettings</name>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="28"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="31"/>
         <source>Region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="41"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="44"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="60"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="63"/>
         <source>Appearance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="73"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="76"/>
         <source>Color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="87"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="90"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="102"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="105"/>
         <source>Touch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="116"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="119"/>
         <source>Single instance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="130"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="133"/>
         <source>System font rendering</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1098,28 +1103,36 @@ If you add dithering devices on the master track, please uncheck this option.</s
 <context>
     <name>Mixer</name>
     <message>
-        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="20"/>
+        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="26"/>
         <source>Instrument Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="36"/>
+        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="42"/>
         <source>Audio Effect Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="95"/>
+        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="101"/>
         <source>Show Effects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="119"/>
+        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="125"/>
         <source>Show volume faders and dB meters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="146"/>
+        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="152"/>
         <source>Master</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MixerChannel</name>
+    <message>
+        <location filename="../qmlproject/imports/Musec/MixerChannel.qml" line="376"/>
+        <source>Mono</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1424,22 +1437,22 @@ If you add dithering devices on the master track, please uncheck this option.</s
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/OptionsWindow.qml" line="58"/>
+        <location filename="../qmlproject/OptionsWindow.qml" line="61"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/OptionsWindow.qml" line="58"/>
+        <location filename="../qmlproject/OptionsWindow.qml" line="61"/>
         <source>Audio Hardware</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/OptionsWindow.qml" line="58"/>
+        <location filename="../qmlproject/OptionsWindow.qml" line="61"/>
         <source>Plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/OptionsWindow.qml" line="58"/>
+        <location filename="../qmlproject/OptionsWindow.qml" line="61"/>
         <source>Arrangement</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1596,11 +1609,16 @@ If you add dithering devices on the master track, please uncheck this option.</s
     </message>
     <message>
         <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="298"/>
-        <source>Panning comp.</source>
+        <source>Pan law</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="329"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="311"/>
+        <source>Compensate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="339"/>
         <source>&amp;Reset</source>
         <translation type="unfinished"></translation>
     </message>

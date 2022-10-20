@@ -30,7 +30,12 @@ Project::Project(int reserveTrackCount):
     masterTrackControls_(),
     gain_(), panning_(),
     trackMute_(), trackSolo_(), trackInvertPhase_(), trackArmRecording_(), trackMonoDownMix_(),
-    pluginAndWindow_()
+    pluginAndWindow_(),
+    vst2PluginPool_(),
+    panLaw_(Musec::Audio::Util::PanLaw::kN3),
+    compensate_(true),
+    getScale_(&Musec::Audio::Util::fromPanning<float, Musec::Audio::Util::PanLaw::kN3>),
+    getCompensate_(&Musec::Audio::Util::compensateFromPanLaw<float, Musec::Audio::Util::PanLaw::kN3>)
 {
     static std::thread thread([this]() { vst2PluginIdleFunc(); });
     if(thread.joinable())
@@ -223,7 +228,7 @@ const Musec::Base::FixedSizeMemoryBlock& Project::masterTrackAudioBuffer() const
 }
 
 // If the application uses ASIO, then this function is called in the ASIOBufferSwitch callback,
-// then setting the priority of this thread is not needed (because it's done by the driver).
+// thus setting the priority of this thread is not needed (because it's done by the driver).
 // If not, the priority of this thread might be set to realtime + MMCSS.
 void Project::process()
 {
@@ -289,6 +294,14 @@ void Project::process()
                 audioBufferViews[0][j] = audioBufferViews[1][j] =
                     (audioBufferViews[0][j] + audioBufferViews[1][j]) * 0.5;
             }
+            auto scales = getScale_(panning_[i]);
+            if(compensate_)
+            {
+                scales.left *= getCompensate_();
+                scales.right *= getCompensate_();
+            }
+            audioBufferViews[0][j] *= scales.left;
+            audioBufferViews[1][j] *= scales.right;
             for (auto k = 0; k < masterTrackAudioBufferViews.size(); ++k)
             {
                 // The buffer is filled with 0 before this.
@@ -307,6 +320,14 @@ void Project::process()
             }
         }
     }
+    const auto& masterTrackAudioEffects = masterTrack_.getPluginSequences()[0];
+    for(const auto& audioEffect: masterTrackAudioEffects)
+    {
+        if(audioEffect->processing())
+        {
+            audioEffect->process(masterTrackAudioBufferViews.data(), 2, masterTrackAudioBufferViews.data(), 2);
+        }
+    }
     for (auto j = 0; j < currentBlockSize; ++j)
     {
         if(masterTrackMonoDownMix())
@@ -314,6 +335,14 @@ void Project::process()
             masterTrackAudioBufferViews[0][j] = masterTrackAudioBufferViews[1][j] =
                 (masterTrackAudioBufferViews[0][j] + masterTrackAudioBufferViews[1][j]) * 0.5;
         }
+        auto scales = getScale_(masterTrackPanning_);
+        if(compensate_)
+        {
+            scales.left *= getCompensate_();
+            scales.right *= getCompensate_();
+        }
+        masterTrackAudioBufferViews[0][j] *= scales.left;
+        masterTrackAudioBufferViews[1][j] *= scales.right;
         for (auto& masterTrackAudioBufferView : masterTrackAudioBufferViews)
         {
             if(masterTrackMute())
@@ -328,14 +357,6 @@ void Project::process()
                     masterTrackAudioBufferView[j] *= -1;
                 }
             }
-        }
-    }
-    const auto& masterTrackAudioEffects = masterTrack_.getPluginSequences()[0];
-    for(const auto& audioEffect: masterTrackAudioEffects)
-    {
-        if(audioEffect->processing())
-        {
-            audioEffect->process(masterTrackAudioBufferViews.data(), 2, masterTrackAudioBufferViews.data(), 2);
         }
     }
 }
@@ -356,6 +377,38 @@ void Project::clear()
     trackInvertPhase_.clear();
     trackArmRecording_.clear();
     pluginAndWindow_.clear();
+}
+
+Musec::Audio::Util::PanLaw Project::getPanLaw()
+{
+    return panLaw_;
+}
+
+bool Project::isCompensate()
+{
+    return compensate_;
+}
+
+void Project::setPanLaw(Musec::Audio::Util::PanLaw panLaw, bool compensate)
+{
+    using namespace Musec::Audio::Util;
+    panLaw_ = panLaw;
+    compensate_ = compensate;
+    if(panLaw_ == PanLaw::k0)
+    {
+        getScale_ = &fromPanning<float, PanLaw::k0>;
+        getCompensate_ = &compensateFromPanLaw<float, PanLaw::k0>;
+    }
+    else if(panLaw_ == PanLaw::kN6)
+    {
+        getScale_ = &fromPanning<float, PanLaw::kN6>;
+        getCompensate_ = &compensateFromPanLaw<float, PanLaw::kN6>;
+    }
+    else/* if(panLaw_ == PanLaw::kN3)*/
+    {
+        getScale_ = &fromPanning<float, PanLaw::kN3>;
+        getCompensate_ = &compensateFromPanLaw<float, PanLaw::kN3>;
+    }
 }
 
 Project::MasterTrackControlType::reference Project::masterTrackMute()

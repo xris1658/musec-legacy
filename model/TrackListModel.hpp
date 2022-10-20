@@ -37,6 +37,7 @@ public:
         InstrumentRole,
         PluginListRole,
         ChannelGainRole,
+        ChannelPanningRole,
         kRoleNamesCount
     };
 public:

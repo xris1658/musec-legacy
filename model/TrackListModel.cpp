@@ -94,6 +94,7 @@ TrackListModel::TrackListModel(QObject* parent):
     roleNames_[RoleNames::InstrumentRole] = "instrument";
     roleNames_[RoleNames::PluginListRole] = "plugin_list";
     roleNames_[RoleNames::ChannelGainRole] = "channel_gain";
+    roleNames_[RoleNames::ChannelPanningRole] = "channel_panning";
 }
 
 TrackListModel::~TrackListModel()
@@ -176,6 +177,8 @@ QVariant TrackListModel::data(const QModelIndex& index, int role) const
     }
     case RoleNames::ChannelGainRole:
         return QVariant(track.gain);
+    case RoleNames::ChannelPanningRole:
+        return QVariant(track.panning);
     default:
         return QVariant();
     }
@@ -235,6 +238,10 @@ bool TrackListModel::setData(const QModelIndex& index, const QVariant& value, in
             break;
         case RoleNames::ChannelGainRole:
             trackRef.gain = value.value<double>();
+            ret = true;
+            break;
+        case RoleNames::ChannelPanningRole:
+            trackRef.panning = value.value<double>();
             ret = true;
             break;
         }
@@ -513,7 +520,7 @@ void TrackListModel::setMasterTrackGain(double gain)
 
 double TrackListModel::getMasterTrackPanning() const
 {
-    return 0;
+    return project_.masterTrackRef().panning;
 }
 
 void TrackListModel::setMasterTrackPanning(double panning)

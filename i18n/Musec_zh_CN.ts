@@ -176,7 +176,7 @@
     <name>Arrangement</name>
     <message>
         <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="40"/>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="557"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="558"/>
         <source>Select Color</source>
         <translation>选择颜色</translation>
     </message>
@@ -269,28 +269,28 @@
         <translation>主轨道</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="557"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="558"/>
         <source>Track</source>
         <translation>轨道</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="825"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="827"/>
         <source>MIDI Track Options</source>
         <translation>MIDI 轨道选项</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="835"/>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="840"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="837"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="842"/>
         <source>Audio Track Options</source>
         <translation>音频轨道选项</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="985"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="987"/>
         <source>Drag &amp; Drop plugins or audio clips here</source>
         <translation>将插件或音频片段拖动至此处</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="830"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="832"/>
         <source>Add MIDI Clip</source>
         <oldsource>添加 MIDI 片段</oldsource>
         <translation>添加 MIDI 片段</translation>
@@ -435,88 +435,97 @@
 <context>
     <name>AudioHardwareSelector</name>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="45"/>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="59"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="51"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="66"/>
         <source>Driver</source>
         <translation>驱动程序</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="72"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="79"/>
         <source>No ASIO driver found</source>
         <translation>未找到 ASIO 驱动程序</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="73"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="80"/>
         <source>No driver loaded</source>
         <translation>未加载驱动</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="82"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="89"/>
         <source>Sample Rate</source>
         <translation>采样率</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="104"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="110"/>
         <source>Hz</source>
         <translation>Hz</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="120"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="126"/>
         <source>Open Driver Settings</source>
         <translation>打开驱动程序设置</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="130"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="136"/>
         <source>Hardware I/O</source>
         <translation>硬件输入/输出</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="145"/>
-        <source>Input Device</source>
-        <translation>输入设备</translation>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="152"/>
+        <source>L</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="161"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="162"/>
+        <source>R</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Input Device</source>
+        <translation type="vanished">输入设备</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="171"/>
         <source>Output Device</source>
         <translation>输出设备</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="194"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="223"/>
         <source>Buffer size</source>
         <translation>缓冲区大小</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="205"/>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="227"/>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="249"/>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="271"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="234"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="256"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="278"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="300"/>
         <source>sample(s)</source>
         <translation>采样</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="216"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="245"/>
         <source>Input latency</source>
         <translation>输入延迟</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="227"/>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="249"/>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="271"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="256"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="278"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="300"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="238"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="267"/>
         <source>Output latency</source>
         <translation>输出延迟</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="260"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="289"/>
         <source>Sum latency</source>
         <translation>总延迟</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="178"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="207"/>
         <source>Status</source>
         <translation>状态</translation>
     </message>
@@ -829,42 +838,42 @@
 <context>
     <name>GeneralSettings</name>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="28"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="31"/>
         <source>Region</source>
         <translation>区域</translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="41"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="44"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="60"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="63"/>
         <source>Appearance</source>
         <translation>外观</translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="73"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="76"/>
         <source>Color</source>
         <translation>颜色</translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="87"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="90"/>
         <source>Zoom</source>
         <translation>缩放</translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="102"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="105"/>
         <source>Touch</source>
         <translation>触控</translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="116"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="119"/>
         <source>Single instance</source>
         <translation>防止多开</translation>
     </message>
     <message>
-        <location filename="../qmlproject/GeneralSettings.qml" line="130"/>
+        <location filename="../qmlproject/GeneralSettings.qml" line="133"/>
         <source>System font rendering</source>
         <translation>使用系统文字渲染</translation>
     </message>
@@ -1121,29 +1130,37 @@ If you add dithering devices on the master track, please uncheck this option.</s
 <context>
     <name>Mixer</name>
     <message>
-        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="20"/>
+        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="26"/>
         <source>Instrument Options</source>
         <translation>乐器选项</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="36"/>
+        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="42"/>
         <source>Audio Effect Options</source>
         <translation>音频效果器选项</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="95"/>
+        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="101"/>
         <source>Show Effects</source>
         <translation>显示效果器</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="119"/>
+        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="125"/>
         <source>Show volume faders and dB meters</source>
         <translation>显示音量推子和电平表</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="146"/>
+        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="152"/>
         <source>Master</source>
         <translation>主轨道</translation>
+    </message>
+</context>
+<context>
+    <name>MixerChannel</name>
+    <message>
+        <location filename="../qmlproject/imports/Musec/MixerChannel.qml" line="376"/>
+        <source>Mono</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1479,22 +1496,22 @@ If you add dithering devices on the master track, please uncheck this option.</s
         <translation>首选项</translation>
     </message>
     <message>
-        <location filename="../qmlproject/OptionsWindow.qml" line="58"/>
+        <location filename="../qmlproject/OptionsWindow.qml" line="61"/>
         <source>General</source>
         <translation>通用</translation>
     </message>
     <message>
-        <location filename="../qmlproject/OptionsWindow.qml" line="58"/>
+        <location filename="../qmlproject/OptionsWindow.qml" line="61"/>
         <source>Audio Hardware</source>
         <translation>音频硬件</translation>
     </message>
     <message>
-        <location filename="../qmlproject/OptionsWindow.qml" line="58"/>
+        <location filename="../qmlproject/OptionsWindow.qml" line="61"/>
         <source>Plugins</source>
         <translation>插件</translation>
     </message>
     <message>
-        <location filename="../qmlproject/OptionsWindow.qml" line="58"/>
+        <location filename="../qmlproject/OptionsWindow.qml" line="61"/>
         <source>Arrangement</source>
         <translation>编排视图</translation>
     </message>
@@ -1622,8 +1639,8 @@ If you add dithering devices on the master track, please uncheck this option.</s
     </message>
     <message>
         <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="298"/>
-        <source>Panning comp.</source>
-        <translation>声像补偿</translation>
+        <source>Pan law</source>
+        <translation>声像法则</translation>
     </message>
     <message>
         <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="131"/>
@@ -1656,7 +1673,12 @@ If you add dithering devices on the master track, please uncheck this option.</s
         <translation>混音器</translation>
     </message>
     <message>
-        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="329"/>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="311"/>
+        <source>Compensate</source>
+        <translation>补偿</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="339"/>
         <source>&amp;Reset</source>
         <translation>还原(&amp;R)</translation>
     </message>

@@ -13,16 +13,32 @@ namespace Math
 {
 #if __cplusplus >= 202002L
 template<typename T>
-constexpr T Pi = std::numbers::pi_v<T>;
+constexpr T pi()
+{
+    return std::numbers::pi_v<T>;
+}
 
 template<typename T>
-constexpr T Sqrt2 = std::numbers::sqrt2_v<T>;
+constexpr T sqrt2()
+{
+    return std::numbers::sqrt2_v<T>;
+}
 #else
+
+// Variable template and `constexpr` is not used for several reasons:
+// - Functions in <cmath> might modify global variables like `errno`
+// - Some functions in <cmath> depend on the rounding mode at runtime
 template<typename T>
-constexpr T Pi = std::acos(T(-1));
+T pi()
+{
+    return std::acos(-1.0l);
+}
 
 template<typename T>
-constexpr T Sqrt2 = std::sqrt(T(2));
+T sqrt2()
+{
+    return std::sqrt(2.0l);
+}
 #endif
 }
 }

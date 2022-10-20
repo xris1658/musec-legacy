@@ -125,9 +125,9 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int16Buffer[j] = static_cast<int16_t>(masterTrackAudioBufferView[i][j] * Base::Int16Max);
-                    if constexpr(Native::endian() == Util::Endian::LittleEndian)
+                    if constexpr(Musec::Native::endian() == Musec::Util::Endian::LittleEndian)
                     {
-                        Util::reverseEndianness(int16Buffer + j, sizeof(int16_t));
+                        Musec::Util::reverseEndianness(int16Buffer + j, sizeof(int16_t));
                     }
                 }
                 break;
@@ -140,7 +140,7 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     temp = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int24Max);
-                    if constexpr(Native::endian() == Util::Endian::BigEndian)
+                    if constexpr(Native::endian() == Musec::Util::Endian::BigEndian)
                     {
                         memcpy(int24Buffer + j, &temp, sizeof(int24_t));
                     }
@@ -158,22 +158,22 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int32Buffer[j] = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int32Max);
-                    if constexpr(Native::endian() == Util::Endian::LittleEndian)
+                    if constexpr(Native::endian() == Musec::Util::Endian::LittleEndian)
                     {
-                        Util::reverseEndianness(int32Buffer + j, sizeof(int32_t));
+                        Musec::Util::reverseEndianness(int32Buffer + j, sizeof(int32_t));
                     }
                 }
                 break;
             }
             case ASIOSTFloat32MSB:
             {
-                if constexpr(Native::endian() == Util::Endian::BigEndian)
+                if constexpr(Native::endian() == Musec::Util::Endian::BigEndian)
                 {
                     memcpy(buffer, masterTrackAudioBufferView[i].getSamples(), bufferSize * sizeof(float));
                 }
                 else
                 {
-                    Util::reverseEndiannessCopy(masterTrackAudioBufferView[i].getSamples(), bufferSize * sizeof(float), buffer);
+                    Musec::Util::reverseEndiannessCopy(masterTrackAudioBufferView[i].getSamples(), bufferSize * sizeof(float), buffer);
                 }
                 break;
             }
@@ -183,9 +183,9 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     doubleBuffer[j] = static_cast<double>(masterTrackAudioBufferView[i][j]);
-                    if constexpr(Native::endian() == Util::Endian::LittleEndian)
+                    if constexpr(Native::endian() == Musec::Util::Endian::LittleEndian)
                     {
-                        Util::reverseEndianness(doubleBuffer + j, sizeof(double));
+                        Musec::Util::reverseEndianness(doubleBuffer + j, sizeof(double));
                     }
                 }
                 break;
@@ -197,9 +197,9 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int32Buffer[j] = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int16Max);
-                    if constexpr(Native::endian() == Util::Endian::LittleEndian)
+                    if constexpr(Native::endian() == Musec::Util::Endian::LittleEndian)
                     {
-                        Util::reverseEndianness(int32Buffer + j, sizeof(int32_t));
+                        Musec::Util::reverseEndianness(int32Buffer + j, sizeof(int32_t));
                     }
                 }
                 break;
@@ -211,9 +211,9 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int32Buffer[j] = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int18Max);
-                    if constexpr(Native::endian() == Util::Endian::LittleEndian)
+                    if constexpr(Native::endian() == Musec::Util::Endian::LittleEndian)
                     {
-                        Util::reverseEndianness(int32Buffer + j, sizeof(int32_t));
+                        Musec::Util::reverseEndianness(int32Buffer + j, sizeof(int32_t));
                     }
                 }
                 break;
@@ -225,9 +225,9 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int32Buffer[j] = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int20Max);
-                    if constexpr(Native::endian() == Util::Endian::LittleEndian)
+                    if constexpr(Native::endian() == Musec::Util::Endian::LittleEndian)
                     {
-                        Util::reverseEndianness(int32Buffer + j, sizeof(int32_t));
+                        Musec::Util::reverseEndianness(int32Buffer + j, sizeof(int32_t));
                     }
                 }
                 break;
@@ -239,9 +239,9 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int32Buffer[j] = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int24Max);
-                    if constexpr(Native::endian() == Util::Endian::LittleEndian)
+                    if constexpr(Native::endian() == Musec::Util::Endian::LittleEndian)
                     {
-                        Util::reverseEndianness(int32Buffer + j, sizeof(int32_t));
+                        Musec::Util::reverseEndianness(int32Buffer + j, sizeof(int32_t));
                     }
                 }
                 break;
@@ -254,9 +254,9 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int16Buffer[j] = static_cast<int16_t>(masterTrackAudioBufferView[i][j] * Base::Int16Max);
-                    if constexpr(Native::endian() == Util::Endian::BigEndian)
+                    if constexpr(Native::endian() == Musec::Util::Endian::BigEndian)
                     {
-                        Util::reverseEndianness(int16Buffer + j, sizeof(int16_t));
+                        Musec::Util::reverseEndianness(int16Buffer + j, sizeof(int16_t));
                     }
                 }
                 break;
@@ -269,7 +269,7 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     temp = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int24Max);
-                    if constexpr(Native::endian() == Util::Endian::LittleEndian)
+                    if constexpr(Native::endian() == Musec::Util::Endian::LittleEndian)
                     {
                         memcpy(int24Buffer + j, &temp, sizeof(int24_t));
                     }
@@ -287,22 +287,22 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int32Buffer[j] = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int32Max);
-                    if constexpr(Native::endian() == Util::Endian::BigEndian)
+                    if constexpr(Native::endian() == Musec::Util::Endian::BigEndian)
                     {
-                        Util::reverseEndianness(int32Buffer + j, sizeof(int32_t));
+                        Musec::Util::reverseEndianness(int32Buffer + j, sizeof(int32_t));
                     }
                 }
                 break;
             }
             case ASIOSTFloat32LSB:
             {
-                if constexpr(Native::endian() == Util::Endian::LittleEndian)
+                if constexpr(Native::endian() == Musec::Util::Endian::LittleEndian)
                 {
                     memcpy(buffer, masterTrackAudioBufferView[i].getSamples(), bufferSize * sizeof(float));
                 }
                 else
                 {
-                    Util::reverseEndiannessCopy(masterTrackAudioBufferView[i].getSamples(), bufferSize * sizeof(float), buffer);
+                    Musec::Util::reverseEndiannessCopy(masterTrackAudioBufferView[i].getSamples(), bufferSize * sizeof(float), buffer);
                 }
                 break;
             }
@@ -312,9 +312,9 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     doubleBuffer[j] = static_cast<double>(masterTrackAudioBufferView[i][j]);
-                    if constexpr(Native::endian() == Util::Endian::BigEndian)
+                    if constexpr(Native::endian() == Musec::Util::Endian::BigEndian)
                     {
-                        Util::reverseEndianness(doubleBuffer + j, sizeof(double));
+                        Musec::Util::reverseEndianness(doubleBuffer + j, sizeof(double));
                     }
                 }
                 break;
@@ -326,9 +326,9 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int32Buffer[j] = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int16Max);
-                    if constexpr(Native::endian() == Util::Endian::BigEndian)
+                    if constexpr(Native::endian() == Musec::Util::Endian::BigEndian)
                     {
-                        Util::reverseEndianness(int32Buffer + j, sizeof(int32_t));
+                        Musec::Util::reverseEndianness(int32Buffer + j, sizeof(int32_t));
                     }
                 }
                 break;
@@ -340,9 +340,9 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int32Buffer[j] = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int18Max);
-                    if constexpr(Native::endian() == Util::Endian::BigEndian)
+                    if constexpr(Native::endian() == Musec::Util::Endian::BigEndian)
                     {
-                        Util::reverseEndianness(int32Buffer + j, sizeof(int32_t));
+                        Musec::Util::reverseEndianness(int32Buffer + j, sizeof(int32_t));
                     }
                 }
                 break;
@@ -354,9 +354,9 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int32Buffer[j] = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int20Max);
-                    if constexpr(Native::endian() == Util::Endian::BigEndian)
+                    if constexpr(Native::endian() == Musec::Util::Endian::BigEndian)
                     {
-                        Util::reverseEndianness(int32Buffer + j, sizeof(int32_t));
+                        Musec::Util::reverseEndianness(int32Buffer + j, sizeof(int32_t));
                     }
                 }
                 break;
@@ -368,9 +368,9 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
                 for(int j = 0; j < bufferSize; ++j)
                 {
                     int32Buffer[j] = static_cast<int32_t>(masterTrackAudioBufferView[i][j] * Base::Int24Max);
-                    if constexpr(Native::endian() == Util::Endian::BigEndian)
+                    if constexpr(Native::endian() == Musec::Util::Endian::BigEndian)
                     {
-                        Util::reverseEndianness(int32Buffer + j, sizeof(int32_t));
+                        Musec::Util::reverseEndianness(int32Buffer + j, sizeof(int32_t));
                     }
                 }
                 break;

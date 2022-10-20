@@ -295,16 +295,26 @@ Window {
                     }
                     Text {
                         width: 100
-                        text: qsTr("Panning comp.") + ":"
+                        text: qsTr("Pan law") + ":"
                         font.family: Constants.font
                         color: Constants.contentColor1
                         horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
                     }
                     MCtrl.ComboBox {
-                        model: ["-6dB", "-4.5dB", "-3dB", "0dB"]
+                        model: ["-6dB", "-3dB", "0dB"]
                         width: 100
                         height: 20
+                    }
+                    Text {
+                        width: 100
+                        text: qsTr("Compensate") + ":"
+                        font.family: Constants.font
+                        color: Constants.contentColor1
+                        horizontalAlignment: Text.AlignRight
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    MCtrl.CheckBox {
                     }
                 }
             }
