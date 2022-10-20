@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-#if __cplusplus >= 202002L
+#if __cplusplus >= 201907L
 #include <numbers>
 #endif
 
@@ -11,7 +11,7 @@ namespace Musec
 {
 namespace Math
 {
-#if __cplusplus >= 202002L
+#if __cplusplus >= 201907L
 template<typename T>
 constexpr T pi()
 {
