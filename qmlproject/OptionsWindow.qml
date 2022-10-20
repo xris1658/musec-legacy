@@ -100,7 +100,7 @@ Window {
                     currentIndex: categoryList.currentIndex
                     GeneralSettings {
                         id: generalSettings
-                        onLanguageSelectionChanged: {
+                        onLanguageSelectionChanged: (currentLanguage) => {
                             EventBridge.languageSelectionChanged(currentLanguage);
                         }
                         onSystemRenderChanged: {
@@ -109,7 +109,7 @@ Window {
                     }
                     AudioHardwareSelector {
                         id: audioHardwareSelector
-                        onDriverASIOSelectionChanged: {
+                        onDriverASIOSelectionChanged: (currentSelectionValue) => {
                             EventBridge.driverASIOSelectionChanged(currentSelectionValue);
                         }
                         onSampleRateChanged: {
