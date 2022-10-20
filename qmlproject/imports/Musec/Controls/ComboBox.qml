@@ -52,7 +52,7 @@ QQC2.ComboBox {
                 }
             }
         }
-        contentItem: Rectangle {
+        contentItem: Item {
             id: content
             width: comboBoxDelegate.width
             height: comboBoxDelegate.height
