@@ -176,6 +176,7 @@ HEADERS += \
     native/MIDIInputDeviceImpl.hpp \
     native/MIDIMessageImpl.hpp \
     native/Native.hpp \
+    native/WinRTForward.hpp \
     native/WindowsLibraryRAII.hpp \
     ui/FontUtility.hpp \
     ui/MessageDialog.hpp \
