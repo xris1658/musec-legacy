@@ -20,8 +20,8 @@ QQC2.Dial {
         id: handleItem
         x: control.background.x + (control.background.width - width) / 2
         y: control.background.y + (control.background.height - height) / 2
-        width: 4
-        height: control.background.height / 4
+        width: 2
+        height: control.background.height * (1 - 0.618)
         color: Constants.contentColor2
         antialiasing: true
         transform: [
