@@ -460,15 +460,23 @@ Item {
                             }
                             font.family: Constants.font
                             onAccepted: {
-                                var newPanning = text.length == 0? 0.0: parseInt(text) * 0.01;
-                                if(newPanning > 1.0) {
-                                    newPanning = 1.0;
+                                if(text.length != 0) {
+                                    var parsed = parseFloat(text);
+                                    if(isNaN(parsed)) {
+                                        return;
+                                    }
+                                    else {
+                                        var newPanning = parsed * 0.01;
+                                        if(newPanning > 1.0) {
+                                            newPanning = 1.0;
+                                        }
+                                        if(newPanning < -1.0) {
+                                            newPanning = -1.0;
+                                        }
+                                        panningPopup.visible = false;
+                                        root.setPanning(newPanning);
+                                    }
                                 }
-                                if(newPanning < -1.0) {
-                                    newPanning = -1.0;
-                                }
-                                panningPopup.visible = false;
-                                root.setPanning(newPanning);
                             }
                         }
                     }
@@ -553,9 +561,20 @@ Item {
                                 }
                                 font.family: Constants.font
                                 onAccepted: {
-                                    var newGain = text.length == 0? 1.0: Math.pow(10.0, text * 0.05);
+                                    if(text.length != 0) {
+                                        var parsed = parseFloat(text);
+                                        if(!isNaN(parsed)) {
+                                            if(parsed < mixerChannelSlider.from) {
+                                                parsed = mixerChannelSlider.from;
+                                            }
+                                            if(parsed > mixerChannelSlider.to) {
+                                                parsed = mixerChannelSlider.to;
+                                            }
+                                            var newGain = Math.pow(10.0, parsed * 0.05);
+                                            root.setGain(newGain);
+                                        }
+                                    }
                                     gainTextInputPopup.visible = false;
-                                    setGain(newGain);
                                 }
                             }
                         }
