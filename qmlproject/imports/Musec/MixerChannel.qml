@@ -346,10 +346,64 @@ Item {
             clip: true
             Row {
                 Item {
-                    width: root.width / 2
-                    height: 20
-                    MCtrl.Dial {
+                    width: channelStereo.width / 2
+                    height: channelStereo.height
+                    MCtrl.Button {
                         anchors.centerIn: parent
+                        width: parent.width - 2
+                        height: parent.height - 2
+                        border.width: 1
+                        border.color: Constants.borderColor
+                        z: 2
+                        clip: true
+                        hoverEnabled: true
+                        Item {
+                            width: 24
+                            height: 16
+                            anchors.centerIn: parent
+                            Rectangle {
+                                width: 12
+                                height: 12
+                                radius: 6
+                                anchors.centerIn: parent
+                                anchors.horizontalCenterOffset: -3
+                                color: "transparent"
+                                border.width: 1
+                                border.color: root.channelMonoDownMix? Constants.contentColor2: Constants.contentColor1
+                            }
+                            Rectangle {
+                                width: 12
+                                height: 12
+                                radius: 6
+                                anchors.centerIn: parent
+                                anchors.horizontalCenterOffset: 3
+                                color: "transparent"
+                                border.width: 1
+                                border.color: root.channelMonoDownMix? Constants.contentColor2: Constants.contentColor1
+                            }
+                            Rectangle {
+                                width: 8
+                                height: 8
+                                radius: 4
+                                anchors.centerIn: parent
+                                color: Constants.contentColor1
+                                border.width: 1
+                                border.color: Constants.contentColor1
+                                visible: root.channelMonoDownMix
+                            }
+                        }
+                        onClicked: {
+                            root.setMonoDownMix(!root.channelMonoDownMix);
+                        }
+                    }
+                }
+                Item {
+                    width: channelStereo.width / 4
+                    height: channelStereo.height
+                    MCtrl.Dial {
+                        anchors.right: parent.right
+                        anchors.rightMargin: 5
+                        anchors.verticalCenter: parent.verticalCenter
                         diameter: parent.height - 2
                         from: -1.0
                         to: 1.0
@@ -362,27 +416,70 @@ Item {
                     }
                 }
                 Item {
-                    width: root.width / 2
-                    height: 20
-                    MCtrl.Button {
+                    width: channelStereo.width / 4
+                    height: channelStereo.height
+                    Text {
+                        id: panningText
+                        anchors.left: parent.left
+                        anchors.rightMargin: 5
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: Math.floor(root.panning * 100)
+                        font.family: Constants.font
+                        color: Constants.contentColor1
+                    }
+                    Popup {
+                        id: panningPopup
+                        width: parent.width
+                        height: parent.height
+                        padding: 0
                         anchors.centerIn: parent
-                        width: parent.width - 2
-                        height: parent.height - 2
-                        border.width: 1
-                        border.color: Constants.borderColor
-                        color: root.channelMonoDownMix? Constants.contentColor1: Constants.backgroundColor
-                        contentItem: Text {
-                            anchors.centerIn: parent
-                            text: qsTr("Mono")
-                            font.family: Constants.font
-                            verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignHCenter
-                            color: root.channelMonoDownMix? Constants.backgroundColor: Constants.contentColor1
+                        visible: false
+                        clip: false
+                        background: Rectangle {
+                            color: Constants.backgroundColor
+                            border.width: 1
+                            border.color: Constants.borderColor
                         }
-                        z: 2
-                        clip: true
+                        TextField {
+                            id: panningTextInput
+                            focus: true
+                            anchors.fill: parent
+                            text: panningText.text
+                            color: Constants.contentColor1
+                            selectionColor: Constants.currentElementColor
+                            selectedTextColor: Constants.backgroundColor
+                            horizontalAlignment: TextInput.AlignLeft
+                            placeholderText: "0"
+                            placeholderTextColor: Constants.currentElementColor
+                            padding: 0
+                            inputMethodHints: Qt.ImhFormattedNumbersOnly
+                            background: Rectangle {
+                                color: Constants.backgroundColor
+                                border.width: 1
+                                border.color: Constants.borderColor
+                            }
+                            font.family: Constants.font
+                            onAccepted: {
+                                var newPanning = text.length == 0? 0.0: parseInt(text) * 0.01;
+                                if(newPanning > 1.0) {
+                                    newPanning = 1.0;
+                                }
+                                if(newPanning < -1.0) {
+                                    newPanning = -1.0;
+                                }
+                                panningPopup.visible = false;
+                                root.setPanning(newPanning);
+                            }
+                        }
+                    }
+                    MouseArea {
+                        id: panningMouseArea
+                        anchors.fill: parent
                         onClicked: {
-                            root.setMonoDownMix(!root.channelMonoDownMix);
+                            panningPopup.visible = true;
+                            panningTextInput.text = panningText.text;
+                            panningTextInput.selectAll();
+                            panningTextInput.forceActiveFocus();
                         }
                     }
                 }
