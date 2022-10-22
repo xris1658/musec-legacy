@@ -279,43 +279,6 @@ Window {
                             rightPadding: 5
                         }
                     }
-                    Text {
-                        width: 100
-                        height: 20
-                        text: qsTr("Mixer")
-                        font.family: Constants.font
-                        color: Constants.contentColor2
-                        horizontalAlignment: Text.AlignLeft
-                        leftPadding: 5
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                    Item {
-                        width: 320
-                        height: 20
-                    }
-                    Text {
-                        width: 100
-                        text: qsTr("Pan law") + ":"
-                        font.family: Constants.font
-                        color: Constants.contentColor1
-                        horizontalAlignment: Text.AlignRight
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                    MCtrl.ComboBox {
-                        model: ["-6dB", "-3dB", "0dB"]
-                        width: 100
-                        height: 20
-                    }
-                    Text {
-                        width: 100
-                        text: qsTr("Compensate") + ":"
-                        font.family: Constants.font
-                        color: Constants.contentColor1
-                        horizontalAlignment: Text.AlignRight
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                    MCtrl.CheckBox {
-                    }
                 }
             }
         }
