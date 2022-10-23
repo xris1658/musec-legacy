@@ -171,6 +171,7 @@ HEADERS += \
     model/TempoAutomationModel.hpp \
     model/TrackListModel.hpp \
     model/TranslationFileModel.hpp \
+    model/VolumeFaderScaleModel.hpp \
     native/ASIODriverImpl.hpp \
     native/CompilerSpecific.hpp \
     native/MIDIInputDeviceImpl.hpp \
@@ -273,6 +274,7 @@ SOURCES += \
     model/TempoAutomationModel.cpp \
     model/TrackListModel.cpp \
     model/TranslationFileModel.cpp \
+    model/VolumeFaderScaleModel.cpp \
     native/ASIODriverImpl.cpp \
     native/MIDIInputDeviceImpl.cpp \
     native/MIDIMessageImpl.cpp \

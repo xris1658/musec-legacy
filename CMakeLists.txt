@@ -240,6 +240,8 @@ set(PROJECT_SOURCES
     model/TrackListModel.hpp
     model/TranslationFileModel.cpp
     model/TranslationFileModel.hpp
+    model/VolumeFaderScaleModel.cpp
+    model/VolumeFaderScaleModel.hpp
     native/ASIODriverImpl.cpp
     native/ASIODriverImpl.hpp
     native/CompilerSpecific.hpp
