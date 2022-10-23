@@ -82,6 +82,7 @@
         <file>qmlproject/imports/Musec/TrackHeader.qml</file>
         <file>qmlproject/imports/Musec/Views/ExplorerView.qml</file>
         <file>qmlproject/imports/Musec/Views/qmldir</file>
+        <file>qmlproject/imports/Musec/VolumeFader.qml</file>
         <file>qmlproject/imports/Musec/qmldir</file>
         <file>qmlproject/qmldir</file>
     </qresource>

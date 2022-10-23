@@ -24,3 +24,4 @@ PianoKeyBackup 1.0 PianoKeyBackup.qml
 PluginWindow 1.0 PluginWindow.qml
 Timeline 1.0 Timeline.qml
 TrackHeader 1.0 TrackHeader.qml
+VolumeFader 1.0 VolumeFader.qml
