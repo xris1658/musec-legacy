@@ -284,60 +284,20 @@ bool VST3Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
     auto setBusArrangementsResult = audioProcessor_->setBusArrangements(
         inputSpeakerArrangements_.data(), processData_.numInputs,
         outputSpeakerArrangements_.data(), processData_.numOutputs);
-    decltype(setBusArrangementsResult) getBusArrangementResult = Steinberg::kResultOk;
-    if(setBusArrangementsResult != Steinberg::kNotImplemented
-    && setBusArrangementsResult != Steinberg::kResultOk)
+    // Just gave up negotiating speaker arrangements
+    // Zebra2 and Zebralette simply return `Steinberg::kResultFalse` even if we set the speaker
+    // arrangement to what we've retrieved using `getBusArrangement`
+    for (decltype(inputBusCount) i = 0; i < inputBusCount; ++i)
     {
-        // call getBusArrangement again to negotiate bus arrangement between host and plugin
-        // Reference:
-        // - https://developer.steinberg.help/pages/viewpage.action?pageId=49906849
-        // - My plug-in is capable of processing all possible channel configurations
-        //   https://developer.steinberg.help/display/VST/Bus+Arrangement+Setting+Sequences
-        for (decltype(outputBusCount) i = 0; i < outputBusCount; ++i)
-        {
-            getBusArrangementResult = audioProcessor_->getBusArrangement(
-                Steinberg::Vst::BusDirections::kOutput, i, outputSpeakerArrangements_[i]
-            );
-            if (getBusArrangementResult == Steinberg::kNotImplemented)
-            {
-                break;
-            }
-        }
-        if (getBusArrangementResult != Steinberg::kNotImplemented)
-        {
-            for (decltype(inputBusCount) i = 0; i < inputBusCount; ++i)
-            {
-                audioProcessor_->getBusArrangement(
-                    Steinberg::Vst::BusDirections::kInput, i, inputSpeakerArrangements_[i]
-                );
-            }
-        }
-        setBusArrangementsResult = audioProcessor_->setBusArrangements(
-            inputSpeakerArrangements_.data(), inputSpeakerArrangements_.size(),
-            outputSpeakerArrangements_.data(), outputSpeakerArrangements_.size());
-        if (setBusArrangementsResult != Steinberg::kResultOk)
-        {
-            return false;
-        }
+        audioProcessor_->getBusArrangement(Steinberg::Vst::BusDirections::kInput, i,
+            inputSpeakerArrangements_[i]);
+        inputs_[i].numChannels = Steinberg::Vst::SpeakerArr::getChannelCount(inputSpeakerArrangements_[i]);
     }
-    if(getBusArrangementResult == Steinberg::kResultOk)
+    for (decltype(outputBusCount) i = 0; i < outputBusCount; ++i)
     {
-        for (decltype(inputBusCount) i = 0; i < inputBusCount; ++i)
-        {
-            audioProcessor_->getBusArrangement(Steinberg::Vst::BusDirections::kInput, i,
-                inputSpeakerArrangements_[i]);
-            inputs_[i].numChannels = Steinberg::Vst::SpeakerArr::getChannelCount(inputSpeakerArrangements_[i]);
-        }
-        for (decltype(outputBusCount) i = 0; i < outputBusCount; ++i)
-        {
-            audioProcessor_->getBusArrangement(Steinberg::Vst::BusDirections::kOutput, i,
-                outputSpeakerArrangements_[i]);
-            outputs_[i].numChannels = Steinberg::Vst::SpeakerArr::getChannelCount(outputSpeakerArrangements_[i]);
-        }
-    }
-    else
-    {
-        throw std::runtime_error("");
+        audioProcessor_->getBusArrangement(Steinberg::Vst::BusDirections::kOutput, i,
+            outputSpeakerArrangements_[i]);
+        outputs_[i].numChannels = Steinberg::Vst::SpeakerArr::getChannelCount(outputSpeakerArrangements_[i]);
     }
     // Many VST3 plugins I'm using don't support this
     // Steinberg::Vst::RoutingInfo inputRoutingInfo = {0, 0, 0};
