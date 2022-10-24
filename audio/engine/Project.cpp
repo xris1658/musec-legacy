@@ -32,7 +32,7 @@ Project::Project(int reserveTrackCount):
     trackMute_(), trackSolo_(), trackInvertPhase_(), trackArmRecording_(), trackMonoDownMix_(),
     pluginAndWindow_(),
     vst2PluginPool_(),
-    panLaw_(Musec::Audio::Util::PanLaw::kN3),
+    panLaw_(Musec::Audio::Util::DefaultPanLaw),
     compensate_(true),
     getScale_(&Musec::Audio::Util::fromPanning<float, Musec::Audio::Util::PanLaw::kN3>),
     getCompensate_(&Musec::Audio::Util::compensateFromPanLaw<float, Musec::Audio::Util::PanLaw::kN3>)

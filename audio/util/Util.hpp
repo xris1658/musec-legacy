@@ -11,12 +11,14 @@ namespace Audio
 {
 namespace Util
 {
-enum class PanLaw
+enum PanLaw
 {
     k0,
     kN3,
     kN6
 };
+
+constexpr PanLaw DefaultPanLaw = PanLaw::kN3;
 
 constexpr double A4Frequency = 440.0;
 
