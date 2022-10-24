@@ -9,6 +9,7 @@ import QtQml.Models 2.15
 import Musec 1.0
 import Musec.Controls 1.0 as MCtrl
 import Musec.Views 1.0 as MView
+import Musec.Models 1.0 as MModel
 
 ApplicationWindow {
     id: mainWindow
@@ -41,6 +42,21 @@ ApplicationWindow {
 
     property alias arrangementPosition: arrangement.position
 
+    property MModel.VolumeFaderScaleModel volumeFaderScaleModel: MModel.VolumeFaderScaleModel {
+        maxDecibel: 6
+        minDecibel: -144
+        Component.onCompleted: {
+            insertPoint(0.9, 0);
+            insertPoint(0.8, -6);
+            insertPoint(0.7, -12);
+            insertPoint(0.6, -18);
+            insertPoint(0.5, -24);
+            insertPoint(0.4, -36);
+            insertPoint(0.3, -54);
+            insertPoint(0.2, -78);
+            insertPoint(0.1, -108);
+        }
+    }
     onEngineRunningChanged: {
         if(engineRunning) {
             realtimeUpdateTimer.start();
@@ -747,6 +763,7 @@ ApplicationWindow {
                             anchors.margins: 1
                             y: parent.y
                             tracks: trackList
+                            volumeFaderScaleModel: mainWindow.volumeFaderScaleModel
                         }
                     }
                 }

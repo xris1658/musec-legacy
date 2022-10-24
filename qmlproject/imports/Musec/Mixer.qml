@@ -18,8 +18,8 @@ Rectangle {
     property MModel.PluginSequenceModel masterTrackPluginSequence
     property bool effectVisible: true
     property bool gainAndMeterVisible: true
+    property MModel.VolumeFaderScaleModel volumeFaderScaleModel
     clip: true
-
     MCtrl.Menu {
         id: instrumentSlotOptions
         property int trackIndex
@@ -147,6 +147,7 @@ Rectangle {
         color: Constants.backgroundColor2
         MixerChannel {
             id: masterChannel
+            volumeFaderScale: root.volumeFaderScaleModel
             z: 2
             effectListModel: root.masterTrackPluginSequence
             channelName: qsTr("Master")
@@ -156,7 +157,8 @@ Rectangle {
             height: root.height - scroll.height
             effectVisible: root.effectVisible
             gainAndMeterVisible: root.gainAndMeterVisible
-            gain: root.tracks.masterTrackGain
+//            gain: root.tracks.masterTrackGain
+            gainInDecibel: 20.0 * Math.log10(root.tracks.masterTrackGain)
             panning: root.tracks.masterTrackPanning
             channelMuted: root.tracks.masterTrackMute
             channelSolo: root.tracks.masterTrackSolo
@@ -187,8 +189,8 @@ Rectangle {
             onAudioSlotRightClicked: (audioEffectIndex, menuX, menuY) => {
                 root.audioEffectSlotRightClicked(-1, audioEffectIndex, menuX, menuY);
             }
-            onSetGain: (newGain) => {
-                root.tracks.masterTrackGain = newGain;
+            onSetGainInDecibel: (newGainInDecibel) => {
+                root.tracks.masterTrackGain = Math.pow(10.0, newGainInDecibel * 0.05);
             }
             onSetPanning: (newPanning) => {
                 root.tracks.masterTrackPanning = newPanning;
@@ -244,6 +246,7 @@ Rectangle {
                 property MixerChannel mixerChannelOfThis: mixerChannel
                 MixerChannel {
                     id: mixerChannel
+                    volumeFaderScale: root.volumeFaderScaleModel
                     z: 2
                     clip: false
                     effectListModel: plugin_list
@@ -256,7 +259,7 @@ Rectangle {
                     channelNumber: index + 1
                     effectVisible: root.effectVisible
                     gainAndMeterVisible: root.gainAndMeterVisible
-                    gain: channel_gain
+                    gainInDecibel: 20.0 * Math.log10(channel_gain)
                     panning: channel_panning
                     channelMuted: mute
                     channelSolo: solo
@@ -283,9 +286,9 @@ Rectangle {
                     onSetMonoDownMix: (newMonoDownMix) => {
                                           monoDownMix = newMonoDownMix;
                                       }
-                    onSetGain: (newGain) => {
-                                   channel_gain = newGain;
-                               }
+                    onSetGainInDecibel: (newGainInDecibel) => {
+                                            channel_gain = Math.pow(10.0, newGainInDecibel * 0.05);
+                                        }
                     onSetPanning: (newPanning) => {
                                       channel_panning = newPanning;
                                   }

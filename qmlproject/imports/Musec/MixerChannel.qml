@@ -5,6 +5,7 @@ import QtQml.Models 2.15
 
 import Musec 1.0
 import Musec.Controls 1.0 as MCtrl
+import Musec.Models 1.0 as MModel
 
 Item {
     id: root
@@ -19,6 +20,7 @@ Item {
         AudioTrack,
         InstrumentTrack
     }
+    property alias volumeFaderScale: mixerChannelSlider.model
     property bool instrumentEnabled
     property string instrumentName
     property bool instrumentSidechainExist: false
@@ -33,7 +35,7 @@ Item {
     property bool channelMonoDownMix: false
     property real panning: 0.0
     property real stereo: 1.0
-    property real gain: 1.00
+    property real gainInDecibel: 0.0
     property real peak: 0.00
     property string channelName
     property color channelColor
@@ -116,6 +118,7 @@ Item {
     signal setArmRecording(newArmRecording: bool)
     signal setMonoDownMix(newMonoDownMix: bool)
     signal setGain(newGain: double)
+    signal setGainInDecibel(newGainInDecibel: double)
     signal setPanning(newPanning: double)
     Column {
         width: parent.width
@@ -504,7 +507,7 @@ Item {
                     Item {
                         width: root.width / 2
                         height: channelGainAndPeak.height - 35
-                        MCtrl.Slider {
+                        VolumeFader {
                             topPadding: 5
                             id: mixerChannelSlider
                             implicitThickness: 4
@@ -514,14 +517,12 @@ Item {
                             orientation: Qt.Vertical
                             width: 20
                             height: parent.height
-                            from: -144
-                            to: 6
                             live: true
-                            value: 20 * Math.log10(root.gain)
+                            value: model.positionFromDecibel(root.gainInDecibel)
                             snapMode: Slider.NoSnap
                             onValueChanged: {
-                                var newGain = Math.pow(10.0, value * 0.05);
-                                setGain(newGain);
+                                var newGainInDecibel = model.decibelFromPosition(value);
+                                root.setGainInDecibel(newGainInDecibel);
                             }
                         }
                     }
@@ -564,14 +565,9 @@ Item {
                                     if(text.length != 0) {
                                         var parsed = parseFloat(text);
                                         if(!isNaN(parsed)) {
-                                            if(parsed < mixerChannelSlider.from) {
-                                                parsed = mixerChannelSlider.from;
-                                            }
-                                            if(parsed > mixerChannelSlider.to) {
-                                                parsed = mixerChannelSlider.to;
-                                            }
-                                            var newGain = Math.pow(10.0, parsed * 0.05);
-                                            root.setGain(newGain);
+                                            parsed = Math.max(parsed, root.volumeFaderScale.minDecibel);
+                                            parsed = Math.min(parsed, root.volumeFaderScale.maxDecibel);
+                                            root.setGainInDecibel(parsed);
                                         }
                                     }
                                     gainTextInputPopup.visible = false;
@@ -581,7 +577,12 @@ Item {
                         Text {
                             id: mixerChannelGainText
                             anchors.centerIn: parent
-                            text: gain == 0? "-inf": (20 * Math.log10(gain)).toPrecision(3)
+                            property double number: volumeFaderScale.decibelFromPosition(mixerChannelSlider.value)
+                            text: Math.abs(number) >= 1?    number.toPrecision(3):
+                                  Math.abs(number) >= 0.1?  number.toPrecision(2):
+                                  Math.abs(number) >= 0.01? number.toPrecision(1):
+                                  number < 0? "-0.00": "0.00"
+//                            text: gain == 0? "-inf": (20 * Math.log10(gain)).toPrecision(3)
                             font.family: Constants.font
                             color: Constants.contentColor1
                         }
