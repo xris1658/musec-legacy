@@ -55,6 +55,7 @@ ApplicationWindow {
             insertPoint(0.3, -54);
             insertPoint(0.2, -78);
             insertPoint(0.1, -108);
+            mixer.volumeFaderScaleModel = this;
         }
     }
     onEngineRunningChanged: {
@@ -763,7 +764,6 @@ ApplicationWindow {
                             anchors.margins: 1
                             y: parent.y
                             tracks: trackList
-                            volumeFaderScaleModel: mainWindow.volumeFaderScaleModel
                         }
                     }
                 }
