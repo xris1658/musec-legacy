@@ -80,7 +80,7 @@ HEADERS += \
     audio/engine/Project.hpp \
     audio/host/CLAPEvents.hpp \
     audio/host/CLAPHost.hpp \
-    audio/host/MusecVST3Host.hpp \
+    audio/host/VST3Host.hpp \
     audio/media/AudioSequence.hpp \
     audio/media/MIDISequence.hpp \
     audio/midi/MIDIInputDevice.hpp \
@@ -200,7 +200,7 @@ SOURCES += \
     audio/engine/Project.cpp \
     audio/host/CLAPEvents.cpp \
     audio/host/CLAPHost.cpp \
-    audio/host/MusecVST3Host.cpp \
+    audio/host/VST3Host.cpp \
     audio/media/AudioSequence.cpp \
     audio/media/MIDISequence.cpp \
     audio/midi/MIDIInputDevice.cpp \

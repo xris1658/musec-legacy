@@ -1,6 +1,6 @@
 #include "PluginBase.hpp"
 
-#include "audio/host/MusecVST3Host.hpp"
+#include "audio/host/VST3Host.hpp"
 #include "audio/plugin/VST2Plugin.hpp"
 #include "audio/plugin/VST3Plugin.hpp"
 #include "audio/plugin/CLAPPlugin.hpp"
@@ -241,7 +241,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                         IComponent* component = nullptr;
                         /*result = */audioProcessor->queryInterface(IComponent_iid,
                                                                     reinterpret_cast<void**>(&component));
-                        auto& host = MusecVST3Host::instance();
+                        auto& host = VST3Host::instance();
                         component->initialize(&host);
                         ProcessSetup setup{};
                         setup.processMode = Vst::ProcessModes::kRealtime;

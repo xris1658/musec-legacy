@@ -1,5 +1,5 @@
-#ifndef MUSEC_AUDIO_HOST_MUSECVST3HOST
-#define MUSEC_AUDIO_HOST_MUSECVST3HOST
+#ifndef MUSEC_AUDIO_HOST_VST3HOST
+#define MUSEC_AUDIO_HOST_VST3HOST
 
 #include <pluginterfaces/base/funknown.h>
 #include <pluginterfaces/vst/ivsthostapplication.h>
@@ -14,24 +14,24 @@ namespace Host
 using namespace Steinberg;
 using namespace Steinberg::Vst;
 
-class MusecVST3Host: public IHostApplication
+class VST3Host: public IHostApplication
 {
 private:
-    MusecVST3Host() = default;
+    VST3Host() = default;
 public:
-    MusecVST3Host(const MusecVST3Host&) = delete;
-    ~MusecVST3Host() = default;
+    VST3Host(const VST3Host&) = delete;
+    ~VST3Host() = default;
 public:
     DECLARE_FUNKNOWN_METHODS
 public:
     tresult PLUGIN_API getName(String128 name) override;
-    tresult PLUGIN_API createInstance(TUID cid, TUID iid, void** obj) override;
+    tresult PLUGIN_API createInstance(TUID cid, TUID iid_, void** obj) override;
 public:
-    static MusecVST3Host& instance();
+    static VST3Host& instance();
     static ProcessContext& AppProcessContext();
 };
 }
 }
 }
 
-#endif // MUSEC_AUDIO_HOST_MUSECVST3HOST
+#endif // MUSEC_AUDIO_HOST_VST3HOST

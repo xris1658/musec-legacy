@@ -75,8 +75,8 @@ set(PROJECT_SOURCES
     audio/host/CLAPEvents.hpp
     audio/host/CLAPHost.cpp
     audio/host/CLAPHost.hpp
-    audio/host/MusecVST3Host.cpp
-    audio/host/MusecVST3Host.hpp
+    audio/host/VST3Host.cpp
+    audio/host/VST3Host.hpp
     audio/media/AudioSequence.cpp
     audio/media/AudioSequence.hpp
     audio/media/MIDISequence.cpp

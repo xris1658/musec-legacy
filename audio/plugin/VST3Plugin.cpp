@@ -1,6 +1,6 @@
 #include "VST3Plugin.hpp"
 
-#include "audio/host/MusecVST3Host.hpp"
+#include "audio/host/VST3Host.hpp"
 #include "controller/AudioEngineController.hpp"
 
 #include <pluginterfaces/base/ibstream.h>
@@ -200,7 +200,7 @@ void VST3Plugin::process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs
     processData_.numOutputs = outputs_.size();
     processData_.inputs = inputs_.data();
     processData_.outputs = outputs_.data();
-    auto& processContext = Musec::Audio::Host::MusecVST3Host::AppProcessContext();
+    auto& processContext = Musec::Audio::Host::VST3Host::AppProcessContext();
     processData_.processContext = &processContext;
     audioProcessor_->process(processData_);
     // FIXME: `IEditController` member functions can only be called in the UI process
@@ -225,7 +225,7 @@ void VST3Plugin::process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs
 // ------------------------------------------------------------------------------------------
 bool VST3Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
 {
-    auto initializeComponentResult = component_->initialize(&Musec::Audio::Host::MusecVST3Host::instance());
+    auto initializeComponentResult = component_->initialize(&Musec::Audio::Host::VST3Host::instance());
     if(initializeComponentResult != Steinberg::kResultOk)
     {
         return false;
@@ -448,7 +448,7 @@ bool VST3Plugin::initializeEditController()
             reinterpret_cast<void**>(&xmlRepresentationController_));
         if(effectAndEditorUnified_ != EffectAndEditorUnified::Unified)
         {
-            auto initEditControllerResult = editController_->initialize(&Musec::Audio::Host::MusecVST3Host::instance());
+            auto initEditControllerResult = editController_->initialize(&Musec::Audio::Host::VST3Host::instance());
             if(initEditControllerResult != Steinberg::kResultOk)
             {
                 // Initialization of edit controller failed. This means that

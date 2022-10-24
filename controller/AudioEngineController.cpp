@@ -2,7 +2,7 @@
 
 #include "audio/driver/ASIODriver.hpp"
 #include "audio/host/CLAPEvents.hpp"
-#include "audio/host/MusecVST3Host.hpp"
+#include "audio/host/VST3Host.hpp"
 #include "audio/plugin/CLAPUtils.hpp"
 #include "controller/MIDIClockController.hpp"
 #include "native/Native.hpp"
@@ -102,7 +102,7 @@ double getCurrentTempo()
 void fillPluginContext()
 {
     auto currentTempo = getCurrentTempo();
-    auto& processContext = Musec::Audio::Host::MusecVST3Host::AppProcessContext();
+    auto& processContext = Musec::Audio::Host::VST3Host::AppProcessContext();
     auto& eventTransport = Musec::Audio::Host::AppCLAPEventTransport();
     using Steinberg::Vst::ProcessContext;
     processContext.state = ProcessContext::StatesAndFlags::kSystemTimeValid

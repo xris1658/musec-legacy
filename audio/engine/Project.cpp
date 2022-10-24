@@ -1,7 +1,7 @@
 #include "Project.hpp"
 
 #include "audio/host/CLAPEvents.hpp"
-#include "audio/host/MusecVST3Host.hpp"
+#include "audio/host/VST3Host.hpp"
 #include "audio/plugin/VST2Plugin.hpp"
 #include "audio/track/AudioTrack.hpp"
 #include "audio/track/InstrumentTrack.hpp"
