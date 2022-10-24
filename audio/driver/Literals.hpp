@@ -24,7 +24,7 @@ constexpr char asioErrorNoClock[] = "asioErrorNoClockText";
 constexpr char asioErrorNoMemory[] = "asioErrorNoMemoryText";
 constexpr char asioErrorUnknown[] = "asioErrorUnknownText";
 
-const QString& asioErrorMessage(ASIOError error);
+QString asioErrorMessage(ASIOError error);
 }
 }
 }

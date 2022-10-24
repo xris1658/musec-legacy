@@ -25,8 +25,6 @@ namespace Musec::Controller
 {
 void loadOrInitConfig()
 {
-    using namespace Musec::Event;
-    auto strings = Musec::UI::strings;
     if(Musec::Controller::findAppData())
     {
         Musec::Controller::loadAppData();
@@ -84,7 +82,7 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
                 {
                     AppASIODriver() = ASIODriver(item);
                 }
-                catch(std::runtime_error& exception)
+                catch(std::runtime_error&)
                 {
                    Musec::UI::MessageDialog::messageDialogNonModal(
                        strings->property("loadASIODriverErrorText").toString(),

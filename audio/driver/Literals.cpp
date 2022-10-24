@@ -4,7 +4,7 @@
 
 namespace Musec::Audio::Driver::Literals
 {
-const QString& asioErrorMessage(ASIOError error)
+QString asioErrorMessage(ASIOError error)
 {
     using namespace Musec::UI;
     using ASIOErrorEnum = decltype(ASE_OK);

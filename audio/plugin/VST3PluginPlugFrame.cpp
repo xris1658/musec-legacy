@@ -8,10 +8,10 @@ VST3PluginPlugFrame::VST3PluginPlugFrame(Musec::Audio::Plugin::VST3Plugin* plugi
     plugin_(plugin)
 {}
 
-Steinberg::tresult VST3PluginPlugFrame::queryInterface(const Steinberg::int8* iid, void** obj)
+Steinberg::tresult VST3PluginPlugFrame::queryInterface(const Steinberg::int8* iid_, void** obj)
 {
-    QUERY_INTERFACE(iid, obj, Steinberg::FUnknown::iid, Steinberg::IPlugFrame)
-    QUERY_INTERFACE(iid, obj, Steinberg::IPlugFrame::iid, Steinberg::IPlugFrame)
+    QUERY_INTERFACE(iid_, obj, Steinberg::FUnknown::iid, Steinberg::IPlugFrame)
+    QUERY_INTERFACE(iid_, obj, Steinberg::IPlugFrame::iid, Steinberg::IPlugFrame)
     *obj = nullptr;
     return Steinberg::kNoInterface;
 }
