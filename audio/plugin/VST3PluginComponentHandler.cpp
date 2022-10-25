@@ -63,6 +63,87 @@ Steinberg::tresult VST3PluginComponentHandler::endEdit(Steinberg::Vst::ParamID i
 
 Steinberg::tresult VST3PluginComponentHandler::restartComponent(Steinberg::int32 flags)
 {
+    using namespace Steinberg::Vst;
+    if(flags & RestartFlags::kReloadComponent)
+    {
+        bool activated = plugin_->activated();
+        bool processing = plugin_->processing();
+        if(processing && !plugin_->stopProcessing())
+        {
+            return Steinberg::kResultFalse;
+        }
+        if(activated && !plugin_->deactivate())
+        {
+            return Steinberg::kResultFalse;
+        }
+        auto processSetup = plugin_->processSetup();
+        auto sampleRate = processSetup.sampleRate;
+        auto maxBlockSize = processSetup.maxSamplesPerBlock;
+        if(plugin_->uninitialize()
+            && plugin_->initialize(sampleRate, maxBlockSize))
+        {
+            if(activated && !plugin_->activate())
+            {
+                return Steinberg::kResultFalse;
+            }
+            if(processing && !plugin_->startProcessing())
+            {
+                return Steinberg::kResultFalse;
+            }
+            return Steinberg::kResultOk;
+        }
+        return Steinberg::kResultFalse;
+    }
+    else if(flags & RestartFlags::kIoChanged)
+    {
+        bool processing = plugin_->processing();
+        if(processing && !plugin_->stopProcessing())
+        {
+            return Steinberg::kResultFalse;
+        }
+        if(plugin_->deactivate())
+        {
+            // TODO: Update bus information
+            if(plugin_->activate())
+            {
+                if(processing && !plugin_->startProcessing())
+                {
+                    return Steinberg::kResultFalse;
+                }
+                return Steinberg::kResultOk;
+            }
+        }
+        return Steinberg::kResultFalse;
+    }
+    else if(flags & RestartFlags::kParamValuesChanged)
+    {
+        // TODO: Refresh parameter values
+    }
+    else if(flags & RestartFlags::kLatencyChanged)
+    {
+        bool processing = plugin_->processing();
+        if(processing && !plugin_->stopProcessing())
+        {
+            return Steinberg::kResultFalse;
+        }
+        if(plugin_->deactivate())
+        {
+            if(plugin_->activate())
+            {
+                // TODO: Get plugin latency
+                if(processing && !plugin_->startProcessing())
+                {
+                    return Steinberg::kResultFalse;
+                }
+                return Steinberg::kResultOk;
+            }
+        }
+        return Steinberg::kResultFalse;
+    }
+    else if(flags & RestartFlags::kParamTitlesChanged)
+    {
+        // TODO: Refresh parameter information
+    }
     return Steinberg::kNotImplemented;
 }
 

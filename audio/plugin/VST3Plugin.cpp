@@ -249,17 +249,16 @@ bool VST3Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
     audioProcessor_->queryInterface(Steinberg::Vst::IAudioPresentationLatency::iid,
         reinterpret_cast<void**>(&audioPresentationLatency_));
     // ProcessSetup -------------------------------------------------------------------------
-    Steinberg::Vst::ProcessSetup setup;
-    setup.processMode = Steinberg::Vst::ProcessModes::kRealtime;
-    setup.symbolicSampleSize = Steinberg::Vst::SymbolicSampleSizes::kSample32;
-    setup.maxSamplesPerBlock = maxSampleCount;
-    setup.sampleRate = sampleRate;
+    processSetup_.processMode = Steinberg::Vst::ProcessModes::kRealtime;
+    processSetup_.symbolicSampleSize = Steinberg::Vst::SymbolicSampleSizes::kSample32;
+    processSetup_.maxSamplesPerBlock = maxSampleCount;
+    processSetup_.sampleRate = sampleRate;
     // ProcessSetup -------------------------------------------------------------------------
     // ProcessData --------------------------------------------------------------------------
     processData_.inputParameterChanges = &inputParameterChanges_;
     processData_.outputParameterChanges = &outputParameterChanges_;
-    processData_.processMode = setup.processMode;
-    processData_.symbolicSampleSize = setup.symbolicSampleSize;
+    processData_.processMode = processSetup_.processMode;
+    processData_.symbolicSampleSize = processSetup_.symbolicSampleSize;
     auto inputBusCount = component_->getBusCount(Steinberg::Vst::MediaTypes::kAudio,
         Steinberg::Vst::BusDirections::kInput);
     auto outputBusCount = component_->getBusCount(Steinberg::Vst::MediaTypes::kAudio,
@@ -271,7 +270,7 @@ bool VST3Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
     inputs_ = decltype(inputs_)(inputBusCount);
     outputs_ = decltype(outputs_)(outputBusCount);
     // setupProcessing ------------------------------------------------------------------------------------------------- setupProcessing
-    auto setupProcessingResult = audioProcessor_->setupProcessing(setup);
+    auto setupProcessingResult = audioProcessor_->setupProcessing(processSetup_);
     if (setupProcessingResult != Steinberg::kResultOk
         && setupProcessingResult != Steinberg::kNotImplemented)
     {
@@ -769,5 +768,10 @@ const ISpeakerGroupCollection& VST3Plugin::audioInputSpeakerGroupCollection() co
 const ISpeakerGroupCollection& VST3Plugin::audioOutputSpeakerGroupCollection() const
 {
     return outputSpeakerGroupCollection_;
+}
+
+Steinberg::Vst::ProcessSetup VST3Plugin::processSetup()
+{
+    return processSetup_;
 }
 }

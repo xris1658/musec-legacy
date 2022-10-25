@@ -137,6 +137,8 @@ private:
     void initializeWindowSizeConnections();
     void uninitializeWindowSizeConnections();
     void onWindowSizeChanged();
+public:
+    Steinberg::Vst::ProcessSetup processSetup();
 private:
     Steinberg::PClassInfo classInfo_;
     Steinberg::IPluginFactory* factory_ = nullptr;
@@ -182,6 +184,7 @@ private:
     Musec::Audio::Plugin::VST3PluginComponentHandler componentHandler_;
     Musec::Audio::Plugin::VST3PluginPlugFrame plugFrame_;
     std::array<QMetaObject::Connection, 2> windowSizeConnections_;
+    Steinberg::Vst::ProcessSetup processSetup_ = {};
 };
 }
 }
