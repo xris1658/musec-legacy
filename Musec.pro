@@ -71,10 +71,10 @@ HEADERS += \
     audio/driver/ASIOCallback.hpp \
     audio/driver/ASIODriver.hpp \
     audio/driver/ASIODriverBasicInfo.hpp \
+    audio/driver/ASIOErrorText.hpp \
     audio/driver/ASIODriverForward.hpp \
     audio/driver/ASIODriverStreamInfo.hpp \
     audio/driver/ASIOSampleTypeName.hpp \
-    audio/driver/Literals.hpp \
     audio/engine/Graph.hpp \
     audio/engine/MIDIClock.hpp \
     audio/engine/Project.hpp \
@@ -195,8 +195,8 @@ SOURCES += \
     audio/base/TimeSignature.cpp \
     audio/driver/ASIOCallback.cpp \
     audio/driver/ASIODriver.cpp \
+    audio/driver/ASIOErrorText.cpp \
     audio/driver/ASIOSampleTypeName.cpp \
-    audio/driver/Literals.cpp \
     audio/engine/Project.cpp \
     audio/host/CLAPEvents.cpp \
     audio/host/CLAPHost.cpp \

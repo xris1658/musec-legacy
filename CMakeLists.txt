@@ -63,10 +63,10 @@ set(PROJECT_SOURCES
     audio/driver/ASIODriverBasicInfo.hpp
     audio/driver/ASIODriverForward.hpp
     audio/driver/ASIODriverStreamInfo.hpp
+    audio/driver/ASIOErrorText.cpp
+    audio/driver/ASIOErrorText.hpp
     audio/driver/ASIOSampleTypeName.cpp
     audio/driver/ASIOSampleTypeName.hpp
-    audio/driver/Literals.cpp
-    audio/driver/Literals.hpp
     audio/engine/Graph.hpp
     audio/engine/MIDIClock.hpp
     audio/engine/Project.cpp

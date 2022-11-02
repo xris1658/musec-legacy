@@ -1,7 +1,7 @@
 #include "ASIODriverController.hpp"
 
 #include "audio/driver/ASIODriver.hpp"
-#include "audio/driver/Literals.hpp"
+#include "audio/driver/ASIOErrorText.hpp"
 #include "concurrent/ButlerThread.hpp"
 #include "controller/AppController.hpp"
 #include "controller/ConfigController.hpp"
@@ -25,7 +25,7 @@ void showASIOErrorMessageDialog(Musec::Audio::Driver::ASIODriver& driver, ASIOEr
             Musec::UI::strings->property("loadASIODriverErrorTextWithErrorCode").value<QString>()
                 .arg(name)
                 .arg(error)
-                .arg(Musec::Audio::Driver::Literals::asioErrorMessage(error)),
+                .arg(Musec::Audio::Driver::getASIOErrorText(error)),
             Musec::UI::strings->property("driverWarningTitleText").value<QString>(),
             Musec::UI::MessageDialog::IconType::Warning);
     }
@@ -35,7 +35,7 @@ void showASIOErrorMessageDialog(Musec::Audio::Driver::ASIODriver& driver, ASIOEr
             Musec::UI::strings->property("loadASIODriverErrorTextWithErrorCodeAndInfo").value<QString>()
                 .arg(name)
                 .arg(error)
-                .arg(Musec::Audio::Driver::Literals::asioErrorMessage(error))
+                .arg(Musec::Audio::Driver::getASIOErrorText(error))
                 .arg(errorMessageBuffer),
             Musec::UI::strings->property("driverWarningTitleText").value<QString>(),
             Musec::UI::MessageDialog::IconType::Warning);
@@ -45,8 +45,8 @@ void showASIOErrorMessageDialog(Musec::Audio::Driver::ASIODriver& driver, ASIOEr
 
 void loadASIODriver()
 {
-    using namespace Audio::Driver;
-    using namespace UI;
+    using namespace Musec::Audio::Driver;
+    using namespace Musec::UI;
     auto& driver = AppASIODriver();
     Musec::Concurrent::ButlerThread::instance();
     if(!driver)
@@ -147,7 +147,7 @@ void openASIODriverControlPanel()
 
 void unloadASIODriver()
 {
-    using namespace UI;
+    using namespace Musec::UI;
     using namespace Audio::Driver;
     mainWindow->setProperty("engineRunning", QVariant::fromValue<bool>(false));
     AppASIODriver() = ASIODriver();
@@ -156,7 +156,7 @@ void unloadASIODriver()
 void updateCurrentASIODriverInfo()
 {
     using namespace Musec::Audio::Driver;
-    using namespace UI;
+    using namespace Musec::UI;
     auto& driver = AppASIODriver();
     auto info = Musec::Audio::Driver::getChannelCount(driver);
     auto& channelInfoList = getASIOChannelInfoList();

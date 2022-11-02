@@ -22,17 +22,6 @@ QtObject {
     readonly property string driverWarningTitleText:                    applicationName + " - " + qsTr("Driver Warning")
     readonly property string driverErrorTitleText:                      applicationName + " - " + qsTr("Driver Error")
 
-    readonly property string asioErrorOkText:                           qsTr("The operation is done successfully.")
-    readonly property string asioErrorSuccessText:                      qsTr("The operation is done successfully.")
-    readonly property string asioErrorNotPresentText:                   qsTr("There is no hardware input or output devices, or the devices are not available.")
-    readonly property string asioErrorHardwareMalfunctionText:          qsTr("The current hardware is malfunctioning.")
-    readonly property string asioErrorInvalidParameterText:             qsTr("The current parameter is invalid. You might need to check settings of the audio driver.")
-    readonly property string asioErrorInvalidModeText:                  qsTr("The mode of the hardware is invalid.")
-    readonly property string asioErrorSamplePositionIsNotAdvancingText: qsTr("The hardware can't return the sample position.")
-    readonly property string asioErrorNoClockText:                      qsTr("The sample rate selected is not supported by the hardware.")
-    readonly property string asioErrorNoMemoryText:                     qsTr("The available memory space is not enough to complete current operation.")
-    readonly property string asioErrorUnknownText:                      qsTr("Unknown error. Unfortunately, that's all we know.")
-
     readonly property string loadTranslationFailedText:                 "The specified translation cannot be loaded. The program will show things in English."
 
     readonly property string optionSaveRebootPromptText:                qsTr("The option changes is saved. A restart is required to apply.")
