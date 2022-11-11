@@ -121,38 +121,16 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
     }
     else if(format == PluginFormat::FormatVST3)
     {
-        // TODO: Use VST3Plugin here
         try
         {
-            WindowsLibraryRAII library(path);
-            auto pluginInitProc = getExport<VST3PluginInitProc>(library, "InitDll");
-            auto pluginFactoryProc = getExport<VST3PluginFactoryProc>(library, "GetPluginFactory");
-            auto pluginExitProc = getExport<VST3PluginExitProc>(library, "ExitDll");
-            if(!pluginFactoryProc)
-            {
-                auto error = GetLastError();
-                switch (error)
-                {
-                case ERROR_PROC_NOT_FOUND:
-                    break;
-                default:
-                    break;
-                }
-                return ret;
-            }
-            if(pluginInitProc)
-            {
-                bool initResult = pluginInitProc();
-                if(!initResult)
-                {
-                }
-            }
-            auto factory = pluginFactoryProc();
+            Musec::Audio::Plugin::VST3Plugin plugin(path);
+            auto factory = plugin.factory();
             Steinberg::IPluginFactory2* factory2 = nullptr;
-            // Musec try using IPluginFactory2 to check the type first.
-            // If failed, Musec has to guess the type according to the I/O type and count.
-            auto factory2Result = factory->queryInterface(Steinberg::IPluginFactory2_iid, reinterpret_cast<void**>(&factory2));
-            if(factory2Result == Steinberg::kResultOk)
+            if(
+                factory->queryInterface(
+                    Steinberg::IPluginFactory2::iid, reinterpret_cast<void**>(&factory2)
+                ) == Steinberg::kResultOk
+            )
             {
                 auto classCount = factory2->countClasses();
                 for(decltype(classCount) i = 0; i < classCount; ++i)
@@ -220,117 +198,13 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                 }
                 factory2->release();
             }
-            else
-            {
-                auto classCount = factory->countClasses();
-                for(decltype(classCount) i = 0; i < classCount; ++i)
-                {
-                    Steinberg::PClassInfo classInfo;
-                    factory->getClassInfo(i, &classInfo);
-                    auto* category = classInfo.category;
-                    if(std::strcmp(category, kVstAudioEffectClass) == 0)
-                    {
-                        using namespace Steinberg;
-                        using namespace Steinberg::Vst;
-                        using namespace Musec::Audio::Host;
-                        auto pluginType = PluginType::TypeUnknown;
-                        IAudioProcessor* audioProcessor = nullptr;
-                        /*auto result = */factory->createInstance(classInfo.cid,
-                                                                  IAudioProcessor_iid,
-                                                                  reinterpret_cast<void**>(&audioProcessor));
-                        IComponent* component = nullptr;
-                        /*result = */audioProcessor->queryInterface(IComponent_iid,
-                                                                    reinterpret_cast<void**>(&component));
-                        auto& host = VST3Host::instance();
-                        component->initialize(&host);
-                        ProcessSetup setup{};
-                        setup.processMode = Vst::ProcessModes::kRealtime;
-                        setup.sampleRate = 44100.0;
-                        setup.maxSamplesPerBlock = 1024;
-                        setup.symbolicSampleSize = Vst::SymbolicSampleSizes::kSample64;
-                        audioProcessor->setupProcessing(setup);
-                        constexpr Vst::MediaTypes mediaTypes[] =
-                            {
-                                Vst::MediaTypes::kAudio,
-                                Vst::MediaTypes::kAudio,
-                                Vst::MediaTypes::kEvent,
-                                Vst::MediaTypes::kEvent
-                            };
-                        constexpr Vst::BusDirections busDirections[] =
-                            {
-                                Vst::BusDirections::kInput,
-                                Vst::BusDirections::kOutput,
-                                Vst::BusDirections::kInput,
-                                Vst::BusDirections::kOutput
-                            };
-                        int32 busCounts[] = { 0, 0, 0, 0 };
-                        for(int i = 0; i < 4; ++i)
-                        {
-                            busCounts[i] = component->getBusCount(mediaTypes[i], busDirections[i]);
-                        }
-                        // Plugins that have only outputs, or only inputs, or only audio inputs and
-                        // event outputs are not taken into account.
-                        if(busCounts[0] && busCounts[1] && busCounts[2])
-                        {
-                            // This class has event I, audio I and audio O, maybe even event O.
-                            // Musec guesses that the plugin is an audio effect that has
-                            // event input (e.g. FabFilter Pro-Q 2).
-                            // Note that the plugin might be an instrument that has audio I as
-                            // sidechain (e.g. Surge XT).
-                            pluginType = PluginType::TypeAudioFX;
-                        }
-                        else if(busCounts[1] && busCounts[2])
-                        {
-                            // This class has event I and audio O, but no audio I.
-                            // Musec guesses that the plugin is an instrument.
-                            pluginType = PluginType::TypeInstrument;
-                        }
-                        else if(busCounts[0] && busCounts[1])
-                        {
-                            // This class has audio I/O, or maybe even event O, but no event I.
-                            // Musec guesses that the plugin is an audio effect.
-                            pluginType = PluginType::TypeAudioFX;
-                        }
-                        else if(busCounts[2] && busCounts[3])
-                        {
-                            // This class has only event I/O.
-                            // Musec guesses that the plugin is an event processor like MIDI effect.
-                            pluginType = PluginType::TypeMidiFX;
-                        }
-                        else if(busCounts[0] == 0 && busCounts[1] == 0
-                                && busCounts[2] == 0 && busCounts[3] == 0)
-                        {
-                            // This class has no I/O, i.e. isolated.
-                            // Musec cannot figure it out.
-                            pluginType = PluginType::TypeUnknown;
-                        }
-                        component->terminate();
-                        component->release();
-                        audioProcessor->release();
-                        ret.append(std::make_tuple(
-                               i,
-                               QString(classInfo.name),
-                               PluginFormat::FormatVST3,
-                               pluginType
-                           )
-                        );
-                    }
-                }
-            }
-            factory->release();
-            if(pluginExitProc)
-            {
-                auto result = pluginExitProc();
-                if (!result)
-                {
-                    //
-                }
-            }
+            // I've never actually met a plugin that doesn't implement `IPluginFactory2`
         }
-        catch (WindowsLibraryRAII::ExceptionType)
+        catch(WindowsLibraryRAII::ExceptionType)
         {
-//
+            //
         }
+
     }
     else if(format == PluginFormat::FormatCLAP)
     {

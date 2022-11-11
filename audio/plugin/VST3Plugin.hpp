@@ -93,7 +93,11 @@ class VST3Plugin:
     using SampleTypePointers = std::vector<SampleType*>;
 public: // ctor & dtor
     VST3Plugin();
+    VST3Plugin(const QString& path);
+    bool createPlugin(const Steinberg::PClassInfo& classInfo);
+    bool createPlugin(int classIndex);
     VST3Plugin(const QString& path, int classIndex);
+    VST3Plugin(const QString& path, const Steinberg::PClassInfo& classInfo);
     ~VST3Plugin() override;
 public:
     const Steinberg::PClassInfo& getClassInfo() const;

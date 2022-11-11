@@ -25,7 +25,7 @@ VST3Plugin::VST3Plugin():
     VST3Plugin::Base(), componentHandler_(this), plugFrame_(this)
 {}
 
-VST3Plugin::VST3Plugin(const QString& path, int classIndex):
+VST3Plugin::VST3Plugin(const QString& path):
     VST3Plugin::Base(path), componentHandler_(this), plugFrame_(this)
 {
     auto pluginInitProc = Musec::Native::getExport<Musec::Base::VST3PluginInitProc>(*this, VST3PluginInitName);
@@ -46,19 +46,46 @@ VST3Plugin::VST3Plugin(const QString& path, int classIndex):
     factory_ = pluginFactoryProc();
     audioProcessorStatus_ = VST3AudioProcessorStatus::Factory;
     editControllerStatus_ = VST3EditControllerStatus::Factory;
-    auto classCount = factory_->countClasses();
-    if (classIndex >= classCount)
+}
+
+bool VST3Plugin::createPlugin(int classIndex)
+{
+    if(factory_)
+    {
+        auto classCount = factory_->countClasses();
+        if (classIndex >= classCount)
+        {
+            return false;
+        }
+        factory_->getClassInfo(classIndex, &classInfo_);
+        return createPlugin(classInfo_);
+    }
+}
+
+bool VST3Plugin::createPlugin(const Steinberg::PClassInfo& classInfo)
+{
+    if(factory_)
+    {
+        if(auto createComponentResult = factory_->createInstance(
+                classInfo.cid, Steinberg::Vst::IComponent::iid,
+                reinterpret_cast<void**>(&component_)
+            );
+        createComponentResult == Steinberg::kResultOk)
+        {
+            audioProcessorStatus_ = VST3AudioProcessorStatus::Created;
+            return true;
+        }
+    }
+    return false;
+}
+
+VST3Plugin::VST3Plugin(const QString& path, int classIndex):
+    VST3Plugin(path)
+{
+    if(!createPlugin(classIndex))
     {
         throw std::runtime_error("");
     }
-    factory_->getClassInfo(classIndex, &classInfo_);
-    auto createComponentResult = factory_->createInstance(classInfo_.cid,
-        Steinberg::Vst::IComponent::iid, reinterpret_cast<void**>(&component_));
-    if(createComponentResult != Steinberg::kResultOk)
-    {
-        throw std::runtime_error("Error creating audio processor instance!");
-    }
-    audioProcessorStatus_ = VST3AudioProcessorStatus::Created;
 }
 
 VST3Plugin::~VST3Plugin()
