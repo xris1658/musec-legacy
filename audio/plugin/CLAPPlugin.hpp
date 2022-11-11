@@ -50,7 +50,9 @@ public:
     CLAPPlugin(CLAPPlugin&& rhs) = delete;
     CLAPPlugin& operator=(CLAPPlugin&& rhs) = delete;
     bool createPlugin(int index);
+    bool createPlugin(const char* id);
     CLAPPlugin(const QString& path, int index);
+    CLAPPlugin(const QString& path, const char* id);
     ~CLAPPlugin() override;
 public:
     std::uint8_t audioInputCount() const override;

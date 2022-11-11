@@ -42,8 +42,17 @@ bool CLAPPlugin::createPlugin(int index)
     {
         // auto count = factory_->get_plugin_count(factory_);
         desc_ = factory_->get_plugin_descriptor(factory_, index);
+        return createPlugin(desc_->id);
+    }
+    return false;
+}
+
+bool CLAPPlugin::createPlugin(const char* id)
+{
+    if(factory_)
+    {
         auto host = new(hostArea) Musec::Audio::Host::CLAPHost(*this);
-        plugin_ = factory_->create_plugin(factory_, &(host->host()), desc_->id);
+        plugin_ = factory_->create_plugin(factory_, &(host->host()), id);
         pluginStatus_ = CLAPPluginStatus::Created;
         return plugin_;
     }
@@ -54,6 +63,12 @@ CLAPPlugin::CLAPPlugin(const QString& path, int index):
     CLAPPlugin(path)
 {
     createPlugin(index);
+}
+
+CLAPPlugin::CLAPPlugin(const QString& path, const char* id):
+    CLAPPlugin(path)
+{
+    createPlugin(id);
 }
 
 CLAPPlugin::~CLAPPlugin()
