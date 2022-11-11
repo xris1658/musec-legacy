@@ -148,7 +148,6 @@ void EventHandler::scanPluginComplete()
     signalScanPluginComplete();
 }
 
-
 void EventHandler::onMainWindowOpened()
 {
     Controller::ASIODriverController::loadASIODriver();

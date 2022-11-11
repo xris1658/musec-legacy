@@ -112,7 +112,7 @@ Item {
                 }
             }
         }
-        onMouseYChanged: {
+        onMouseYChanged: (mouse) => {
             if(pressed) {
                 if(settingVelocity) {
                     control.velocity -= mouse.y - initialY;

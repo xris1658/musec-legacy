@@ -9,7 +9,7 @@
     </Type>
     <Type Name="ASIOChannelInfo">
         <Expand>
-            <Item Index="[Channel Index]">channel</Item>
+            <Item Name="[Channel Index]">channel</Item>
             <Item Name="[Channel Type]">isInput? "Input": "Output"</Item>
             <Item Name="[Active]">static_cast&lt;bool&gt;(isActive)</Item>
             <Item Name="[Channel Group]">channelGroup</Item>

@@ -1,9 +1,6 @@
 #ifndef MUSEC_UI_UI
 #define MUSEC_UI_UI
 
-#include "event/EventHandler.hpp"
-#include "event/MainWindowEvent.hpp"
-
 #include <QQuickWindow>
 #include <QQmlApplicationEngine>
 #include <QTranslator>

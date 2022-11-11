@@ -17,9 +17,7 @@
 #include <cstring>
 #include <stdexcept>
 
-namespace Musec
-{
-namespace Native
+namespace Musec::Native
 {
 namespace Impl
 {

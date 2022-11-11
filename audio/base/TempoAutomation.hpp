@@ -85,7 +85,7 @@ public:
         }
         auto afterStart = Base::upperBound(from.count());
         // auto afterEnd = Base::upperBound(to.count());
-        if (afterStart == Base::cend() /*&& afterEnd == Bae::cend()*/)
+        if (afterStart == Base::cend() /*&& afterEnd == Base::cend()*/)
         {
             ret = secondElapsed((Base::cend() - 1)->value(), to - from);
             return ret;

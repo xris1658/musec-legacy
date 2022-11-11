@@ -1,8 +1,6 @@
 #ifndef MUSEC_NATIVE_NATIVE
 #define MUSEC_NATIVE_NATIVE
 
-#include "audio/driver/ASIODriverBasicInfo.hpp"
-#include "audio/driver/ASIODriverForward.hpp"
 #include "util/Endian.hpp"
 
 #include <QList>

@@ -254,7 +254,7 @@ void Project::process()
         if(trackTypes_[i] == Musec::Audio::Track::TrackType::kInstrumentTrack)
         {
             // The `if` expression is used to get the type of the track, so it's okay not to use `dynamic_cast`
-            auto instrumentTrack = reinterpret_cast<Musec::Audio::Track::InstrumentTrack*>(track.get());
+            auto instrumentTrack = static_cast<Musec::Audio::Track::InstrumentTrack*>(track.get());
             const auto& instrument = instrumentTrack->getInstrument();
             if (instrument && (instrument->processing()))
             {
@@ -271,7 +271,7 @@ void Project::process()
         }
         else if (trackTypes_[i] == Musec::Audio::Track::TrackType::kAudioTrack)
         {
-            auto audioTrack = reinterpret_cast<Musec::Audio::Track::AudioTrack*>(track.get());
+            auto audioTrack = static_cast<Musec::Audio::Track::AudioTrack*>(track.get());
             const auto& plugins = audioTrack->getPluginSequences()[0];
             for (const auto& audioEffect: plugins)
             {

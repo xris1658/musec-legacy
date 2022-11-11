@@ -22,7 +22,9 @@ public:
     }
     virtual ~IDevice() = default;
 public:
+    // Audio input channel count
     virtual std::uint8_t audioInputCount() const = 0;
+    // Audio output channel count
     virtual std::uint8_t audioOutputCount() const = 0;
     virtual const ISpeakerGroupCollection& audioInputSpeakerGroupCollection() const = 0;
     virtual const ISpeakerGroupCollection& audioOutputSpeakerGroupCollection() const = 0;

@@ -583,7 +583,7 @@ Item {
                             }
                             onDropped: (drop) => {
                                 if(checkDragEvent(drop)) {
-                                    console.log("Append a plugin to track") + ": ";
+                                    console.log("Append a plugin to track: ");
                                     console.log(drop.getDataAsString("type"), drop.getDataAsString("pluginId"));
                                 }
                             }
