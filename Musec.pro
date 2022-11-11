@@ -210,6 +210,7 @@ SOURCES += \
     audio/plugin/CLAPPluginParameter.cpp \
     audio/plugin/CLAPSpeakerGroup.cpp \
     audio/plugin/CLAPSpeakerGroupCollection.cpp \
+    audio/plugin/VST2Callback.cpp \
     audio/plugin/VST2Plugin.cpp \
     audio/plugin/VST2PluginParameter.cpp \
     audio/plugin/VST2PluginPool.cpp \

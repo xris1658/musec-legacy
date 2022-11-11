@@ -98,6 +98,7 @@ set(PROJECT_SOURCES
     audio/plugin/CLAPUtils.hpp
     audio/plugin/IParameter.hpp
     audio/plugin/IPlugin.hpp
+    audio/plugin/VST2Callback.cpp
     audio/plugin/VST2Plugin.cpp
     audio/plugin/VST2Plugin.hpp
     audio/plugin/VST2PluginForward.hpp
