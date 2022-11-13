@@ -48,9 +48,7 @@ public:
     int columnCount(const QModelIndex&) const override;
     QVariant data(const QModelIndex& index, int role) const override;
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
-    void insert(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, int index);
     void insert(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, const QString& name, int index);
-    void replace(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, int index);
     void replace(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, const QString& name, int index);
     void remove(int index);
     void clear();

@@ -162,11 +162,6 @@ bool PluginSequenceModel::setData(const QModelIndex& index, const QVariant& valu
     }
 }
 
-void PluginSequenceModel::insert(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, int index)
-{
-    insert(plugin, "", index);
-}
-
 void PluginSequenceModel::insert(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, const QString& name, int index)
 {
     names_.insert(names_.begin() + index, name);
@@ -181,11 +176,6 @@ void PluginSequenceModel::insert(std::shared_ptr<Musec::Audio::Plugin::IPlugin> 
                 );
             }
         ));
-}
-
-void PluginSequenceModel::replace(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, int index)
-{
-    replace(plugin, "", index);
 }
 
 void PluginSequenceModel::replace(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, const QString& name, int index)
