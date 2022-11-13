@@ -42,7 +42,6 @@ public:
         return setProcessing(!bypass);
     }
     virtual bool getBypass() const = 0;
-    virtual QString getName() const = 0;
     virtual Musec::Base::PluginFormat pluginFormat() = 0;
     virtual int parameterCount() = 0;
     virtual IParameter& parameter(int index) = 0;

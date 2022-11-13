@@ -42,11 +42,11 @@ Plugin& Plugin::operator=(Plugin&& rhs) noexcept
     return *this;
 }
 
-Musec::Entities::Plugin Plugin::fromPlugin(const std::shared_ptr<Musec::Audio::Plugin::IPlugin>& plugin)
+Musec::Entities::Plugin Plugin::fromPlugin(const std::shared_ptr<Musec::Audio::Plugin::IPlugin>& plugin, const QString& name)
 {
     if(plugin)
     {
-        return {plugin, plugin->getName(), false, false};
+        return {plugin, name, false, false};
     }
     else
     {

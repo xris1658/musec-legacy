@@ -179,25 +179,8 @@ bool VST2Plugin::getBypass() const
     return bypass_;
 }
 
-QString VST2Plugin::getName() const
-{
-    if(!effect_)
-    {
-        return QString();
-    }
-    // Sylenth1 and Ableton SAK write `kVstMaxEffectNameLen + 1` characters, null terminator included
-    // The maximum lengths in VST2 excludes the null terminator.
-    std::array<char, kVstMaxEffectNameLen + 1> nameBuffer = {0};
-#ifndef NDEBUG
-    std::memset(nameBuffer.data(), 0x7F, nameBuffer.size());
-#endif
-    effect_->dispatcher(effect_, AEffectXOpcodes::effGetEffectName, 0, 0, nameBuffer.data(), 0);
-    return QString(nameBuffer.data());
-}
-
 bool VST2Plugin::attachToWindow(QWindow* window)
 {
-    window->setTitle(getName());
     ERect* rect = nullptr;
     effect_->dispatcher(effect_, AEffectOpcodes::effEditOpen, 0, 0, reinterpret_cast<Musec::Native::WindowType>(window->winId()), 0);
     effect_->dispatcher(effect_, AEffectOpcodes::effEditGetRect, 0, 0, &rect, 0);

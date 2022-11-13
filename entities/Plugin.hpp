@@ -42,7 +42,7 @@ public:
     Plugin& operator=(Plugin&& rhs) noexcept;
     ~Plugin() = default;
 public:
-    static Musec::Entities::Plugin fromPlugin(const std::shared_ptr<Musec::Audio::Plugin::IPlugin>& plugin = nullptr);
+    static Musec::Entities::Plugin fromPlugin(const std::shared_ptr<Musec::Audio::Plugin::IPlugin>& plugin = nullptr, const QString& name = {});
     bool valid() const;
     const QString& getName() const;
     void setName(const QString& name);

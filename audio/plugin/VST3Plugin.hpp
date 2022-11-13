@@ -127,7 +127,6 @@ public:
     bool startProcessing() override;
     bool stopProcessing() override;
     bool getBypass() const override;
-    QString getName() const override;
     bool hasUI() override;
     Musec::Base::PluginFormat pluginFormat() override;
 public:

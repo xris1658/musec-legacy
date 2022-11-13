@@ -102,7 +102,7 @@ QVariant PluginSequenceModel::data(const QModelIndex& index, int role) const
     case RoleNames::ProcessingRole:
         return QVariant::fromValue((*pluginSequence)[row]->processing());
     case RoleNames::NameRole:
-        return QVariant::fromValue((*pluginSequence)[row]->getName());
+        return QVariant::fromValue(names_[row]);
     case RoleNames::SidechainExistRole:
         return QVariant::fromValue(false); // FIXME
     case RoleNames::SidechainEnabledRole:
@@ -164,25 +164,36 @@ bool PluginSequenceModel::setData(const QModelIndex& index, const QVariant& valu
 
 void PluginSequenceModel::insert(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, int index)
 {
+    insert(plugin, "", index);
+}
+
+void PluginSequenceModel::insert(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, const QString& name, int index)
+{
+    names_.insert(names_.begin() + index, name);
     pluginWindowConnections_.insert(pluginWindowConnections_.begin() + index,
-        std::make_unique<Musec::Entities::Plugin>(Musec::Entities::Plugin::fromPlugin(plugin)));
+        std::make_unique<Musec::Entities::Plugin>(Musec::Entities::Plugin::fromPlugin(plugin, name)));
     connections_.insert(connections_.begin() + index,
         QObject::connect(pluginWindowConnections_[index].get(), &Musec::Entities::Plugin::windowVisibleChanged,
             this, [this, pluginIndex = index]()
-        {
-            dataChanged(this->index(pluginIndex), this->index(pluginIndex),
-                { RoleNames::WindowVisibleRole }
-            );
-        }
-    ));
+            {
+                dataChanged(this->index(pluginIndex), this->index(pluginIndex),
+                    { RoleNames::WindowVisibleRole }
+                );
+            }
+        ));
 }
 
 void PluginSequenceModel::replace(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, int index)
 {
+    replace(plugin, "", index);
+}
+
+void PluginSequenceModel::replace(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, const QString& name, int index)
+{
     QObject::disconnect(connections_[index]);
     pluginWindowConnections_[index].reset();
     pluginWindowConnections_[index] = std::make_unique<Musec::Entities::Plugin>(
-        Musec::Entities::Plugin::fromPlugin(plugin));
+        Musec::Entities::Plugin::fromPlugin(plugin, name));
     connections_[index] =
     QObject::connect(pluginWindowConnections_[index].get(), &Musec::Entities::Plugin::windowVisibleChanged,
         this, [this, pluginIndex = index]()
@@ -192,12 +203,14 @@ void PluginSequenceModel::replace(std::shared_ptr<Musec::Audio::Plugin::IPlugin>
             );
         }
     );
+    names_[index] = name;
 }
 
 void PluginSequenceModel::remove(int index)
 {
     connections_.erase(connections_.begin() + index);
     pluginWindowConnections_.erase(pluginWindowConnections_.begin() + index);
+    names_.erase(names_.begin() + index);
 }
 
 void PluginSequenceModel::clear()
@@ -205,6 +218,7 @@ void PluginSequenceModel::clear()
     std::for_each(connections_.begin(), connections_.end(), [](const QMetaObject::Connection& connection) { QObject::disconnect(connection); });
     connections_.clear();
     pluginWindowConnections_.clear();
+    names_.clear();
 }
 
 RoleNamesType PluginSequenceModel::roleNames() const

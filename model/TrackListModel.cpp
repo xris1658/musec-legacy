@@ -233,54 +233,10 @@ void TrackListModel::removeTrack(int index)
 void TrackListModel::loadInstrument(int trackIndex, int pluginId)
 {
     auto info = Musec::Controller::PluginController::pluginFromId(pluginId);
-    loadInstrument(trackIndex,
-        std::get<Musec::Base::PluginReadInfoField::ReadFieldFormat>(info),
-        std::get<Musec::Base::PluginReadInfoField::ReadFieldPath>(info),
-        std::get<Musec::Base::PluginReadInfoField::ReadFieldUid>(info));
-}
-
-void TrackListModel::insertEffect(int trackIndex, int pluginIndex, int pluginId)
-{
-    auto info = Musec::Controller::PluginController::pluginFromId(pluginId);
-    insertEffect(trackIndex,
-        std::get<Musec::Base::PluginReadInfoField::ReadFieldFormat>(info),
-        std::get<Musec::Base::PluginReadInfoField::ReadFieldPath>(info),
-        std::get<Musec::Base::PluginReadInfoField::ReadFieldUid>(info),
-        pluginIndex);
-}
-
-void TrackListModel::replaceEffect(int trackIndex, int pluginIndex, int pluginId)
-{
-    auto info = Musec::Controller::PluginController::pluginFromId(pluginId);
-    insertEffect(trackIndex,
-        std::get<Musec::Base::PluginReadInfoField::ReadFieldFormat>(info),
-        std::get<Musec::Base::PluginReadInfoField::ReadFieldPath>(info),
-        std::get<Musec::Base::PluginReadInfoField::ReadFieldUid>(info),
-        pluginIndex);
-}
-
-void TrackListModel::insertEffectMasterTrack(int pluginIndex, int pluginId)
-{
-    auto info = Musec::Controller::PluginController::pluginFromId(pluginId);
-    insertEffectMasterTrack(
-        std::get<Musec::Base::PluginReadInfoField::ReadFieldFormat>(info),
-        std::get<Musec::Base::PluginReadInfoField::ReadFieldPath>(info),
-        std::get<Musec::Base::PluginReadInfoField::ReadFieldUid>(info),
-        pluginIndex);
-}
-
-void TrackListModel::replaceEffectMasterTrack(int pluginIndex, int pluginId)
-{
-    auto info = Musec::Controller::PluginController::pluginFromId(pluginId);
-    replaceEffectMasterTrack(
-        std::get<Musec::Base::PluginReadInfoField::ReadFieldFormat>(info),
-        std::get<Musec::Base::PluginReadInfoField::ReadFieldPath>(info),
-        std::get<Musec::Base::PluginReadInfoField::ReadFieldUid>(info),
-        pluginIndex);
-}
-
-void TrackListModel::loadInstrument(int trackIndex, int pluginFormat, const QString& path, const std::vector<char>& pluginSubId)
-{
+    const auto& pluginFormat = std::get<Musec::Base::PluginReadInfoField::ReadFieldFormat>(info);
+    const auto& path = std::get<Musec::Base::PluginReadInfoField::ReadFieldPath>(info);
+    const auto& pluginSubId = std::get<Musec::Base::PluginReadInfoField::ReadFieldUid>(info);
+    const auto& name = std::get<Musec::Base::PluginReadInfoField::ReadFieldName>(info);
     auto track = project_[trackIndex];
     if(track.track->trackType() != Musec::Audio::Track::TrackType::kInstrumentTrack)
     {
@@ -293,13 +249,17 @@ void TrackListModel::loadInstrument(int trackIndex, int pluginFormat, const QStr
         return;
     }
     instrumentTrack->setInstrument(instrument);
-    instruments_[trackIndex] = std::make_unique<Musec::Entities::Plugin>(Musec::Entities::Plugin::fromPlugin(instrument));
+    instruments_[trackIndex] = std::make_unique<Musec::Entities::Plugin>(Musec::Entities::Plugin::fromPlugin(instrument, name));
     dataChanged(index(trackIndex), index(trackIndex), QVector<int>(1, RoleNames::InstrumentRole));
 }
 
-void TrackListModel::insertEffect(int trackIndex, int pluginFormat, const QString& path, const std::vector<char>& pluginSubId,
-    int pluginIndex)
+void TrackListModel::insertEffect(int trackIndex, int pluginIndex, int pluginId)
 {
+    auto info = Musec::Controller::PluginController::pluginFromId(pluginId);
+    const auto& pluginFormat = std::get<Musec::Base::PluginReadInfoField::ReadFieldFormat>(info);
+    const auto& path = std::get<Musec::Base::PluginReadInfoField::ReadFieldPath>(info);
+    const auto& pluginSubId = std::get<Musec::Base::PluginReadInfoField::ReadFieldUid>(info);
+    const auto& name = std::get<Musec::Base::PluginReadInfoField::ReadFieldName>(info);
     auto track = project_[trackIndex];
     auto trackType = track.track->trackType();
     if(trackType == Musec::Audio::Track::TrackType::kMIDITrack)
@@ -331,13 +291,17 @@ void TrackListModel::insertEffect(int trackIndex, int pluginFormat, const QStrin
         audioTrack->setPluginSequences(std::move(pluginSequences));
         pluginSequenceModel->endInsertRows();
     }
-    pluginSequenceModel->insert(plugin, pluginIndex);
+    pluginSequenceModel->insert(plugin, name, pluginIndex);
     dataChanged(index(trackIndex), index(trackIndex), QVector<int>(1, RoleNames::PluginListRole));
 }
 
-void TrackListModel::replaceEffect(int trackIndex, int pluginFormat, const QString& path, const std::vector<char>& pluginSubId,
-    int pluginIndex)
+void TrackListModel::replaceEffect(int trackIndex, int pluginIndex, int pluginId)
 {
+    auto info = Musec::Controller::PluginController::pluginFromId(pluginId);
+    const auto& pluginFormat = std::get<Musec::Base::PluginReadInfoField::ReadFieldFormat>(info);
+    const auto& path = std::get<Musec::Base::PluginReadInfoField::ReadFieldPath>(info);
+    const auto& pluginSubId = std::get<Musec::Base::PluginReadInfoField::ReadFieldUid>(info);
+    const auto& name = std::get<Musec::Base::PluginReadInfoField::ReadFieldName>(info);
     auto track = project_[trackIndex];
     auto trackType = track.track->trackType();
     if(trackType == Musec::Audio::Track::TrackType::kMIDITrack)
@@ -366,9 +330,54 @@ void TrackListModel::replaceEffect(int trackIndex, int pluginFormat, const QStri
         pluginSequences[0][pluginIndex] = plugin;
         audioTrack->setPluginSequences(std::move(pluginSequences));
     }
-    pluginSequenceModel->replace(plugin, pluginIndex);
+    pluginSequenceModel->replace(plugin, name, pluginIndex);
     pluginSequenceModel->dataChanged(index(pluginIndex), index(pluginIndex), {});
     dataChanged(index(trackIndex), index(trackIndex), QVector<int>(1, RoleNames::PluginListRole));
+}
+
+void TrackListModel::insertEffectMasterTrack(int pluginIndex, int pluginId)
+{
+    auto info = Musec::Controller::PluginController::pluginFromId(pluginId);
+    const auto& pluginFormat = std::get<Musec::Base::PluginReadInfoField::ReadFieldFormat>(info);
+    const auto& path = std::get<Musec::Base::PluginReadInfoField::ReadFieldPath>(info);
+    const auto& pluginSubId = std::get<Musec::Base::PluginReadInfoField::ReadFieldUid>(info);
+    const auto& name = std::get<Musec::Base::PluginReadInfoField::ReadFieldName>(info);
+    auto& track = projectMasterTrackRef_.masterTrack;
+    auto plugin = Musec::Controller::PluginController::loadPlugin(path, pluginFormat, pluginSubId.data());
+    if(!Musec::Controller::PluginController::startPlugin(plugin))
+    {
+        return;
+    }
+    auto& masterTrackPluginSequenceModel = this->masterTrackPluginSequenceModel();
+    masterTrackPluginSequenceModel.beginInsertRows(QModelIndex(), pluginIndex, pluginIndex);
+    auto masterTrackPluginSequences = track.getPluginSequences();
+    masterTrackPluginSequences[0].insert(masterTrackPluginSequences[0].begin() + pluginIndex, plugin);
+    track.setPluginSequences(masterTrackPluginSequences);
+    masterTrackPluginSequenceModel.endInsertRows();
+    masterTrackPluginSequenceModel.insert(plugin, name, pluginIndex);
+}
+
+void TrackListModel::replaceEffectMasterTrack(int pluginIndex, int pluginId)
+{
+    auto info = Musec::Controller::PluginController::pluginFromId(pluginId);
+    const auto& pluginFormat = std::get<Musec::Base::PluginReadInfoField::ReadFieldFormat>(info);
+    const auto& path = std::get<Musec::Base::PluginReadInfoField::ReadFieldPath>(info);
+    const auto& pluginSubId = std::get<Musec::Base::PluginReadInfoField::ReadFieldUid>(info);
+    const auto& name = std::get<Musec::Base::PluginReadInfoField::ReadFieldName>(info);
+    auto& track = projectMasterTrackRef_.masterTrack;
+    auto plugin = Musec::Controller::PluginController::loadPlugin(path, pluginFormat, pluginSubId.data());
+    if(!Musec::Controller::PluginController::startPlugin(plugin))
+    {
+        return;
+    }
+    auto& masterTrackPluginSequenceModel = this->masterTrackPluginSequenceModel();
+    masterTrackPluginSequenceModel.beginInsertRows(QModelIndex(), pluginIndex, pluginIndex);
+    auto masterTrackPluginSequences = track.getPluginSequences();
+    masterTrackPluginSequences[0][pluginIndex].reset();
+    masterTrackPluginSequences[0][pluginIndex] = plugin;
+    track.setPluginSequences(std::move(masterTrackPluginSequences));
+    masterTrackPluginSequenceModel.replace(plugin, name, pluginIndex);
+    masterTrackPluginSequenceModel.dataChanged(index(pluginIndex), index(pluginIndex), {});
 }
 
 void TrackListModel::removeInstrument(int trackIndex)
@@ -436,41 +445,6 @@ void TrackListModel::moveEffect(
     int fromTrackIndex, int fromPluginIndex, int toTrackIndex, int toPluginIndex)
 {
 
-}
-
-void TrackListModel::insertEffectMasterTrack(int pluginFormat, const QString& path, const std::vector<char>& pluginSubId, int pluginIndex)
-{
-    auto& track = projectMasterTrackRef_.masterTrack;
-    auto plugin = Musec::Controller::PluginController::loadPlugin(path, pluginFormat, pluginSubId.data());
-    if(!Musec::Controller::PluginController::startPlugin(plugin))
-    {
-        return;
-    }
-    auto& masterTrackPluginSequenceModel = this->masterTrackPluginSequenceModel();
-    masterTrackPluginSequenceModel.beginInsertRows(QModelIndex(), pluginIndex, pluginIndex);
-    auto masterTrackPluginSequences = track.getPluginSequences();
-    masterTrackPluginSequences[0].insert(masterTrackPluginSequences[0].begin() + pluginIndex, plugin);
-    track.setPluginSequences(masterTrackPluginSequences);
-    masterTrackPluginSequenceModel.endInsertRows();
-    masterTrackPluginSequenceModel.insert(plugin, pluginIndex);
-}
-
-void TrackListModel::replaceEffectMasterTrack(int pluginFormat, const QString& path, const std::vector<char>& pluginSubId, int pluginIndex)
-{
-    auto& track = projectMasterTrackRef_.masterTrack;
-    auto plugin = Musec::Controller::PluginController::loadPlugin(path, pluginFormat, pluginSubId.data());
-    if(!Musec::Controller::PluginController::startPlugin(plugin))
-    {
-        return;
-    }
-    auto& masterTrackPluginSequenceModel = this->masterTrackPluginSequenceModel();
-    masterTrackPluginSequenceModel.beginInsertRows(QModelIndex(), pluginIndex, pluginIndex);
-    auto masterTrackPluginSequences = track.getPluginSequences();
-    masterTrackPluginSequences[0][pluginIndex].reset();
-    masterTrackPluginSequences[0][pluginIndex] = plugin;
-    track.setPluginSequences(std::move(masterTrackPluginSequences));
-    masterTrackPluginSequenceModel.replace(plugin, pluginIndex);
-    masterTrackPluginSequenceModel.dataChanged(index(pluginIndex), index(pluginIndex), {});
 }
 
 void TrackListModel::removeEffectMasterTrack(int pluginIndex)

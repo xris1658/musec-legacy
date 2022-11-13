@@ -282,11 +282,6 @@ Musec::Base::PluginFormat CLAPPlugin::pluginFormat()
     return Musec::Base::FormatCLAP;
 }
 
-QString CLAPPlugin::getName() const
-{
-    return QString(); // FIXME
-}
-
 bool CLAPPlugin::attachToWindow(QWindow* window)
 {
     auto supported = gui_->is_api_supported(plugin_, CLAP_WINDOW_API_WIN32, false);
@@ -304,7 +299,6 @@ bool CLAPPlugin::attachToWindow(QWindow* window)
         clapWindow_.api = CLAP_WINDOW_API_WIN32;
         clapWindow_.win32 = reinterpret_cast<clap_hwnd>(window->winId());
         gui_->set_parent(plugin_, &clapWindow_);
-        window->setTitle(getName());
         Musec::Controller::AudioEngineController::AppProject().addPluginWindowMapping(this, window);
         window_ = window;
         // For some reason, some plugins will always return `false` even if the GUI is present

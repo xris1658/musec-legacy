@@ -184,7 +184,7 @@ Rectangle {
                 root.tracks.insertEffectMasterTrack(effectIndex, pluginId);
             }
             onReplaceEffect: (pluginId, effectIndex) => {
-                root.tracks.replaceEffectMasterTrack(pluginId, effectIndex);
+                root.tracks.replaceEffectMasterTrack(effectIndex, pluginId);
             }
             onAudioSlotRightClicked: (audioEffectIndex, menuX, menuY) => {
                 root.audioEffectSlotRightClicked(-1, audioEffectIndex, menuX, menuY);

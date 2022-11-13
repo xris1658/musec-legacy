@@ -78,7 +78,6 @@ public:
     bool stopProcessing() override;
     bool hasUI() override;
     bool getBypass() const override;
-    QString getName() const override;
     Musec::Base::PluginFormat pluginFormat() override;
     int parameterCount() override;
     IParameter& parameter(int index) override;

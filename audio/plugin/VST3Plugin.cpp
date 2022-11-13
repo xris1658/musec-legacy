@@ -729,16 +729,7 @@ bool VST3Plugin::getBypass() const
     return this->audioProcessorStatus_ < VST3AudioProcessorStatus::Processing;
 }
 
- QString VST3Plugin::getName() const
-{
-    if(!factory_)
-    {
-        return QString();
-    }
-    return QString(getClassInfo().name);
-}
-
- QWindow* VST3Plugin::window()
+QWindow* VST3Plugin::window()
 {
     return window_;
 }

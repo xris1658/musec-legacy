@@ -48,10 +48,10 @@ public:
     int columnCount(const QModelIndex&) const override;
     QVariant data(const QModelIndex& index, int role) const override;
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
-    Q_INVOKABLE
-    Q_INVOKABLE
     void insert(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, int index);
+    void insert(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, const QString& name, int index);
     void replace(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, int index);
+    void replace(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, const QString& name, int index);
     void remove(int index);
     void clear();
 protected:
@@ -59,6 +59,7 @@ protected:
 private:
     Musec::Audio::Track::InstrumentTrack* instrumentTrack_ = nullptr;
     Musec::Audio::Track::AudioTrack* audioTrack_ = nullptr;
+    std::vector<QString> names_;
     std::vector<std::unique_ptr<Musec::Entities::Plugin>> pluginWindowConnections_;
     std::vector<QMetaObject::Connection> connections_;
     RoleNamesType roleNames_;

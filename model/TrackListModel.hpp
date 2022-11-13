@@ -72,12 +72,6 @@ public:
     Q_INVOKABLE void moveInstrument(int fromTrackIndex, int toTrackIndex);
     Q_INVOKABLE void moveEffect(int fromTrackIndex, int fromPluginIndex, int toTrackIndex, int toPluginIndex);
     Q_INVOKABLE void removeEffectMasterTrack(int pluginIndex);
-private:
-    void loadInstrument(int trackIndex, int pluginFormat, const QString& path, const std::vector<char>& pluginSubId);
-    void insertEffect(int trackIndex, int pluginFormat, const QString& path, const std::vector<char>& pluginSubId, int pluginIndex);
-    void replaceEffect(int trackIndex, int pluginFormat, const QString& path, const std::vector<char>& pluginSubId, int pluginIndex);
-    void insertEffectMasterTrack(int pluginFormat, const QString& path, const std::vector<char>& pluginSubId, int pluginIndex);
-    void replaceEffectMasterTrack(int pluginFormat, const QString& path, const std::vector<char>& pluginSubId, int pluginIndex);
 public:
     double getMasterTrackGain() const;
     void setMasterTrackGain(double gain);
