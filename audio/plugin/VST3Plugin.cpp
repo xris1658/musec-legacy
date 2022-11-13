@@ -48,29 +48,15 @@ VST3Plugin::VST3Plugin(const QString& path):
     editControllerStatus_ = VST3EditControllerStatus::Factory;
 }
 
-bool VST3Plugin::createPlugin(int classIndex)
-{
-    if(factory_)
-    {
-        auto classCount = factory_->countClasses();
-        if (classIndex >= classCount)
-        {
-            return false;
-        }
-        factory_->getClassInfo(classIndex, &classInfo_);
-        return createPlugin(classInfo_);
-    }
-}
-
-bool VST3Plugin::createPlugin(const Steinberg::PClassInfo& classInfo)
+bool VST3Plugin::createPlugin(const Steinberg::TUID& uid)
 {
     if(factory_)
     {
         if(auto createComponentResult = factory_->createInstance(
-                classInfo.cid, Steinberg::Vst::IComponent::iid,
+                uid, Steinberg::Vst::IComponent::iid,
                 reinterpret_cast<void**>(&component_)
             );
-        createComponentResult == Steinberg::kResultOk)
+            createComponentResult == Steinberg::kResultOk)
         {
             audioProcessorStatus_ = VST3AudioProcessorStatus::Created;
             return true;
@@ -79,10 +65,10 @@ bool VST3Plugin::createPlugin(const Steinberg::PClassInfo& classInfo)
     return false;
 }
 
-VST3Plugin::VST3Plugin(const QString& path, int classIndex):
+VST3Plugin::VST3Plugin(const QString& path, const Steinberg::TUID& uid):
     VST3Plugin(path)
 {
-    if(!createPlugin(classIndex))
+    if(!createPlugin(uid))
     {
         throw std::runtime_error("");
     }

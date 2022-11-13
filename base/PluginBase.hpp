@@ -11,13 +11,13 @@ namespace Musec
 namespace Base
 {
 // UID, name, format, type
-using PluginBasicInfo = std::tuple<int, QString, int, int>;
+using PluginBasicInfo = std::tuple<std::vector<char>, QString, int, int>;
 
 // Path, UID, name, format, type
-using PluginWriteInfo = std::tuple<QString, int, QString, int, int>;
+using PluginWriteInfo = std::tuple<QString, std::vector<char>, QString, int, int>;
 
 // ID, path, UID, name, format, type
-using PluginReadInfo = std::tuple<int, QString, int, QString, int, int>;
+using PluginReadInfo = std::tuple<int, QString, std::vector<char>, QString, int, int>;
 
 // VST3 plugin initialization entry
 using VST3PluginInitProc = bool(*)();

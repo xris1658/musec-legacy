@@ -1,5 +1,7 @@
 #include "PluginListModel.hpp"
 
+#include <QByteArray>
+
 #include <utility>
 #include <tuple>
 
@@ -12,8 +14,6 @@ PluginListModel::PluginListModel(QObject* parent): QAbstractListModel(parent)
 {
     roleNames_.reserve(columnSize());
     roleNames_[RoleNames::IdRole] = "id";
-    roleNames_[RoleNames::PathRole] = "path";
-    roleNames_[RoleNames::UidRole] = "uid";
     roleNames_[RoleNames::NameRole] = "name";
     roleNames_[RoleNames::FormatRole] = "format";
     roleNames_[RoleNames::TypeRole] = "type";
@@ -80,6 +80,7 @@ int PluginListModel::columnCount(const QModelIndex&) const
 
 QVariant PluginListModel::data(const QModelIndex& index, int role) const
 {
+    using namespace Musec::Base;
     int row = index.row();
     if(row < 0 || row >= itemCount())
     {
@@ -93,17 +94,13 @@ QVariant PluginListModel::data(const QModelIndex& index, int role) const
     switch(role)
     {
     case RoleNames::IdRole:
-        return QVariant::fromValue(std::get<RoleNames::IdRole - Qt::UserRole>(list_[row]));
-    case RoleNames::PathRole:
-        return QVariant::fromValue(std::get<RoleNames::PathRole - Qt::UserRole>(list_[row]));
-    case RoleNames::UidRole:
-        return QVariant::fromValue(std::get<RoleNames::UidRole - Qt::UserRole>(list_[row]));
+        return QVariant::fromValue(std::get<PluginReadInfoField::ReadFieldId>(list_[row]));
     case RoleNames::NameRole:
-        return QVariant::fromValue(std::get<RoleNames::NameRole - Qt::UserRole>(list_[row]));
+        return QVariant::fromValue(std::get<PluginReadInfoField::ReadFieldName>(list_[row]));
     case RoleNames::FormatRole:
-        return QVariant::fromValue(std::get<RoleNames::FormatRole - Qt::UserRole>(list_[row]));
+        return QVariant::fromValue(std::get<PluginReadInfoField::ReadFieldFormat>(list_[row]));
     case RoleNames::TypeRole:
-        return QVariant::fromValue(std::get<RoleNames::TypeRole - Qt::UserRole>(list_[row]));
+        return QVariant::fromValue(std::get<PluginReadInfoField::ReadFieldType>(list_[row]));
     default:
         return QVariant();
     }

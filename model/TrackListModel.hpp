@@ -7,6 +7,7 @@
 #include "model/PluginSequenceModel.hpp"
 
 #include <QAbstractListModel>
+#include <QByteArray>
 
 namespace Musec
 {
@@ -59,18 +60,24 @@ public:
     Q_INVOKABLE void insertTrack(int index, const Musec::Entities::CompleteTrack& track);
     Q_INVOKABLE void appendTrack(const Musec::Entities::CompleteTrack& track);
     Q_INVOKABLE void removeTrack(int index);
-    Q_INVOKABLE void loadInstrument(int trackIndex, int pluginFormat, const QString& path, int pluginSubId);
+    Q_INVOKABLE void loadInstrument(int trackIndex, int pluginId);
+    Q_INVOKABLE void insertEffect(int trackIndex, int pluginIndex, int pluginId);
+    Q_INVOKABLE void replaceEffect(int trackIndex, int pluginIndex, int pluginId);
+    Q_INVOKABLE void insertEffectMasterTrack(int pluginIndex, int pluginId);
+    Q_INVOKABLE void replaceEffectMasterTrack(int pluginIndex, int pluginId);
     Q_INVOKABLE void removeInstrument(int trackIndex);
-    Q_INVOKABLE void insertEffect(int trackIndex, int pluginFormat, const QString& path, int pluginSubId, int pluginIndex);
-    Q_INVOKABLE void replaceEffect(int trackIndex, int pluginFormat, const QString& path, int pluginSubId, int pluginIndex);
     Q_INVOKABLE void removeEffect(int trackIndex, int pluginIndex);
     Q_INVOKABLE void copyInstrument(int fromTrackIndex, int toTrackIndex);
     Q_INVOKABLE void copyEffect(int fromTrackIndex, int fromPluginIndex, int toTrackIndex, int toPluginIndex);
     Q_INVOKABLE void moveInstrument(int fromTrackIndex, int toTrackIndex);
     Q_INVOKABLE void moveEffect(int fromTrackIndex, int fromPluginIndex, int toTrackIndex, int toPluginIndex);
-    Q_INVOKABLE void insertEffectMasterTrack(int pluginFormat, const QString& path, int pluginSubId, int pluginIndex);
-    Q_INVOKABLE void replaceEffectMasterTrack(int pluginFormat, const QString& path, int pluginSubId, int pluginIndex);
     Q_INVOKABLE void removeEffectMasterTrack(int pluginIndex);
+private:
+    void loadInstrument(int trackIndex, int pluginFormat, const QString& path, const std::vector<char>& pluginSubId);
+    void insertEffect(int trackIndex, int pluginFormat, const QString& path, const std::vector<char>& pluginSubId, int pluginIndex);
+    void replaceEffect(int trackIndex, int pluginFormat, const QString& path, const std::vector<char>& pluginSubId, int pluginIndex);
+    void insertEffectMasterTrack(int pluginFormat, const QString& path, const std::vector<char>& pluginSubId, int pluginIndex);
+    void replaceEffectMasterTrack(int pluginFormat, const QString& path, const std::vector<char>& pluginSubId, int pluginIndex);
 public:
     double getMasterTrackGain() const;
     void setMasterTrackGain(double gain);

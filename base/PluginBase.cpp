@@ -1,10 +1,8 @@
 #include "PluginBase.hpp"
 
-#include "audio/host/VST3Host.hpp"
 #include "audio/plugin/VST2Plugin.hpp"
 #include "audio/plugin/VST3Plugin.hpp"
 #include "audio/plugin/CLAPPlugin.hpp"
-#include "controller/ASIODriverController.hpp"
 #include "native/Native.hpp"
 
 #include <clap/plugin-features.h>
@@ -55,6 +53,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
     {
         try
         {
+            std::vector<char> shellPluginIdRaw(sizeof(VstInt32) + 1, 0);
             Musec::Audio::Plugin::VST2Plugin plugin(path, true);
             auto effect = plugin.effect();
             std::array<char, kVstMaxProductStrLen> nameBuffer = {0};
@@ -80,8 +79,10 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                     int pluginType = subPlugin->flags & effFlagsIsSynth?
                         PluginType::TypeInstrument:
                         PluginType::TypeAudioFX;
+                    auto shellPluginIdAsInt32 = static_cast<VstInt32>(shellPluginId);
+                    std::memcpy(shellPluginIdRaw.data(), &shellPluginIdAsInt32, sizeof(VstInt32));
                     ret.append(std::make_tuple(
-                            shellPluginId,
+                            shellPluginIdRaw,
                             QString(nameBuffer.data()),
                             PluginFormat::FormatVST2,
                             pluginType
@@ -104,9 +105,10 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                 int pluginType = effect->flags & effFlagsIsSynth?
                     PluginType::TypeInstrument:
                     PluginType::TypeAudioFX;
+                std::memcpy(shellPluginIdRaw.data(), &(effect->uniqueID), sizeof(VstInt32));
                 ret.append(
                     std::make_tuple(
-                        effect->uniqueID,
+                        shellPluginIdRaw,
                         QString(nameBuffer.data()),
                         PluginFormat::FormatVST2,
                         pluginType
@@ -123,6 +125,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
     {
         try
         {
+            std::vector<char> uid(16, 0);
             Musec::Audio::Plugin::VST3Plugin plugin(path);
             auto factory = plugin.factory();
             Steinberg::IPluginFactory2* factory2 = nullptr;
@@ -133,13 +136,14 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
             )
             {
                 auto classCount = factory2->countClasses();
+                Steinberg::PClassInfo2 classInfo2;
                 for(decltype(classCount) i = 0; i < classCount; ++i)
                 {
-                    Steinberg::PClassInfo2 classInfo2;
                     factory2->getClassInfo2(i, &classInfo2);
                     auto* category = classInfo2.category;
                     if(std::strcmp(category, kVstAudioEffectClass) == 0)
                     {
+                        std::memcpy(uid.data(), classInfo2.cid, 16);
                         std::array<char, Steinberg::PClassInfo2::kSubCategoriesSize> subCateg = {0};
                         std::strncpy(subCateg.data(), classInfo2.subCategories, subCateg.size());
                         std::array<char*, Steinberg::PClassInfo2::kSubCategoriesSize> strings = {nullptr};
@@ -165,7 +169,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                                 pluginType = PluginType::TypeAudioFX;
                                 ret.append(
                                     std::make_tuple(
-                                        i,
+                                        uid,
                                         QString(classInfo2.name),
                                         PluginFormat::FormatVST3,
                                         pluginType
@@ -177,7 +181,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                                 pluginType = PluginType::TypeInstrument;
                                 ret.append(
                                     std::make_tuple(
-                                        i,
+                                        uid,
                                         QString(classInfo2.name),
                                         PluginFormat::FormatVST3,
                                         pluginType
@@ -188,7 +192,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                         if(pluginType == PluginType::TypeUnknown)
                         {
                             ret.append(std::make_tuple(
-                                    i,
+                                    uid,
                                     QString(classInfo2.name),
                                     PluginFormat::FormatVST3,
                                     pluginType
@@ -198,13 +202,33 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                 }
                 factory2->release();
             }
-            // I've never actually met a plugin that doesn't implement `IPluginFactory2`
+            // I've never actually met any plugin that doesn't implement `IPluginFactory2`
+            else
+            {
+                auto classCount = factory->countClasses();
+                Steinberg::PClassInfo classInfo;
+                for(decltype(classCount) i = 0; i < classCount; ++i)
+                {
+                    factory->getClassInfo(i, &classInfo);
+                    if(std::strcmp(classInfo.category, kVstAudioEffectClass) == 0)
+                    {
+                        std::memcpy(uid.data(), classInfo.cid, 16);
+                        ret.append(
+                            std::make_tuple(
+                                uid,
+                                QString(classInfo.name),
+                                PluginFormat::FormatVST3,
+                                PluginType::TypeUnknown
+                            )
+                        );
+                    }
+                }
+            }
         }
         catch(WindowsLibraryRAII::ExceptionType)
         {
             //
         }
-
     }
     else if(format == PluginFormat::FormatCLAP)
     {
@@ -218,6 +242,9 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                 auto desc = factory->get_plugin_descriptor(factory, i);
                 auto name = desc->name;
                 auto features = desc->features;
+                auto length = std::strlen(desc->id);
+                std::vector<char> uid(length + 1, 0);
+                std::memcpy(uid.data(), desc->id, length);
                 for(int j = 0; features[j]; ++j)
                 {
                     auto feature = features[j];
@@ -225,7 +252,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                     {
                         ret.append(
                             std::make_tuple(
-                                i,
+                                uid,
                                 QString(desc->name),
                                 PluginFormat::FormatCLAP,
                                 PluginType::TypeInstrument
@@ -237,7 +264,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                     {
                         ret.append(
                             std::make_tuple(
-                                i,
+                                uid,
                                 QString(desc->name),
                                 PluginFormat::FormatCLAP,
                                 PluginType::TypeAudioFX

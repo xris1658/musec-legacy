@@ -49,9 +49,7 @@ public:
     CLAPPlugin(const QString& path);
     CLAPPlugin(CLAPPlugin&& rhs) = delete;
     CLAPPlugin& operator=(CLAPPlugin&& rhs) = delete;
-    bool createPlugin(int index);
     bool createPlugin(const char* id);
-    CLAPPlugin(const QString& path, int index);
     CLAPPlugin(const QString& path, const char* id);
     ~CLAPPlugin() override;
 public:
@@ -97,7 +95,6 @@ private:
     const clap_plugin_audio_ports* audioPorts_ = nullptr;
     const clap_plugin_entry* entry_ = nullptr;
     const clap_plugin_factory* factory_ = nullptr;
-    const clap_plugin_descriptor* desc_ = nullptr;
     const clap_plugin_gui* gui_ = nullptr;
     const clap_plugin_note_ports* notePorts_ = nullptr;
     const clap_plugin_params* params_ = nullptr;

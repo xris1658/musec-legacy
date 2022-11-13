@@ -94,10 +94,8 @@ class VST3Plugin:
 public: // ctor & dtor
     VST3Plugin();
     VST3Plugin(const QString& path);
-    bool createPlugin(const Steinberg::PClassInfo& classInfo);
-    bool createPlugin(int classIndex);
-    VST3Plugin(const QString& path, int classIndex);
-    VST3Plugin(const QString& path, const Steinberg::PClassInfo& classInfo);
+    bool createPlugin(const Steinberg::TUID& uid);
+    VST3Plugin(const QString& path, const Steinberg::TUID& uid);
     ~VST3Plugin() override;
 public:
     const Steinberg::PClassInfo& getClassInfo() const;

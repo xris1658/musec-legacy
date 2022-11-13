@@ -180,11 +180,11 @@ Rectangle {
             onSetMonoDownMix: (newMonoDownMix) => {
                 root.tracks.masterTrackMonoDownMix = newMonoDownMix;
             }
-            onInsertEffect: (pluginPath, pluginSubId, pluginFormat, effectIndex) => {
-                root.tracks.insertEffectMasterTrack(pluginFormat, pluginPath, pluginSubId, effectIndex);
+            onInsertEffect: (pluginId, effectIndex) => {
+                root.tracks.insertEffectMasterTrack(effectIndex, pluginId);
             }
-            onReplaceEffect: (pluginPath, pluginSubId, pluginFormat, effectIndex) => {
-                root.tracks.replaceEffectMasterTrack(pluginFormat, pluginPath, pluginSubId, effectIndex);
+            onReplaceEffect: (pluginId, effectIndex) => {
+                root.tracks.replaceEffectMasterTrack(pluginId, effectIndex);
             }
             onAudioSlotRightClicked: (audioEffectIndex, menuX, menuY) => {
                 root.audioEffectSlotRightClicked(-1, audioEffectIndex, menuX, menuY);
@@ -293,14 +293,14 @@ Rectangle {
                                       channel_panning = newPanning;
                                   }
 
-                    onLoadInstrument: (pluginPath, pluginSubId, pluginFormat) => {
-                        tracks.loadInstrument(index, pluginFormat, pluginPath, pluginSubId);
+                    onLoadInstrument: (pluginId) => {
+                        tracks.loadInstrument(index, pluginId);
                     }
-                    onInsertEffect: (pluginPath, pluginSubId, pluginFormat, effectIndex) => {
-                        tracks.insertEffect(index, pluginFormat, pluginPath, pluginSubId, effectIndex);
+                    onInsertEffect: (pluginId, effectIndex) => {
+                        tracks.insertEffect(index, effectIndex, pluginId);
                     }
-                    onReplaceEffect: (pluginPath, pluginSubId, pluginFormat, effectIndex) => {
-                        tracks.replaceEffect(index, pluginFormat, pluginPath, pluginSubId, effectIndex);
+                    onReplaceEffect: (pluginId, effectIndex) => {
+                        tracks.replaceEffect(index, effectIndex, pluginId);
                     }
                     onInstrumentSlotVisibleToggled: (instrumentWindowVisible) => {
                         if(instrument) {

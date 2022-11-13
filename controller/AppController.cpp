@@ -1,5 +1,6 @@
 #include "AppController.hpp"
 
+#include "base/Base.hpp"
 #include "base/Constants.hpp"
 #include "controller/AssetDirectoryController.hpp"
 #include "controller/ConfigController.hpp"
@@ -196,7 +197,7 @@ void refreshPluginList(bool rescan)
         {
             using namespace Musec::Base;
             auto& pluginType =
-                std::get<PluginListModel::RoleNames::TypeRole - Qt::UserRole>(item);
+                std::get<PluginReadInfoField::ReadFieldType>(item);
             if(pluginType != PluginType::TypeUnknown)
             {
                 typePluginList[pluginType - 1].append(item);

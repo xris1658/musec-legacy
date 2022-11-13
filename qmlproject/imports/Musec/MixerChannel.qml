@@ -59,10 +59,8 @@ Item {
     }
     signal instrumentSlotDragEventDropped(drop: var)
     onInstrumentSlotDragEventDropped: (drop) => {
-        var format = parseInt(drop.getDataAsString("format"));
-        var path = drop.getDataAsString("path");
-        var pluginSubId = parseInt(drop.getDataAsString("uid"));
-        loadInstrument(path, pluginSubId, format);
+        var pluginId = parseInt(drop.getDataAsString("pluginId"));
+        loadInstrument(pluginId);
     }
     signal instrumentSlotVisibleToggled(instrumentWindowVisible: bool)
     signal instrumentSlotEnabledToggled(instrumentSlotEnabled: bool)
@@ -77,10 +75,8 @@ Item {
     }
     signal audioEffectSlotDragEventDropped(drop: var, audioEffectIndex: int)
     onAudioEffectSlotDragEventDropped: (drop, audioEffectIndex) => {
-        var format = parseInt(drop.getDataAsString("format"));
-        var path = drop.getDataAsString("path");
-        var pluginSubId = parseInt(drop.getDataAsString("uid"));
-        replaceEffect(path, pluginSubId, format, audioEffectIndex);
+        var pluginId = parseInt(drop.getDataAsString("pluginId"));
+        replaceEffect(pluginId, audioEffectIndex);
     }
     signal betweenAudioEffectSlotDragEventEntered(drag: var, audioEffectIndex: int)
     onBetweenAudioEffectSlotDragEventEntered: (drag, audioEffectIndex) => {
@@ -88,30 +84,26 @@ Item {
             drag.accepted = false;
         }
     }
-
     signal betweenAudioEffectSlotDragEventDropped(drop: var, audioEffectIndex: int)
     onBetweenAudioEffectSlotDragEventDropped: (drop, audioEffectIndex) => {
-        var format = parseInt(drop.getDataAsString("format"));
-        var path = drop.getDataAsString("path");
-        var pluginSubId = parseInt(drop.getDataAsString("uid"));
-        insertEffect(path, pluginSubId, format, audioEffectIndex);
+        var pluginId = parseInt(drop.getDataAsString("pluginId"));
+        insertEffect(pluginId, audioEffectIndex);
     }
     signal blankAreaDragEventEntered(drag: var)
     signal blankAreaDragEventDropped(drop: var)
     onBlankAreaDragEventDropped: (drop) => {
-        var format = parseInt(drop.getDataAsString("format"));
-        var path = drop.getDataAsString("path");
-        var pluginSubId = parseInt(drop.getDataAsString("uid"));
-        if(drop.getDataAsString("type") == 2) {
-            loadInstrument(path, pluginSubId, format);
+        var pluginType = parseInt(drop.getDataAsString("type"));
+        var pluginId = parseInt(drop.getDataAsString("pluginId"));
+        if(pluginType == 2) {
+            loadInstrument(pluginId);
         }
-        else {
-            insertEffect(path, pluginSubId, format, channelEffectList.count);
+        else if(pluginType == 3) {
+            insertEffect(pluginId, channelEffectList.count);
         }
     }
-    signal loadInstrument(pluginPath: string, pluginSubId: int, pluginFormat: int)
-    signal insertEffect(pluginPath: string, pluginSubId: int, pluginFormat: int, effectIndex: int)
-    signal replaceEffect(pluginPath: string, pluginSubId: int, pluginFormat: int, effectIndex: int)
+    signal loadInstrument(pluginId: int)
+    signal insertEffect(pluginId: int, effectIndex: int)
+    signal replaceEffect(pluginId: int, effectIndex: int)
     signal setMute(newMute: bool)
     signal setSolo(newSolo: bool)
     signal setInvertPhase(newInvertPhase: bool)

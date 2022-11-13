@@ -36,17 +36,6 @@ CLAPPlugin::CLAPPlugin(const QString& path):
     }
 }
 
-bool CLAPPlugin::createPlugin(int index)
-{
-    if(factory_)
-    {
-        // auto count = factory_->get_plugin_count(factory_);
-        desc_ = factory_->get_plugin_descriptor(factory_, index);
-        return createPlugin(desc_->id);
-    }
-    return false;
-}
-
 bool CLAPPlugin::createPlugin(const char* id)
 {
     if(factory_)
@@ -57,12 +46,6 @@ bool CLAPPlugin::createPlugin(const char* id)
         return plugin_;
     }
     return false;
-}
-
-CLAPPlugin::CLAPPlugin(const QString& path, int index):
-    CLAPPlugin(path)
-{
-    createPlugin(index);
 }
 
 CLAPPlugin::CLAPPlugin(const QString& path, const char* id):
@@ -95,21 +78,28 @@ CLAPPlugin::~CLAPPlugin()
 
 std::uint8_t CLAPPlugin::audioInputCount() const
 {
-    auto features = desc_->features;
-    for(int j = 0; features[j]; ++j)
+    auto count = audioPorts_->count(plugin_, true);
+    clap_audio_port_info audioPortInfo;
+    std::uint32_t ret = 0;
+    for(decltype(count) i = 0; i < count; ++i)
     {
-        auto feature = features[j];
-        if(std::strcmp(feature, CLAP_PLUGIN_FEATURE_INSTRUMENT) == 0)
-        {
-            return 0;
-        }
+        audioPorts_->get(plugin_, i, true, &audioPortInfo);
+        ret += audioPortInfo.channel_count;
     }
-    return 2;
+    return ret;
 }
 
 std::uint8_t CLAPPlugin::audioOutputCount() const
 {
-    return 2;
+    auto count = audioPorts_->count(plugin_, false);
+    clap_audio_port_info audioPortInfo;
+    std::uint32_t ret = 0;
+    for(decltype(count) i = 0; i < count; ++i)
+    {
+        audioPorts_->get(plugin_, i, false, &audioPortInfo);
+        ret += audioPortInfo.channel_count;
+    }
+    return ret;
 }
 
 void CLAPPlugin::process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs, int inputBufferCount,
@@ -171,6 +161,8 @@ bool CLAPPlugin::initialize(double sampleRate, std::int32_t maxSampleCount)
         if(plugin_->init(plugin_))
         {
             pluginStatus_ = CLAPPluginStatus::Initialized;
+            notePorts_ = reinterpret_cast<decltype(notePorts_)>(plugin_->get_extension(plugin_, CLAP_EXT_NOTE_PORTS));
+            audioPorts_ = reinterpret_cast<decltype(audioPorts_)>(plugin_->get_extension(plugin_, CLAP_EXT_AUDIO_PORTS));
             inputSpeakerGroupCollection_ = {plugin_, audioPorts_, true};
             outputSpeakerGroupCollection_ = {plugin_, audioPorts_, false};
             if(initializeParameters())
@@ -242,8 +234,6 @@ bool CLAPPlugin::activate()
 {
     if(plugin_)
     {
-        notePorts_ = reinterpret_cast<decltype(notePorts_)>(plugin_->get_extension(plugin_, CLAP_EXT_NOTE_PORTS));
-        audioPorts_ = reinterpret_cast<decltype(audioPorts_)>(plugin_->get_extension(plugin_, CLAP_EXT_AUDIO_PORTS));
         processDataInput_.latency = 0;
         processDataOutput_.latency = 0;
         if(plugin_->activate(plugin_, sampleRate_, minBlockSize_, maxBlockSize_))
@@ -294,11 +284,7 @@ Musec::Base::PluginFormat CLAPPlugin::pluginFormat()
 
 QString CLAPPlugin::getName() const
 {
-    if(desc_)
-    {
-        return QString(desc_->name);
-    }
-    return QString();
+    return QString(); // FIXME
 }
 
 bool CLAPPlugin::attachToWindow(QWindow* window)

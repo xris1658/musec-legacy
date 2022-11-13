@@ -18,6 +18,8 @@ void removeAllPlugins();
 QList<Musec::Base::PluginReadInfo> selectAllPlugin(bool reserve);
 
 int getAllPluginCount();
+
+Musec::Base::PluginReadInfo selectPluginFromId(int id);
 }
 }
 

@@ -28,8 +28,6 @@ public:
     enum RoleNames
     {
         IdRole = Qt::UserRole,
-        PathRole,
-        UidRole,
         NameRole,
         FormatRole,
         TypeRole

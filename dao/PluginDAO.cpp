@@ -17,7 +17,7 @@ const char16_t* createPluginTableCommand()
         "       CONSTRAINT plugin_pk"
         "           PRIMARY KEY AUTOINCREMENT,"
         "   `path`   TEXT NOT NULL,"
-        "   `uid`    INTEGER NOT NULL,"
+        "   `uid`    BLOB NOT NULL,"
         "   `name`   TEXT NOT NULL,"
         "   `format` INTEGER NOT NULL,"
         "   `type`   INTEGER NOT NULL"
@@ -53,6 +53,12 @@ const char16_t* selectAllPluginCommand()
 {
     static char16_t ret[] =
         u"SELECT * FROM plugin";
+    return ret;
+}
+const char16_t* selectPluginByIdCommand()
+{
+    static char16_t ret[] =
+        u"SELECT * FROM plugin WHERE id = ?";
     return ret;
 }
 const char16_t* selectPluginByNameCommand()
@@ -97,7 +103,7 @@ QList<Musec::Base::PluginReadInfo> selectAllPlugin(bool reserve)
     AppDatabase() << Impl::selectAllPluginCommand()
                   >> [&ret](int id,
                             const std::u16string& path,
-                            int uid,
+                            const std::vector<char>& uid,
                             const std::u16string& name,
                             int format,
                             int type)
@@ -116,6 +122,28 @@ int getAllPluginCount()
 {
     int ret;
     AppDatabase() << Impl::getAllPluginCountCommand() >> ret;
+    return ret;
+}
+
+Musec::Base::PluginReadInfo selectPluginFromId(int id)
+{
+    Musec::Base::PluginReadInfo ret;
+    AppDatabase() << Impl::selectPluginByIdCommand() << id
+                  >> [&ret](int id,
+                            const std::u16string& path,
+                            const std::vector<char>& uid,
+                            const std::u16string& name,
+                            int format,
+                            int type)
+    {
+        ret = std::make_tuple(
+            id,
+            QString::fromStdU16String(path),
+            uid,
+            QString::fromStdU16String(name),
+            format,
+            type);
+    };
     return ret;
 }
 }
