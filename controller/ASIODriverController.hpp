@@ -15,7 +15,7 @@ namespace Controller
 {
 namespace ASIODriverController
 {
-void loadASIODriver();
+bool loadASIODriver();
 
 QString getASIODriver();
 
@@ -25,11 +25,11 @@ void openASIODriverControlPanel();
 
 void unloadASIODriver();
 
-void updateCurrentASIODriverInfo();
+bool updateCurrentASIODriverInfo();
 
-void allocateASIODriverBuffer();
+bool allocateASIODriverBuffer();
 
-void startASIODriver();
+bool startASIODriver();
 
 Musec::Model::ASIOChannelInfoListModel& inputChannelInfoList();
 

@@ -23,6 +23,7 @@ public:
         GroupRole,                       // ASIOChannelInfo::channelGroup
         SampleTypeRole,                  // ASIOChannelInfo::type
         NameRole,                        // ASIOChannelInfo::name
+        DisplayTextRole,
         RoleEnd
     };
 public:

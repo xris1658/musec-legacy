@@ -10,17 +10,45 @@ Rectangle {
     height: 500
     clip: true
     color: Constants.backgroundColor
+    QtObject {
+        id: channelIndexCopy
+        property int leftOutputChannel
+        property int rightOutputChannel
+    }
+    function updateCopy() {
+        channelIndexCopy.leftOutputChannel = leftOutputChannel;
+        channelIndexCopy.rightOutputChannel = rightOutputChannel;
+    }
+    Component.onCompleted: {
+        updateCopy();
+    }
     property alias driverListModel: comboBoxDriver.model
     property alias currentDriver: comboBoxDriver.currentIndex
     property alias outputChannelListModel: comboBoxLeftOutput.model
     property alias leftOutputChannel: comboBoxLeftOutput.currentIndex
     property alias rightOutputChannel: comboBoxRightOutput.currentIndex
+    property bool running: false
+    signal channelUpdated(left: int, right: int)
+    onLeftOutputChannelChanged: {
+        if(leftOutputChannel == rightOutputChannel) {
+            rightOutputChannel = channelIndexCopy.leftOutputChannel;
+        }
+        updateCopy();
+        channelUpdated(leftOutputChannel, rightOutputChannel);
+    }
+    onRightOutputChannelChanged: {
+        if(rightOutputChannel == leftOutputChannel) {
+            leftOutputChannel = channelIndexCopy.rightOutputChannel;
+        }
+        updateCopy();
+        channelUpdated(leftOutputChannel, rightOutputChannel);
+    }
     property int bufferSize: 512
     property int inputLatencyInSamples: 512
     property int outputLatencyInSamples: 512
     property int sampleRate
     function driverLoadedAndWorking() {
-        return comboBoxDriver.count != 0 && currentDriver != -1;
+        return comboBoxDriver.count != 0 && currentDriver != -1 && running;
     }
 
     signal driverASIOSelectionChanged(currentSelectionValue: string)
@@ -40,6 +68,7 @@ Rectangle {
     }
 
     Grid {
+        id: mainGrid
         columns: 2
         columnSpacing: 10
         rowSpacing: 5
@@ -78,7 +107,8 @@ Rectangle {
             valueRole: "clsid"
             displayText: count == 0? qsTr("No ASIO driver found"):
                          currentIndex == -1? qsTr("No driver loaded"):
-                         currentText
+                         root.running? currentText:
+                         currentText + " (" + qsTr("Not running") + ")"
             onCurrentValueChanged: {
                 driverASIOSelectionChanged(currentValue);
             }
@@ -181,24 +211,34 @@ Rectangle {
             visible: root.driverLoadedAndWorking()
             MCtrl.ComboBox {
                 id: comboBoxLeftOutput
-                width: parent.width / 2 - 2
+                width: (parent.width - buttonSwapLeftRight.width) / 2 - mainGrid.rowSpacing
                 anchors.left: parent.left
-                textRole: "name"
+                textRole: "display_text"
                 valueRole: "channel_index"
-                onCurrentValueChanged: {
-                    //
+            }
+            MCtrl.Button {
+                id: buttonSwapLeftRight
+                anchors.centerIn: parent
+                width: parent.height
+                height: width
+                text: "\u2194"
+                onClicked: {
+                    var temp = comboBoxLeftOutput.currentIndex;
+                    comboBoxLeftOutput.currentIndex = comboBoxRightOutput.currentIndex;
+                    comboBoxRightOutput.currentIndex = temp;
+                }
+                MCtrl.ToolTip {
+                    visible: parent.hovered
+                    text: qsTr("Swap left and right channel")
                 }
             }
             MCtrl.ComboBox {
                 id: comboBoxRightOutput
-                width: parent.width / 2 - 2
+                width: (parent.width - buttonSwapLeftRight.width) / 2 - mainGrid.rowSpacing
                 anchors.right: parent.right
                 model: comboBoxLeftOutput.model
-                textRole: "name"
+                textRole: "display_text"
                 valueRole: "channel_index"
-                onCurrentValueChanged: {
-                    //
-                }
             }
         }
         Text {

@@ -25,11 +25,13 @@ Window {
     property alias driverList: audioHardwareSelector.driverListModel
     property alias pluginDirectoryList: pluginSettings.pluginPathListModel
     property alias currentDriver: audioHardwareSelector.currentDriver
+    property bool running: Objects.mainWindow.engineRunning
     property alias bufferSize: audioHardwareSelector.bufferSize
     property alias inputLatencyInSamples: audioHardwareSelector.inputLatencyInSamples
     property alias outputLatencyInSamples: audioHardwareSelector.outputLatencyInSamples
     property alias sampleRate: audioHardwareSelector.sampleRate
     property alias outputChannelList: audioHardwareSelector.outputChannelListModel
+
     property alias leftOutputChannel: audioHardwareSelector.leftOutputChannel
     property alias rightOutputChannel: audioHardwareSelector.rightOutputChannel
 
@@ -109,6 +111,7 @@ Window {
                     }
                     AudioHardwareSelector {
                         id: audioHardwareSelector
+                        running: root.running
                         onDriverASIOSelectionChanged: (currentSelectionValue) => {
                             EventBridge.driverASIOSelectionChanged(currentSelectionValue);
                         }
@@ -117,6 +120,9 @@ Window {
                         }
                         onOpenASIODriverControlPanel: {
                             EventBridge.openASIODriverControlPanel();
+                        }
+                        onChannelUpdated: (left, right) => {
+                            EventBridge.channelUpdated(left, right);
                         }
                     }
                     PluginSettings {

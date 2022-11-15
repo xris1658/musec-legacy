@@ -46,6 +46,8 @@ QtObject {
 
     signal updateCPUMeter()
 
+    signal channelUpdated(left: int, right: int) // TODO
+
     // Receive from C++ backend
     signal setBootText(newBootText: string)
     onSetBootText: (newBootText) => {

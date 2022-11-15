@@ -49,7 +49,7 @@ QtObject {
     readonly property color bigClockCpuForeColor:         "#0088FF"
     readonly property color bigClockCpuOverloadForeColor: "#FF0000"
     readonly property color bigClockCpuBackColor:         Constants.backgroundColor
-    readonly property color bigClockCpuOffBackColor:      Constants.backgroundColor2
+    readonly property color bigClockCpuOffBackColor:      "#800000"
 
     // Big clock
 //    readonly property color bigClockColor:         "#18181F"

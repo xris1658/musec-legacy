@@ -15,6 +15,7 @@ ASIOChannelInfoListModel::ASIOChannelInfoListModel(QObject* parent):
     roleNames_[RoleNames::GroupRole] = "group";
     roleNames_[RoleNames::SampleTypeRole] = "sample_type";
     roleNames_[RoleNames::NameRole] = "name";
+    roleNames_[RoleNames::DisplayTextRole] = "display_text";
 }
 
 ASIOChannelInfoListModel::~ASIOChannelInfoListModel()
@@ -80,6 +81,12 @@ QVariant ASIOChannelInfoListModel::data(const QModelIndex& index, int role) cons
         return QVariant::fromValue(getASIOSampleTypeName(channelInfoList_[row].type));
     case NameRole:
         return QVariant::fromValue(QString(channelInfoList_[row].name));
+    case DisplayTextRole:
+        return QVariant::fromValue(
+            QString::number(channelInfoList_[row].channel + 1)
+            .append(": ")
+            .append(channelInfoList_[row].name)
+        );
     default:
         return QVariant();
     }

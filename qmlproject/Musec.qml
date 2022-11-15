@@ -37,6 +37,7 @@ ApplicationWindow {
     property alias mixerVisible: actionMixerVisible.checked
 
     property alias engineRunning: mainBar.engineRunning
+
     property alias bpm: mainBar.bpm
     property alias cpu: mainBar.cpu
 
@@ -710,28 +711,25 @@ ApplicationWindow {
                     width: parent.width
                     SplitView.preferredHeight: parent.height * 0.625
                     SplitView.minimumHeight: 20
-                    Item {
+                    Rectangle {
                         SplitView.preferredWidth: parent.width * 0.6
-                        FunctionArea {
-                            id: arrangementFunctionArea
-                            title: qsTr("Arrangement")
-                            Arrangement {
-                                id: arrangement
-                                timelineNumerator: mainBar.numerator
-                                tracks: trackList
-                                parent: arrangementFunctionArea.contentArea
-                                barCount: 40
-                                anchors.fill: parent
-                                anchors.margins: 1
-                                y: parent.y
-                                loop: actionLoop.checked
-                                position: 0
-                                onAppendTrack: (track) => {
-                                    eventBridge.appendTrack(track);
-                                }
-                                onInsertTrack: (track, index) => {
-                                    eventBridge.insertTrack(track, index);
-                                }
+                        color: "transparent"
+                        border.color: Constants.borderColor
+                        Arrangement {
+                            id: arrangement
+                            timelineNumerator: mainBar.numerator
+                            tracks: trackList
+                            barCount: 40
+                            anchors.fill: parent
+                            anchors.margins: 1
+                            y: parent.y
+                            loop: actionLoop.checked
+                            position: 0
+                            onAppendTrack: (track) => {
+                                eventBridge.appendTrack(track);
+                            }
+                            onInsertTrack: (track, index) => {
+                                eventBridge.insertTrack(track, index);
                             }
                         }
                     }

@@ -490,7 +490,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="89"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="111"/>
+        <source>Not running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="119"/>
         <source>Sample Rate</source>
         <translation type="unfinished"></translation>
     </message>
@@ -525,7 +530,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="207"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="232"/>
+        <source>Swap left and right channel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="247"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>

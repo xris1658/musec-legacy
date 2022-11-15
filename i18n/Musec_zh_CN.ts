@@ -500,7 +500,12 @@
         <translation>未加载驱动</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="89"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="111"/>
+        <source>Not running</source>
+        <translation>未运行</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="119"/>
         <source>Sample Rate</source>
         <translation>采样率</translation>
     </message>
@@ -539,7 +544,16 @@
         <translation>输出设备</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="223"/>
+        <source>No outputs available</source>
+        <translation type="vanished">无可用输出</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="232"/>
+        <source>Swap left and right channel</source>
+        <translation>交换左右声道</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="263"/>
         <source>Buffer size</source>
         <translation>缓冲区大小</translation>
     </message>
