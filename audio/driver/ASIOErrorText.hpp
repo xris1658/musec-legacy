@@ -3,6 +3,8 @@
 
 #include "audio/driver/ASIODriverForward.hpp"
 
+#include <QString>
+
 namespace Musec
 {
 namespace Audio

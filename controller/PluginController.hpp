@@ -3,8 +3,6 @@
 
 #include "audio/plugin/IPlugin.hpp"
 #include "base/PluginBase.hpp"
-#include "dao/DatabaseDAO.hpp"
-#include "dao/PluginDAO.hpp"
 
 #include <QList>
 

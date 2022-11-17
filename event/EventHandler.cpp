@@ -10,6 +10,7 @@
 #include "controller/ConfigController.hpp"
 #include "controller/GeneralSettingsController.hpp"
 #include "controller/MIDIClockController.hpp"
+#include "controller/PluginController.hpp"
 #include "controller/PluginSettingsController.hpp"
 #include "event/EventBase.hpp"
 #include "ui/PluginWindow.hpp"

@@ -7,6 +7,7 @@
 #include "controller/LoggingController.hpp"
 #include "controller/PluginController.hpp"
 #include "controller/PluginSettingsController.hpp"
+#include "dao/DatabaseDAO.hpp"
 #include "dao/PluginDirectoryDAO.hpp"
 #include "event/EventBase.hpp"
 #include "native/Native.hpp"
@@ -49,8 +50,6 @@ void initApplication(Musec::Event::SplashScreen* splashScreen)
     }
     catch(std::exception&)
     {
-        // FIXME: The application will crash if this function is called,
-        //  since Musec::Event::EventHandler is not initialized here.
         Musec::UI::MessageDialog::messageDialogNonModal(
            strings->property("enumeratingASIODriverErrorText").toString(),
            Musec::Base::ProductName,
