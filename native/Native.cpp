@@ -7,6 +7,7 @@
 #include <ShlObj_core.h>
 #include <shellapi.h>
 #include <processthreadsapi.h>
+#include <synchapi.h>
 #include <timezoneapi.h>
 #include <realtimeapiset.h>
 
@@ -21,6 +22,11 @@ namespace Musec::Native
 {
 namespace Impl
 {
+using OneHunderdNanoSecondInterval = std::chrono::duration<
+    std::chrono::steady_clock::rep,
+    std::ratio<1, 10000000>
+>;
+
 template<int CSIDL>
 class SHGetFolderHelper
 {
@@ -324,5 +330,17 @@ QString getProductVersion(const QString& path)
     }
     return {};
 }
+
+void sleepFor(std::chrono::steady_clock::duration duration)
+{
+    static auto handle = CreateWaitableTimer(NULL, FALSE, NULL);
+    LARGE_INTEGER timeIn10e7;
+    timeIn10e7.QuadPart = static_cast<std::int64_t>(
+        std::chrono::duration_cast<Impl::OneHunderdNanoSecondInterval>(duration).count()
+    );
+    SetWaitableTimerEx(handle, &timeIn10e7, 0, NULL, NULL, NULL, 0);
+    WaitForSingleObject(handle, INFINITE);
 }
+
+
 }
