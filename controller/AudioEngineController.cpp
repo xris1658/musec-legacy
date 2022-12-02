@@ -96,7 +96,9 @@ long getOutputLatency()
 double getCurrentTempo()
 {
     auto& midiClock = Musec::Controller::MIDIClockController::AppMIDIClock();
-    return midiClock.tempoAutomation()(midiClock.getPosition().count());
+    return midiClock.tempoAutomation().empty()?
+        midiClock.tempo():
+        midiClock.tempoAutomation()(midiClock.getPosition().count());
 }
 
 void fillPluginContext()

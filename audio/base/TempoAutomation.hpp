@@ -239,6 +239,18 @@ public:
         return pulseElapsedFrom(TimePoint<PPQ>(0U), second, precision);
     }
 };
+
+template<std::size_t PPQ>
+double secondElapsed(double tempo, const Duration<PPQ>& duration)
+{
+    return 60.0 * duration.count() / (tempo * PPQ);
+}
+
+template<std::size_t PPQ>
+Duration<PPQ> pulseElapsed(double tempo, double second)
+{
+    return second * tempo * PPQ / 60.0;
+}
 }
 }
 }
