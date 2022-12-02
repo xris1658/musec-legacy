@@ -1,5 +1,5 @@
-#ifndef MUSEC_AUDIO_PLUGIN_VST3PLUGINCOMPONENTHANDLER
-#define MUSEC_AUDIO_PLUGIN_VST3PLUGINCOMPONENTHANDLER
+#ifndef MUSEC_AUDIO_PLUGIN_VST3COMPONENTHANDLER
+#define MUSEC_AUDIO_PLUGIN_VST3COMPONENTHANDLER
 
 #include <pluginterfaces/vst/ivsteditcontroller.h>
 
@@ -13,15 +13,15 @@ namespace Plugin
 {
 class VST3Plugin;
 
-class VST3PluginComponentHandler:
+class VST3ComponentHandler:
     public Steinberg::Vst::IComponentHandler,
     public Steinberg::Vst::IComponentHandler2
 {
 public:
-    VST3PluginComponentHandler(Musec::Audio::Plugin::VST3Plugin* plugin = nullptr);
-    VST3PluginComponentHandler(const VST3PluginComponentHandler&) = delete;
-    VST3PluginComponentHandler(VST3PluginComponentHandler&&) = default;
-    ~VST3PluginComponentHandler() {}
+    VST3ComponentHandler(Musec::Audio::Plugin::VST3Plugin* plugin = nullptr);
+    VST3ComponentHandler(const VST3ComponentHandler&) = delete;
+    VST3ComponentHandler(VST3ComponentHandler&&) = default;
+    ~VST3ComponentHandler() {}
 public: // FUnknown interfaces
     Steinberg::tresult queryInterface(const Steinberg::TUID iid, void** obj) override;
     Steinberg::uint32 addRef() override;
@@ -44,4 +44,4 @@ private:
 }
 }
 
-#endif //MUSEC_AUDIO_PLUGIN_VST3PLUGINCOMPONENTHANDLER
+#endif //MUSEC_AUDIO_PLUGIN_VST3COMPONENTHANDLER

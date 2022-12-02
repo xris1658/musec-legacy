@@ -101,7 +101,7 @@ HEADERS += \
     audio/plugin/VST2SpeakerGroup.hpp \
     audio/plugin/VST2SpeakerGroupCollection.hpp \
     audio/plugin/VST3Plugin.hpp \
-    audio/plugin/VST3PluginComponentHandler.hpp \
+    audio/plugin/VST3ComponentHandler.hpp \
     audio/plugin/VST3PluginParameter.hpp \
     audio/plugin/VST3PluginPlugFrame.hpp \
     audio/plugin/VST3SpeakerGroup.hpp \
@@ -218,7 +218,7 @@ SOURCES += \
     audio/plugin/VST2SpeakerGroup.cpp \
     audio/plugin/VST2SpeakerGroupCollection.cpp \
     audio/plugin/VST3Plugin.cpp \
-    audio/plugin/VST3PluginComponentHandler.cpp \
+    audio/plugin/VST3ComponentHandler.cpp \
     audio/plugin/VST3PluginParameter.cpp \
     audio/plugin/VST3PluginPlugFrame.cpp \
     audio/plugin/VST3SpeakerGroup.cpp \

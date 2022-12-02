@@ -3,7 +3,7 @@
 
 #include "audio/plugin/IPlugin.hpp"
 #include "audio/plugin/VST3PluginParameter.hpp"
-#include "audio/plugin/VST3PluginComponentHandler.hpp"
+#include "audio/plugin/VST3ComponentHandler.hpp"
 #include "audio/plugin/VST3PluginPlugFrame.hpp"
 #include "audio/plugin/VST3SpeakerGroupCollection.hpp"
 #include "base/FixedSizeMemoryBlock.hpp"
@@ -182,7 +182,7 @@ private:
     VST3EditControllerStatus editControllerStatus_ = VST3EditControllerStatus::NoEditController;
     EffectAndEditorUnified effectAndEditorUnified_ = EffectAndEditorUnified::NotUnified;
     QWindow* window_ = nullptr;
-    Musec::Audio::Plugin::VST3PluginComponentHandler componentHandler_;
+    Musec::Audio::Plugin::VST3ComponentHandler componentHandler_;
     Musec::Audio::Plugin::VST3PluginPlugFrame plugFrame_;
     std::array<QMetaObject::Connection, 2> windowSizeConnections_;
     Steinberg::Vst::ProcessSetup processSetup_ = {};
