@@ -5,7 +5,7 @@ Window {
     id: root
     flags: Qt.Dialog
     modality: Qt.NonModal
-    property bool destroyingPluigin: false
+    property bool destroyingPlugin: false
     onClosing: (close) => {
         if(!root.destroyingPlugin) {
             close.accepted = false;
