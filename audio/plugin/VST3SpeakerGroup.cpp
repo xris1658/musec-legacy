@@ -24,7 +24,7 @@ VST3SpeakerGroup& VST3SpeakerGroup::operator=(VST3SpeakerGroup rhs)
 
 QString VST3SpeakerGroup::name() const
 {
-    return QString::fromWCharArray(busInfo_.name);
+    return QString::fromUtf16(busInfo_.name);
 }
 
 std::uint8_t VST3SpeakerGroup::speakerCount() const

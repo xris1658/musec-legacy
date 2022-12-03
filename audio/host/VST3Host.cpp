@@ -1,5 +1,8 @@
 #include "VST3Host.hpp"
 
+#include "base/Base.hpp"
+#include "base/Constants.hpp"
+
 #include <public.sdk/source/vst/hosting/hostclasses.h>
 
 #include <cwchar>
@@ -8,7 +11,10 @@ namespace Musec::Audio::Host
 {
 tresult PLUGIN_API VST3Host::getName(String128 name)
 {
-    std::wcscpy(name, L"Musec");
+    for(int i = 0; i < Musec::Base::stackArraySize(Musec::Base::ProductName); ++i)
+    {
+        name[i] = Musec::Base::ProductName[i];
+    }
     return kResultOk;
 }
 

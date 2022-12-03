@@ -37,7 +37,7 @@ VST3PluginParameter::VST3PluginParameter(
 
 QString VST3PluginParameter::name() const
 {
-    return QString::fromWCharArray(parameterInfo_.title);
+    return QString::fromUtf16(parameterInfo_.title);
 }
 
 double VST3PluginParameter::minValue() const
