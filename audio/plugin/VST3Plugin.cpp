@@ -497,10 +497,16 @@ bool VST3Plugin::initializeEditController()
         {
             paramBlockAsArray[i] = VST3PluginParameter(editController_, i);
         }
-        view_ = editController_->createView(Steinberg::Vst::ViewType::kEditor);
-        if (view_)
+        try
         {
-            view_->setFrame(&plugFrame_);
+            view_ = editController_->createView(Steinberg::Vst::ViewType::kEditor);
+            if (view_)
+            {
+                view_->setFrame(&plugFrame_);
+            }
+        }
+        catch(...)
+        {
         }
     }
     return true;
