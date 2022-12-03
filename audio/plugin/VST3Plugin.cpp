@@ -632,7 +632,6 @@ bool VST3Plugin::attachToWindow(QWindow* window)
         Steinberg::ViewRect viewRect;
         // Some plugins cannot return a correct size here
         window_ = window;
-        window_->setTitle(classInfo_.name);
         view_->attached(reinterpret_cast<HWND>(window_->winId()), Steinberg::kPlatformTypeHWND);
         Musec::Controller::AudioEngineController::AppProject().addPluginWindowMapping(audioProcessor_, window_);
         initializeWindowSizeConnections();
@@ -659,11 +658,6 @@ bool VST3Plugin::detachWithWindow()
         return true;
     }
     return false;
-}
-
-const Steinberg::PClassInfo& VST3Plugin::getClassInfo() const
-{
-    return classInfo_;
 }
 
 Steinberg::IPluginFactory* VST3Plugin::factory() const

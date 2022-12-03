@@ -98,7 +98,6 @@ public: // ctor & dtor
     VST3Plugin(const QString& path, const Steinberg::TUID& uid);
     ~VST3Plugin() override;
 public:
-    const Steinberg::PClassInfo& getClassInfo() const;
     Steinberg::IPluginFactory* factory() const;
     Steinberg::Vst::IComponent* component() const;
     Steinberg::Vst::IAudioProcessor* effect() const;
@@ -141,7 +140,6 @@ private:
 public:
     Steinberg::Vst::ProcessSetup processSetup();
 private:
-    Steinberg::PClassInfo classInfo_;
     Steinberg::IPluginFactory* factory_ = nullptr;
     Steinberg::Vst::IComponent* component_ = nullptr;
     // IAudioProcessor and extension
