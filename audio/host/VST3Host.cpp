@@ -52,12 +52,6 @@ tresult PLUGIN_API VST3Host::createInstance(TUID cid, TUID iid_, void** obj)
         *obj = new HostMessage;
         return kResultOk;
     }
-    else if(classId == IAttributeList::iid && interfaceId == IAttributeList::iid)
-    {
-        // TODO: Allocate using memory pool
-        *obj = new HostAttributeList;
-        return kResultOk;
-    }
     *obj = nullptr;
     return kNotImplemented;
 }
