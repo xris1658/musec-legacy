@@ -70,6 +70,28 @@ FixedSizeMemoryPool::FixedSizeMemoryPool(std::size_t memoryBlockSize, std::size_
     mutexes_.emplace_back();
 }
 
+FixedSizeMemoryPool::FixedSizeMemoryPool(FixedSizeMemoryPool&& rhs) noexcept(false)
+{
+    if(!empty())
+    {
+        throw std::runtime_error("");
+    }
+    swap(rhs);
+}
+
+FixedSizeMemoryPool& FixedSizeMemoryPool::operator=(FixedSizeMemoryPool&& rhs) noexcept(false)
+{
+    if(this != &rhs)
+    {
+        if(!empty())
+        {
+            throw std::runtime_error("");
+        }
+        swap(rhs);
+    }
+    return *this;
+}
+
 FixedSizeMemoryPool::~FixedSizeMemoryPool() noexcept(false)
 {
     if(!empty())
@@ -102,7 +124,7 @@ bool FixedSizeMemoryPool::full() const
         vacant_.begin(), vacant_.end(),
         [](const SinglePoolAllocationStatus& status)
         {
-                return std::all_of(status.begin(), status.end(), [](bool value) { return !value; });
+            return std::all_of(status.begin(), status.end(), [](bool value) { return !value; });
         }
     );
 }
@@ -157,5 +179,14 @@ std::shared_ptr<void> FixedSizeMemoryPool::lendMemoryBlock()
             this->returnMemoryBlock(iterators, blockIndex);
         }
     );
+}
+
+void FixedSizeMemoryPool::swap(FixedSizeMemoryPool& rhs)
+{
+    std::swap(memoryBlockSize_, rhs.memoryBlockSize_);
+    std::swap(initialBlockCount_, rhs.initialBlockCount_);
+    std::swap(pools_, rhs.pools_);
+    std::swap(vacant_, rhs.vacant_);
+    std::swap(mutexes_, rhs.mutexes_);
 }
 }

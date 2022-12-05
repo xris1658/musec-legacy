@@ -1,7 +1,6 @@
 #ifndef MUSEC_AUDIO_ENGINE_PROJECT
 #define MUSEC_AUDIO_ENGINE_PROJECT
 
-#include "audio/arrangement/TrackSequence.hpp"
 #include "audio/engine/Graph.hpp"
 #include "audio/plugin/IPlugin.hpp"
 #include "audio/plugin/VST2PluginPool.hpp"
@@ -54,7 +53,7 @@ public:
         MasterTrackControlType::reference trackMonoDownMix;
     };
 public:
-    Project(int reserveTrackCount = initialReserveTrackCount);
+    Project(std::size_t audioBufferSizeInFrame, int reserveTrackCount = initialReserveTrackCount);
     Project(const Project&) = delete;
     Project(Project&&) = delete;
     ~Project();
@@ -78,9 +77,7 @@ public:
     void process();
     const Musec::Base::FixedSizeMemoryBlock& masterTrackAudioBuffer() const;
 public:
-    Musec::Audio::Util::PanLaw getPanLaw();
-    bool isCompensate();
-    void setPanLaw(Musec::Audio::Util::PanLaw panLaw, bool compensate = true);
+    void reallocateAudioBuffer(std::size_t audioBufferSizeInFrame);
 private:
     MasterTrackControlType::reference masterTrackMute();
     MasterTrackControlType::reference masterTrackSolo();
@@ -111,10 +108,6 @@ private:
     std::vector<bool> trackMonoDownMix_;
     std::map<void*, QWindow*> pluginAndWindow_;
     Musec::Audio::Plugin::VST2PluginPool vst2PluginPool_;
-    Musec::Audio::Util::PanLaw panLaw_;
-    bool compensate_;
-    Musec::Audio::Util::StereoChannelScaleCollection<float>(*getScale_)(float);
-    float (*getCompensate_)();
 };
 }
 }

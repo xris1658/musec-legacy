@@ -11,7 +11,7 @@ namespace Musec::Controller::AudioEngineController
 {
 Musec::Audio::Engine::Project& AppProject()
 {
-    static Musec::Audio::Engine::Project ret;
+    static Musec::Audio::Engine::Project ret(0);
     return ret;
 }
 
@@ -44,7 +44,7 @@ double getCurrentSampleRate()
     {
         return Musec::Audio::Driver::getSampleRate();
     }
-    return 44100.0;
+    return 0;
 }
 
 long getMaxBlockSize()
@@ -52,10 +52,9 @@ long getMaxBlockSize()
     if(Musec::Audio::Driver::AppASIODriver())
     {
         auto ret = Musec::Audio::Driver::getBufferSize().maximumBufferSize;
-        if(ret != 0xcccccccc && ret != 0)
         return ret;
     }
-    return 88200; // Maximum sample count of FlexASIO from what I can tell
+    return 0; // Maximum sample count of FlexASIO from what I can tell
 }
 
 long getCurrentBlockSize()
@@ -72,7 +71,7 @@ long getCurrentBlockSize()
             return Musec::Audio::Driver::getBufferSize().maximumBufferSize;
         }
     }
-    return 512;
+    return 0;
 }
 
 long getInputLatency()

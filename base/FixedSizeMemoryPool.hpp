@@ -34,7 +34,9 @@ private:
     IteratorOfLists end();
     IteratorOfLists beforeEnd();
 public:
-    FixedSizeMemoryPool(std::size_t memoryBlockSize, std::size_t initialBlockCount);
+    FixedSizeMemoryPool(std::size_t memoryBlockSize, std::size_t initialBlockCount = 16);
+    FixedSizeMemoryPool(FixedSizeMemoryPool&& rhs) noexcept(false);
+    FixedSizeMemoryPool& operator=(FixedSizeMemoryPool&& rhs) noexcept(false);
     ~FixedSizeMemoryPool() noexcept(false);
 private:
     void returnMemoryBlock(IteratorOfLists iterators, std::size_t blockIndex);
@@ -46,6 +48,7 @@ public:
     std::size_t memoryBlockSize() const noexcept;
 public:
     std::shared_ptr<void> lendMemoryBlock();
+    void swap(FixedSizeMemoryPool& rhs);
 private:
     std::size_t memoryBlockSize_;
     std::size_t initialBlockCount_;

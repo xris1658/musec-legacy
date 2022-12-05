@@ -151,7 +151,8 @@ void EventHandler::scanPluginComplete()
 
 void EventHandler::onMainWindowOpened()
 {
-    Controller::ASIODriverController::loadASIODriver();
+    using namespace Musec::Controller::ASIODriverController;
+    setASIODriver(getASIODriver());
 }
 
 void EventHandler::onOptionsWindowOpened()

@@ -1,10 +1,10 @@
 #ifndef MUSEC_MATH_CONSTANTS
 #define MUSEC_MATH_CONSTANTS
 
-#include <cmath>
-
 #if __cplusplus >= 201907L
 #include <numbers>
+#else
+#include <cmath>
 #endif
 
 namespace Musec
@@ -31,13 +31,13 @@ constexpr T sqrt2()
 template<typename T>
 T pi()
 {
-    return std::acos(-1.0l);
+    return std::acosl(-1.0l);
 }
 
 template<typename T>
 T sqrt2()
 {
-    return std::sqrt(2.0l);
+    return std::sqrtl(2.0l);
 }
 #endif
 }

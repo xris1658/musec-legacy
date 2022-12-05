@@ -11,7 +11,7 @@ namespace Audio
 {
 namespace Util
 {
-enum PanLaw
+enum class PanLaw
 {
     k0,
     kN3,
@@ -51,7 +51,7 @@ StereoChannelScaleCollection<T> fromPanning(T panning)
     static_assert(std::is_floating_point_v<T>);
     if constexpr(panLaw == PanLaw::k0)
     {
-        return panning < 0?
+        return panning <= 0?
             StereoChannelScaleCollection<T>{T(1), T(1) + panning}:
             StereoChannelScaleCollection<T>{T(1) - panning, T(1)};
     }
@@ -64,7 +64,6 @@ StereoChannelScaleCollection<T> fromPanning(T panning)
     {
         return {T(0.5) - T(0.5) * panning, T(0.5) + T(0.5) * panning};
     }
-    return {1, 1};
 }
 
 template<typename T, PanLaw panLaw>
@@ -84,6 +83,47 @@ T compensateFromPanLaw()
         return 2;
     }
 }
+
+#pragma warning(push)
+#pragma warning(disable: 4702) // Unreachable code
+template<typename T, PanLaw panLaw, bool Compensate>
+StereoChannelScaleCollection<T> fromPanning(T panning)
+{
+    static_assert(std::is_floating_point_v<T>);
+    using namespace Musec::Math;
+    if constexpr(panLaw == PanLaw::k0)
+    {
+        return panning <= 0?
+            StereoChannelScaleCollection<T>{T(1), T(1) + panning}:
+            StereoChannelScaleCollection<T>{T(1) - panning, T(1)};
+    }
+    else if constexpr(panLaw == PanLaw::kN3)
+    {
+        if(panning == 0)
+        {
+            if constexpr(Compensate)
+            {
+                return {T(1), T(1)};
+            }
+            return {sqrt2<T>(), sqrt2<T>()};
+        }
+        T left = std::cos(T(0.25) * Musec::Math::pi<T>() * (panning + 1));
+        if constexpr(Compensate)
+        {
+            return {left * sqrt2<T>(), std::sqrt((1 - left * left) * 2)};
+        }
+        return {left, std::sqrt(1 - left * left)};
+    }
+    else if constexpr(panLaw == PanLaw::kN6)
+    {
+        if constexpr(Compensate)
+        {
+            return {T(1) - T(1) * panning, T(1) + T(1) * panning};
+        }
+        return {T(0.5) - T(0.5) * panning, T(0.5) + T(0.5) * panning};
+    }
+}
+#pragma warning(pop)
 }
 }
 }

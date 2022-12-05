@@ -6,6 +6,7 @@
 #include "audio/track/AudioTrack.hpp"
 #include "audio/track/InstrumentTrack.hpp"
 #include "audio/track/MIDITrack.hpp"
+#include "audio/util/Util.hpp"
 #include "controller/AudioEngineController.hpp"
 #include "ui/PluginWindow.hpp"
 
@@ -15,10 +16,10 @@
 
 namespace Musec::Audio::Engine
 {
-Project::Project(int reserveTrackCount):
+Project::Project(std::size_t audioBufferSizeInFrame, int reserveTrackCount):
     mutex_(),
     audioBufferPool_(
-        sizeof(float) * Musec::Controller::AudioEngineController::getMaxBlockSize() * 2, reserveTrackCount
+        sizeof(float) * audioBufferSizeInFrame, reserveTrackCount
     ),
     audioBuffer_(),
     masterTrackAudioBuffer_(audioBufferPool_.memoryBlockSize()),
@@ -31,11 +32,7 @@ Project::Project(int reserveTrackCount):
     gain_(), panning_(),
     trackMute_(), trackSolo_(), trackInvertPhase_(), trackArmRecording_(), trackMonoDownMix_(),
     pluginAndWindow_(),
-    vst2PluginPool_(),
-    panLaw_(Musec::Audio::Util::DefaultPanLaw),
-    compensate_(true),
-    getScale_(&Musec::Audio::Util::fromPanning<float, Musec::Audio::Util::PanLaw::kN3>),
-    getCompensate_(&Musec::Audio::Util::compensateFromPanLaw<float, Musec::Audio::Util::PanLaw::kN3>)
+    vst2PluginPool_()
 {
     static std::thread thread([this]() { vst2PluginIdleFunc(); });
     if(thread.joinable())
@@ -232,6 +229,7 @@ const Musec::Base::FixedSizeMemoryBlock& Project::masterTrackAudioBuffer() const
 // If not, the priority of this thread might be set to realtime + MMCSS.
 void Project::process()
 {
+    using namespace Musec::Audio::Util;
     std::lock_guard<std::mutex> lg(mutex_);
     Musec::Controller::AudioEngineController::fillPluginContext();
     masterTrackAudioBuffer_.init();
@@ -292,12 +290,13 @@ void Project::process()
                 audioBufferViews[0][j] = audioBufferViews[1][j] =
                     (audioBufferViews[0][j] + audioBufferViews[1][j]) * 0.5;
             }
-            auto scales = getScale_(panning_[i]);
-            if(compensate_)
-            {
-                scales.left *= getCompensate_();
-                scales.right *= getCompensate_();
-            }
+            // auto scales = getScale_(panning_[i]);
+            // if(compensate_)
+            // {
+            //     scales.left *= getCompensate_();
+            //     scales.right *= getCompensate_();
+            // }
+            auto scales = fromPanning<double, PanLaw::kN3, true>(panning_[i]);
             audioBufferViews[0][j] *= scales.left;
             audioBufferViews[1][j] *= scales.right;
             for (auto k = 0; k < masterTrackAudioBufferViews.size(); ++k)
@@ -333,12 +332,7 @@ void Project::process()
             masterTrackAudioBufferViews[0][j] = masterTrackAudioBufferViews[1][j] =
                 (masterTrackAudioBufferViews[0][j] + masterTrackAudioBufferViews[1][j]) * 0.5;
         }
-        auto scales = getScale_(masterTrackPanning_);
-        if(compensate_)
-        {
-            scales.left *= getCompensate_();
-            scales.right *= getCompensate_();
-        }
+        auto scales = fromPanning<double, PanLaw::kN3, true>(masterTrackPanning_);
         masterTrackAudioBufferViews[0][j] *= scales.left;
         masterTrackAudioBufferViews[1][j] *= scales.right;
         for (auto& masterTrackAudioBufferView : masterTrackAudioBufferViews)
@@ -377,35 +371,21 @@ void Project::clear()
     pluginAndWindow_.clear();
 }
 
-Musec::Audio::Util::PanLaw Project::getPanLaw()
+void Project::reallocateAudioBuffer(std::size_t audioBufferSizeInFrame)
 {
-    return panLaw_;
-}
-
-bool Project::isCompensate()
-{
-    return compensate_;
-}
-
-void Project::setPanLaw(Musec::Audio::Util::PanLaw panLaw, bool compensate)
-{
-    using namespace Musec::Audio::Util;
-    panLaw_ = panLaw;
-    compensate_ = compensate;
-    if(panLaw_ == PanLaw::k0)
+    auto trackCount = this->trackCount();
+    auto audioBufferPool = Musec::Base::FixedSizeMemoryPool(sizeof(float) * audioBufferSizeInFrame * 2);
+    decltype(audioBuffer_) audioBuffer(trackCount, nullptr);
+    for(decltype(trackCount) i = 0; i < trackCount; ++i)
     {
-        getScale_ = &fromPanning<float, PanLaw::k0>;
-        getCompensate_ = &compensateFromPanLaw<float, PanLaw::k0>;
+        audioBuffer[i] = std::static_pointer_cast<float>(audioBufferPool.lendMemoryBlock());
     }
-    else if(panLaw_ == PanLaw::kN6)
+    decltype(masterTrackAudioBuffer_) masterTrackAudioBuffer(sizeof(float) * audioBufferSizeInFrame * 2);
     {
-        getScale_ = &fromPanning<float, PanLaw::kN6>;
-        getCompensate_ = &compensateFromPanLaw<float, PanLaw::kN6>;
-    }
-    else/* if(panLaw_ == PanLaw::kN3)*/
-    {
-        getScale_ = &fromPanning<float, PanLaw::kN3>;
-        getCompensate_ = &compensateFromPanLaw<float, PanLaw::kN3>;
+        std::lock_guard<std::mutex> lg(mutex_);
+        audioBuffer_ = std::move(audioBuffer);
+        audioBufferPool_ = std::move(audioBufferPool);
+        masterTrackAudioBuffer_ = std::move(masterTrackAudioBuffer);
     }
 }
 

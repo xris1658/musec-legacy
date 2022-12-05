@@ -4,6 +4,7 @@
 #include "audio/driver/ASIOErrorText.hpp"
 #include "concurrent/ButlerThread.hpp"
 #include "controller/AppController.hpp"
+#include "controller/AudioEngineController.hpp"
 #include "controller/ConfigController.hpp"
 #include "ui/MessageDialog.hpp"
 #include "ui/UI.hpp"
@@ -95,7 +96,7 @@ bool loadASIODriver()
             Musec::UI::MessageDialog::IconType::Warning);
         return false;
     }
-    return allocateASIODriverBuffer() && startASIODriver();
+    return true;
 }
 
 QString getASIODriver()
@@ -115,15 +116,27 @@ void setASIODriver(const QString& clsid)
         auto& itemCLSID = std::get<CLSIDField>(item);
         if(itemCLSID.compare(clsid, Qt::CaseInsensitive) == 0)
         {
+            auto oldMaxSize = Musec::Audio::Driver::getBufferSize(AppASIODriver()).preferredBufferSize;
             unloadASIODriver();
             try
             {
                 AppASIODriver() = ASIODriver(item);
-                loadASIODriver();
-                auto& appConfig = ConfigController::appConfig();
-                appConfig["musec"]["options"]["audio-hardware"]["driver-id"] =
+                if(loadASIODriver())
+                {
+                    auto newMaxSize = Musec::Audio::Driver::getBufferSize(AppASIODriver()).preferredBufferSize;
+                    Musec::Controller::AudioEngineController::AppProject().reallocateAudioBuffer(newMaxSize);
+                    auto& appConfig = ConfigController::appConfig();
+                    appConfig["musec"]["options"]["audio-hardware"]["driver-id"] =
                         clsid.toStdString();
-                ConfigController::saveAppConfig();
+                    ConfigController::saveAppConfig();
+                    if(allocateASIODriverBuffer())
+                    {
+                        if(startASIODriver())
+                        {
+                            //
+                        }
+                    }
+                }
             }
             catch(std::runtime_error&)
             {
@@ -133,7 +146,7 @@ void setASIODriver(const QString& clsid)
                     Musec::UI::MessageDialog::IconType::Error);
                 unloadASIODriver();
             }
-            break;
+            return;
         }
     }
 }

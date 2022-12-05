@@ -91,7 +91,7 @@ ASIOLatencyInSamples getLatency(const ASIODriver& driver)
 
 ASIOBufferSize getBufferSize(const ASIODriver& driver)
 {
-    ASIOBufferSize ret;
+    ASIOBufferSize ret {0, 0, 0, 0};
     driver->getBufferSize(&ret.minimumBufferSize,
         &ret.maximumBufferSize,
         &ret.preferredBufferSize,
