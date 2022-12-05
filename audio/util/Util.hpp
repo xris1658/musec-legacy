@@ -25,8 +25,8 @@ constexpr double A4Frequency = 440.0;
 template<typename T>
 struct StereoChannelScaleCollection
 {
-    float left;
-    float right;
+    T left;
+    T right;
 };
 
 double noteToFrequency(std::uint8_t note, double A4Freq = A4Frequency);
