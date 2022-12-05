@@ -105,7 +105,7 @@ StereoChannelScaleCollection<T> fromPanning(T panning)
             {
                 return {T(1), T(1)};
             }
-            return {sqrt2<T>(), sqrt2<T>()};
+            return {0.5 * sqrt2<T>(), 0.5 * sqrt2<T>()};
         }
         T left = std::cos(T(0.25) * Musec::Math::pi<T>() * (panning + 1));
         if constexpr(Compensate)
