@@ -139,7 +139,7 @@ void VST2Plugin::process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs
     Musec::Audio::Base::AudioBufferView<SampleType>* outputs, int outputCount)
 {
     processLevel_ = VstProcessLevels::kVstProcessLevelRealtime;
-    for(int i = 0; i < inputCount; ++i)
+    for(int i = 0; i < inputCount && i < inputsRaw_.size(); ++i)
     {
         inputsRaw_[i] = inputs[i].getSamples();
         if(inputsRaw_.size() > inputCount)
@@ -151,7 +151,7 @@ void VST2Plugin::process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs
     {
         inputsRaw_[i] = Musec::Controller::AudioEngineController::dummyBufferView<SampleType>().getSamples();
     }
-    for(int i = 0; i < outputCount && i < this->audioOutputCount(); ++i)
+    for(int i = 0; i < outputCount && i < this->audioOutputCount() && i < inputsRaw_.size(); ++i)
     {
         outputsRaw_[i] = outputs[i].getSamples();
     }
