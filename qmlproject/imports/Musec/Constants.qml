@@ -240,7 +240,12 @@ QtObject {
         ListElement {
             name: "VST"
             homepage: "https://www.steinberg.net/developers/"
-            description: qsTr("Widely used audio plugin framework")
+            description: qsTr("Widely used audio plugin format")
+        }
+        ListElement {
+            name: "CLAP"
+            homepage: "https://cleveraudio.org"
+            description: qsTr("Free audio plugin format")
         }
         ListElement {
             name: "yaml-cpp"

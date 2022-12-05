@@ -818,11 +818,16 @@
     </message>
     <message>
         <location filename="../qmlproject/imports/Musec/Constants.qml" line="243"/>
-        <source>Widely used audio plugin framework</source>
+        <source>Widely used audio plugin format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qmlproject/imports/Musec/Constants.qml" line="248"/>
+        <source>Free audio plugin format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="253"/>
         <source>YAML parser and emitter</source>
         <translation type="unfinished"></translation>
     </message>

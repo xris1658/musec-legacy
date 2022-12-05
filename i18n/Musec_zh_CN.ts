@@ -836,11 +836,16 @@
     </message>
     <message>
         <location filename="../qmlproject/imports/Musec/Constants.qml" line="243"/>
-        <source>Widely used audio plugin framework</source>
-        <translation>广泛使用的音频插件框架</translation>
+        <source>Widely used audio plugin format</source>
+        <translation>广泛使用的音频插件格式</translation>
     </message>
     <message>
         <location filename="../qmlproject/imports/Musec/Constants.qml" line="248"/>
+        <source>Free audio plugin format</source>
+        <translation>自由的音频插件格式</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/imports/Musec/Constants.qml" line="253"/>
         <source>YAML parser and emitter</source>
         <translation>YAML 解析与生成程序</translation>
     </message>
