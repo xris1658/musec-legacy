@@ -38,7 +38,7 @@ public:
     Q_ENUM(TrackType)
 public:
     CompleteTrack(QObject* parent = nullptr,
-        QString  trackName = "", QColor trackColor = QColor(0, 0, 0),
+        QString trackName = "", QColor trackColor = QColor(0, 0, 0),
         TrackType trackType = TrackType::AudioTrack,
         int height = 60, double gain = 1.0, double panning = 0.0,
         bool trackMute = false, bool trackSolo = false,
