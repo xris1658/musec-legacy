@@ -304,6 +304,7 @@ Item {
                 TrackHeader {
                     id: masterTrack
                     trackName: qsTr("Master")
+                    indexVisible: false
                     parent: showMasterTrackButton.currentIndex == 1? masterTrackHeader: masterTrackFooter
                     width: headers.width
                     height: 60

@@ -17,6 +17,8 @@ Item {
     property bool trackSolo: false
     property bool trackRecord: false
 
+    property alias indexVisible: trackIndexBar.visible
+
     signal renameComplete(newName: string)
     signal setMute(newMute: bool)
     signal setSolo(newSolo: bool)
@@ -108,7 +110,7 @@ Item {
                     }
                     Item {
                         id: trackNameBar
-                        width: root.width - colorBar.width - trackIndexBar.width - 3 * height
+                        width: root.width - colorBar.width - (trackIndexBar.visible? trackIndexBar.width: 0) - 3 * height
                         height: lineHeight
                         Text {
                             anchors.left: parent.left
