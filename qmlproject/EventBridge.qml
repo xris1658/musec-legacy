@@ -26,8 +26,6 @@ QtObject {
     signal openSpecialCharacterInput()
     signal setArrangementPosition(position: int)
     signal requestExplorerView()
-    signal appendTrack(track: CompleteTrack)
-    signal insertTrack(track: CompleteTrack, index: int)
     signal newPluginWindowReady()
     signal setIcon()
     function setWindowIcon(window: Window) {
@@ -96,11 +94,6 @@ QtObject {
     onSetSystemTextRenderingComplete: {
         messageDialog(Strings.optionSaveRebootPromptText,
             Strings.applicationName, MDlg.MessageDialog.Icon.Info);
-    }
-
-    signal trackInserted(index: int)
-    onTrackInserted: (index) => {
-        Objects.mainWindow.trackInserted(index);
     }
 
     signal updateArrangement()

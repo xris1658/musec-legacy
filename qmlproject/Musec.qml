@@ -180,11 +180,6 @@ ApplicationWindow {
         }
     }
 
-    signal trackInserted(index: int)
-    onTrackInserted: (index) => {
-        arrangement.appendTrackComplete(index);
-    }
-
     signal readyToQuit()
     onReadyToQuit: {
         canClose = true;
@@ -725,12 +720,6 @@ ApplicationWindow {
                             y: parent.y
                             loop: actionLoop.checked
                             position: 0
-                            onAppendTrack: (track) => {
-                                eventBridge.appendTrack(track);
-                            }
-                            onInsertTrack: (track, index) => {
-                                eventBridge.insertTrack(track, index);
-                            }
                         }
                     }
                     Item {

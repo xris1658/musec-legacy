@@ -14,6 +14,7 @@
 
 namespace Musec::Model
 {
+using namespace Musec::Entities;
 namespace Impl
 {
 std::shared_ptr<Musec::Audio::Plugin::IPlugin> loadAndStartPlugin(const QString& path, int format, const char* id)
@@ -113,7 +114,7 @@ QVariant TrackListModel::data(const QModelIndex& index, int role) const
             return QVariant();
         }
         // pointer to `const` can't be used in the meta-object system, so we need to remove `const`
-        return QVariant::fromValue(const_cast<Musec::Entities::Plugin*>(instruments_[row].get()));
+        return QVariant::fromValue(const_cast<Plugin*>(instruments_[row].get()));
     }
     case RoleNames::PluginListRole:
     {
@@ -210,13 +211,13 @@ Musec::Model::PluginSequenceModel& TrackListModel::masterTrackPluginSequenceMode
     return masterPluginSequences_;
 }
 
-void TrackListModel::insertTrack(int index, const Musec::Entities::CompleteTrack& track)
+void TrackListModel::insertTrack(int index, const CompleteTrack& track)
 {
     emit beginInsertRows(QModelIndex(), index, index);
     project_.insertTrack(index, track);
     instruments_.insert(
         instruments_.begin() + index,
-        std::make_unique<Musec::Entities::Plugin>(Musec::Entities::Plugin::fromPlugin(nullptr))
+        std::make_unique<Plugin>(Plugin::fromPlugin(nullptr))
     );
     pluginSequences_.insert(
         pluginSequences_.begin() + index,
@@ -225,9 +226,27 @@ void TrackListModel::insertTrack(int index, const Musec::Entities::CompleteTrack
     emit endInsertRows();
 }
 
-void TrackListModel::appendTrack(const Musec::Entities::CompleteTrack& track)
+void TrackListModel::appendTrack(const CompleteTrack& track)
 {
     insertTrack(trackCount(), track);
+}
+
+void TrackListModel::insertTrack(int index, const QJSValue& value)
+{
+    auto track = qobject_cast<CompleteTrack*>(value.toQObject());
+    if(track)
+    {
+        insertTrack(index, *track);
+    }
+}
+
+void TrackListModel::appendTrack(const QJSValue& value)
+{
+    auto track = qobject_cast<CompleteTrack*>(value.toQObject());
+    if(track)
+    {
+        appendTrack(*track);
+    }
 }
 
 void TrackListModel::removeTrack(int index)
@@ -260,7 +279,7 @@ void TrackListModel::loadInstrument(int trackIndex, int pluginId)
     if(instrument)
     {
         instrumentTrack->setInstrument(instrument);
-        instruments_[trackIndex] = std::make_unique<Musec::Entities::Plugin>(Musec::Entities::Plugin::fromPlugin(instrument, name));
+        instruments_[trackIndex] = std::make_unique<Plugin>(Plugin::fromPlugin(instrument, name));
         dataChanged(index(trackIndex), index(trackIndex), QVector<int>(1, RoleNames::InstrumentRole));
     }
 }
@@ -401,7 +420,7 @@ void TrackListModel::removeInstrument(int trackIndex)
     {
         auto instrumentTrack = std::static_pointer_cast<Musec::Audio::Track::InstrumentTrack>(track);
         instrumentTrack->setInstrument(nullptr);
-        *(instruments_[trackIndex]) = Musec::Entities::Plugin::fromPlugin();
+        *(instruments_[trackIndex]) = Plugin::fromPlugin();
         dataChanged(this->index(trackIndex), this->index(trackIndex), { RoleNames::InstrumentRole });
     }
 }

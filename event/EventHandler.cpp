@@ -58,10 +58,6 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      this,        SLOT(onPlayStop()));
     QObject::connect(eventBridge, SIGNAL(requestExplorerView()),
                      this,        SLOT(onRequestExplorerView()));
-    QObject::connect(eventBridge, SIGNAL(appendTrack(Musec::Entities::CompleteTrack*)),
-                     this,        SLOT(onAppendTrack(Musec::Entities::CompleteTrack*)));
-    QObject::connect(eventBridge, SIGNAL(insertTrack(Musec::Entities::CompleteTrack*, int)),
-                     this,        SLOT(onInsertTrack(Musec::Entities::CompleteTrack*, int)));
     QObject::connect(eventBridge, SIGNAL(newPluginWindowReady()),
                      this,        SLOT(onNewPluginWindowReady()));
     QObject::connect(eventBridge, SIGNAL(setIcon()),
@@ -385,16 +381,6 @@ void EventHandler::onRequestExplorerView()
         requestExplorerViewComplete();
     };
     std::async(std::launch::async, setList);
-}
-
-void EventHandler::onAppendTrack(Musec::Entities::CompleteTrack* track)
-{
-    Musec::Controller::AudioEngineController::appendTrack(*track);
-}
-
-void EventHandler::onInsertTrack(Musec::Entities::CompleteTrack* track, int index)
-{
-    Musec::Controller::AudioEngineController::insertTrack(index, *track);
 }
 
 void EventHandler::onTrackInserted(const QModelIndex& parent, int first, int last)

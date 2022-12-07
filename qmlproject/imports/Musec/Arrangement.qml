@@ -46,9 +46,23 @@ Item {
     property ListModel trackClipboard: ListModel {
         dynamicRoles: true
     }
-    signal appendTrack(track: CompleteTrack)
-    signal insertTrack(track: CompleteTrack, index: int)
-    signal appendTrackComplete(index: int)
+
+    CompleteTrack {
+        id: completeTrack
+    }
+    function generateInstrumentTrackInfo() {
+        completeTrack.trackColor = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
+        completeTrack.trackName = qsTr("Instrument");
+        completeTrack.trackType = CompleteTrack.InstrumentTrack;
+        completeTrack.height = 60;
+    }
+
+    function generateAudioTrackInfo() {
+        completeTrack.trackColor = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
+        completeTrack.trackName = qsTr("Audio");
+        completeTrack.trackType = CompleteTrack.AudioTrack;
+        completeTrack.height = 60;
+    }
 
     MCtrl.Menu {
         id: trackOptions
@@ -99,25 +113,15 @@ Item {
         MCtrl.Action {
             text: qsTr("Insert &Instrument Track Above")
             onTriggered: {
-                let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
-                    root, "");
-                completeTrack.trackColor = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
-                completeTrack.trackName = qsTr("Instrument");
-                completeTrack.trackType = CompleteTrack.InstrumentTrack;
-                completeTrack.height = 60;
-                insertTrack(completeTrack, trackOptions.trackIndex - 1);
+                generateInstrumentTrackInfo();
+                tracks.insertTrack(trackOptions.trackIndex - 1, completeTrack);
             }
         }
         MCtrl.Action {
             text: qsTr("Insert &Audio Track Above")
             onTriggered: {
-                let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
-                    root, "");
-                completeTrack.trackColor = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
-                completeTrack.trackName = qsTr("Audio");
-                completeTrack.trackType = CompleteTrack.AudioTrack;
-                completeTrack.height = 60;
-                insertTrack(completeTrack, trackOptions.trackIndex - 1);
+                generateAudioTrackInfo();
+                tracks.insertTrack(trackOptions.trackIndex - 1, completeTrack);
             }
         }
     }
@@ -268,26 +272,16 @@ Item {
                         id: insertInstrumentTrack
                         text: qsTr("Append an &Instrument Track")
                         onTriggered: {
-                            let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
-                                root, "");
-                            completeTrack.trackColor = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
-                            completeTrack.trackName = qsTr("Instrument");
-                            completeTrack.trackType = CompleteTrack.InstrumentTrack;
-                            completeTrack.height = 60;
-                            appendTrack(completeTrack);
+                            generateInstrumentTrackInfo();
+                            tracks.appendTrack(completeTrack);
                         }
                     }
                     MCtrl.Action {
                         id: insertAudioTrack
                         text: qsTr("Append an &Audio Track")
                         onTriggered: {
-                            let completeTrack = Qt.createQmlObject("import Musec.Entities 1.0; CompleteTrack {}",
-                                root, "");
-                            completeTrack.trackColor = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
-                            completeTrack.trackName = qsTr("Audio");
-                            completeTrack.trackType = CompleteTrack.AudioTrack;
-                            completeTrack.height = 60;
-                            appendTrack(completeTrack);
+                            generateAudioTrackInfo();
+                            tracks.appendTrack(completeTrack);
                         }
                     }
                     MCtrl.MenuSeparator {}
@@ -426,13 +420,17 @@ Item {
                         onDropped: (drop) => {
                             if(checkDragEvent(drop)) {
                                 var type = parseInt(drop.getDataAsString("type"));
-                                if(type == 2) {
-                                    insertInstrumentTrack.trigger(blankHeaderDropArea);
+                                if(type == Plugin.Instrument) {
+                                    generateInstrumentTrackInfo();
+                                    tracks.appendTrack(completeTrack);
+                                    tracks.loadInstrument(tracks.trackCount() - 1, parseInt(drop.getDataAsString("pluginId")));
                                 }
-                                else if(type == 3) {
-                                    insertAudioTrack.trigger(blankHeaderDropArea);
+                                else if(type == Plugin.AudioEffect) {
+                                    generateAudioTrackInfo();
+                                    tracks.appendTrack(completeTrack);
+                                    tracks.insertEffect(tracks.trackCount() - 1, 0, parseInt(drop.getDataAsString("pluginId")));
                                 }
-                                console.log("Create a new track with plugin") + ": ";
+                                console.log("Create a new track with plugin: ");
                                 console.log(drop.getDataAsString("type"), drop.getDataAsString("pluginId"));
                             }
                             else {
@@ -577,14 +575,30 @@ Item {
                                 opacity: parent.containsDrag? 0.6: 0
                             }
                             onEntered: (drag) => {
-                                if(!checkDragEvent(drag)) {
-                                    drag.accepted = false;
+                                if(checkDragEvent(drag)) {
+                                    if(type == CompleteTrack.AudioTrack
+                                       && (parseInt(drag.getDataAsString("type")) != Plugin.AudioEffect)) {
+                                        drag.accepted = false;
+                                    }
+                                    return;
                                 }
+                                drag.accepted = false;
                             }
                             onDropped: (drop) => {
-                                if(checkDragEvent(drop)) {
-                                    console.log("Append a plugin to track: ");
-                                    console.log(drop.getDataAsString("type"), drop.getDataAsString("pluginId"));
+                                let pluginType = parseInt(drop.getDataAsString("type"));
+                                let pluginId = parseInt(drop.getDataAsString("pluginId"));
+                                if(type == CompleteTrack.InstrumentTrack) {
+                                    if(pluginType == Plugin.Instrument) {
+                                        tracks.loadInstrument(index, pluginId);
+                                    }
+                                    else if(pluginType == Plugin.AudioEffect) {
+                                        tracks.insertEffect(index, plugin_list.itemCount(), pluginId);
+                                    }
+                                }
+                                else if(type == CompleteTrack.AudioTrack) {
+                                    if(pluginType == Plugin.AudioEffect) {
+                                        tracks.insertEffect(index, plugin_list.itemCount(), pluginId);
+                                    }
                                 }
                             }
                         }

@@ -3,16 +3,19 @@
 #define MUSEC_MODEL_TRACKLISTMODEL
 
 #include "audio/engine/Project.hpp"
+#include "entities/CompleteTrack.hpp"
 #include "model/ModelBase.hpp"
 #include "model/PluginSequenceModel.hpp"
 
 #include <QAbstractListModel>
 #include <QByteArray>
+#include <QJSValue>
 
 namespace Musec
 {
 namespace Model
 {
+using namespace Musec::Entities;
 class TrackListModel: public QAbstractListModel
 {
     Q_OBJECT
@@ -57,8 +60,10 @@ public:
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
     Musec::Model::PluginSequenceModel& masterTrackPluginSequenceModel();
 public:
-    Q_INVOKABLE void insertTrack(int index, const Musec::Entities::CompleteTrack& track);
-    Q_INVOKABLE void appendTrack(const Musec::Entities::CompleteTrack& track);
+    void insertTrack(int index, const CompleteTrack& track);
+    void appendTrack(const CompleteTrack& track);
+    Q_INVOKABLE void insertTrack(int index, const QJSValue& value);
+    Q_INVOKABLE void appendTrack(const QJSValue& value);
     Q_INVOKABLE void removeTrack(int index);
     Q_INVOKABLE void loadInstrument(int trackIndex, int pluginId);
     Q_INVOKABLE void insertEffect(int trackIndex, int pluginIndex, int pluginId);
