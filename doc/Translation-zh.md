@@ -16,7 +16,7 @@
   - 语言码列表：[List of ISO 639-1 codes - Wikipedia](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
   - 国家码列表：[List of ISO 3166 country codes - Wikipedia](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes)
 - 用 Qt Linguist 打开翻译文件。
-- Qt Linguist 会自动检测文件名中的语言码和国家码，若没有检测到，则检测系统语言和区域设置，并自动调整目标语言。也可以自行选择目标语言。确认目标语言无误后点击 **OK**。
+- Qt Linguist 会自动从文件名中检测语言码和国家码，若没有检测到，则通过检测系统语言和区域设置来调整目标语言。也可以自行选择目标语言。确认目标语言无误后点击 **OK**。
 - 翻译文本。
 - 翻译完成后，保存翻译文件。
 
@@ -40,7 +40,7 @@
 
 ## 发布翻译文件
 要让程序使用翻译，需要将翻译文件发布为目标文件。
-用 Qt Linguist 打开翻译文件后，选择菜单栏中的**文件->发布**，翻译文件所在的目录中会生成一个目标文件。
+要发布翻译文件，用 Qt Linguist 打开翻译文件后，选择菜单栏中的**文件->发布**，翻译文件所在的目录中会生成一个目标文件。
 将发布的文件放在程序目录下，即可在程序中使用翻译。
 
 可以将发布翻译的过程集成到项目文件中。
@@ -50,7 +50,7 @@
 # CMakeLists.txt
 add_custom_command(TARGET Musec POST_BUILD COMMAND ${Qt5_DIR}/../../../bin/lrelease.exe ${CMAKE_SOURCE_DIR}/i18n/Musec_zh_CN.ts -qm ${CMAKE_CURRENT_BINARY_DIR}\\Musec_zh_CN.qm)
 ```
-要使用自己的翻译，可以更改这一命令。
+要发布自己的翻译，可以更改这一命令。
 ### 在 qmake 中发布
 发布翻译和复制发布文件的操作由 qmake 提供支持。
 

@@ -16,7 +16,7 @@ If you'd not like to download a whole development kit, you can install standalon
   - List of language codes: [List of ISO 639-1 codes - Wikipedia](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
   - List of country codes: [List of ISO 3166 country codes - Wikipedia](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes)
 - Open the translation file with Qt Linguist.
-- Qt Linguist will detect the language code and country code in the file automatically, if failed, it will detect the language and region settings of the operating system. Then the target language will be set. You can select the target language manually. Make sure the target language is correct, then click **OK**.
+- Qt Linguist will detect the language code and country code from the file name automatically. If failed, it will set them by detecting the language and region settings of the operating system. You can select the target language manually. Make sure the target language is correct, then click **OK**.
 - Translate the text.
 - If the translation is complete, save the translation file.
 
@@ -28,7 +28,7 @@ There are two custom targets in `CMakeLists.txt`:
 - `GenerateLocaleBase`, this updated `base.ts`.
 - `GenerateLocaleCN`, this updated `Musec_zh_CN.ts`.
 
-You can add your translation file by copying and changing the custom target.
+You can add your translation file by duplicating and changing the custom target.
 
 ### Update in qmake
 Translation files in the project are listed in the variable `TRANSLATIONS` of `Musec.pro`. You can set this variable to include your file.
@@ -40,7 +40,7 @@ After the file is included, just update them using `lupdate.exe`:
 
 ## Release translations
 It's required to release the translation files to target files in order to make use of them in the program. 
-Open the translation file with Qt Linguist, select **File -> Release**, then a target file is generated in the directory of the translation file. 
+To release a translation file, open the translation file with Qt Linguist, select **File -> Release**, then a target file is generated in the directory of the translation file. 
 Move the target file to the directory of the program, then the translation can be used by the program.
 
 You can integrate the releasing process in the project file.
@@ -51,7 +51,7 @@ Releasing the translation file is a custom command in `CMakeList.txt`, and it's 
 # CMakeLists.txt
 add_custom_command(TARGET Musec POST_BUILD COMMAND ${Qt5_DIR}/../../../bin/lrelease.exe ${CMAKE_SOURCE_DIR}/i18n/Musec_zh_CN.ts -qm ${CMAKE_CURRENT_BINARY_DIR}\\Musec_zh_CN.qm)
 ```
-You could change this command in order to use your translation.
+You could change this command in order to release your translation.
 
 ### Release in qmake
 Releasing the translation is supported by qmake.
