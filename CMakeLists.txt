@@ -311,7 +311,7 @@ add_executable(MusecControlsTest ${QT_RESOURCES} ${MUSECCONTROLSTEST_SOURCES})
 
 add_executable(VST2PluginTestWithQt ${PROJECT_SOURCES} ${TEST_COMMON_SOURCES} ${VST2PLUGINTEST_SOURCES})
 
-add_executable(VST3PluginTestWithQt ${PROJECT_SOURCES} ${TEST_COMMON_SOURCES} ${VST3PLUGINTEST_SOURCES} ${VST3_EXTRA_SOURCES})
+add_executable(VST3PluginTestWithQt ${PROJECT_SOURCES} ${TEST_COMMON_SOURCES} ${VST3PLUGINTEST_SOURCES})
 
 target_compile_definitions(Musec
                            PRIVATE
