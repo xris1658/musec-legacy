@@ -219,6 +219,7 @@ SOURCES += \
     audio/plugin/VST2SpeakerGroupCollection.cpp \
     audio/plugin/VST3Plugin.cpp \
     audio/plugin/VST3ComponentHandler.cpp \
+    audio/plugin/VST3MemoryStream.cpp \
     audio/plugin/VST3PluginParameter.cpp \
     audio/plugin/VST3PluginPlugFrame.cpp \
     audio/plugin/VST3SpeakerGroup.cpp \
@@ -287,8 +288,7 @@ SOURCES += \
     ui/Render.cpp \
     ui/UI.cpp \
     util/Endian.cpp \
-    util/Literal.cpp \
-    $$VST3SDK_DIR/public.sdk/source/common/memorystream.cpp
+    util/Literal.cpp
 
 RESOURCES += \
     Musec.qrc

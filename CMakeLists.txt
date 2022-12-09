@@ -114,6 +114,7 @@ set(PROJECT_SOURCES
     audio/plugin/VST2SpeakerGroupCollection.hpp
     audio/plugin/VST3ComponentHandler.cpp
     audio/plugin/VST3ComponentHandler.hpp
+    audio/plugin/VST3MemoryStream.cpp
     audio/plugin/VST3Plugin.cpp
     audio/plugin/VST3Plugin.hpp
     audio/plugin/VST3PluginParameter.cpp
@@ -300,10 +301,7 @@ set(VST2PLUGINTEST_SOURCES
 set(VST3PLUGINTEST_SOURCES
     test/VST3PluginTestWithQt/main.cpp)
 
-set(VST3_EXTRA_SOURCES
-    ${VST3SDK_SOURCE_DIR}/public.sdk/source/common/memorystream.cpp)
-
-add_executable(Musec main.cpp ${PROJECT_SOURCES} ${RESOURCE_FILE} ${QT_RESOURCES} ${VST3_EXTRA_SOURCES})
+add_executable(Musec main.cpp ${PROJECT_SOURCES} ${RESOURCE_FILE} ${QT_RESOURCES})
 
 target_precompile_headers(Musec PRIVATE ${PROJECT_PCH})
 

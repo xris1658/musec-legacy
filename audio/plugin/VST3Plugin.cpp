@@ -8,9 +8,7 @@
 #include <pluginterfaces/vst/vstspeaker.h>
 
 // For some reason, memorystream.cpp is not included in sdk_common library, so I have to solve this
-// by adding the source file as an external source (by adding this to CMakeLists.txt).
-// Before that I `#include`d that file, so the content of the source is recompiled every time
-// VST3Plugin.cpp is recompiled, even if memorystream.cpp is not changed. It's a waste of time.
+// by `#include`ing the source file in another source: `audio/plugin/VST3MemoryStream.cpp`.
 #include <public.sdk/source/common/memorystream.h>
 
 #include <errhandlingapi.h>
