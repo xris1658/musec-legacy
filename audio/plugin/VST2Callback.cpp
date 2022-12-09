@@ -157,14 +157,14 @@ VstIntPtr VSTCALLBACK pluginVST2Callback(
         // ptr: Character buffer
     case audioMasterGetVendorString:
     {
-        constexpr int vendorNameLength = sizeof(Musec::Base::CompanyName) + 1;
+        constexpr int vendorNameLength = sizeof(Musec::Base::CompanyName);
         std::strncpy(reinterpret_cast<char*>(ptr), Musec::Base::CompanyName, vendorNameLength);
         break;
     }
         // ditto
     case audioMasterGetProductString:
     {
-        constexpr int productNameLength = sizeof(Musec::Base::ProductName) + 1;
+        constexpr int productNameLength = sizeof(Musec::Base::ProductName);
         std::strncpy(reinterpret_cast<char*>(ptr), Musec::Base::ProductName, productNameLength);
         break;
     }
