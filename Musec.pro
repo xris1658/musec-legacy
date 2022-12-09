@@ -39,13 +39,13 @@ INCLUDEPATH += $$VCPKG_DIR/installed/x64-windows/include \
 CONFIG(debug, debug | release) {
     QMAKE_LIBDIR += \
         $$VCPKG_DIR/installed/x64-windows/debug/lib \
-        $$VST3SDK_DIR/build/debug/lib
+        $$VST3SDK_DIR/build/lib/Debug
 }
 
 CONFIG(release, debug | release) {
     QMAKE_LIBDIR += \
         $$VCPKG_DIR/installed/x64-windows/lib \
-        $$VST3SDK_DIR/build/release/lib \
+        $$VST3SDK_DIR/build/lib/Release
 }
 
 message(Library directory: $$QMAKE_LIBDIR)

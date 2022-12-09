@@ -103,7 +103,7 @@
   - 选择菜单栏中的**生成 -> 批生成...**。
   - 勾选 `ALL_BUILD Debug x64` 和 `ALL_BUILD Release x64` 两行“生成”列的复选框，然后点击**生成**按钮。
 
-    如果在 `<VST3 SDK 路径>\build\debug\lib` 和 `<VST3 SDK 路径>\build\release\lib` 下找到了库文件，则构建正确。
+    如果在 `<VST3 SDK 路径>\build\lib\Debug` 和 `<VST3 SDK 路径>\build\lib\Release` 下找到了库文件，则构建正确。
 3. 配置并生成 Musec 项目。
   - 将 Musec 仓库克隆到本机。
   - 用 Qt Creator 打开 `<Musec directory>\Musec.pro`。

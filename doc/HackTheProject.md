@@ -120,7 +120,7 @@ library files) have to be made manually.
     - Choose **Build -> Batch Build...** from the menu bar.
     - Check the checkboxes of row `ALL_BUILD Debug x64` and `ALL_BUILD Release x64`, then click the **Build** button.
 
-    If you see library files in `<VST3 SDK path>\build\debug\lib` and `<VST3 SDK path>\build\release\lib`, then you have made it correctly.
+    If you see library files in `<VST3 SDK path>\build\lib\Debug` and `<VST3 SDK path>\build\lib\Release`, then you have made it correctly.
 3. Configure and build the Musec project.
     - Clone the repository to your machine.
     - Open `<Musec directory>\Musec.pro` using Qt Creator.
