@@ -28,7 +28,7 @@ namespace Musec::Audio::Plugin
 {
 namespace Impl
 {
-bool stringEqual(const char* lhs, const char* rhs)
+inline bool stringEqual(const char* lhs, const char* rhs)
 {
     return std::strcmp(lhs, rhs) == 0;
 }
