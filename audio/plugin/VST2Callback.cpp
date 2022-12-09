@@ -13,8 +13,13 @@ namespace VST2AudioEffectX
 #pragma warning(disable: 4458) // Shadows the local declaration
 #pragma warning(disable: 4100) // Unreferenced parameter
 #include <public.sdk/source/vst2.x/audioeffect.h>
-#include <public.sdk/source/vst2.x/audioeffectx.h>
 #include <public.sdk/source/vst2.x/audioeffect.cpp>
+// Some code of AudioEffectX is not compatible with C++11. (See the following line number.)
+// If using MSVC, then /Zc:strictStrings- should be applied to this source file.
+// I don't quite know how to set compiler flags for an individual file in qmake.
+// l.143
+#include <public.sdk/source/vst2.x/audioeffectx.h>
+// l.307
 #include <public.sdk/source/vst2.x/audioeffectx.cpp>
 #pragma warning(pop)
 }

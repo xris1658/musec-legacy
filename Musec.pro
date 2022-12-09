@@ -12,7 +12,7 @@ CONFIG(debug, debug | release) {
     CONFIG += qml_debug
 }
 
-QMAKE_CXXFLAGS += /Zc:wchar_t /W4
+QMAKE_CXXFLAGS += /Zc:wchar_t /W4 /Zc:__cplusplus /Zc:strictStrings-
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
