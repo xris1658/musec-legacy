@@ -31,6 +31,8 @@ public:
 public:
     virtual void process(Musec::Audio::Base::AudioBufferView<float>* input, int inputCount,
         Musec::Audio::Base::AudioBufferView<float>* output, int outputCount) = 0;
+public:
+    virtual int latency() = 0;
 };
 }
 }

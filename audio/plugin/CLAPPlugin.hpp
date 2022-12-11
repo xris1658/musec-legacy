@@ -10,6 +10,7 @@
 
 #include <clap/ext/audio-ports.h>
 #include <clap/ext/gui.h>
+#include <clap/ext/latency.h>
 #include <clap/ext/note-ports.h>
 #include <clap/ext/params.h>
 #include <clap/entry.h>
@@ -81,6 +82,7 @@ public:
     Musec::Base::PluginFormat pluginFormat() override;
     int parameterCount() override;
     IParameter& parameter(int index) override;
+    int latency() override;
 private:
     bool initializeParameters();
     bool uninitializeParameters();
@@ -97,6 +99,7 @@ private:
     const clap_plugin_gui* gui_ = nullptr;
     const clap_plugin_note_ports* notePorts_ = nullptr;
     const clap_plugin_params* params_ = nullptr;
+    const clap_plugin_latency* latency_ = nullptr;
     double sampleRate_;
     std::uint32_t minBlockSize_;
     std::uint32_t maxBlockSize_;

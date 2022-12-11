@@ -262,5 +262,10 @@ const Musec::Audio::Device::ISpeakerGroupCollection& VST2Plugin::audioOutputSpea
 {
     return outputSpeakerGroupCollection_;
 }
+
+int VST2Plugin::latency()
+{
+    return effect_? effect_->initialDelay: 0;
+}
 // ------------------------------------------------------------------------------------------
 }

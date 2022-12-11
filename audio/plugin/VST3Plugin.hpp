@@ -119,6 +119,7 @@ public: // IPlugin interfaces
     bool uninitialize() override;
     int parameterCount() override;
     IParameter& parameter(int index) override;
+    int latency() override;
 public:
     bool attachToWindow(QWindow* window) override;
     bool detachWithWindow() override;

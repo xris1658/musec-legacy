@@ -757,6 +757,11 @@ IParameter& VST3Plugin::parameter(int index)
     return reinterpret_cast<VST3PluginParameter*>(paramBlock_.data())[index];
 }
 
+int VST3Plugin::latency()
+{
+    return audioProcessor_? audioProcessor_->getLatencySamples(): 0;
+}
+
 bool VST3Plugin::processing()
 {
     return audioProcessorStatus_ >= VST3AudioProcessorStatus::Processing;

@@ -66,6 +66,7 @@ public:
     Musec::Base::PluginFormat pluginFormat() override;
     int parameterCount() override;
     IParameter& parameter(int index) override;
+    int latency() override;
 private:
     AEffect* effect_ = nullptr;
     VstProcessLevels processLevel_ = kVstProcessLevelUser;

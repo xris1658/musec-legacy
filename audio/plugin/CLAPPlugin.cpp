@@ -163,6 +163,7 @@ bool CLAPPlugin::initialize(double sampleRate, std::int32_t maxSampleCount)
             pluginStatus_ = CLAPPluginStatus::Initialized;
             notePorts_ = reinterpret_cast<decltype(notePorts_)>(plugin_->get_extension(plugin_, CLAP_EXT_NOTE_PORTS));
             audioPorts_ = reinterpret_cast<decltype(audioPorts_)>(plugin_->get_extension(plugin_, CLAP_EXT_AUDIO_PORTS));
+            latency_ = reinterpret_cast<decltype(latency_)>(plugin_->get_extension(plugin_, CLAP_EXT_LATENCY));
             inputSpeakerGroupCollection_ = {plugin_, audioPorts_, true};
             outputSpeakerGroupCollection_ = {plugin_, audioPorts_, false};
             if(initializeParameters())
@@ -378,6 +379,11 @@ int CLAPPlugin::parameterCount()
 IParameter& CLAPPlugin::parameter(int index)
 {
     throw std::out_of_range("");
+}
+
+int CLAPPlugin::latency()
+{
+    return latency_? latency_->get(plugin_): 0;
 }
 
 void CLAPPlugin::initHost()
