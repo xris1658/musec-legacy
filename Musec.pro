@@ -75,7 +75,6 @@ HEADERS += \
     audio/driver/ASIODriverForward.hpp \
     audio/driver/ASIODriverStreamInfo.hpp \
     audio/driver/ASIOSampleTypeName.hpp \
-    audio/engine/Graph.hpp \
     audio/engine/MIDIClock.hpp \
     audio/engine/Project.hpp \
     audio/host/CLAPEvents.hpp \

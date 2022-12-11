@@ -67,7 +67,6 @@ set(PROJECT_SOURCES
     audio/driver/ASIOErrorText.hpp
     audio/driver/ASIOSampleTypeName.cpp
     audio/driver/ASIOSampleTypeName.hpp
-    audio/engine/Graph.hpp
     audio/engine/MIDIClock.hpp
     audio/engine/Project.cpp
     audio/engine/Project.hpp

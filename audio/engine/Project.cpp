@@ -23,7 +23,6 @@ Project::Project(std::size_t audioBufferSizeInFrame, int reserveTrackCount):
     ),
     audioBuffer_(),
     masterTrackAudioBuffer_(audioBufferPool_.memoryBlockSize()),
-    pluginGraph_(),
     tracks_(),
     trackTypes_(),
     masterTrack_(),
@@ -357,7 +356,6 @@ void Project::clear()
 {
     std::lock_guard<std::mutex> lg(mutex_);
     vst2PluginIdleFuncRunning_ = false;
-    pluginGraph_.clear();
     audioBuffer_.clear();
     tracks_.clear();
     trackTypes_.clear();

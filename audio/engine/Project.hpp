@@ -1,7 +1,6 @@
 #ifndef MUSEC_AUDIO_ENGINE_PROJECT
 #define MUSEC_AUDIO_ENGINE_PROJECT
 
-#include "audio/engine/Graph.hpp"
 #include "audio/plugin/IPlugin.hpp"
 #include "audio/plugin/VST2PluginPool.hpp"
 #include "audio/track/AudioTrack.hpp"
@@ -92,7 +91,6 @@ private:
     Musec::Base::FixedSizeMemoryPool audioBufferPool_;
     std::vector<std::shared_ptr<float>> audioBuffer_;
     Musec::Base::FixedSizeMemoryBlock masterTrackAudioBuffer_;
-    Musec::Audio::Engine::Graph<std::shared_ptr<Musec::Audio::Plugin::IPlugin>> pluginGraph_;
     std::vector<std::shared_ptr<Musec::Audio::Track::ITrack>> tracks_;
     std::vector<Musec::Audio::Track::TrackType> trackTypes_;
     Musec::Audio::Track::AudioTrack masterTrack_;
