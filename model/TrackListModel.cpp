@@ -264,11 +264,8 @@ void TrackListModel::removeTrack(int index)
 
 void TrackListModel::loadInstrument(int trackIndex, int pluginId)
 {
-    auto info = Musec::Controller::PluginController::pluginFromId(pluginId);
-    const auto& pluginFormat = std::get<Musec::Base::PluginReadInfoField::ReadFieldFormat>(info);
-    const auto& path = std::get<Musec::Base::PluginReadInfoField::ReadFieldPath>(info);
-    const auto& pluginSubId = std::get<Musec::Base::PluginReadInfoField::ReadFieldUid>(info);
-    const auto& name = std::get<Musec::Base::PluginReadInfoField::ReadFieldName>(info);
+    const auto& [id, path, pluginSubId, name, pluginFormat, type] =
+        Musec::Controller::PluginController::pluginFromId(pluginId);
     auto track = project_[trackIndex];
     if(track.track->trackType() != Musec::Audio::Track::TrackType::kInstrumentTrack)
     {
@@ -286,11 +283,8 @@ void TrackListModel::loadInstrument(int trackIndex, int pluginId)
 
 void TrackListModel::insertEffect(int trackIndex, int pluginIndex, int pluginId)
 {
-    auto info = Musec::Controller::PluginController::pluginFromId(pluginId);
-    const auto& pluginFormat = std::get<Musec::Base::PluginReadInfoField::ReadFieldFormat>(info);
-    const auto& path = std::get<Musec::Base::PluginReadInfoField::ReadFieldPath>(info);
-    const auto& pluginSubId = std::get<Musec::Base::PluginReadInfoField::ReadFieldUid>(info);
-    const auto& name = std::get<Musec::Base::PluginReadInfoField::ReadFieldName>(info);
+    const auto& [id, path, pluginSubId, name, pluginFormat, type] =
+        Musec::Controller::PluginController::pluginFromId(pluginId);
     auto track = project_[trackIndex];
     auto trackType = track.track->trackType();
     if(trackType == Musec::Audio::Track::TrackType::kMIDITrack)
@@ -327,11 +321,8 @@ void TrackListModel::insertEffect(int trackIndex, int pluginIndex, int pluginId)
 
 void TrackListModel::replaceEffect(int trackIndex, int pluginIndex, int pluginId)
 {
-    auto info = Musec::Controller::PluginController::pluginFromId(pluginId);
-    const auto& pluginFormat = std::get<Musec::Base::PluginReadInfoField::ReadFieldFormat>(info);
-    const auto& path = std::get<Musec::Base::PluginReadInfoField::ReadFieldPath>(info);
-    const auto& pluginSubId = std::get<Musec::Base::PluginReadInfoField::ReadFieldUid>(info);
-    const auto& name = std::get<Musec::Base::PluginReadInfoField::ReadFieldName>(info);
+    const auto& [id, path, pluginSubId, name, pluginFormat, type] =
+        Musec::Controller::PluginController::pluginFromId(pluginId);
     auto track = project_[trackIndex];
     auto trackType = track.track->trackType();
     if(trackType == Musec::Audio::Track::TrackType::kMIDITrack)
@@ -368,11 +359,8 @@ void TrackListModel::replaceEffect(int trackIndex, int pluginIndex, int pluginId
 
 void TrackListModel::insertEffectMasterTrack(int pluginIndex, int pluginId)
 {
-    auto info = Musec::Controller::PluginController::pluginFromId(pluginId);
-    const auto& pluginFormat = std::get<Musec::Base::PluginReadInfoField::ReadFieldFormat>(info);
-    const auto& path = std::get<Musec::Base::PluginReadInfoField::ReadFieldPath>(info);
-    const auto& pluginSubId = std::get<Musec::Base::PluginReadInfoField::ReadFieldUid>(info);
-    const auto& name = std::get<Musec::Base::PluginReadInfoField::ReadFieldName>(info);
+    const auto& [id, path, pluginSubId, name, pluginFormat, type] =
+        Musec::Controller::PluginController::pluginFromId(pluginId);
     auto& track = projectMasterTrackRef_.masterTrack;
     auto plugin = Impl::loadAndStartPlugin(path, pluginFormat, pluginSubId.data());
     if(plugin)
@@ -389,11 +377,8 @@ void TrackListModel::insertEffectMasterTrack(int pluginIndex, int pluginId)
 
 void TrackListModel::replaceEffectMasterTrack(int pluginIndex, int pluginId)
 {
-    auto info = Musec::Controller::PluginController::pluginFromId(pluginId);
-    const auto& pluginFormat = std::get<Musec::Base::PluginReadInfoField::ReadFieldFormat>(info);
-    const auto& path = std::get<Musec::Base::PluginReadInfoField::ReadFieldPath>(info);
-    const auto& pluginSubId = std::get<Musec::Base::PluginReadInfoField::ReadFieldUid>(info);
-    const auto& name = std::get<Musec::Base::PluginReadInfoField::ReadFieldName>(info);
+    const auto& [id, path, pluginSubId, name, pluginFormat, type] =
+        Musec::Controller::PluginController::pluginFromId(pluginId);
     auto& track = projectMasterTrackRef_.masterTrack;
     auto plugin = Impl::loadAndStartPlugin(path, pluginFormat, pluginSubId.data());
     if(plugin)
