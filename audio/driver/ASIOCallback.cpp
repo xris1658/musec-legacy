@@ -10,8 +10,6 @@
 #include "util/Endian.hpp"
 #include "util/Stopwatch.hpp"
 
-#include <future>
-
 namespace Musec::Audio::Driver
 {
 bool driverSupportsOutputReady;
@@ -394,12 +392,52 @@ void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
 
 double cpuUsage = 0.0;
 
+void onASIOBufferSwitchAndUpdateTime(long doubleBufferIndex, ASIOBool directProcess)
+{
+    auto timeInNanoSecond = Musec::Util::stopwatchVoid<long, ASIOBool>(
+        Impl::onASIOBufferSwitch,
+        std::forward<long>(doubleBufferIndex), std::forward<ASIOBool>(directProcess));
+    // Do I have to retrieve these values every time?
+    if(AppASIODriver())
+    {
+        auto blockSize = getBufferSize().preferredBufferSize;
+        auto sampleRate = getSampleRate();
+        auto blockTimeInNanosecond = blockSize * 1e9 / sampleRate;
+        cpuUsage = timeInNanoSecond / blockTimeInNanosecond;
+    }
+}
+
+void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
+{
+#if NATIVE_INT64
+    ASIOSamples samples = 0LL;
+        ASIOTimeStamp timeStamp = 0LL;
+#else
+    ASIOSamples samples {0UL, 0UL};
+    ASIOTimeStamp timeStamp {0UL, 0UL};
+#endif
+    AppASIODriver()->getSamplePosition(&samples, &timeStamp);
+#if NATIVE_INT64
+    auto systemTime = timeStamp;
+#else
+    auto systemTime = timeStamp.hi * 0x100000000LL + timeStamp.lo;
+#endif
+    // TODO: Use systemTime to determine whether the driver has entered steady-state
+    onASIOBufferSwitchAndUpdateTime(doubleBufferIndex, directProcess);
+}
+
 ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
                                      long doubleBufferIndex,
                                      ASIOBool directProcess)
 {
-    onASIOBufferSwitch(doubleBufferIndex, directProcess);
-    return nullptr;
+#if NATIVE_INT64
+    std::int64_t systemTime = params->timeInfo.systemTime;
+#else
+    std::int64_t systemTime = params->timeInfo.systemTime.hi * 0x100000000LL + params->timeInfo.systemTime.lo;
+#endif
+    // TODO: Use systemTime to determine whether the driver has entered steady-state
+    onASIOBufferSwitchAndUpdateTime(doubleBufferIndex, directProcess);
+    return params;
 }
 
 void onASIOSampleRateDidChange(ASIOSampleRate sRate)
@@ -425,22 +463,6 @@ long onASIOMessage(long selector,
         return 1L;
     default:
         return 1L;
-    }
-}
-
-void onASIOBufferSwitch(long doubleBufferIndex, ASIOBool directProcess)
-{
-    auto timeInNanoSecond = Musec::Util::stopwatchVoid<long, ASIOBool>(
-        Impl::onASIOBufferSwitch,
-        std::forward<long>(doubleBufferIndex), std::forward<ASIOBool>(directProcess));
-    // Do I have to retrieve these values every time?
-    auto& theDriver = Musec::Audio::Driver::AppASIODriver();
-    if(theDriver)
-    {
-        auto blockSize = getBufferSize().preferredBufferSize;
-        auto sampleRate = getSampleRate();
-        auto blockTimeInNanosecond = blockSize * 1e9 / sampleRate;
-        cpuUsage = timeInNanoSecond / blockTimeInNanosecond;
     }
 }
 
