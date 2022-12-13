@@ -15,20 +15,6 @@ extern double cpuUsage;
 
 extern bool driverSupportsOutputReady;
 
-void onASIOBufferSwitch(long doubleBufferIndex,
-                        ASIOBool directProcess);
-
-ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
-                                     long doubleBufferIndex,
-                                     ASIOBool directProcess);
-
-void onASIOSampleRateDidChange(ASIOSampleRate sRate);
-
-long onASIOMessage(long selector,
-                   long value,
-                   void* message,
-                   double* opt);
-
 ASIOCallbacks& getCallbacks();
 }
 }
