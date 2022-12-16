@@ -93,11 +93,19 @@ VST3Plugin::~VST3Plugin()
     if(audioProcessorStatus_ == VST3AudioProcessorStatus::Created)
     {
         component_->release();
+        component_ = nullptr;
         audioProcessorStatus_ = VST3AudioProcessorStatus::Factory;
+    }
+    if(editControllerStatus_ == VST3EditControllerStatus::Created)
+    {
+        editController_->release();
+        editController_ = nullptr;
+        editControllerStatus_ = VST3EditControllerStatus::Factory;
     }
     if (factory_)
     {
         factory_->release();
+        factory_ = nullptr;
         audioProcessorStatus_ = VST3AudioProcessorStatus::NoAudioProcessor;
         editControllerStatus_ = VST3EditControllerStatus::NoEditController;
         auto pluginExitProc = Musec::Native::getExport<Musec::Base::VST3PluginExitProc>(*this, VST3PluginExitName);
@@ -401,7 +409,18 @@ bool VST3Plugin::uninitialize()
     inputSpeakerGroupCollection_ = {};
     outputSpeakerGroupCollection_ = {};
     audioProcessorStatus_ = VST3AudioProcessorStatus::Initialized;
+    if(audioPresentationLatency_)
+    {
+        audioPresentationLatency_->release();
+        audioPresentationLatency_ = nullptr;
+    }
+    if(processContextRequirements_)
+    {
+        processContextRequirements_->release();
+        processContextRequirements_ = nullptr;
+    }
     audioProcessor_->release();
+    audioProcessor_ = nullptr;
     auto terminateComponentResult = component_->terminate();
     if(terminateComponentResult != Steinberg::kResultOk)
     {
@@ -513,12 +532,12 @@ bool VST3Plugin::initializeEditController()
 bool VST3Plugin::uninitializeEditController()
 {
     detachWithWindow();
-    if(editController2_) { editController2_->release(); }
-    if(midiMapping_) { midiMapping_->release(); }
-    if(editControllerHostEditing_) { editControllerHostEditing_->release(); }
-    if(noteExpressionController_) { noteExpressionController_->release(); }
-    if(keyswitchController_) { keyswitchController_->release(); }
-    if(xmlRepresentationController_) { xmlRepresentationController_->release(); }
+    if(editController2_) { editController2_->release(); editController2_ = nullptr; }
+    if(midiMapping_) { midiMapping_->release(); midiMapping_ = nullptr; }
+    if(editControllerHostEditing_) { editControllerHostEditing_->release(); editControllerHostEditing_ = nullptr; }
+    if(noteExpressionController_) { noteExpressionController_->release(); noteExpressionController_ = nullptr; }
+    if(keyswitchController_) { keyswitchController_->release(); keyswitchController_ = nullptr; }
+    if(xmlRepresentationController_) { xmlRepresentationController_->release(); xmlRepresentationController_ = nullptr; }
     paramBlock_ = Musec::Base::FixedSizeMemoryBlock();
     paramCount_ = 0;
     if(componentPoint_ && editControllerPoint_)
@@ -526,8 +545,8 @@ bool VST3Plugin::uninitializeEditController()
         componentPoint_->disconnect(editControllerPoint_);
         editControllerPoint_->disconnect(componentPoint_);
         componentPoint_->release();
-        editControllerPoint_->release();
         componentPoint_ = nullptr;
+        editControllerPoint_->release();
         editControllerPoint_ = nullptr;
         editControllerStatus_ = VST3EditControllerStatus::Initialized;
     }
@@ -659,6 +678,8 @@ bool VST3Plugin::detachWithWindow()
         view_->removed();
         Musec::Controller::AudioEngineController::AppProject().removePluginWindowMapping(audioProcessor_);
         window_ = nullptr;
+        view_->release();
+        view_ = nullptr;
         return true;
     }
     return false;
