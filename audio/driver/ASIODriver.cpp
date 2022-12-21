@@ -106,22 +106,4 @@ ASIOSampleRate getSampleRate(const ASIODriver& driver)
     return ret;
 }
 
-ASIODriverStreamInfo getASIODriverStreamInfo(const ASIODriver& driver)
-{
-    ASIODriverStreamInfo ret {};
-    if(*driver)
-    {
-        // auto version = driver->getDriverVersion();
-        driver->getChannels(&ret.inputChannelCount,
-                            &ret.outputChannelCount);
-        driver->getLatencies(&ret.inputLatencyInSamples,
-                             &ret.outputLatencyInSamples);
-        driver->getBufferSize(&ret.minimumBufferSize,
-                              &ret.maximumBufferSize,
-                              &ret.preferredBufferSize,
-                              &ret.bufferSizeGranularity);
-        driver->getSampleRate(&ret.sampleRate);
-    }
-    return ret;
-}
 }

@@ -102,7 +102,6 @@ ASIOBufferSize getBufferSize(const ASIODriver& driver = AppASIODriver());
 
 ASIOSampleRate getSampleRate(const ASIODriver& driver = AppASIODriver());
 
-ASIODriverStreamInfo getASIODriverStreamInfo(const ASIODriver& driver = AppASIODriver());
 }
 }
 }

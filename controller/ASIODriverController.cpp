@@ -193,15 +193,14 @@ bool updateCurrentASIODriverInfo()
     outputChannelInfoList().setList(channelInfoList.data() + info.inputCount, info.outputCount);
     if(optionsWindow)
     {
-        const auto& driverStreamInfo = getASIODriverStreamInfo(AppASIODriver());
         optionsWindow->setProperty("bufferSize",
-                                   QVariant::fromValue<int>(driverStreamInfo.preferredBufferSize));
+                                   QVariant::fromValue<int>(getBufferSize().preferredBufferSize));
         optionsWindow->setProperty("inputLatencyInSamples",
-                                   QVariant::fromValue<int>(driverStreamInfo.inputLatencyInSamples));
+                                   QVariant::fromValue<int>(getLatency().inputLatency));
         optionsWindow->setProperty("outputLatencyInSamples",
-                                   QVariant::fromValue<int>(driverStreamInfo.outputLatencyInSamples));
+                                   QVariant::fromValue<int>(getLatency().outputLatency));
         optionsWindow->setProperty("sampleRate",
-                                   QVariant::fromValue<double>(driverStreamInfo.sampleRate));
+                                   QVariant::fromValue<double>(getSampleRate()));
         optionsWindow->setProperty("outputChannelList",
                                    QVariant::fromValue<QObject*>(&outputChannelInfoList()));
         optionsWindow->setProperty("leftOutputChannel",
