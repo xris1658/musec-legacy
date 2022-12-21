@@ -52,6 +52,15 @@ tresult PLUGIN_API VST3Host::createInstance(TUID cid, TUID iid_, void** obj)
         *obj = new HostMessage;
         return kResultOk;
     }
+    if(classId == IAttributeList::iid && interfaceId == IAttributeList::iid)
+    {
+        if(auto attributeList = HostAttributeList::make())
+        {
+            *obj = attributeList.take();
+            return kResultOk;
+        }
+        return kOutOfMemory;
+    }
     *obj = nullptr;
     return kNotImplemented;
 }
