@@ -179,7 +179,7 @@ Rectangle {
                 width: parent.width / 2
                 height: parent.height
                 anchors.left: parent.left
-                text: qsTr("L")
+                text: "L"
                 font.family: Constants.font
                 color: Constants.contentColor1
                 horizontalAlignment: Text.AlignHCenter
@@ -189,7 +189,7 @@ Rectangle {
                 width: parent.width / 2
                 height: parent.height
                 anchors.right: parent.right
-                text: qsTr("R")
+                text: "R"
                 font.family: Constants.font
                 color: Constants.contentColor1
                 horizontalAlignment: Text.AlignHCenter

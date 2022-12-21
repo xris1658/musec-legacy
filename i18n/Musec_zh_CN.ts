@@ -7,42 +7,42 @@
         <location filename="../audio/driver/ASIOErrorText.cpp" line="12"/>
         <location filename="../audio/driver/ASIOErrorText.cpp" line="14"/>
         <source>The operation is done successfully.</source>
-        <translation type="unfinished">操作成功完成。</translation>
+        <translation>操作成功完成。</translation>
     </message>
     <message>
         <location filename="../audio/driver/ASIOErrorText.cpp" line="16"/>
         <source>There is no hardware input or output devices, or the devices are not available.</source>
-        <translation type="unfinished">没有硬件输入或输出设备，或者当前的设备不可用。</translation>
+        <translation>没有硬件输入或输出设备，或者当前的设备不可用。</translation>
     </message>
     <message>
         <location filename="../audio/driver/ASIOErrorText.cpp" line="18"/>
         <source>The current hardware is malfunctioning.</source>
-        <translation type="unfinished">当前硬件没有正常工作。</translation>
+        <translation>当前硬件没有正常工作。</translation>
     </message>
     <message>
         <location filename="../audio/driver/ASIOErrorText.cpp" line="20"/>
         <source>The current parameter is invalid. You might need to check settings of the audio driver.</source>
-        <translation type="unfinished">当前使用的参数无效，可能需要检查音频驱动的设置。</translation>
+        <translation>当前使用的参数无效，可能需要检查音频驱动的设置。</translation>
     </message>
     <message>
         <location filename="../audio/driver/ASIOErrorText.cpp" line="22"/>
         <source>The mode of the hardware is invalid.</source>
-        <translation type="unfinished">当前的硬件状态无效。</translation>
+        <translation>当前的硬件状态无效。</translation>
     </message>
     <message>
         <location filename="../audio/driver/ASIOErrorText.cpp" line="24"/>
         <source>The hardware can&apos;t return the sample position.</source>
-        <translation type="unfinished">硬件无法返回采样时刻。</translation>
+        <translation>硬件无法返回采样时刻。</translation>
     </message>
     <message>
         <location filename="../audio/driver/ASIOErrorText.cpp" line="26"/>
         <source>The sample rate selected is not supported by the hardware.</source>
-        <translation type="unfinished">硬件不支持当前使用的音频采样率。</translation>
+        <translation>硬件不支持当前使用的音频采样率。</translation>
     </message>
     <message>
         <location filename="../audio/driver/ASIOErrorText.cpp" line="28"/>
         <source>The available memory space is not enough to complete current operation.</source>
-        <translation type="unfinished">内存空间不足，无法完成当前操作。</translation>
+        <translation>内存空间不足，无法完成当前操作。</translation>
     </message>
     <message>
         <location filename="../audio/driver/ASIOErrorText.cpp" line="30"/>
