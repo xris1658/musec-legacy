@@ -135,7 +135,7 @@ Item {
                     height: channelEffectList.headerHeight + channelEffectList.spacing
                     MixerSlot {
                         id: instrumentButton
-                        visible: root.channelType == MixerChannel.ChannelType.InstrumentTrack
+                        visible: root.channelType == ChannelStrip.ChannelType.InstrumentTrack
                         anchors.left: parent.left
                         anchors.fill: parent
                         anchors.bottomMargin: channelEffectList.spacing

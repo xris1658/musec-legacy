@@ -145,7 +145,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         clip: true
         color: Constants.backgroundColor2
-        MixerChannel {
+        ChannelStrip {
             id: masterChannel
             volumeFaderScale: root.volumeFaderScaleModel
             z: 2
@@ -196,7 +196,7 @@ Rectangle {
                 root.tracks.masterTrackPanning = newPanning;
             }
             onBlankAreaDragEventEntered: (drag) => {
-                if(drag.getDataAsString("type") != 3 && root.channelType != MixerChannel.ChannelType.InstrumentTrack) {
+                if(drag.getDataAsString("type") != 3 && root.channelType != ChannelStrip.ChannelType.InstrumentTrack) {
                     drag.accepted = false;
                 }
             }
@@ -243,8 +243,8 @@ Rectangle {
                 id: trackChannelListDelegate
                 clip: false
                 z: trackChannelList.count - index - 1
-                property MixerChannel mixerChannelOfThis: mixerChannel
-                MixerChannel {
+                property ChannelStrip mixerChannelOfThis: mixerChannel
+                ChannelStrip {
                     id: mixerChannel
                     volumeFaderScale: root.volumeFaderScaleModel
                     z: 2
@@ -252,8 +252,8 @@ Rectangle {
                     effectListModel: plugin_list
                     channelName: trackname
                     channelColor: trackcolor
-                    channelType: type == CompleteTrack.InstrumentTrack? MixerChannel.ChannelType.InstrumentTrack:
-                                                                        MixerChannel.ChannelType.AudioTrack
+                    channelType: type == CompleteTrack.InstrumentTrack? ChannelStrip.ChannelType.InstrumentTrack:
+                                                                        ChannelStrip.ChannelType.AudioTrack
                     width: 120
                     height: root.height - scroll.height
                     channelNumber: index + 1
@@ -319,7 +319,7 @@ Rectangle {
                         root.audioEffectSlotRightClicked(index, audioEffectIndex, menuX, menuY);
                     }
                     onBlankAreaDragEventEntered: (drag) => {
-                        if(drag.getDataAsString("type") != 3 && root.channelType != MixerChannel.ChannelType.InstrumentTrack) {
+                        if(drag.getDataAsString("type") != 3 && root.channelType != ChannelStrip.ChannelType.InstrumentTrack) {
                             drag.accepted = false;
                         }
                     }

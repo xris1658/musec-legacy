@@ -71,7 +71,7 @@
         <file>qmlproject/imports/Musec/MainBar.qml</file>
         <file>qmlproject/imports/Musec/MidiEditor.qml</file>
         <file>qmlproject/imports/Musec/Mixer.qml</file>
-        <file>qmlproject/imports/Musec/MixerChannel.qml</file>
+        <file>qmlproject/imports/Musec/ChannelStrip.qml</file>
         <file>qmlproject/imports/Musec/MixerSlot.qml</file>
         <file>qmlproject/imports/Musec/MusecList.qml</file>
         <file>qmlproject/imports/Musec/Note.qml</file>

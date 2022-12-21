@@ -15,7 +15,7 @@ Level 1.0 Level.qml
 MainBar 1.0 MainBar.qml
 MidiEditor 1.0 MidiEditor.qml
 Mixer 1.0 Mixer.qml
-MixerChannel 1.0 MixerChannel.qml
+ChannelStrip 1.0 ChannelStrip.qml
 MixerSlot 1.0 MixerSlot.qml
 MusecList 1.0 MusecList.qml
 Note 1.0 Note.qml
