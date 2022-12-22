@@ -15,7 +15,7 @@ VST2PluginParameter::VST2PluginParameter(
     {
         throw std::out_of_range("Error: parameter index out of range.");
     }
-    flags_ &= (ParameterSupportFlags::SupportAutomatable | ParameterSupportFlags::SupportMinMaxValue);
+    flags_ |= (ParameterFlags::Automatable | ParameterFlags::SupportMinMaxValue);
     if(effect_->dispatcher(effect_, AEffectXOpcodes::effGetParameterProperties, index_, 0, &parameterProperties_, 0.0) == 1)
     {
         if(parameterProperties_.flags &
@@ -24,7 +24,7 @@ VST2PluginParameter::VST2PluginParameter(
             | VstParameterFlags::kVstParameterUsesFloatStep)
         )
         {
-            flags_ &= ParameterSupportFlags::SupportDiscrete;
+            flags_ |= ParameterFlags::Discrete;
         }
         else
         {

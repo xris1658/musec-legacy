@@ -13,26 +13,26 @@ VST3PluginParameter::VST3PluginParameter(
     editController_->getParameterInfo(index, parameterInfo_);
     if(parameterInfo_.stepCount != 0)
     {
-        IParameter::flags_ |= ParameterSupportFlags::SupportDiscrete;
+        IParameter::flags_ |= ParameterFlags::Discrete;
     }
     if(parameterInfo_.flags & Steinberg::Vst::ParameterInfo::ParameterFlags::kIsWrapAround)
     {
-        IParameter::flags_ |= ParameterSupportFlags::SupportPeriodic;
+        IParameter::flags_ |= ParameterFlags::Periodic;
     }
     if(parameterInfo_.flags & Steinberg::Vst::ParameterInfo::ParameterFlags::kIsHidden)
     {
-        IParameter::flags_ |= ParameterSupportFlags::SupportHidden;
+        IParameter::flags_ |= ParameterFlags::Hidden;
     }
     if(parameterInfo_.flags & Steinberg::Vst::ParameterInfo::ParameterFlags::kIsReadOnly)
     {
-        IParameter::flags_ |= ParameterSupportFlags::SupportReadonly;
+        IParameter::flags_ |= ParameterFlags::Readonly;
     }
     if(parameterInfo_.flags & Steinberg::Vst::ParameterInfo::ParameterFlags::kCanAutomate)
     {
-        IParameter::flags_ |= ParameterSupportFlags::SupportAutomatable;
+        IParameter::flags_ |= ParameterFlags::Automatable;
     }
-    IParameter::flags_ &= ParameterSupportFlags::SupportMinMaxValue;
-    IParameter::flags_ &= ParameterSupportFlags::SupportDefaultValue;
+    IParameter::flags_ |= ParameterFlags::SupportMinMaxValue;
+    IParameter::flags_ |= ParameterFlags::SupportDefaultValue;
 }
 
 QString VST3PluginParameter::name() const

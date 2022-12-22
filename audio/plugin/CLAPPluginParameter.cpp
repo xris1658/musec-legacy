@@ -10,26 +10,26 @@ CLAPPluginParameter::CLAPPluginParameter(const clap_plugin* plugin, const clap_p
     auto flags = paramInfo_.flags;
     if(flags & CLAP_PARAM_IS_STEPPED)
     {
-        flags_ |= ParameterSupportFlags::SupportDiscrete;
+        flags_ |= ParameterFlags::Discrete;
     }
     if(flags & CLAP_PARAM_IS_PERIODIC)
     {
-        flags_ |= ParameterSupportFlags::SupportPeriodic;
+        flags_ |= ParameterFlags::Periodic;
     }
     if(flags & CLAP_PARAM_IS_HIDDEN)
     {
-        flags_ |= ParameterSupportFlags::SupportHidden;
+        flags_ |= ParameterFlags::Hidden;
     }
     if(flags & CLAP_PARAM_IS_READONLY)
     {
-        flags_ |= ParameterSupportFlags::SupportReadonly;
+        flags_ |= ParameterFlags::Readonly;
     }
     if(flags & CLAP_PARAM_IS_AUTOMATABLE)
     {
-        flags_ |= ParameterSupportFlags::SupportAutomatable;
+        flags_ |= ParameterFlags::Automatable;
     }
-    flags |= ParameterSupportFlags::SupportMinMaxValue;
-    flags |= ParameterSupportFlags::SupportDefaultValue;
+    flags |= ParameterFlags::SupportMinMaxValue;
+    flags |= ParameterFlags::SupportDefaultValue;
 }
 
 QString CLAPPluginParameter::name() const
@@ -67,7 +67,7 @@ void CLAPPluginParameter::setValue(double value)
 
 double CLAPPluginParameter::step() const
 {
-    return flags_ & ParameterSupportFlags::SupportDiscrete? 1: 0;
+    return flags_ & ParameterFlags::Discrete? 1: 0;
 }
 
 void automationToParamList(const CLAPPluginParameter& parameter,

@@ -14,13 +14,13 @@ namespace Audio
 {
 namespace Plugin
 {
-enum ParameterSupportFlags: std::int32_t
+enum ParameterFlags: std::int32_t
 {
-    SupportDiscrete     = 1 << 0,
-    SupportPeriodic     = 1 << 1,
-    SupportHidden       = 1 << 2,
-    SupportReadonly     = 1 << 3,
-    SupportAutomatable  = 1 << 4,
+    Discrete     = 1 << 0,
+    Periodic     = 1 << 1,
+    Hidden       = 1 << 2,
+    Readonly     = 1 << 3,
+    Automatable  = 1 << 4,
     SupportMinMaxValue  = 1 << 5,
     SupportDefaultValue = 1 << 6
 };
@@ -41,7 +41,7 @@ public:
         return flags_;
     }
 protected:
-    std::int32_t flags_;
+    std::int32_t flags_ = 0;
 };
 }
 }
