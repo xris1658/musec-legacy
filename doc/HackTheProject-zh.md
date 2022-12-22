@@ -179,6 +179,8 @@
 ## 调试
 Visual Studio 和较新版本的 CLion 支持 NatVis，可以基于配置文件对对象进行可视化处理。当调试使用其他库（如 Qt）的应用时，NatVis 会非常有用。
 
+要编写 NatVis 文件以在 Visual Studio 中使用，请参阅[使用 Natvis 框架在调试器中创建 C++ 对象的自定义视图](https://learn.microsoft.com/zh-cn/visualstudio/debugger/create-custom-views-of-native-objects)。
+
 要在 CLion 中使用 NatVis：
 - 确保启用了相关选项。详情参阅 [CLion 文档](https://www.jetbrains.com/help/clion/2022.1/quick-tutorial-on-configuring-clion-on-windows.html#msvc-debugger)。
 - 将 Qt 的 NatVis 文件下载或复制到项目的根目录。

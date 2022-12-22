@@ -196,6 +196,8 @@ You should check these information before choosing the way that fits for you.
 ## Debugging
 Visual Studio and recent versions of CLion support NatVis, which can visualize objects base on configuration files. When debugging applications using libraries like Qt, this can be very helpful.
 
+To write a NatVis file to use it in Visual Studio, check [Create custom views of C++ objects in the debugger using the Natvis framework](https://learn.microsoft.com/en-us/visualstudio/debugger/create-custom-views-of-native-objects).
+
 If you want to use NatVis in CLion:
 - Make sure the related options are enabled. See the [CLion documentation](https://www.jetbrains.com/help/clion/2022.1/quick-tutorial-on-configuring-clion-on-windows.html#msvc-debugger) for details.
 - Download or copy the Qt NatVis files to the root directory of the project.
