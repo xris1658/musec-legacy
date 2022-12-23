@@ -40,7 +40,7 @@ public:
         bool sidechainEnabled);
     Plugin(Plugin&& rhs) noexcept;
     Plugin& operator=(Plugin&& rhs) noexcept;
-    ~Plugin() = default;
+    ~Plugin();
 public:
     static Musec::Entities::Plugin fromPlugin(const std::shared_ptr<Musec::Audio::Plugin::IPlugin>& plugin = nullptr, const QString& name = {});
     bool valid() const;
@@ -62,10 +62,15 @@ signals:
     void windowVisibleChanged();
 public:
     void swap(Plugin& rhs) noexcept;
+public:
+    std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin();
+public:
+    void setBasicPluginEditor(QWindow* basicPluginEditor);
 private:
     void initSignal();
 private:
     std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin_;
+    QWindow* basicPluginEditor_ = nullptr;
     QString name_;
     // bool enabled_;
     bool sidechainExist_;

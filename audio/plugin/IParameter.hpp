@@ -36,7 +36,7 @@ public:
     virtual void setValue(double value) = 0;
     virtual double step() const = 0;
 public:
-    std::int32_t flags()
+    std::int32_t flags() const
     {
         return flags_;
     }

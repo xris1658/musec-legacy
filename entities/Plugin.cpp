@@ -1,5 +1,7 @@
 #include "Plugin.hpp"
 
+#include "ui/PluginWindow.hpp"
+
 #include <utility>
 
 namespace Musec
@@ -23,6 +25,14 @@ Plugin::Plugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, const QStr
     sidechainExist_(sidechainExist),
     sidechainEnabled_(sidechainEnabled)
 {
+    // TODO: If the plugin doesn't have GUI, create a basic plugin editor for it
+    if(plugin_)
+    {
+        if(!plugin_->window())
+        {
+            Musec::UI::createBasicPluginEditor(this);
+        }
+    }
     initSignal();
 }
 
@@ -40,6 +50,14 @@ Plugin& Plugin::operator=(Plugin&& rhs) noexcept
         initSignal();
     }
     return *this;
+}
+
+Plugin::~Plugin()
+{
+    if(basicPluginEditor_)
+    {
+        Musec::UI::destroyBasicPluginEditor(basicPluginEditor_);
+    }
 }
 
 Musec::Entities::Plugin Plugin::fromPlugin(const std::shared_ptr<Musec::Audio::Plugin::IPlugin>& plugin, const QString& name)
@@ -110,6 +128,7 @@ void Plugin::setSidechainEnabled(bool sidechainEnabled)
 void Plugin::swap(Plugin& rhs) noexcept
 {
     std::swap(plugin_, rhs.plugin_);
+    std::swap(basicPluginEditor_, rhs.basicPluginEditor_);
     std::swap(name_, rhs.name_);
     std::swap(sidechainExist_, rhs.sidechainExist_);
     std::swap(sidechainEnabled_, rhs.sidechainEnabled_);
@@ -125,24 +144,46 @@ void Plugin::swap(Plugin& rhs) noexcept
 
 bool Plugin::isWindowVisible() const
 {
-    return plugin_ && plugin_->window() && plugin_->window()->isVisible();
+    if(plugin_ && plugin_->window())
+    {
+        return plugin_->window()->isVisible();
+    }
+    return basicPluginEditor_ && basicPluginEditor_->isVisible();
 }
 
 void Plugin::setWindowVisible(bool windowVisible)
 {
     if(plugin_ && plugin_->window())
     {
-        if(windowVisible)
-        {
-            plugin_->window()->show();
-        }
-        else
-        {
-            plugin_->window()->hide();
-        }
+        plugin_->window()->setVisible(windowVisible);
+        windowVisibleChanged();
+    }
+    if(basicPluginEditor_)
+    {
+        basicPluginEditor_->setVisible(windowVisible);
         windowVisibleChanged();
     }
 }
+
+std::shared_ptr<Musec::Audio::Plugin::IPlugin> Plugin::plugin()
+{
+    return plugin_;
+}
+
+void Plugin::setBasicPluginEditor(QWindow* basicPluginEditor)
+{
+    basicPluginEditor_ = basicPluginEditor;
+    if(basicPluginEditor_)
+    {
+        QObject::connect(basicPluginEditor_, &QWindow::visibleChanged,
+            this, [this](bool visible)
+            {
+                windowVisibleChanged();
+            }
+        );
+    }
+}
+
 void Plugin::initSignal()
 {
     if(plugin_ && plugin_->window())

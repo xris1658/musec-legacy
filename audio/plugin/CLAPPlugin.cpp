@@ -202,11 +202,11 @@ bool CLAPPlugin::initializeParameters()
     if(params_)
     {
         auto paramCount = parameterCount();
-        paramBlock_ = {sizeof(CLAPPluginParameter) * paramCount};
+        paramBlock_ = Musec::Base::FixedSizeMemoryBlock(sizeof(CLAPPluginParameter) * paramCount);
         auto paramBlockAsArray = reinterpret_cast<CLAPPluginParameter*>(paramBlock_.data());
         for(decltype(paramCount) i = 0; i < paramCount; ++i)
         {
-            paramBlockAsArray[i] = CLAPPluginParameter(plugin_, params_, i);
+            new(paramBlockAsArray + i) CLAPPluginParameter(plugin_, params_, i);
         }
     }
     return params_;
@@ -378,7 +378,7 @@ int CLAPPlugin::parameterCount()
 
 IParameter& CLAPPlugin::parameter(int index)
 {
-    throw std::out_of_range("");
+    return reinterpret_cast<CLAPPluginParameter*>(paramBlock_.data())[index];
 }
 
 int CLAPPlugin::latency()

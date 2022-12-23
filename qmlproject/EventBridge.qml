@@ -27,6 +27,7 @@ QtObject {
     signal setArrangementPosition(position: int)
     signal requestExplorerView()
     signal newPluginWindowReady()
+    signal newBasicPluginEditorReady()
     signal setIcon()
     function setWindowIcon(window: Window) {
         Objects.mainWindow.windowToSetIcon = window;
@@ -104,6 +105,11 @@ QtObject {
     signal newPluginWindow()
     onNewPluginWindow: {
         Objects.mainWindow.newPluginWindow();
+    }
+
+    signal newBasicPluginEditor()
+    onNewBasicPluginEditor: {
+        Objects.mainWindow.newBasicPluginEditor();
     }
 
     signal updateUsage(usage: double)

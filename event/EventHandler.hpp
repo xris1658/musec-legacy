@@ -35,6 +35,7 @@ signals:
     void requestExplorerViewComplete();
     void updateArrangement();
     void newPluginWindow();
+    void newBasicPluginEditor();
     void updateUsage(double usage);
     void setLanguageComplete();
     void setRealtimeTimerInterval(int intervalInMilliseconds);
@@ -62,6 +63,7 @@ public slots:
     void onTrackInserted(const QModelIndex& parent, int first, int last);
     void onTrackAboutToBeRemoved(const QModelIndex &parent, int first, int last);
     void onNewPluginWindowReady();
+    void onNewBasicPluginEditorReady();
     void onSetIcon();
     void onScanShortcutChanged(bool newValue);
     void onLanguageSelectionChanged(const QString& language);

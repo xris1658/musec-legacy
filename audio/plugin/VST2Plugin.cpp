@@ -89,8 +89,7 @@ bool VST2Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
     auto paramBlockAsArray = reinterpret_cast<VST2PluginParameter*>(paramBlock_.data());
     for(decltype(paramCount) i = 0; i < paramCount; ++i)
     {
-        auto& param = paramBlockAsArray[i];
-        param = VST2PluginParameter(*this, i);
+        new(paramBlockAsArray + i) VST2PluginParameter(*this, i);
     }
     return true;
 }
@@ -99,6 +98,12 @@ bool VST2Plugin::uninitialize()
 {
     inputSpeakerGroupCollection_ = {};
     outputSpeakerGroupCollection_ = {};
+    auto paramCount = parameterCount();
+    auto paramBlockAsArray = reinterpret_cast<VST2PluginParameter*>(paramBlock_.data());
+    for(decltype(paramCount) i = 0; i < paramCount; ++i)
+    {
+        (paramBlockAsArray + i)->~VST2PluginParameter();
+    }
     paramBlock_ = Musec::Base::FixedSizeMemoryBlock();
     uninitializeEditor();
     stopProcessing();

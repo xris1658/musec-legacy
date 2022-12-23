@@ -60,6 +60,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      this,        SLOT(onRequestExplorerView()));
     QObject::connect(eventBridge, SIGNAL(newPluginWindowReady()),
                      this,        SLOT(onNewPluginWindowReady()));
+    QObject::connect(eventBridge, SIGNAL(newBasicPluginEditorReady()),
+                     this,        SLOT(onNewBasicPluginEditorReady()));
     QObject::connect(eventBridge, SIGNAL(setIcon()),
                      this,        SLOT(onSetIcon()));
     QObject::connect(eventBridge, SIGNAL(updateCPUMeter()),
@@ -100,6 +102,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      eventBridge,   SIGNAL(updateArrangement()));
     QObject::connect(this,          SIGNAL(newPluginWindow()),
                      eventBridge,   SIGNAL(newPluginWindow()));
+    QObject::connect(this,          SIGNAL(newBasicPluginEditor()),
+                     eventBridge,   SIGNAL(newBasicPluginEditor()));
     QObject::connect(this,          SIGNAL(updateUsage(double)),
                      eventBridge,   SIGNAL(updateUsage(double)));
     QObject::connect(this,          SIGNAL(setLanguageComplete()),
@@ -396,6 +400,12 @@ void EventHandler::onNewPluginWindowReady()
 {
     auto window = Musec::UI::mainWindow->property("windowForPlugin").value<QWindow*>();
     Musec::UI::createNewPluginWindowComplete(window);
+}
+
+void EventHandler::onNewBasicPluginEditorReady()
+{
+    auto window = Musec::UI::mainWindow->property("basicPluginEditorForPlugin").value<QWindow*>();
+    Musec::UI::createBasicPluginEditorComplete(window);
 }
 
 void EventHandler::onSetIcon()

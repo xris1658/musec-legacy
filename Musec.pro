@@ -166,6 +166,7 @@ HEADERS += \
     model/ModelBase.hpp \
     model/ModelInitializer.hpp \
     model/PluginListModel.hpp \
+    model/PluginParameterListModel.hpp \
     model/PluginSequenceModel.hpp \
     model/TempoAutomationModel.hpp \
     model/TrackListModel.hpp \
@@ -271,6 +272,7 @@ SOURCES += \
     model/MIDIInputDeviceListModel.cpp \
     model/ModelInitializer.cpp \
     model/PluginListModel.cpp \
+    model/PluginParameterListModel.cpp \
     model/PluginSequenceModel.cpp \
     model/TempoAutomationModel.cpp \
     model/TrackListModel.cpp \

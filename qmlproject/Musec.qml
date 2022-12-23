@@ -28,6 +28,7 @@ ApplicationWindow {
     readonly property EventBridge eventBridge: EventBridge
     property bool canClose: false
     property PluginWindow windowForPlugin: null
+    property BasicPluginEditor basicPluginEditorForPlugin: null
     property Window windowToSetIcon: null
 
     property MView.ExplorerView explorerViewOnRequest
@@ -129,6 +130,20 @@ ApplicationWindow {
             var window = component.createObject(mainWindow);
             mainWindow.windowForPlugin = window;
             eventBridge.newPluginWindowReady();
+        }
+        else {
+            console.log(component.errorString());
+        }
+    }
+
+    function newBasicPluginEditor() {
+        var component = Qt.createComponent(
+            "qrc:/qmlproject/imports/Musec/BasicPluginEditor.qml",
+            mainWindow);
+        if(component.status == Component.Ready) {
+            var window = component.createObject(mainWindow);
+            mainWindow.basicPluginEditorForPlugin = window;
+            eventBridge.newBasicPluginEditorReady();
         }
         else {
             console.log(component.errorString());

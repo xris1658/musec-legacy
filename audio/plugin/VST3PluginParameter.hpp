@@ -30,10 +30,12 @@ public:
     double step() const override;
 public:
     const Steinberg::Vst::ParameterInfo& getParameterInfo() const;
+public:
+    void swap(VST3PluginParameter& rhs);
 private:
-    Steinberg::Vst::IEditController* editController_;
-    Steinberg::Vst::ParameterInfo parameterInfo_;
-    std::int32_t index_;
+    Steinberg::Vst::IEditController* editController_ = nullptr;
+    Steinberg::Vst::ParameterInfo parameterInfo_ = {};
+    std::int32_t index_ = -1;
 };
 
 void automationToParamList(const VST3PluginParameter& parameter,

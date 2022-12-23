@@ -13,6 +13,7 @@
 
 #include <errhandlingapi.h>
 
+#include <algorithm>
 #include <stdexcept>
 
 namespace Musec::Audio::Plugin
@@ -512,14 +513,25 @@ bool VST3Plugin::initializeEditController()
         auto paramBlockAsArray = reinterpret_cast<VST3PluginParameter*>(paramBlock_.data());
         for(decltype(paramCount_) i = 0; i < paramCount_; ++i)
         {
-            paramBlockAsArray[i] = VST3PluginParameter(editController_, i);
+            new(paramBlockAsArray + i) VST3PluginParameter(editController_, i);
+            auto name = paramBlockAsArray[i].name();
         }
+        auto firstHiddenParameter = std::stable_partition<VST3PluginParameter*>(
+            paramBlockAsArray,
+            paramBlockAsArray + paramCount_,
+            [](VST3PluginParameter& parameter) { return (parameter.flags() & ParameterFlags::Hidden) == 0; });
+            // [](VST3PluginParameter& parameter) { return (parameter.getParameterInfo().flags & ParameterInfo::ParameterFlags::kIsHidden) == 0; });
+        auto visibleParameterCount = firstHiddenParameter - paramBlockAsArray;
         try
         {
             view_ = editController_->createView(Steinberg::Vst::ViewType::kEditor);
             if (view_)
             {
                 view_->setFrame(&plugFrame_);
+            }
+            else
+            {
+                //
             }
         }
         catch(...)
@@ -538,6 +550,11 @@ bool VST3Plugin::uninitializeEditController()
     if(noteExpressionController_) { noteExpressionController_->release(); noteExpressionController_ = nullptr; }
     if(keyswitchController_) { keyswitchController_->release(); keyswitchController_ = nullptr; }
     if(xmlRepresentationController_) { xmlRepresentationController_->release(); xmlRepresentationController_ = nullptr; }
+    auto paramBlockAsArray = reinterpret_cast<VST3PluginParameter*>(paramBlock_.data());
+    for(decltype(paramCount_) i = 0; i < paramCount_; ++i)
+    {
+        (paramBlockAsArray + i)->~VST3PluginParameter();
+    }
     paramBlock_ = Musec::Base::FixedSizeMemoryBlock();
     paramCount_ = 0;
     if(componentPoint_ && editControllerPoint_)

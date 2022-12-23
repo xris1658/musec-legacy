@@ -109,12 +109,13 @@ QVariant PluginSequenceModel::data(const QModelIndex& index, int role) const
         return QVariant::fromValue(false);
     case RoleNames::WindowVisibleRole:
     {
-        auto& plugin = (*pluginSequence)[row];
-        if(plugin->hasUI())
-        {
-            return QVariant::fromValue(plugin->window()->isVisible());
-        }
-        return QVariant::fromValue(false);
+        return QVariant::fromValue(pluginWindowConnections_[row]->isWindowVisible());
+        // auto& plugin = (*pluginSequence)[row];
+        // if(plugin->hasUI())
+        // {
+        //     return QVariant::fromValue(plugin->window()->isVisible());
+        // }
+        // return QVariant::fromValue(false);
     }
     default:
         return QVariant();
@@ -141,14 +142,16 @@ bool PluginSequenceModel::setData(const QModelIndex& index, const QVariant& valu
     {
     case RoleNames::WindowVisibleRole:
     {
-        auto& plugin = (*pluginSequence)[row];
-        if(plugin->hasUI())
-        {
-            plugin->window()->setVisible(value.value<bool>());
-            dataChanged(index, index, { RoleNames::WindowVisibleRole });
-            return true;
-        }
-        return false;
+        pluginWindowConnections_[row]->setWindowVisible(value.value<bool>());
+        return true;
+        // auto& plugin = (*pluginSequence)[row];
+        // if(plugin->hasUI())
+        // {
+        //     plugin->window()->setVisible(value.value<bool>());
+        //     dataChanged(index, index, { RoleNames::WindowVisibleRole });
+        //     return true;
+        // }
+        // return false;
     }
     case RoleNames::ProcessingRole:
     {

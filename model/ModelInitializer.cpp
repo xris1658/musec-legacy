@@ -9,6 +9,7 @@
 #include "model/FolderListModel.hpp"
 #include "model/MIDIInputDeviceListModel.hpp"
 #include "model/PluginListModel.hpp"
+#include "model/PluginParameterListModel.hpp"
 #include "model/TempoAutomationModel.hpp"
 #include "model/TrackListModel.hpp"
 #include "model/TranslationFileModel.hpp"
@@ -26,6 +27,7 @@ ModelInitializer::ModelInitializer()
     QML_REGISTER_TYPE(FolderListModel,          Musec.Models, 1, 0);
     QML_REGISTER_TYPE(MIDIInputDeviceListModel, Musec.Models, 1, 0);
     QML_REGISTER_TYPE(PluginListModel,          Musec.Models, 1, 0);
+    QML_REGISTER_TYPE(PluginParameterListModel, Musec.Models, 1, 0);
     QML_REGISTER_TYPE(PluginSequenceModel,      Musec.Models, 1, 0);
     QML_REGISTER_TYPE(TempoAutomationModel,     Musec.Models, 1, 0);
     QML_REGISTER_TYPE(TrackListModel,           Musec.Models, 1, 0);

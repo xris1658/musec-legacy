@@ -4,13 +4,14 @@ import QtQuick.Window 2.15
 
 import Musec 1.0
 import Musec.Controls 1.0 as MCtrl
+import Musec.Models 1.0 as MModel
 
 Window {
     id: root
     width: 400
     height: 400
     color: Constants.backgroundColor
-//    property alias parameterListModel: parameterListView.model
+    property MModel.PluginParameterListModel parameterListModel: null
     property string pluginName: "Plugin name here"
     Column {
         Item {
@@ -33,7 +34,7 @@ Window {
                 anchors.right: parent.right
                 anchors.rightMargin: (parent.height - contentHeight) / 2
                 anchors.verticalCenter: parent.verticalCenter
-                text: qsTr("# of Adjustable parameters") + ":" + parameterListView.count
+                text: (parameterListModel.parameterCount()? parameterListModel.parameterCount(): 0) + qsTr(" parameters")
                 font.family: Constants.font
                 color: Constants.contentColor1
                 font.pixelSize: parent.height * 0.6
@@ -53,47 +54,16 @@ Window {
                 id: parameterListView
                 spacing: 5
                 anchors.fill: parent
-                model: ListModel {
-                    ListElement {
-                        parameterId: 1
-                        parameterName: "Continuous Parameter"
-                        shortParameterName: "Cont."
-                        continuous: true
-                    }
-                    ListElement {
-                        parameterId: 2
-                        parameterName: "Discrete Parameter (10 scales, display as horizontal fader)"
-                        shortParameterName: "Disc. 10 fader"
-                        continuous: false
-                        stepCount: 10
-                        showAsComboBox: false
-                    }
-                    ListElement {
-                        parameterId: 3
-                        parameterName: "Discrete Parameter (10 scales, display as combo box)"
-                        shortParameterName: "Disc. 10 combo"
-                        continuous: false
-                        stepCount: 10
-                        showAsComboBox: true
-                    }
-                    ListElement {
-                        parameterId: 4
-                        parameterName: "Discrete Parameter (Switch)"
-                        shortParameterName: "Disc. Switch"
-                        continuous: false
-                        parameterIsSwitch: true
-                    }
-                }
+                model: root.parameterListModel
                 ScrollBar.vertical: ScrollBar {
                     width: 15
                 }
-
                 delegate: Item {
                     id: delegate
                     width: root.width
                     height: 20
                     Item {
-                        id: left
+                        id: left_
                         width: parent.width * 0.75
                         height: parent.height
                         onWidthChanged: {
@@ -102,9 +72,9 @@ Window {
                         Text {
                             id: paramText
                             function getDisplayText() {
-                                text = parameterName;
+                                text = name;
                                 if(contentWidth > parent.width) {
-                                    text = shortParameterName;
+                                    text = shortName;
                                 }
                             }
                             Component.onCompleted: {
@@ -117,16 +87,16 @@ Window {
                         }
                     }
                     Item {
-                        id: right
-                        width: delegate.width - left.width
+                        id: right_
+                        width: delegate.width - left_.width
                         anchors.right: parent.right
                         height: parent.height
                         Slider {
                             anchors.fill: parent
                             anchors.rightMargin: 2
-                            visible: continuous || (!parameterIsSwitch)
-                            snapMode: continuous? Slider.NoSnap: Slider.SnapAlways
-                            stepSize: continuous? 0.0: 1.0 / stepCount
+                            visible: true
+                            snapMode: discrete? Slider.SnapAlways: Slider.NoSnap
+                            stepSize: discrete? 1.0 / step: 0.0
                             handle.width: 10
                             handle.height: 16
                             leftPadding: 0
@@ -135,13 +105,18 @@ Window {
                         MCtrl.ComboBox {
                             anchors.fill: parent
                             anchors.rightMargin: 2
-                            visible: (!continuous) && showAsComboBox
-                            model: stepCount
+                            visible: false
+                            model: step
                         }
-                        MCtrl.Button {
+                        Item {
                             anchors.fill: parent
                             anchors.rightMargin: 2
-                            visible: (!continuous) && parameterIsSwitch
+                            visible: false
+                            MCtrl.Switch {
+                                anchors.right: parent.right
+                                height: parent.height
+                                width: height * 2
+                            }
                         }
                     }
                 }

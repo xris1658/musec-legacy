@@ -107,4 +107,11 @@ void automationToParamList(const VST3PluginParameter& parameter,
         paramList.addPoint(i, automation(i), index);
     }
 }
+
+void VST3PluginParameter::swap(VST3PluginParameter& rhs)
+{
+    std::swap(editController_, rhs.editController_);
+    std::swap(parameterInfo_, rhs.parameterInfo_);
+    std::swap(index_, rhs.index_);
+}
 }
