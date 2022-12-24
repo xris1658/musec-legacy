@@ -320,6 +320,7 @@ void EventHandler::onDriverASIOSelectionChanged(const QString& clsid)
 void EventHandler::onPrepareToQuit()
 {
     Musec::Controller::ASIODriverController::unloadASIODriver();
+    Musec::Controller::AudioEngineController::AppTrackListModel().clear();
     Musec::Controller::AudioEngineController::AppProject().clear();
     readyToQuit();
 }

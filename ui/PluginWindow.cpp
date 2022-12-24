@@ -56,6 +56,7 @@ void destroyBasicPluginEditor(QWindow* window)
 {
     if(window)
     {
+        window->setProperty("destroyingPlugin", QVariant::fromValue(true));
         delete window;
     }
 }

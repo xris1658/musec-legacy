@@ -8,6 +8,15 @@ import Musec.Models 1.0 as MModel
 
 Window {
     id: root
+    flags: Qt.Dialog
+    modality: Qt.NonModal
+    property bool destroyingPlugin: false
+    onClosing: (close) => {
+        if(!root.destroyingPlugin) {
+            close.accepted = false;
+            root.hide();
+        }
+    }
     width: 400
     height: 400
     color: Constants.backgroundColor

@@ -77,6 +77,7 @@ public:
     Q_INVOKABLE void moveInstrument(int fromTrackIndex, int toTrackIndex);
     Q_INVOKABLE void moveEffect(int fromTrackIndex, int fromPluginIndex, int toTrackIndex, int toPluginIndex);
     Q_INVOKABLE void removeEffectMasterTrack(int pluginIndex);
+    Q_INVOKABLE void clear();
 public:
     double getMasterTrackGain() const;
     void setMasterTrackGain(double gain);

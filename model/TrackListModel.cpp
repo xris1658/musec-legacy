@@ -52,9 +52,7 @@ TrackListModel::TrackListModel(QObject* parent):
 
 TrackListModel::~TrackListModel()
 {
-    project_.clear();
-    masterPluginSequences_.clear();
-    pluginSequences_.clear();
+    clear();
 }
 
 constexpr int TrackListModel::columnSize()
@@ -471,6 +469,13 @@ void TrackListModel::removeEffectMasterTrack(int pluginIndex)
     track.setPluginSequences(std::move(masterTrackPluginSequences));
     masterTrackPluginSequenceModel.remove(pluginIndex);
     masterTrackPluginSequenceModel.endRemoveRows();
+}
+
+void TrackListModel::clear()
+{
+    instruments_.clear();
+    masterPluginSequences_.clear();
+    pluginSequences_.clear();
 }
 
 RoleNamesType TrackListModel::roleNames() const
