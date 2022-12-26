@@ -72,6 +72,7 @@ private:
     std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin_;
     QWindow* basicPluginEditor_ = nullptr;
     QString name_;
+    QMetaObject::Connection connectionWithBasicPluginEditor_;
     // bool enabled_;
     bool sidechainExist_;
     bool sidechainEnabled_;

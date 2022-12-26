@@ -40,6 +40,7 @@ Plugin::Plugin(Plugin&& rhs) noexcept
 {
     swap(rhs);
     initSignal();
+    setBasicPluginEditor(basicPluginEditor_);
 }
 
 Plugin& Plugin::operator=(Plugin&& rhs) noexcept
@@ -48,6 +49,7 @@ Plugin& Plugin::operator=(Plugin&& rhs) noexcept
     {
         swap(rhs);
         initSignal();
+        setBasicPluginEditor(basicPluginEditor_);
     }
     return *this;
 }
@@ -56,6 +58,7 @@ Plugin::~Plugin()
 {
     if(basicPluginEditor_)
     {
+        QObject::disconnect(connectionWithBasicPluginEditor_);
         Musec::UI::destroyBasicPluginEditor(basicPluginEditor_);
     }
 }
@@ -175,7 +178,7 @@ void Plugin::setBasicPluginEditor(QWindow* basicPluginEditor)
     basicPluginEditor_ = basicPluginEditor;
     if(basicPluginEditor_)
     {
-        QObject::connect(basicPluginEditor_, &QWindow::visibleChanged,
+        connectionWithBasicPluginEditor_ = QObject::connect(basicPluginEditor_, &QWindow::visibleChanged,
             this, [this](bool visible)
             {
                 windowVisibleChanged();
