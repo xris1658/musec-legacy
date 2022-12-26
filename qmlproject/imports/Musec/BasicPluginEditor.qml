@@ -20,7 +20,7 @@ Window {
     width: 400
     height: 400
     color: Constants.backgroundColor
-    property MModel.PluginParameterListModel parameterListModel: null
+    property MModel.PluginParameterListModel parameterListModel: MModel.PluginParameterListModel {}
     property string pluginName: "Plugin name here"
     Column {
         Item {
@@ -65,16 +65,29 @@ Window {
                 anchors.fill: parent
                 model: root.parameterListModel
                 ScrollBar.vertical: ScrollBar {
+                    id: scrollBar
                     width: 15
+                    visible: parameterListView.contentHeight > parameterListView.height
+                    background: Rectangle {
+                        anchors.fill: parent
+                        color: Constants.backgroundColor
+                    }
+                    contentItem: Rectangle {
+                        radius: 2
+                        color: scrollBar.hovered? Qt.darker(Constants.currentElementColor): Constants.mouseOverElementColor
+                    }
                 }
                 delegate: Item {
                     id: delegate
                     width: root.width
                     height: 20
+                    visible: !hidden
                     Item {
                         id: left_
                         width: parent.width * 0.75
                         height: parent.height
+                        anchors.left: parent.left
+                        anchors.leftMargin: scrollBar.width
                         onWidthChanged: {
                             paramText.getDisplayText();
                         }
@@ -99,23 +112,38 @@ Window {
                         id: right_
                         width: delegate.width - left_.width
                         anchors.right: parent.right
+                        anchors.rightMargin: scrollBar.width
                         height: parent.height
-                        Slider {
+                        MCtrl.Slider {
+                            id: slider
                             anchors.fill: parent
                             anchors.rightMargin: 2
-                            visible: true
+                            visible: (!showAsList) && (!showAsSwitch)
                             snapMode: discrete? Slider.SnapAlways: Slider.NoSnap
                             stepSize: discrete? 1.0 / step: 0.0
                             handle.width: 10
                             handle.height: 16
                             leftPadding: 0
                             rightPadding: 0
+                            value: value
+                            from: minValue
+                            to: maxValue
+                        }
+                        MCtrl.Switch {
+                            visible: showAsSwitch
+                            anchors.right: parent.right
+                            anchors.rightMargin: 2
+                            width: height * 1.5
+                            height: parent.height
+                            checked: value
                         }
                         MCtrl.ComboBox {
                             anchors.fill: parent
                             anchors.rightMargin: 2
-                            visible: false
-                            model: step
+                            visible: showAsList
+                            model: visible? list: step
+                            textRole: "text"
+                            valueRole: "value"
                         }
                         Item {
                             anchors.fill: parent

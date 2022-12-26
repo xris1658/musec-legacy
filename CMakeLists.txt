@@ -233,8 +233,10 @@ set(PROJECT_SOURCES
     model/ModelInitializer.hpp
     model/PluginListModel.cpp
     model/PluginListModel.hpp
-    model/PluginParameterListModel.hpp
     model/PluginParameterListModel.cpp
+    model/PluginParameterListModel.hpp
+    model/PluginParameterValueListModel.cpp
+    model/PluginParameterValueListModel.hpp
     model/PluginSequenceModel.cpp
     model/PluginSequenceModel.hpp
     model/TempoAutomationModel.cpp

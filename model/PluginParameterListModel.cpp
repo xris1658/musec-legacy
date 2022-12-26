@@ -22,6 +22,9 @@ PluginParameterListModel::PluginParameterListModel(Musec::Audio::Plugin::IPlugin
     roleNames_[DefaultValueRole] = "defaultValue";
     roleNames_[ValueRole] = "value";
     roleNames_[StepRole] = "step";
+    roleNames_[ShowAsListRole] = "showAsList";
+    roleNames_[ShowAsSwitchRole] = "showAsSwitch";
+    roleNames_[ListRole] = "list";
 }
 
 PluginParameterListModel::PluginParameterListModel(const PluginParameterListModel& rhs):
@@ -42,14 +45,9 @@ Q_INVOKABLE int PluginParameterListModel::parameterCount() const
     return plugin_? plugin_->parameterCount(): 0;
 }
 
-int PluginParameterListModel::visibleParameterCount() const
+Q_INVOKABLE QString PluginParameterListModel::valueToString(int index, double value) const
 {
-    return 0;
-}
-
-int PluginParameterListModel::automatableParameterCount() const
-{
-    return 0;
+    return plugin_->parameter(index).valueToString(value);
 }
 
 constexpr int PluginParameterListModel::columnSize()
@@ -77,7 +75,7 @@ QVariant PluginParameterListModel::data(const QModelIndex& index, int role) cons
         switch(role)
         {
         case IdRole:
-            return QVariant::fromValue(row);
+            return QVariant::fromValue(parameter.id());
         case NameRole:
             return QVariant::fromValue(parameter.name());
         case ShortNameRole:
@@ -99,7 +97,33 @@ QVariant PluginParameterListModel::data(const QModelIndex& index, int role) cons
         case ValueRole:
             return QVariant::fromValue(parameter.value());
         case StepRole:
-            return QVariant::fromValue(parameter.step());
+            return QVariant::fromValue(parameter.stepSize());
+        case ShowAsListRole:
+            return QVariant::fromValue((parameter.flags() & ParameterFlags::ShowAsList) != 0);
+        case ShowAsSwitchRole:
+            return QVariant::fromValue((parameter.flags() & ParameterFlags::ShowAsSwitch) != 0);
+        case ListRole:
+        {
+            if(parameter.flags() & ParameterFlags::ShowAsList)
+            {
+                if(auto iterator = valueList_.find(row); iterator != valueList_.end())
+                {
+                    return QVariant::fromValue(const_cast<PluginParameterValueListModel*>(&(iterator->second)));
+                }
+                else
+                {
+                    auto [inserted, succeeded] = valueList_.insert({row, PluginParameterValueListModel(&parameter)});
+                    if(succeeded)
+                    {
+                        return QVariant::fromValue(const_cast<PluginParameterValueListModel*>(&(inserted->second)));
+                    }
+                }
+            }
+            else
+            {
+                return QVariant::fromValue(static_cast<QObject*>(nullptr));
+            }
+        }
         default:
             return QVariant();
         }
@@ -108,7 +132,21 @@ QVariant PluginParameterListModel::data(const QModelIndex& index, int role) cons
 
 bool PluginParameterListModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-    return QAbstractItemModel::setData(index, value, role);
+    using namespace Musec::Audio::Plugin;
+    int row = index.row();
+    if(row >= 0 && row < parameterCount())
+    {
+        auto& parameter = plugin_->parameter(row);
+        switch(role)
+        {
+        case ValueRole:
+            parameter.setValue(value.value<double>());
+            return true;
+        default:
+            break;
+        }
+    }
+    return false;
 }
 
 RoleNamesType PluginParameterListModel::roleNames() const

@@ -3,10 +3,11 @@
 
 #include "audio/plugin/IPlugin.hpp"
 #include "model/ModelBase.hpp"
+#include "model/PluginParameterValueListModel.hpp"
 
 #include <QAbstractListModel>
 
-#include <memory>
+#include <map>
 
 namespace Musec
 {
@@ -31,6 +32,9 @@ public:
         DefaultValueRole,
         ValueRole,
         StepRole,
+        ShowAsListRole,
+        ShowAsSwitchRole,
+        ListRole,
         RoleNamesCount
     };
 public:
@@ -39,8 +43,7 @@ public:
     ~PluginParameterListModel();
 public:
     Q_INVOKABLE int parameterCount() const;
-    int visibleParameterCount() const;
-    int automatableParameterCount() const;
+    Q_INVOKABLE QString valueToString(int index, double value) const;
     static constexpr int columnSize();
 public:
     int rowCount(const QModelIndex&) const override;
@@ -51,6 +54,8 @@ protected:
     RoleNamesType roleNames() const override;
 private:
     Musec::Audio::Plugin::IPlugin* plugin_;
+    // data() might modify this by inserting elements, so use `mutable`
+    mutable std::map<int, Musec::Model::PluginParameterValueListModel> valueList_;
     RoleNamesType roleNames_;
 };
 

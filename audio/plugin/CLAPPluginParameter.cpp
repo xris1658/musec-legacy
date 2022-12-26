@@ -32,6 +32,11 @@ CLAPPluginParameter::CLAPPluginParameter(const clap_plugin* plugin, const clap_p
     flags |= ParameterFlags::SupportDefaultValue;
 }
 
+std::uint32_t CLAPPluginParameter::id() const
+{
+    return paramInfo_.id;
+}
+
 QString CLAPPluginParameter::name() const
 {
     // CLAP: All strings are valid UTF-8
@@ -62,12 +67,31 @@ double CLAPPluginParameter::value() const
 
 void CLAPPluginParameter::setValue(double value)
 {
-    //
+    // TODO
 }
 
-double CLAPPluginParameter::step() const
+double CLAPPluginParameter::stepSize() const
 {
     return flags_ & ParameterFlags::Discrete? 1: 0;
+}
+
+QString CLAPPluginParameter::valueToString(double value) const
+{
+    constexpr std::uint32_t bufferSize = 128;
+    char buffer[bufferSize];
+    if(params_->value_to_text(plugin_, paramInfo_.id, value, buffer, bufferSize)
+    && buffer[0] != 0)
+    {
+        return QString::fromUtf8(buffer);
+    }
+    return QString::number(value);
+}
+
+double CLAPPluginParameter::stringToValue(const QString& string) const
+{
+    auto utf8 = string.toUtf8();
+    double ret;
+    return params_->text_to_value(plugin_, paramInfo_.id, utf8.data(), &ret)? ret: -1;
 }
 
 void automationToParamList(const CLAPPluginParameter& parameter,

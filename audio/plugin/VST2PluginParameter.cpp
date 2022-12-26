@@ -26,11 +26,22 @@ VST2PluginParameter::VST2PluginParameter(
         {
             flags_ |= ParameterFlags::Discrete;
         }
-        else
+        if(parameterProperties_.flags &
+            VstParameterFlags::kVstParameterIsSwitch)
         {
-            parameterPropertiesValid_ = false;
+            flags_ |= ParameterFlags::ShowAsSwitch;
         }
     }
+    else
+    {
+        parameterPropertiesValid_ = false;
+    }
+}
+
+std::uint32_t VST2PluginParameter::id() const
+{
+    auto index = index_;
+    return *reinterpret_cast<std::uint32_t*>(&index);
 }
 
 QString VST2PluginParameter::name() const
@@ -74,7 +85,7 @@ void VST2PluginParameter::setValue(double value)
     return effect_->setParameter(effect_, index_, value);
 }
 
-double VST2PluginParameter::step() const
+double VST2PluginParameter::stepSize() const
 {
     if(parameterPropertiesValid_)
     {
@@ -88,5 +99,17 @@ double VST2PluginParameter::step() const
         }
     }
     return 0.0;
+}
+
+QString VST2PluginParameter::valueToString(double value) const
+{
+    return QString::number(value);
+}
+
+double VST2PluginParameter::stringToValue(const QString& string) const
+{
+    bool ok = false;
+    auto ret = string.toDouble(&ok);
+    return ok? ret: -1;
 }
 }

@@ -18,20 +18,20 @@ class VST3PluginParameter: public Musec::Audio::Plugin::IParameter
 {
 public:
     VST3PluginParameter(Steinberg::Vst::IEditController* editController, std::int32_t index);
-    VST3PluginParameter(VST3PluginParameter&&) = default;
-    VST3PluginParameter& operator=(VST3PluginParameter&&) = default;
 public:
+    std::uint32_t id() const override;
     QString name() const override;
     double minValue() const override;
     double maxValue() const override;
     double defaultValue() const override;
     double value() const override;
     void setValue(double value) override;
-    double step() const override;
+    double stepSize() const override;
+public:
+    QString valueToString(double value) const override;
+    double stringToValue(const QString& string) const override;
 public:
     const Steinberg::Vst::ParameterInfo& getParameterInfo() const;
-public:
-    void swap(VST3PluginParameter& rhs);
 private:
     Steinberg::Vst::IEditController* editController_ = nullptr;
     Steinberg::Vst::ParameterInfo parameterInfo_ = {};

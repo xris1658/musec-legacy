@@ -22,16 +22,18 @@ class CLAPPluginParameter: public IParameter
 {
 public:
     CLAPPluginParameter(const clap_plugin* plugin, const clap_plugin_params* params, uint32_t index);
-    CLAPPluginParameter(CLAPPluginParameter&&) = default;
-    CLAPPluginParameter& operator=(CLAPPluginParameter&&) = default;
 public:
+    std::uint32_t id() const override;
     QString name() const override;
     double minValue() const override;
     double maxValue() const override;
     double defaultValue() const override;
     double value() const override;
     void setValue(double value) override;
-    double step() const override;
+    double stepSize() const override;
+public:
+    QString valueToString(double value) const override;
+    double stringToValue(const QString& string) const override;
 private:
     const clap_plugin* plugin_;
     const clap_plugin_params* params_;

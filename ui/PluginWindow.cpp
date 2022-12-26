@@ -46,7 +46,7 @@ void createBasicPluginEditorComplete(QWindow* window)
     {
         window->setProperty("pluginName", plugin->property("name"));
         window->setTitle(plugin->getName());
-        window->setProperty("parameterListModel", QVariant::fromValue(static_cast<QObject*>(new Musec::Model::PluginParameterListModel(plugin->plugin().get(), window))));
+        window->setProperty("parameterListModel", QVariant::fromValue(new Musec::Model::PluginParameterListModel(plugin->plugin().get(), window)));
         plugin->setBasicPluginEditor(window);
         window->showNormal();
     }
