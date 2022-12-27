@@ -158,13 +158,13 @@ Rectangle {
             effectVisible: root.effectVisible
             gainAndMeterVisible: root.gainAndMeterVisible
 //            gain: root.tracks.masterTrackGain
-            gainInDecibel: 20.0 * Math.log10(root.tracks.masterTrackGain)
-            panning: root.tracks.masterTrackPanning
-            channelMuted: root.tracks.masterTrackMute
-            channelSolo: root.tracks.masterTrackSolo
-            channelInverted: root.tracks.masterTrackInvertPhase
-            channelArmRecording: root.tracks.masterTrackArmRecording
-            channelMonoDownMix: root.tracks.masterTrackMonoDownMix
+            gainInDecibel: root.tracks? 20.0 * Math.log10(root.tracks.masterTrackGain): 0.0
+            panning: root.tracks? root.tracks.masterTrackPanning: 0.0
+            channelMuted: root.tracks? root.tracks.masterTrackMute: false
+            channelSolo: root.tracks? root.tracks.masterTrackSolo: false
+            channelInverted: root.tracks? root.tracks.masterTrackInvertPhase: false
+            channelArmRecording: root.tracks? root.tracks.masterTrackArmRecording: false
+            channelMonoDownMix: root.tracks? root.tracks.masterTrackMonoDownMix: false
             onSetMute: (newMute) => {
                 root.tracks.masterTrackMute = newMute;
             }
@@ -190,7 +190,9 @@ Rectangle {
                 root.audioEffectSlotRightClicked(-1, audioEffectIndex, menuX, menuY);
             }
             onSetGainInDecibel: (newGainInDecibel) => {
-                root.tracks.masterTrackGain = Math.pow(10.0, newGainInDecibel * 0.05);
+                if(root.tracks) {
+                    root.tracks.masterTrackGain = Math.pow(10.0, newGainInDecibel * 0.05);
+                }
             }
             onSetPanning: (newPanning) => {
                 root.tracks.masterTrackPanning = newPanning;
