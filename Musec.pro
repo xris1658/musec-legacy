@@ -167,6 +167,7 @@ HEADERS += \
     model/ModelInitializer.hpp \
     model/PluginListModel.hpp \
     model/PluginParameterListModel.hpp \
+    model/PluginParameterValueListModel.hpp \
     model/PluginSequenceModel.hpp \
     model/TempoAutomationModel.hpp \
     model/TrackListModel.hpp \
@@ -273,6 +274,7 @@ SOURCES += \
     model/ModelInitializer.cpp \
     model/PluginListModel.cpp \
     model/PluginParameterListModel.cpp \
+    model/PluginParameterValueListModel.cpp \
     model/PluginSequenceModel.cpp \
     model/TempoAutomationModel.cpp \
     model/TrackListModel.cpp \
