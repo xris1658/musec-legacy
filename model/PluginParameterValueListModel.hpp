@@ -18,7 +18,7 @@ public:
     {
         ValueRole = Qt::UserRole,
         TextRole,
-        RoleNamesCount
+        RoleEnd
     };
 public:
     PluginParameterValueListModel(Musec::Audio::Plugin::IParameter* parameter = nullptr, QObject* parent = nullptr);

@@ -31,7 +31,7 @@ int PluginParameterValueListModel::valueCount() const
 
 constexpr int PluginParameterValueListModel::columnSize()
 {
-    return RoleNames::RoleNamesCount - Qt::UserRole;
+    return RoleNames::RoleEnd - Qt::UserRole;
 }
 
 int PluginParameterValueListModel::rowCount(const QModelIndex&) const

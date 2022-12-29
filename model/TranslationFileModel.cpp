@@ -55,7 +55,7 @@ int TranslationFileModel::itemCount() const
 
 constexpr int TranslationFileModel::columnSize()
 {
-    return RoleNames::RoleNamesCount - Qt::UserRole;
+    return RoleNames::RoleEnd - Qt::UserRole;
 }
 
 int TranslationFileModel::rowCount(const QModelIndex&) const

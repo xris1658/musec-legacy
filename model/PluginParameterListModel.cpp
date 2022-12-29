@@ -52,7 +52,7 @@ Q_INVOKABLE QString PluginParameterListModel::valueToString(int index, double va
 
 constexpr int PluginParameterListModel::columnSize()
 {
-    return RoleNames::RoleNamesCount - Qt::UserRole;
+    return RoleNames::RoleEnd - Qt::UserRole;
 }
 
 int PluginParameterListModel::rowCount(const QModelIndex&) const

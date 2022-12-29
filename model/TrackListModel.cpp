@@ -57,7 +57,7 @@ TrackListModel::~TrackListModel()
 
 constexpr int TrackListModel::columnSize()
 {
-    return RoleNames::kRoleNamesCount - Qt::UserRole;
+    return RoleNames::RoleEnd - Qt::UserRole;
 }
 
 int TrackListModel::trackCount() const noexcept

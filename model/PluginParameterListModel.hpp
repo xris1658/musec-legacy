@@ -35,7 +35,7 @@ public:
         ShowAsListRole,
         ShowAsSwitchRole,
         ListRole,
-        RoleNamesCount
+        RoleEnd
     };
 public:
     PluginParameterListModel(Musec::Audio::Plugin::IPlugin* plugin = nullptr, QObject* parent = nullptr);

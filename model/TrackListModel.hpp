@@ -42,7 +42,7 @@ public:
         PluginListRole,
         ChannelGainRole,
         ChannelPanningRole,
-        kRoleNamesCount
+        RoleEnd
     };
 public:
     explicit TrackListModel(QObject* parent = nullptr);

@@ -23,7 +23,7 @@ public:
         PathRole = Qt::UserRole,
         LanguageNameRole,
         ReadableLanguageNameRole,
-        RoleNamesCount
+        RoleEnd
     };
 public:
     explicit TranslationFileModel(QObject* parent = nullptr);
