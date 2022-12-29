@@ -644,7 +644,7 @@ Rectangle {
                         highlight: Rectangle {
                             color: Constants.currentElementColor
                         }
-                        ScrollBar.vertical: vbar
+                        ScrollBar.vertical: visible? vbar: null
                         focus: true
                         delegate: pluginItemComponent
                     }
@@ -659,7 +659,7 @@ Rectangle {
                         highlight: Rectangle {
                             color: Constants.currentElementColor
                         }
-                        ScrollBar.vertical: vbar
+                        ScrollBar.vertical: visible? vbar: null
                         focus: true
                         delegate: pluginItemComponent
                     }
@@ -674,7 +674,7 @@ Rectangle {
                         highlight: Rectangle {
                             color: Constants.currentElementColor
                         }
-                        ScrollBar.vertical: vbar
+                        ScrollBar.vertical: visible? vbar: null
                         focus: true
                         delegate: pluginItemComponent
                     }
@@ -689,7 +689,7 @@ Rectangle {
                         highlight: Rectangle {
                             color: Constants.currentElementColor
                         }
-                        ScrollBar.vertical: vbar
+                        ScrollBar.vertical: visible? vbar: null
                         focus: true
                         delegate: pluginItemComponent
                     }
