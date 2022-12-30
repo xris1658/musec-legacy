@@ -42,7 +42,7 @@
   <vcpkg 目录>\downloads\tools\cmake-3.21.1-windows\cmake-3.21.1-windows-i386
   ```
   这是一份 32 位的 CMake，可以在 64 位系统上运行，不过应该不能用 x64 的工具链，需要换用 x86_64。
-- 下载并安装 Qt 5。在选择安装组件时，勾选对应项下的 **MSVC 2019 64-bit**。
+- 下载并安装 Qt 5.15.2。在选择安装组件时，勾选 **Qt 5.15.2** 项下的 **MSVC 2019 64-bit**。
   - 读者可能会一并勾选 **Qt Debug information Files** 以及 **Developer and Designer Tools** 下的 **Debugging Tools for Windows** ，用于调试程序。
 - 下载并解压 [Steinberg ASIO SDK](https://www.steinberg.net/asiosdk)。
 - 克隆 [Steinberg VST3 SDK 仓库](https://github.com/steinbergmedia/vst3sdk)。
@@ -60,7 +60,7 @@
     ```
     -DCMAKE_TOOLCHAIN_FILE=<vcpkg 目录>/scripts/buildsystems/vcpkg.cmake -DVST3SDK_SOURCE_DIR=<VST3 SDK 目录> -DASIOSDK_PATH=<ASIO SDK 目录> -DCLAP_SOURCE_DIR=<CLAP SDK 目录> -DCLAP_HELPERS_DIR=<CLAP Helpers 目录> -DCMAKE_MAKE_PROGRAM=<Qt 目录>/Tools/QtCreator/bin/jom/jom.exe
     ```
-    - 上方的命令使用了 Qt 的 JOM，一个“目标是作为支持并行构建的 NMake”的生成工具。当然你想用什么生成系统就用哪个。
+    - 上方的命令使用了 Qt 的 [JOM](https://github.com/qt-labs/jom)，一个“目标是作为支持并行构建的 NMake”的生成工具。当然你想用什么生成系统就用哪个。
 3. 构建目标 `Musec`。
 
 ### 使用命令行

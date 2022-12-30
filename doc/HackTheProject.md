@@ -58,7 +58,7 @@ components.
 and extract files in `vstsdk2.4` (except `index.html`) to the VST3 SDK repository that was cloned
 to your machine.  
   If you see directories `vst` and `vst2.x` in `pluginterfaces`, you have made it correctly.
-  > For those who don't why this link is **not** from the Steinberg website:  
+  > For those who don't know why this link is **not** from the Steinberg website:  
   Steinberg had decided 
   to make the VST2 SDK proprietary and not in public for download in several years ago, and eventually stop supporting VST2 in their own products. There are lots of websites that offer this 
   SDK. The reason I chose this link from The Internet Archive is that the documentation is 

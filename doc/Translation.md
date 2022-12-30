@@ -21,12 +21,12 @@ If you'd not like to download a whole development kit, you can install standalon
 - If the translation is complete, save the translation file.
 
 ## Update translation files
-If the developer updated the code by changing the display text (e.g. added new display text), then the translation files need an upgrade. `lupdate.exe` is a program used to update translation files in Qt. You can check the usage by `lupdate.exe --help`.
+If the developer updated the code by changing the display text (e.g. added new display text), then the translation files need an update. `lupdate.exe` is a program used to update translation files in Qt. You can check the usage by `lupdate.exe --help`.
 
 ### Update in CMake
 There are two custom targets in `CMakeLists.txt`:
-- `GenerateLocaleBase`, this updated `base.ts`.
-- `GenerateLocaleCN`, this updated `Musec_zh_CN.ts`.
+- `GenerateLocaleBase`, which updates `base.ts`.
+- `GenerateLocaleCN`, which updates `Musec_zh_CN.ts`.
 
 You can add your translation file by duplicating and changing the custom target.
 
@@ -56,7 +56,7 @@ You could change this command in order to release your translation.
 ### Release in qmake
 Releasing the translation is supported by qmake.
 
-### Some things to notice
+## Some things to notice
 - `CMakeLists.txt` use the relative path of `Qt5_DIR` to find `lupdate.exe` and `lrelease.exe`. 
 If Qt is installed by the official installer, then the relative path will be okay. 
 Qt could be installed by several package managers (e.g. Conan, vcpkg), in this scenario, make sure you can find these applications on your machine, then edit `CMakeLists.txt` using the right path (you can use absolute paths).
