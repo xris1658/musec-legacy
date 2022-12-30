@@ -2,6 +2,7 @@
 
 #include "audio/host/VST3Host.hpp"
 #include "controller/AudioEngineController.hpp"
+#include "native/Native.hpp"
 
 #include <pluginterfaces/base/ibstream.h>
 #include <pluginterfaces/gui/iplugview.h>
@@ -672,7 +673,7 @@ bool VST3Plugin::attachToWindow(QWindow* window)
         Steinberg::ViewRect viewRect;
         // Some plugins cannot return a correct size here
         window_ = window;
-        view_->attached(reinterpret_cast<HWND>(window_->winId()), Steinberg::kPlatformTypeHWND);
+        view_->attached(reinterpret_cast<Musec::Native::WindowType>(window_->winId()), Steinberg::kPlatformTypeHWND);
         Musec::Controller::AudioEngineController::AppProject().addPluginWindowMapping(audioProcessor_, window_);
         initializeWindowSizeConnections();
         view_->getSize(&viewRect);

@@ -6,6 +6,7 @@
 #include "controller/AppController.hpp"
 #include "controller/AudioEngineController.hpp"
 #include "controller/ConfigController.hpp"
+#include "native/Native.hpp"
 #include "ui/MessageDialog.hpp"
 #include "ui/UI.hpp"
 
@@ -56,7 +57,7 @@ bool loadASIODriver()
     {
         return false;
     }
-    auto hWnd = reinterpret_cast<HWND>(mainWindow->winId());
+    auto hWnd = reinterpret_cast<Musec::Native::WindowType>(mainWindow->winId());
     if(driver->init(hWnd) == ASIOFalse)
     {
         auto name = std::get<Musec::Audio::Driver::ASIODriverField::NameField>(driver.driverInfo());
