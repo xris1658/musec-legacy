@@ -119,7 +119,9 @@ QQC2.ComboBox {
             model: comboBox.delegateModel
             currentIndex: comboBox.currentIndex
             focus: true
-            interactive: false
+            interactive: true
+            boundsBehavior: Flickable.StopAtBounds
+            QQC2.ScrollBar.vertical: QQC2.ScrollBar {}
         }
     }
 }
