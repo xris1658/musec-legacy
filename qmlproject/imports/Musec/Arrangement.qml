@@ -10,6 +10,7 @@ import Musec 1.0
 import Musec.Controls 1.0 as MCtrl
 import Musec.Models 1.0 as MModel
 import Musec.Entities 1.0
+import Musec.Shapes 1.0
 
 Item {
     id: root
@@ -191,43 +192,9 @@ Item {
                         anchors.fill: parent
                         color: automationButton.automationEnabled? Constants.currentElementColor: Constants.backgroundColor
                     }
-                    Item {
+                    AutomationIcon {
                         anchors.centerIn: parent
-                        width: 12
-                        height: 12
-                        Rectangle {
-                            anchors.left: parent.left
-                            anchors.bottom: parent.bottom
-                            width: 5
-                            height: width
-                            radius: width / 2
-                            color: automationButton.automationEnabled? automationButton.enabledForeColor: automationButton.enabledBackColor
-                        }
-                        Rectangle {
-                            anchors.right: parent.right
-                            anchors.top: parent.top
-                            width: 5
-                            height: width
-                            radius: width / 2
-                            color: automationButton.automationEnabled? automationButton.enabledForeColor: automationButton.enabledBackColor
-                        }
-                        Shape {
-                            width: parent.width
-                            height: parent.height
-                            antialiasing: true
-                            smooth: true
-                            ShapePath {
-                                startX: 3
-                                startY: 9
-                                PathLine {
-                                    x: 9
-                                    y: 3
-                                }
-                                strokeWidth: 1.5
-                                strokeColor: fillColor
-                                fillColor: automationButton.automationEnabled? automationButton.enabledForeColor: automationButton.enabledBackColor
-                            }
-                        }
+                        fillColor: automationButton.automationEnabled? automationButton.enabledForeColor: automationButton.enabledBackColor
                     }
                     border.width: 0
                     z: 1

@@ -78,6 +78,8 @@
         <file>qmlproject/imports/Musec/PianoKey.qml</file>
         <file>qmlproject/imports/Musec/PianoKeyBackup.qml</file>
         <file>qmlproject/imports/Musec/PluginWindow.qml</file>
+        <file>qmlproject/imports/Musec/Shapes/AutomationIcon.qml</file>
+        <file>qmlproject/imports/Musec/Shapes/qmldir</file>
         <file>qmlproject/imports/Musec/Timeline.qml</file>
         <file>qmlproject/imports/Musec/TrackHeader.qml</file>
         <file>qmlproject/imports/Musec/Views/ExplorerView.qml</file>

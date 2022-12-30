@@ -1,0 +1,3 @@
+module Musec.Shapes
+
+AutomationIcon 1.0 AutomationIcon.qml
