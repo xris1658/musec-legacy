@@ -5,6 +5,7 @@ import QtQuick.Window 2.15
 import Musec 1.0
 import Musec.Controls 1.0 as MCtrl
 import Musec.Models 1.0 as MModel
+import Musec.Shapes 1.0
 
 Window {
     id: root
@@ -39,11 +40,14 @@ Window {
                 elide: Text.ElideRight
             }
             Text {
+                property int parameterCount: parameterListModel.parameterCount()? parameterListModel.parameterCount(): 0
                 id: paramCountText
                 anchors.right: parent.right
                 anchors.rightMargin: (parent.height - contentHeight) / 2
                 anchors.verticalCenter: parent.verticalCenter
-                text: (parameterListModel.parameterCount()? parameterListModel.parameterCount(): 0) + qsTr(" parameters")
+                text: parameterCount == 0? qsTr("No parameters"):
+                      parameterCount == 1? qsTr("%1 parameter").arg(parameterCount):
+                                           qsTr("%1 parameters").arg(parameterCount)
                 font.family: Constants.font
                 color: Constants.contentColor1
                 font.pixelSize: parent.height * 0.6
@@ -61,8 +65,9 @@ Window {
             clip: true
             ListView {
                 id: parameterListView
-                spacing: 5
                 anchors.fill: parent
+                interactive: true
+                boundsBehavior: Flickable.StopAtBounds
                 model: root.parameterListModel
                 ScrollBar.vertical: ScrollBar {
                     id: scrollBar
@@ -77,22 +82,33 @@ Window {
                         color: scrollBar.hovered? Qt.darker(Constants.currentElementColor): Constants.mouseOverElementColor
                     }
                 }
-                delegate: Item {
+                delegate: Rectangle {
                     id: delegate
                     width: root.width
                     height: 20
                     visible: !hidden
+                    color: index % 2 == 0? Constants.backgroundColor: Constants.backgroundColor2
                     Item {
                         id: left_
                         width: parent.width * 0.75
                         height: parent.height
                         anchors.left: parent.left
-                        anchors.leftMargin: scrollBar.width
                         onWidthChanged: {
                             paramText.getDisplayText();
                         }
+                        Item {
+                            id: automationIndicator
+                            width: height
+                            height: parent.height
+                            AutomationIcon {
+                                anchors.centerIn: parent
+                                visible: automatable
+                                fillColor: Constants.mouseOverElementColor
+                            }
+                        }
                         Text {
                             id: paramText
+                            anchors.left: automationIndicator.right
                             function getDisplayText() {
                                 text = name;
                                 if(contentWidth > parent.width) {
@@ -102,8 +118,6 @@ Window {
                             Component.onCompleted: {
                                 getDisplayText();
                             }
-                            anchors.left: parent.left
-                            anchors.leftMargin: (parent.height - contentHeight) / 2
                             font.family: Constants.font
                             color: Constants.contentColor1
                         }
@@ -112,7 +126,7 @@ Window {
                         id: right_
                         width: delegate.width - left_.width
                         anchors.right: parent.right
-                        anchors.rightMargin: scrollBar.width
+                        anchors.rightMargin: scrollBar.visible? scrollBar.width: 0
                         height: parent.height
                         MCtrl.Slider {
                             id: slider
