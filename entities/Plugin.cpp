@@ -33,13 +33,13 @@ Plugin::Plugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin, const QStr
             Musec::UI::createBasicPluginEditor(this);
         }
     }
-    initSignal();
+    initPluginWindow();
 }
 
 Plugin::Plugin(Plugin&& rhs) noexcept
 {
     swap(rhs);
-    initSignal();
+    initPluginWindow();
     setBasicPluginEditor(basicPluginEditor_);
 }
 
@@ -48,7 +48,7 @@ Plugin& Plugin::operator=(Plugin&& rhs) noexcept
     if(this != &rhs)
     {
         swap(rhs);
-        initSignal();
+        initPluginWindow();
         setBasicPluginEditor(basicPluginEditor_);
     }
     return *this;
@@ -187,10 +187,11 @@ void Plugin::setBasicPluginEditor(QWindow* basicPluginEditor)
     }
 }
 
-void Plugin::initSignal()
+void Plugin::initPluginWindow()
 {
     if(plugin_ && plugin_->window())
     {
+        plugin_->window()->setTitle(name_);
         QObject::connect(plugin_->window(), &QWindow::visibleChanged,
             this, [this](bool visible)
             {

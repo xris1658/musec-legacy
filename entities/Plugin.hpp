@@ -67,7 +67,7 @@ public:
 public:
     void setBasicPluginEditor(QWindow* basicPluginEditor);
 private:
-    void initSignal();
+    void initPluginWindow();
 private:
     std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin_;
     QWindow* basicPluginEditor_ = nullptr;
