@@ -32,7 +32,7 @@ public:
     bool setMinDecibel(double minDecibel);
 public:
     int rowCount() const;
-    constexpr int columnSize() const;
+    static constexpr int columnSize() noexcept;
 public:
     int rowCount(const QModelIndex&) const override;
     int columnCount(const QModelIndex&) const override;

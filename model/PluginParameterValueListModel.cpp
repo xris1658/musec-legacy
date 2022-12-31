@@ -29,7 +29,7 @@ int PluginParameterValueListModel::valueCount() const
     return std::round((parameter_->maxValue() - parameter_->minValue()) / parameter_->stepSize() + 1);
 }
 
-constexpr int PluginParameterValueListModel::columnSize()
+constexpr int PluginParameterValueListModel::columnSize() noexcept
 {
     return RoleNames::RoleEnd - Qt::UserRole;
 }

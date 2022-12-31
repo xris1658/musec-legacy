@@ -63,7 +63,7 @@ int PluginListModel::itemCount() const
     return list_.count();
 }
 
-constexpr int PluginListModel::columnSize()
+constexpr int PluginListModel::columnSize() noexcept
 {
     return RoleNames::RoleEnd - Qt::UserRole;
 }

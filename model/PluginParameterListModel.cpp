@@ -50,7 +50,7 @@ Q_INVOKABLE QString PluginParameterListModel::valueToString(int index, double va
     return plugin_->parameter(index).valueToString(value);
 }
 
-constexpr int PluginParameterListModel::columnSize()
+constexpr int PluginParameterListModel::columnSize() noexcept
 {
     return RoleNames::RoleEnd - Qt::UserRole;
 }

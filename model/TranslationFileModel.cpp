@@ -53,7 +53,7 @@ int TranslationFileModel::itemCount() const
     return list_.size();
 }
 
-constexpr int TranslationFileModel::columnSize()
+constexpr int TranslationFileModel::columnSize() noexcept
 {
     return RoleNames::RoleEnd - Qt::UserRole;
 }

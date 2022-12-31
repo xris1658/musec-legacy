@@ -57,7 +57,7 @@ int ASIODriverListModel::itemCount() const
     return list_.count();
 }
 
-constexpr int ASIODriverListModel::columnSize()
+constexpr int ASIODriverListModel::columnSize() noexcept
 {
     return RoleNames::RoleEnd - Qt::UserRole;
 }

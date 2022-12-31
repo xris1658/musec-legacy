@@ -48,7 +48,7 @@ public:
     explicit TrackListModel(QObject* parent = nullptr);
     ~TrackListModel();
 public:
-    static constexpr int columnSize();
+    static constexpr int columnSize() noexcept;
 public:
     Q_INVOKABLE int trackCount() const noexcept;
 public:

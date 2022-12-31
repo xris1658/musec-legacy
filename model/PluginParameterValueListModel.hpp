@@ -26,7 +26,7 @@ public:
     ~PluginParameterValueListModel();
 public:
     Q_INVOKABLE int valueCount() const;
-    static constexpr int columnSize();
+    static constexpr int columnSize() noexcept;
 public:
     int rowCount(const QModelIndex&) const override;
     int columnCount(const QModelIndex&) const override;

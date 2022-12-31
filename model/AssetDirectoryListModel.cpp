@@ -60,7 +60,7 @@ int AssetDirectoryListModel::itemCount() const
     return list_.count();
 }
 
-constexpr int AssetDirectoryListModel::columnSize()
+constexpr int AssetDirectoryListModel::columnSize() noexcept
 {
     return RoleNames::RoleEnd - Qt::UserRole;
 }

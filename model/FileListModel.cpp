@@ -58,7 +58,7 @@ int FileListModel::itemCount() const
     return list_.size();
 }
 
-constexpr int FileListModel::columnSize()
+constexpr int FileListModel::columnSize() noexcept
 {
     return RoleNames::RoleEnd - Qt::UserRole;
 }

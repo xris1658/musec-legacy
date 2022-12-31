@@ -44,7 +44,7 @@ public:
 public:
     Q_INVOKABLE int parameterCount() const;
     Q_INVOKABLE QString valueToString(int index, double value) const;
-    static constexpr int columnSize();
+    static constexpr int columnSize() noexcept;
 public:
     int rowCount(const QModelIndex&) const override;
     int columnCount(const QModelIndex&) const override;

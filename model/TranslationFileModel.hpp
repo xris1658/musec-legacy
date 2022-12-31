@@ -31,7 +31,7 @@ public:
 public:
     const Item& operator[](int index) const;
     int itemCount() const;
-    static constexpr int columnSize();
+    static constexpr int columnSize() noexcept;
 public:
     virtual int rowCount(const QModelIndex&) const override;
     virtual int columnCount(const QModelIndex&) const override;

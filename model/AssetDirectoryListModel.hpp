@@ -32,7 +32,7 @@ public:
     void setList(QList<Item>&&);
     QList<Item> getList() const;
     int itemCount() const;
-    static constexpr int columnSize();
+    static constexpr int columnSize() noexcept;
     void append(const Item& item);
     Q_INVOKABLE void remove(int id);
     Q_INVOKABLE void rename(int id, const QString& name);

@@ -31,7 +31,7 @@ public:
     void setTrackSequence(const Musec::Audio::Arrangement::AudioTrackSequence&);
     void setTrackSequence(Musec::Audio::Arrangement::AudioTrackSequence&&);
     int clipCount() const;
-    static constexpr int columnSize();
+    static constexpr int columnSize() noexcept;
 public:
     virtual int rowCount(const QModelIndex&) const override;
     virtual int columnCount(const QModelIndex&) const override;

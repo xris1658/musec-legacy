@@ -41,7 +41,7 @@ int ASIOChannelInfoListModel::itemCount() const
     return channelCount_;
 }
 
-constexpr int ASIOChannelInfoListModel::columnSize()
+constexpr int ASIOChannelInfoListModel::columnSize() noexcept
 {
     return RoleNames::RoleEnd - Qt::UserRole;
 }

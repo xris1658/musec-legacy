@@ -63,7 +63,7 @@ int PluginSequenceModel::itemCount() const
     return 0;
 }
 
-constexpr int PluginSequenceModel::columnSize()
+constexpr int PluginSequenceModel::columnSize() noexcept
 {
     return RoleNames::RoleEnd - Qt::UserRole;
 }

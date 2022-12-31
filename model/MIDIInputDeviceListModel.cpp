@@ -56,7 +56,7 @@ int MIDIInputDeviceListModel::itemCount() const
     return list_.count();
 }
 
-constexpr int MIDIInputDeviceListModel::columnSize()
+constexpr int MIDIInputDeviceListModel::columnSize() noexcept
 {
     return RoleNames::RoleEnd - Qt::UserRole;
 }

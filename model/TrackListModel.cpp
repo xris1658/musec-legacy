@@ -55,7 +55,7 @@ TrackListModel::~TrackListModel()
     clear();
 }
 
-constexpr int TrackListModel::columnSize()
+constexpr int TrackListModel::columnSize() noexcept
 {
     return RoleNames::RoleEnd - Qt::UserRole;
 }

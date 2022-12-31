@@ -58,7 +58,7 @@ int FolderListModel::itemCount() const
     return list_.count();
 }
 
-constexpr int FolderListModel::columnSize()
+constexpr int FolderListModel::columnSize() noexcept
 {
     return RoleNames::RoleEnd - Qt::UserRole;
 }

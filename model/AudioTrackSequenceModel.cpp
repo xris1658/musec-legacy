@@ -42,7 +42,7 @@ int AudioTrackSequenceModel::clipCount() const
     return trackSequence_.size();
 }
 
-constexpr int AudioTrackSequenceModel::columnSize()
+constexpr int AudioTrackSequenceModel::columnSize() noexcept
 {
     return RoleNames::RoleEnd - Qt::UserRole;
 }

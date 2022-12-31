@@ -55,7 +55,7 @@ int VolumeFaderScaleModel::rowCount() const
     return container_.size();
 }
 
-constexpr int VolumeFaderScaleModel::columnSize() const
+constexpr int VolumeFaderScaleModel::columnSize() noexcept
 {
     return RoleNames::RoleEnd - Qt::UserRole;
 }
