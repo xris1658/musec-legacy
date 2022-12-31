@@ -21,7 +21,8 @@ public:
     {
         IdRole = Qt::UserRole,
         DirectoryRole,
-        NameRole
+        NameRole,
+        RoleEnd
     };
 public:
     explicit AssetDirectoryListModel(QObject* parent = nullptr);

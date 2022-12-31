@@ -21,7 +21,8 @@ public:
     enum RoleNames
     {
         NameRole = Qt::UserRole,
-        PathRole
+        PathRole,
+        RoleEnd
     };
 public:
     explicit FileListModel(QObject* parent = nullptr);

@@ -21,7 +21,8 @@ public:
     enum RoleNames
     {
         NameRole = Qt::UserRole,
-        IdRole
+        IdRole,
+        RoleEnd
     };
 public:
     explicit MIDIInputDeviceListModel(QObject* parent = nullptr);

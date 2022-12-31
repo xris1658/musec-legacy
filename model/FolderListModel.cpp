@@ -60,7 +60,7 @@ int FolderListModel::itemCount() const
 
 constexpr int FolderListModel::columnSize()
 {
-    return std::tuple_size_v<Item>;
+    return RoleNames::RoleEnd - Qt::UserRole;
 }
 
 int FolderListModel::rowCount(const QModelIndex&) const

@@ -46,8 +46,7 @@ bool AutomationModel::empty() const noexcept
 
 constexpr int AutomationModel::columnSize() noexcept
 {
-    // TODO: Move this number to the file where `Automation` exists
-    return 3;
+    return RoleNames::RoleEnd - Qt::UserRole;
 }
 
 int AutomationModel::timeOfPoint(int index) const

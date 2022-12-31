@@ -22,7 +22,8 @@ public:
     enum RoleNames
     {
         NameRole = Qt::UserRole,
-        CLSIDRole
+        CLSIDRole,
+        RoleEnd
     };
 public:
     explicit ASIODriverListModel(QObject* parent = nullptr);

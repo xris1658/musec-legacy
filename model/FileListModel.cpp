@@ -60,7 +60,7 @@ int FileListModel::itemCount() const
 
 constexpr int FileListModel::columnSize()
 {
-    return std::tuple_size_v<Item>;
+    return RoleNames::RoleEnd - Qt::UserRole;
 }
 
 int FileListModel::rowCount(const QModelIndex&) const

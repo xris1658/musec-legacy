@@ -48,7 +48,7 @@ bool TempoAutomationModel::empty() const noexcept
 
 constexpr int TempoAutomationModel::columnSize() noexcept
 {
-    return 3;
+    return RoleNames::RoleEnd - Qt::UserRole;
 }
 
 int TempoAutomationModel::timeOfPoint(int index) const

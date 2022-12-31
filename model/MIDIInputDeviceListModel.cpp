@@ -58,7 +58,7 @@ int MIDIInputDeviceListModel::itemCount() const
 
 constexpr int MIDIInputDeviceListModel::columnSize()
 {
-    return std::tuple_size_v<Item>;
+    return RoleNames::RoleEnd - Qt::UserRole;
 }
 
 bool MIDIInputDeviceListModel::empty() const noexcept

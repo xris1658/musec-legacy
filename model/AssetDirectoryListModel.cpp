@@ -62,7 +62,7 @@ int AssetDirectoryListModel::itemCount() const
 
 constexpr int AssetDirectoryListModel::columnSize()
 {
-    return std::tuple_size_v<Item>;
+    return RoleNames::RoleEnd - Qt::UserRole;
 }
 
 void AssetDirectoryListModel::append(const Item& item)

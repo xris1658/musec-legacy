@@ -65,7 +65,7 @@ int PluginListModel::itemCount() const
 
 constexpr int PluginListModel::columnSize()
 {
-    return std::tuple_size_v<Item>;
+    return RoleNames::RoleEnd - Qt::UserRole;
 }
 
 int PluginListModel::rowCount(const QModelIndex&) const

@@ -20,7 +20,8 @@ public:
     {
         TimeRole = Qt::UserRole,
         ValueRole,
-        CurveRole
+        CurveRole,
+        RoleEnd
     };
 public:
     explicit TempoAutomationModel(QObject* parent = nullptr);

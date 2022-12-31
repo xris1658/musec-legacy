@@ -30,7 +30,8 @@ public:
         IdRole = Qt::UserRole,
         NameRole,
         FormatRole,
-        TypeRole
+        TypeRole,
+        RoleEnd
     };
 public:
     explicit PluginListModel(QObject* parent = nullptr);
