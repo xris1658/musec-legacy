@@ -33,7 +33,7 @@ public:
         SidechainExistRole,
         SidechainEnabledRole,
         WindowVisibleRole,
-        RoleNamesEnd
+        RoleEnd
     };
 public:
     explicit PluginSequenceModel(int trackIndex, QObject* parent = nullptr);

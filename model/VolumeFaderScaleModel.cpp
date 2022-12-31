@@ -57,7 +57,7 @@ int VolumeFaderScaleModel::rowCount() const
 
 constexpr int VolumeFaderScaleModel::columnSize() const
 {
-    return RoleNames::RoleNamesEnd - Qt::UserRole;
+    return RoleNames::RoleEnd - Qt::UserRole;
 }
 
 int VolumeFaderScaleModel::rowCount(const QModelIndex&) const

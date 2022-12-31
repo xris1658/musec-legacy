@@ -65,7 +65,7 @@ int PluginSequenceModel::itemCount() const
 
 constexpr int PluginSequenceModel::columnSize()
 {
-    return RoleNames::RoleNamesEnd - Qt::UserRole;
+    return RoleNames::RoleEnd - Qt::UserRole;
 }
 
 int PluginSequenceModel::rowCount(const QModelIndex&) const

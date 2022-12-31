@@ -44,7 +44,7 @@ int AudioTrackSequenceModel::clipCount() const
 
 constexpr int AudioTrackSequenceModel::columnSize()
 {
-    return RoleNames::RoleNameCount - Qt::UserRole;
+    return RoleNames::RoleEnd - Qt::UserRole;
 }
 
 int AudioTrackSequenceModel::rowCount(const QModelIndex&) const

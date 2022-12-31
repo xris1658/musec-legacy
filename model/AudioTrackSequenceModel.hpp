@@ -20,7 +20,7 @@ public:
         EndTimeRole,
         ClipRole,
         ClipStartsAtRole,
-        RoleNameCount
+        RoleEnd
     };
 public:
     explicit AudioTrackSequenceModel(QObject* parent = nullptr);

@@ -21,7 +21,7 @@ public:
     {
         PositionRole = Qt::UserRole,
         DecibelRole,
-        RoleNamesEnd
+        RoleEnd
     };
 public:
     VolumeFaderScaleModel(QObject* parent = nullptr);
