@@ -30,10 +30,6 @@ Window {
     property alias inputLatencyInSamples: audioHardwareSelector.inputLatencyInSamples
     property alias outputLatencyInSamples: audioHardwareSelector.outputLatencyInSamples
     property alias sampleRate: audioHardwareSelector.sampleRate
-    property alias outputChannelList: audioHardwareSelector.outputChannelListModel
-
-    property alias leftOutputChannel: audioHardwareSelector.leftOutputChannel
-    property alias rightOutputChannel: audioHardwareSelector.rightOutputChannel
 
     MCtrl.SplitView {
         orientation: Qt.Horizontal
@@ -120,9 +116,6 @@ Window {
                         }
                         onOpenASIODriverControlPanel: {
                             EventBridge.openASIODriverControlPanel();
-                        }
-                        onChannelUpdated: (left, right) => {
-                            EventBridge.channelUpdated(left, right);
                         }
                     }
                     PluginSettings {

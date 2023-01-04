@@ -204,10 +204,6 @@ bool updateCurrentASIODriverInfo()
                                    QVariant::fromValue<double>(getSampleRate()));
         optionsWindow->setProperty("outputChannelList",
                                    QVariant::fromValue<QObject*>(&outputChannelInfoList()));
-        optionsWindow->setProperty("leftOutputChannel",
-                                   QVariant::fromValue<int>(0));
-        optionsWindow->setProperty("rightOutputChannel",
-                                   QVariant::fromValue<int>(1));
     }
     return true;
 }

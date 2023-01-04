@@ -10,39 +10,9 @@ Rectangle {
     height: 500
     clip: true
     color: Constants.backgroundColor
-    QtObject {
-        id: channelIndexCopy
-        property int leftOutputChannel
-        property int rightOutputChannel
-    }
-    function updateCopy() {
-        channelIndexCopy.leftOutputChannel = leftOutputChannel;
-        channelIndexCopy.rightOutputChannel = rightOutputChannel;
-    }
-    Component.onCompleted: {
-        updateCopy();
-    }
     property alias driverListModel: comboBoxDriver.model
     property alias currentDriver: comboBoxDriver.currentIndex
-    property alias outputChannelListModel: comboBoxLeftOutput.model
-    property alias leftOutputChannel: comboBoxLeftOutput.currentIndex
-    property alias rightOutputChannel: comboBoxRightOutput.currentIndex
     property bool running: false
-    signal channelUpdated(left: int, right: int)
-    onLeftOutputChannelChanged: {
-        if(leftOutputChannel == rightOutputChannel) {
-            rightOutputChannel = channelIndexCopy.leftOutputChannel;
-        }
-        updateCopy();
-        channelUpdated(leftOutputChannel, rightOutputChannel);
-    }
-    onRightOutputChannelChanged: {
-        if(rightOutputChannel == leftOutputChannel) {
-            leftOutputChannel = channelIndexCopy.rightOutputChannel;
-        }
-        updateCopy();
-        channelUpdated(leftOutputChannel, rightOutputChannel);
-    }
     property int bufferSize: 512
     property int inputLatencyInSamples: 512
     property int outputLatencyInSamples: 512
@@ -158,87 +128,6 @@ Rectangle {
             enabled: root.driverLoadedAndWorking();
             onClicked: {
                 openASIODriverControlPanel();
-            }
-        }
-        Text {
-            width: 100
-            height: 20
-            text: qsTr("Hardware I/O")
-            font.family: Constants.font
-            color: Constants.contentColor2
-            horizontalAlignment: Text.AlignLeft
-            leftPadding: 5
-            verticalAlignment: Text.AlignVCenter
-            visible: root.driverLoadedAndWorking()
-        }
-        Item {
-            width: openDriverSettingsButton.width
-            height: 20
-            visible: root.driverLoadedAndWorking()
-            Text {
-                width: parent.width / 2
-                height: parent.height
-                anchors.left: parent.left
-                text: "L"
-                font.family: Constants.font
-                color: Constants.contentColor1
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-            Text {
-                width: parent.width / 2
-                height: parent.height
-                anchors.right: parent.right
-                text: "R"
-                font.family: Constants.font
-                color: Constants.contentColor1
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
-        Text {
-            width: 100
-            text: qsTr("Output Device") + ": "
-            font.family: Constants.font
-            color: Constants.contentColor1
-            horizontalAlignment: Text.AlignRight
-            verticalAlignment: Text.AlignVCenter
-            visible: root.driverLoadedAndWorking()
-        }
-        Item {
-            width: secondColumn.width
-            height: 20
-            visible: root.driverLoadedAndWorking()
-            MCtrl.ComboBox {
-                id: comboBoxLeftOutput
-                width: (parent.width - buttonSwapLeftRight.width) / 2 - mainGrid.rowSpacing
-                anchors.left: parent.left
-                textRole: "display_text"
-                valueRole: "channel_index"
-            }
-            MCtrl.Button {
-                id: buttonSwapLeftRight
-                anchors.centerIn: parent
-                width: parent.height
-                height: width
-                text: "\u2194"
-                onClicked: {
-                    var temp = comboBoxLeftOutput.currentIndex;
-                    comboBoxLeftOutput.currentIndex = comboBoxRightOutput.currentIndex;
-                    comboBoxRightOutput.currentIndex = temp;
-                }
-                MCtrl.ToolTip {
-                    visible: parent.hovered
-                    text: qsTr("Swap left and right channel")
-                }
-            }
-            MCtrl.ComboBox {
-                id: comboBoxRightOutput
-                width: (parent.width - buttonSwapLeftRight.width) / 2 - mainGrid.rowSpacing
-                anchors.right: parent.right
-                model: comboBoxLeftOutput.model
-                textRole: "display_text"
-                valueRole: "channel_index"
             }
         }
         Text {
