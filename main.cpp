@@ -1,6 +1,5 @@
 #include "controller/AppController.hpp"
 #include "controller/ConfigController.hpp"
-#include "controller/LoggingController.hpp"
 #include "entities/EntitiesInitializer.hpp"
 #include "event/EventBase.hpp"
 #include "event/ObjectCreateListener.hpp"
@@ -41,7 +40,6 @@ int main(int argc, char* argv[]) try
     // and replaced `QCoreApplication` with `QApplication`.
     // (#include <QColorDialog> is not needed.)
     QApplication app(argc, argv);
-    Musec::Controller::LoggingController::AppLogger();
 #if QT_VERSION_MAJOR < 6
     QTextCodec* codec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForLocale(codec);
