@@ -25,7 +25,7 @@ ApplicationWindow {
     property alias pluginDirectoryList: optionsWindow.pluginDirectoryList
     property alias driverList: optionsWindow.driverList
     property alias currentDriver: optionsWindow.currentDriver
-    readonly property EventBridge eventBridge: EventBridge
+    readonly property QtObject eventBridge: EventBridge
     property bool canClose: false
     property PluginWindow windowForPlugin: null
     property BasicPluginEditor basicPluginEditorForPlugin: null
@@ -129,7 +129,7 @@ ApplicationWindow {
         if(component.status == Component.Ready) {
             var window = component.createObject(mainWindow);
             mainWindow.windowForPlugin = window;
-            eventBridge.newPluginWindowReady();
+            EventBridge.newPluginWindowReady();
         }
         else {
             console.log(component.errorString());
@@ -143,7 +143,7 @@ ApplicationWindow {
         if(component.status == Component.Ready) {
             var window = component.createObject(mainWindow);
             mainWindow.basicPluginEditorForPlugin = window;
-            eventBridge.newBasicPluginEditorReady();
+            EventBridge.newBasicPluginEditorReady();
         }
         else {
             console.log(component.errorString());
@@ -215,7 +215,7 @@ ApplicationWindow {
         id: realtimeUpdateTimer
         onTriggered: {
             if(mainWindow.engineRunning) {
-                eventBridge.updateCPUMeter();
+                EventBridge.updateCPUMeter();
             }
             start();
         }

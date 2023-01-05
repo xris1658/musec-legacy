@@ -8,7 +8,7 @@ import Musec.Controls 1.0 as MCtrl
 
 Rectangle {
     property alias pluginPathListModel: pluginPathListView.model
-    readonly property EventBridge eventBridge: EventBridge
+    readonly property QtObject eventBridge: EventBridge
     property alias scanShortcut: checkScanShortcut.checked
     id: root
     width: 500
