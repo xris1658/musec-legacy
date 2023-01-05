@@ -117,6 +117,9 @@ Window {
                         onOpenASIODriverControlPanel: {
                             EventBridge.openASIODriverControlPanel();
                         }
+                        onReloadDriver: {
+                            EventBridge.reloadDriver();
+                        }
                     }
                     PluginSettings {
                         id: pluginSettings

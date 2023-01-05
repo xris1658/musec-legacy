@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+
 import Musec 1.0
 import Musec.Controls 1.0 as MCtrl
 
@@ -23,6 +24,7 @@ Rectangle {
 
     signal driverASIOSelectionChanged(currentSelectionValue: string)
     signal openASIODriverControlPanel()
+    signal reloadDriver()
 
     onSampleRateChanged: {
         for(var i = 0; i < comboBoxSampleRate.count; ++i) {
@@ -68,19 +70,43 @@ Rectangle {
             horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignVCenter
         }
-        MCtrl.ComboBox {
-            id: comboBoxDriver
+        Item {
             width: secondColumn.width
             height: 20
-            font.family: Constants.font
-            textRole: "name"
-            valueRole: "clsid"
-            displayText: count == 0? qsTr("No ASIO driver found"):
-                         currentIndex == -1? qsTr("No driver loaded"):
-                         root.running? currentText:
-                         currentText + " (" + qsTr("Not running") + ")"
-            onCurrentValueChanged: {
-                driverASIOSelectionChanged(currentValue);
+            MCtrl.ComboBox {
+                id: comboBoxDriver
+                width: parent.width - reloadDriverButton.width - mainGrid.rowSpacing
+                height: 20
+                font.family: Constants.font
+                textRole: "name"
+                valueRole: "clsid"
+                displayText: count == 0? qsTr("No ASIO driver found"):
+                             currentIndex == -1? qsTr("No driver loaded"):
+                             root.running? currentText:
+                             currentText + " (" + qsTr("Not running") + ")"
+                onCurrentValueChanged: {
+                    driverASIOSelectionChanged(currentValue);
+                }
+            }
+            MCtrl.Button {
+                id: reloadDriverButton
+                anchors.right: parent.right
+                width: 20
+                height: 20
+                hoverEnabled: true
+                Image {
+                    anchors.centerIn: parent
+                    width: 16
+                    height: 16
+                    source: "images/restart.svg"
+                }
+                MCtrl.ToolTip {
+                    visible: parent.hovered
+                    text: qsTr("Reset driver")
+                }
+                onClicked: {
+                    reloadDriver();
+                }
             }
         }
         Text {

@@ -66,6 +66,8 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
                      this,        SLOT(onSetIcon()));
     QObject::connect(eventBridge, SIGNAL(updateCPUMeter()),
                      this,        SLOT(onUpdateCPUMeter()));
+    QObject::connect(eventBridge, SIGNAL(reloadDriver()),
+                     this,        SLOT(onResetASIODriver()));
     // (this) C++ -> C++ (this)
     QObject::connect(this, &EventHandler::resetASIODriver,
                      this, &EventHandler::onResetASIODriver,

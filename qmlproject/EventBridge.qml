@@ -45,7 +45,7 @@ QtObject {
 
     signal updateCPUMeter()
 
-    signal channelUpdated(left: int, right: int) // TODO
+    signal reloadDriver()
 
     // Receive from C++ backend
     signal setBootText(newBootText: string)

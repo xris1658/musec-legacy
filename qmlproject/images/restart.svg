@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ccc;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="Foreground" class="cls-1" d="M11,9a2.938,2.938,0,0,1-3,3A2.938,2.938,0,0,1,5,9,2.938,2.938,0,0,1,8,6V8l3-3L8,2V4S3,4,3,9s5,5,5,5,5,0,5-5H11Z"/>
+</svg>
