@@ -298,7 +298,6 @@ RESOURCES += \
 
 LIBS += \
     sqlite3.lib \  # SQLite 3
-    sndfile.lib \  # libsndfile
     AdvAPI32.lib \ # Registry API
     Shell32.lib \  # SHGetFolderPathW
     ole32.lib \
@@ -335,15 +334,7 @@ CONFIG(release, debug | release) {
     spdlog.lib
 }
 
-RC_ICONS = qmlproject/images/Musec-image-2.ico
-
-VERSION = 0.0.0.1
-QMAKE_TARGET_COMPANY = "xris1658"
-QMAKE_TARGET_DESCRIPTION = "Musec based on Qt $${QT_MAJOR_VERSION}.$${QT_MINOR_VERSION}.$${QT_PATCH_VERSION} \
-    (MSVC 2019 $${QT_MSVC_MAJOR_VERSION}.$${QT_MSVC_MINOR_VERSION}.$${QT_MSVC_PATCH_VERSION} 64-bit)"
-QMAKE_TARGET_COPYRIGHT = "Copyright xris1658 2021-2022. All rights reserved."
-QMAKE_TARGET_PRODUCT = "Musec"
-RC_LANG = 0x0804 # Simplified Chinese (China)
+RC_FILE = ./Musec_resource.rc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH = qmlproject/imports
