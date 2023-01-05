@@ -77,32 +77,44 @@ ASIODriver& AppASIODriver()
 
 ASIOChannelCount getChannelCount(const ASIODriver& driver)
 {
-    ASIOChannelCount ret;
-    driver->getChannels(&ret.inputCount, &ret.outputCount);
+    ASIOChannelCount ret {0, 0};
+    if(driver)
+    {
+        driver->getChannels(&ret.inputCount, &ret.outputCount);
+    }
     return ret;
 }
 
 ASIOLatencyInSamples getLatency(const ASIODriver& driver)
 {
-    ASIOLatencyInSamples ret;
-    driver->getLatencies(&ret.inputLatency, &ret.outputLatency);
+    ASIOLatencyInSamples ret {0, 0};
+    if(driver)
+    {
+        driver->getLatencies(&ret.inputLatency, &ret.outputLatency);
+    }
     return ret;
 }
 
 ASIOBufferSize getBufferSize(const ASIODriver& driver)
 {
     ASIOBufferSize ret {0, 0, 0, 0};
-    driver->getBufferSize(&ret.minimumBufferSize,
-        &ret.maximumBufferSize,
-        &ret.preferredBufferSize,
-        &ret.bufferSizeGranularity);
+    if(driver)
+    {
+        driver->getBufferSize(&ret.minimumBufferSize,
+            &ret.maximumBufferSize,
+            &ret.preferredBufferSize,
+            &ret.bufferSizeGranularity);
+    }
     return ret;
 }
 
 ASIOSampleRate getSampleRate(const ASIODriver& driver)
 {
-    ASIOSampleRate ret;
-    driver->getSampleRate(&ret);
+    ASIOSampleRate ret = 0;
+    if(driver)
+    {
+        driver->getSampleRate(&ret);
+    }
     return ret;
 }
 
