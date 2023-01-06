@@ -59,12 +59,12 @@ Window {
                         font.pixelSize: 20
                     }
                     Text {
-                        text: qsTr("Version 0.0.1 Alpha")
+                        text: "Development Version"
                         color: Constants.contentColor1
                         font.family: Constants.font
                     }
                     Text {
-                        text: qsTr("Copyright (c) 2021-2022 xris1658. All rights reserved.")
+                        text: "Copyright (c) 2021-2023 xris1658. All rights reserved."
                         color: Constants.contentColor1
                         font.family: Constants.font
                     }
