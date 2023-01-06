@@ -9,6 +9,7 @@
 #include <QList>
 
 #include <memory>
+#include <vector>
 
 namespace Musec
 {
@@ -30,8 +31,8 @@ extern double cpuUsage;
 constexpr int maxInputChannelCount = 16;
 constexpr int maxOutputChannelCount = 16;
 constexpr int channelCount = maxInputChannelCount + maxOutputChannelCount;
-using ASIOBufferInfoList = std::array<ASIOBufferInfo, channelCount>;
-using ASIOChannelInfoList = std::array<ASIOChannelInfo, channelCount>;
+using ASIOBufferInfoList = std::vector<ASIOBufferInfo>;
+using ASIOChannelInfoList = std::vector<ASIOChannelInfo>;
 
 ASIOBufferInfoList& getASIOBufferInfoList();
 
@@ -102,6 +103,21 @@ ASIOBufferSize getBufferSize(const ASIODriver& driver = AppASIODriver());
 
 ASIOSampleRate getSampleRate(const ASIODriver& driver = AppASIODriver());
 
+// Resize getASIOBufferInfoList() and fill input info.
+// e.g. For a driver that has 2 inputs and 4 outputs, the buffer info list will be
+// | Field      | 0 | 1 | 2 | 3 | 4 | 5 |
+// | ---------- | - | - | - | - | - | - |
+// | isInput    | 1 | 1 | 0 | 0 | 0 | 0 |
+// | channelNum | 0 | 1 | 0 | 1 | 2 | 3 |
+void prepareBufferInfo(const ASIODriver& driver = AppASIODriver());
+
+// Resize getASIOChannelInfoList() and fill input info.
+// e.g. For a driver that has 2 inputs and 4 outputs, the channel info list will be
+// | Field   | 0 | 1 | 2 | 3 | 4 | 5 |
+// | ------- | - | - | - | - | - | - |
+// | channel | 0 | 1 | 0 | 1 | 2 | 3 |
+// | isInput | 1 | 1 | 0 | 0 | 0 | 0 |
+void prepareChannelInfo(const ASIODriver& driver = AppASIODriver());
 }
 }
 }

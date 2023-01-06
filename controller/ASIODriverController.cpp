@@ -12,6 +12,8 @@
 
 #include <QDebug>
 
+#include <vector>
+
 namespace Musec::Controller::ASIODriverController
 {
 namespace Impl
@@ -176,34 +178,34 @@ bool updateCurrentASIODriverInfo()
     using namespace Musec::Audio::Driver;
     using namespace Musec::UI;
     auto& driver = AppASIODriver();
-    auto info = Musec::Audio::Driver::getChannelCount(driver);
+    prepareChannelInfo(driver);
     auto& channelInfoList = getASIOChannelInfoList();
-    auto& bufferInfo = getASIOBufferInfoList();
-    for(int i = 0; i < info.inputCount + info.outputCount; ++i)
+    std::vector<bool> channelInfoValid(channelInfoList.size(), false);
+    for(int i = 0; i < channelInfoList.size(); ++i)
     {
-        channelInfoList[i].channel = bufferInfo[i].channelNum;
-        channelInfoList[i].isInput = bufferInfo[i].isInput;
-        auto getChannelInfoResult = driver->getChannelInfo(&(channelInfoList[i]));
-        if(getChannelInfoResult != ASE_OK)
+        auto* channelInfo = channelInfoList.data() + i;
+        auto getChannelInfoResult = driver->getChannelInfo(channelInfo);
+        if(getChannelInfoResult == ASE_OK)
         {
-            Impl::showASIOErrorMessageDialog(driver, getChannelInfoResult);
-            return false;
+            channelInfoValid[i] = true;
         }
     }
-    inputChannelInfoList().setList(channelInfoList.data(), info.inputCount);
-    outputChannelInfoList().setList(channelInfoList.data() + info.inputCount, info.outputCount);
+    // TODO: Use `channelInfoValid`
+    auto [inputCount, outputCount] = getChannelCount(driver);
+    auto [minSize, maxSize, preferredSize, granularity] = getBufferSize();
+    auto [inputLatency, outputLatency] = getLatency();
+    inputChannelInfoList().setList(channelInfoList.data(), inputCount);
+    outputChannelInfoList().setList(channelInfoList.data() + inputCount, outputCount);
     if(optionsWindow)
     {
         optionsWindow->setProperty("bufferSize",
-                                   QVariant::fromValue<int>(getBufferSize().preferredBufferSize));
+            QVariant::fromValue<int>(preferredSize));
         optionsWindow->setProperty("inputLatencyInSamples",
-                                   QVariant::fromValue<int>(getLatency().inputLatency));
+            QVariant::fromValue<int>(inputLatency));
         optionsWindow->setProperty("outputLatencyInSamples",
-                                   QVariant::fromValue<int>(getLatency().outputLatency));
+            QVariant::fromValue<int>(outputLatency));
         optionsWindow->setProperty("sampleRate",
-                                   QVariant::fromValue<double>(getSampleRate()));
-        optionsWindow->setProperty("outputChannelList",
-                                   QVariant::fromValue<QObject*>(&outputChannelInfoList()));
+            QVariant::fromValue<double>(getSampleRate()));
     }
     return true;
 }
@@ -212,28 +214,17 @@ bool allocateASIODriverBuffer()
 {
     using namespace Musec::Audio::Driver;
     auto& driver = AppASIODriver();
-    auto& bufferInfo = getASIOBufferInfoList();
-    auto info = Musec::Audio::Driver::getChannelCount(driver);
-    for(int i = 0; i < info.inputCount; ++i)
+    prepareBufferInfo(driver);
+    auto& bufferInfoList = getASIOBufferInfoList();
+    auto createBufferResult = driver->createBuffers(
+        bufferInfoList.data(),
+        bufferInfoList.size(),
+        getBufferSize(driver).preferredBufferSize,
+        &getCallbacks()
+        );
+    if(createBufferResult != ASE_OK)
     {
-        bufferInfo[i].isInput = ASIOTrue;
-        bufferInfo[i].channelNum = i;
-        bufferInfo[i].buffers[0] = bufferInfo[i].buffers[1] = nullptr;
-    }
-    for(int i = info.inputCount; i < info.inputCount + info.outputCount; ++i)
-    {
-        bufferInfo[i].isInput = ASIOFalse;
-        bufferInfo[i].channelNum = i - info.inputCount;
-        bufferInfo[i].buffers[0] = bufferInfo[i].buffers[1] = nullptr;
-    }
-    auto createBuffersResult = driver->createBuffers(
-        bufferInfo.data(),
-        info.inputCount + info.outputCount,
-        Musec::Audio::Driver::getBufferSize(driver).preferredBufferSize,
-        &getCallbacks());
-    if(createBuffersResult != ASE_OK)
-    {
-        Impl::showASIOErrorMessageDialog(driver, createBuffersResult);
+        Impl::showASIOErrorMessageDialog(driver, createBufferResult);
         return false;
     }
     updateCurrentASIODriverInfo();

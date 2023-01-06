@@ -1,8 +1,8 @@
 #include "ASIODriver.hpp"
 
+#include "audio/driver/ASIOCallback.hpp"
 #include "native/ASIODriverImpl.hpp"
 
-#include <array>
 #include <utility>
 
 namespace Musec::Audio::Driver
@@ -118,4 +118,54 @@ ASIOSampleRate getSampleRate(const ASIODriver& driver)
     return ret;
 }
 
+void prepareBufferInfo(const ASIODriver& driver)
+{
+    auto& bufferInfoList = getASIOBufferInfoList();
+    if(driver)
+    {
+        auto [inputCount, outputCount] = getChannelCount(driver);
+        bufferInfoList.resize(inputCount + outputCount, {});
+        for(int i = 0; i < inputCount; ++i)
+        {
+            bufferInfoList[i].isInput = true;
+            bufferInfoList[i].channelNum = i;
+            bufferInfoList[i].buffers[0] = bufferInfoList[i].buffers[1] = nullptr;
+        }
+        for(int i = 0; i < outputCount; ++i)
+        {
+            bufferInfoList[i + inputCount].isInput = false;
+            bufferInfoList[i + inputCount].channelNum = i;
+            bufferInfoList[i + inputCount].buffers[0] = bufferInfoList[i + inputCount].buffers[1]
+                = nullptr;
+        }
+    }
+    else
+    {
+        bufferInfoList.clear();
+    }
+}
+
+void prepareChannelInfo(const ASIODriver& driver)
+{
+    auto& channelInfoList = getASIOChannelInfoList();
+    if(driver)
+    {
+        auto [inputCount, outputCount] = getChannelCount(driver);
+        channelInfoList.resize(inputCount + outputCount, {});
+        for(int i = 0; i < inputCount; ++i)
+        {
+            channelInfoList[i].isInput = true;
+            channelInfoList[i].channel = i;
+        }
+        for(int i = 0; i < outputCount; ++i)
+        {
+            channelInfoList[i + inputCount].isInput = false;
+            channelInfoList[i + inputCount].channel = i;
+        }
+    }
+    else
+    {
+        channelInfoList.clear();
+    }
+}
 }
