@@ -17,6 +17,6 @@ ListModel {
         step: 0
         showAsList: false
         showAsSwitch: false
-        list: ListModel {}
+        list: null
     }
 }

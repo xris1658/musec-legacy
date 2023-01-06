@@ -340,7 +340,7 @@ RC_FILE = ./Musec_resource.rc
 QML_IMPORT_PATH = qmlproject/imports
 
 # Additional import path used to resolve QML modules just for Qt Quick Designer
-QML_DESIGNER_IMPORT_PATH = qmlproject/imports
+QML_DESIGNER_IMPORT_PATH = qmlproject/mockup
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

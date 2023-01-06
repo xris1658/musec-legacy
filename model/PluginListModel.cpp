@@ -13,7 +13,7 @@ namespace Model
 PluginListModel::PluginListModel(QObject* parent): QAbstractListModel(parent)
 {
     roleNames_.reserve(columnSize());
-    roleNames_[RoleNames::IdRole] = "id";
+    roleNames_[RoleNames::IdRole] = "pluginId";
     roleNames_[RoleNames::NameRole] = "name";
     roleNames_[RoleNames::FormatRole] = "format";
     roleNames_[RoleNames::TypeRole] = "type";

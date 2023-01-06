@@ -3,6 +3,31 @@ import QtQml.Models 2.15
 ListModel {
     property double maxDecibel: 6
     property double minDecibel: -144
+    function insertPoint(position: double, decibel: double) {
+        //
+    }
+    function removePoint(index: int) {
+        //
+    }
+    function decibelFromPosition(position: double) {
+        if(position <= 0) {
+            return minDecibel;
+        }
+        if(position >= 1) {
+            return maxDecibel;
+        }
+        if(count == 0) {
+            return minDecibel + (maxDecibel - minDecibel) * position;
+        }
+        // TODO
+        for(let i = 0; i < count; ++i) {
+            //
+        }
+    }
+    function positionFromDecibel(decibel: double) {
+        //
+    }
+
     ListElement {
         position: 0.9
         decibel: 0

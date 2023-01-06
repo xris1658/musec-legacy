@@ -3,11 +3,6 @@ import QtQuick.Controls 2.15
 import QtQml 2.15
 
 import Musec.Controls 1.0 as MCtrl
-// // Use this to preview in Design Studio
-//import "../../../entities"
-//import "../../../model" as MModel
-
-// Use this to build the executable file
 import Musec.Entities 1.0
 import Musec.Models 1.0 as MModel
 

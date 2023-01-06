@@ -1,6 +1,13 @@
 import QtQml.Models 2.15
 
 ListModel {
+    property double masterTrackGain: 1.0
+    property double masterTrackPanning: 0.0
+    property bool masterTrackMute: false
+    property bool masterTrackSolo: false
+    property bool masterTrackInvertPhase: false
+    property bool masterTrackArmRecording: false
+    property bool masterTrackMonoDownMix: false
     ListElement {
         trackname: "Track 1"
         type: 0
@@ -12,7 +19,7 @@ ListModel {
         armRecording: false
         monoDownMix: false
         instrument: null
-        plugin_list: PluginSequenceModel {}
+        plugin_list: null
         channel_gain: 1.0
         channel_panning: 0.0
     }
@@ -27,7 +34,7 @@ ListModel {
         armRecording: false
         monoDownMix: false
         instrument: null
-        plugin_list: PluginSequenceModel {}
+        plugin_list: null
         channel_gain: 1.0
         channel_panning: 0.0
     }
@@ -42,7 +49,7 @@ ListModel {
         armRecording: false
         monoDownMix: false
         instrument: null
-        plugin_list: PluginSequenceModel {}
+        plugin_list: null
         channel_gain: 1.0
         channel_panning: 0.0
     }

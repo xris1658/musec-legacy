@@ -27,7 +27,7 @@ Rectangle {
     signal removeAssetDirectory(id: int)
     signal setNewAssetDirectoryId(newId: int)
     onSetNewAssetDirectoryId: (newId) => {
-        assetDirectoryListModel.setProperty(assetDirectoryListModel.count - 1, "id", newId);
+        assetDirectoryListModel.setProperty(assetDirectoryListModel.count - 1, "directoryId", newId);
     }
 
     function getPluginFormatName(pluginFormat: int) {
@@ -89,7 +89,7 @@ Rectangle {
                 Drag.mimeData: {
                     "FromWithin": true,
                     "itemType": "plugin",
-                    "pluginId": id,
+                    "pluginId": pluginId,
                     "type": type,
                     "name": name,
                     "format": format
@@ -390,7 +390,7 @@ Rectangle {
                             interactive: false
                             delegate: Item {
                                 id: _item
-                                property int _id: id
+                                property int _id: directoryId
                                 property string _folderName: name
                                 property string _name: name
                                 property url _path: directory
