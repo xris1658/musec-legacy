@@ -275,6 +275,9 @@ Item {
                     parent: showMasterTrackButton.currentIndex == 1? masterTrackHeader: masterTrackFooter
                     width: headers.width
                     height: 60
+                    // trackMute: tracks.masterTrackMute
+                    // trackSolo: tracks.masterTrackSolo
+                    // trackRecord: tracks.masterTrackArmRecording
                     Rectangle {
                         width: parent.width
                         height: 1
@@ -318,6 +321,15 @@ Item {
                                 console.log(drop.getDataAsString("pluginId"));
                             }
                         }
+                    }
+                    onSetMute: (newMute) => {
+                        tracks.masterTrackMute = newMute;
+                    }
+                    onSetSolo: (newSolo) => {
+                        tracks.masterTrackSolo = newSolo;
+                    }
+                    onSetArmRecording: (newArmRecording) => {
+                        tracks.masterTrackArmRecording = newArmRecording;
                     }
                 }
                 Item {
@@ -449,14 +461,14 @@ Item {
                             trackname = newName;
                         }
                         onSetMute: (newMute) => {
-                                       mute = newMute;
-                                   }
+                            mute = newMute;
+                        }
                         onSetSolo: (newSolo) => {
-                                       solo = newSolo;
-                                   }
+                            solo = newSolo;
+                        }
                         onSetArmRecording: (newArmRecording) => {
-                                               armRecording = newArmRecording;
-                                           }
+                            armRecording = newArmRecording;
+                        }
                         Rectangle {
                             width: parent.width
                             height: 1
