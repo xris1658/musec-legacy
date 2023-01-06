@@ -47,7 +47,7 @@
     <message>
         <location filename="../audio/driver/ASIOErrorText.cpp" line="30"/>
         <source>An error occurred. Unfortunately, that&apos;s all we know.</source>
-        <translation type="unfinished"></translation>
+        <translation>发生了未知错误。</translation>
     </message>
 </context>
 <context>
@@ -177,19 +177,6 @@
         <translatorcomment>可能涉及法律信息，因此不译</translatorcomment>
         <translation></translation>
     </message>
-    <message>
-        <location filename="../qmlproject/AboutQtWindow.qml" line="70"/>
-        <source>&lt;p&gt;Qt is a C++ toolkit for cross-platform application development.&lt;/p&gt;
-                             &lt;p&gt;Qt provides single-source portability across all major desktop operating systems. It is also available for embedded Linux and other embedded and mobile operating systems.&lt;/p&gt;
-                             &lt;p&gt;Qt is available under multiple licensing options designed to accommodate the needs of our various users.&lt;/p&gt;
-                             &lt;p&gt;Qt licensed under our commercial license agreement is appropriate for development of proprietary/commercial software where you do not want to share any source code with third parties or otherwise cannot comply with the terms of GNU (L)GPL.&lt;/p&gt;
-                             &lt;p&gt;Qt licensed under GNU (L)GPL is appropriate for the development of Qt&amp;nbsp;applications provided you can comply with the terms and conditions of the respective licenses.&lt;/p&gt;
-                             &lt;p&gt;Please see &lt;a href=&quot;http://%2/&quot;&gt;%2&lt;/a&gt; for an overview of Qt licensing.&lt;/p&gt;
-                             &lt;p&gt;Copyright (C) %1 The Qt Company Ltd and other contributors.&lt;/p&gt;&lt;p&gt;Qt and the Qt logo are trademarks of The Qt Company Ltd.&lt;/p&gt;
-                             &lt;p&gt;Qt is The Qt Company Ltd product developed as an open source project. See &lt;a href=&quot;http://%3/&quot;&gt;%3&lt;/a&gt; for more information.&lt;/p&gt;</source>
-        <translatorcomment>涉及法律信息，因此不译</translatorcomment>
-        <translation></translation>
-    </message>
 </context>
 <context>
     <name>AboutWindow</name>
@@ -198,17 +185,6 @@
         <source>About Musec</source>
         <oldsource>关于 Musec</oldsource>
         <translation>关于 Musec</translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/AboutWindow.qml" line="62"/>
-        <source>Version 0.0.1 Alpha</source>
-        <oldsource>版本 0.0.1 Alpha</oldsource>
-        <translation>版本 0.0.1 Alpha</translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/AboutWindow.qml" line="67"/>
-        <source>Copyright (c) 2021-2022 xris1658. All rights reserved.</source>
-        <translation></translation>
     </message>
     <message>
         <location filename="../qmlproject/AboutWindow.qml" line="72"/>
@@ -224,122 +200,120 @@
 <context>
     <name>Arrangement</name>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="40"/>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="558"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="41"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="536"/>
         <source>Select Color</source>
         <translation>选择颜色</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="57"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="72"/>
         <source>Track Options</source>
         <translation>轨道选项</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="93"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="108"/>
         <source>Co&amp;lor...</source>
         <translation>颜色(&amp;L)...</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="100"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="115"/>
         <source>Insert &amp;Instrument Track Above</source>
         <translation>在上方插入乐器轨道(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="105"/>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="274"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="56"/>
         <source>Instrument</source>
         <translation>乐器</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="112"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="122"/>
         <source>Insert &amp;Audio Track Above</source>
         <translation>在上方插入音频轨道(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="117"/>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="287"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="63"/>
         <source>Audio</source>
         <translation>音频</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="172"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="177"/>
         <source>Snap Unit</source>
         <translation>对齐单位</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="232"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="203"/>
         <source>Automation</source>
         <translation>自动化</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="232"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="203"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="232"/>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="244"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="203"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="215"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="244"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="215"/>
         <source>Show at Top</source>
         <translation>置于顶部</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="244"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="215"/>
         <source>Show at Bottom</source>
         <translation>置于底部</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="249"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="220"/>
         <source>Show Master Track</source>
         <translation>显示主轨道</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="263"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="234"/>
         <source>Arrangement Options</source>
         <translation>编排视图选项</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="269"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="240"/>
         <source>Append an &amp;Instrument Track</source>
         <translation>添加乐器轨道(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="282"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="248"/>
         <source>Append an &amp;Audio Track</source>
         <translation>添加音频轨道(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="312"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="273"/>
         <source>Master</source>
         <translation>主轨道</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="558"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="536"/>
         <source>Track</source>
         <translation>轨道</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="827"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="821"/>
         <source>MIDI Track Options</source>
         <translation>MIDI 轨道选项</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="837"/>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="842"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="831"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="836"/>
         <source>Audio Track Options</source>
         <translation>音频轨道选项</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="987"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="981"/>
         <source>Drag &amp; Drop plugins or audio clips here</source>
         <translation>将插件或音频片段拖动至此处</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="832"/>
+        <location filename="../qmlproject/imports/Musec/Arrangement.qml" line="826"/>
         <source>Add MIDI Clip</source>
         <oldsource>添加 MIDI 片段</oldsource>
         <translation>添加 MIDI 片段</translation>
@@ -396,38 +370,38 @@
 <context>
     <name>Assets</name>
     <message>
-        <location filename="../qmlproject/imports/Musec/Assets.qml" line="140"/>
+        <location filename="../qmlproject/imports/Musec/Assets.qml" line="138"/>
         <source>Type name</source>
         <translation>键入名称</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Assets.qml" line="163"/>
+        <location filename="../qmlproject/imports/Musec/Assets.qml" line="161"/>
         <source>Asset folder options</source>
         <translation>素材文件夹选项</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Assets.qml" line="169"/>
+        <location filename="../qmlproject/imports/Musec/Assets.qml" line="167"/>
         <source>&amp;Open in Explorer</source>
         <translation>在文件资源管理器中打开(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Assets.qml" line="177"/>
+        <location filename="../qmlproject/imports/Musec/Assets.qml" line="175"/>
         <source>&amp;Rename</source>
         <translation>重命名(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Assets.qml" line="187"/>
+        <location filename="../qmlproject/imports/Musec/Assets.qml" line="185"/>
         <source>Remove from &amp;Directories</source>
         <translation>从位置中移除(&amp;D)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Assets.qml" line="220"/>
+        <location filename="../qmlproject/imports/Musec/Assets.qml" line="218"/>
         <source>Search (Ctrl+F)</source>
         <oldsource>搜索 (Ctrl+F)</oldsource>
         <translation>搜索 (Ctrl+F)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Assets.qml" line="282"/>
+        <location filename="../qmlproject/imports/Musec/Assets.qml" line="280"/>
         <source>Search Box Options</source>
         <translation>搜索框选项</translation>
     </message>
@@ -441,42 +415,42 @@
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Assets.qml" line="311"/>
+        <location filename="../qmlproject/imports/Musec/Assets.qml" line="309"/>
         <source>Input &amp;More Characters...</source>
         <translation>输入更多字符(&amp;M)...</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Assets.qml" line="381"/>
+        <location filename="../qmlproject/imports/Musec/Assets.qml" line="379"/>
         <source>Directories</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Assets.qml" line="473"/>
+        <location filename="../qmlproject/imports/Musec/Assets.qml" line="471"/>
         <source>Add Directories...</source>
         <translation>添加位置...</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Assets.qml" line="485"/>
+        <location filename="../qmlproject/imports/Musec/Assets.qml" line="483"/>
         <source>Caterories</source>
         <translation>分类</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Assets.qml" line="498"/>
+        <location filename="../qmlproject/imports/Musec/Assets.qml" line="496"/>
         <source>Plugins</source>
         <translation>插件</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Assets.qml" line="502"/>
+        <location filename="../qmlproject/imports/Musec/Assets.qml" line="500"/>
         <source>MIDI Effects</source>
         <translation>MIDI 效果器</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Assets.qml" line="506"/>
+        <location filename="../qmlproject/imports/Musec/Assets.qml" line="504"/>
         <source>Instruments</source>
         <translation>乐器</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Assets.qml" line="510"/>
+        <location filename="../qmlproject/imports/Musec/Assets.qml" line="508"/>
         <source>Audio Effects</source>
         <translation>音频效果器</translation>
     </message>
@@ -484,111 +458,83 @@
 <context>
     <name>AudioHardwareSelector</name>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="51"/>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="66"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="52"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="67"/>
         <source>Driver</source>
         <translation>驱动程序</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="79"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="83"/>
         <source>No ASIO driver found</source>
         <translation>未找到 ASIO 驱动程序</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="80"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="84"/>
         <source>No driver loaded</source>
         <translation>未加载驱动</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="111"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="86"/>
         <source>Not running</source>
         <translation>未运行</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="119"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="105"/>
+        <source>Reset driver</source>
+        <translation>重置驱动程序</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="115"/>
         <source>Sample Rate</source>
         <translation>采样率</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="110"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="136"/>
         <source>Hz</source>
         <translation>Hz</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="126"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="152"/>
         <source>Open Driver Settings</source>
         <translation>打开驱动程序设置</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="136"/>
-        <source>Hardware I/O</source>
-        <translation>硬件输入/输出</translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="152"/>
-        <source>L</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="162"/>
-        <source>R</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Input Device</source>
-        <translation type="vanished">输入设备</translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="171"/>
-        <source>Output Device</source>
-        <translation>输出设备</translation>
-    </message>
-    <message>
-        <source>No outputs available</source>
-        <translation type="vanished">无可用输出</translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="232"/>
-        <source>Swap left and right channel</source>
-        <translation>交换左右声道</translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="263"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="178"/>
         <source>Buffer size</source>
         <translation>缓冲区大小</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="234"/>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="256"/>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="278"/>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="300"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="189"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="211"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="233"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="255"/>
         <source>sample(s)</source>
         <translation>采样</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="245"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="200"/>
         <source>Input latency</source>
         <translation>输入延迟</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="256"/>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="278"/>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="300"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="211"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="233"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="255"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="267"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="222"/>
         <source>Output latency</source>
         <translation>输出延迟</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="289"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="244"/>
         <source>Sum latency</source>
         <translation>总延迟</translation>
     </message>
     <message>
-        <location filename="../qmlproject/AudioHardwareSelector.qml" line="207"/>
+        <location filename="../qmlproject/AudioHardwareSelector.qml" line="162"/>
         <source>Status</source>
         <translation>状态</translation>
     </message>
@@ -596,9 +542,21 @@
 <context>
     <name>BasicPluginEditor</name>
     <message>
-        <location filename="../qmlproject/imports/Musec/BasicPluginEditor.qml" line="36"/>
-        <source># of Adjustable parameters</source>
-        <translation>可调参数个数</translation>
+        <location filename="../qmlproject/imports/Musec/BasicPluginEditor.qml" line="48"/>
+        <source>No parameters</source>
+        <translation>无参数</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/imports/Musec/BasicPluginEditor.qml" line="49"/>
+        <source>%1 parameter</source>
+        <translatorcomment>Singular</translatorcomment>
+        <translation>%1 个参数</translation>
+    </message>
+    <message>
+        <location filename="../qmlproject/imports/Musec/BasicPluginEditor.qml" line="50"/>
+        <source>%1 parameters</source>
+        <translatorcomment>Plural</translatorcomment>
+        <translation>%1 个参数</translation>
     </message>
 </context>
 <context>
@@ -848,13 +806,6 @@
         <location filename="../qmlproject/imports/Musec/Constants.qml" line="253"/>
         <source>YAML parser and emitter</source>
         <translation>YAML 解析与生成程序</translation>
-    </message>
-</context>
-<context>
-    <name>EventBridge</name>
-    <message>
-        <source>The option changes is saved. A restart is required to apply.</source>
-        <translation type="vanished">对选项的更改已经保存。需要重新启动才能生效。</translation>
     </message>
 </context>
 <context>
@@ -1198,27 +1149,27 @@ If you add dithering devices on the master track, please uncheck this option.</s
 <context>
     <name>Mixer</name>
     <message>
-        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="26"/>
+        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="21"/>
         <source>Instrument Options</source>
         <translation>乐器选项</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="42"/>
+        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="37"/>
         <source>Audio Effect Options</source>
         <translation>音频效果器选项</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="101"/>
+        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="96"/>
         <source>Show Effects</source>
         <translation>显示效果器</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="125"/>
+        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="120"/>
         <source>Show volume faders and dB meters</source>
         <translation>显示音量推子和电平表</translation>
     </message>
     <message>
-        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="153"/>
+        <location filename="../qmlproject/imports/Musec/Mixer.qml" line="148"/>
         <source>Master</source>
         <translation>主轨道</translation>
     </message>
@@ -1226,118 +1177,118 @@ If you add dithering devices on the master track, please uncheck this option.</s
 <context>
     <name>Musec</name>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="92"/>
+        <location filename="../qmlproject/Musec.qml" line="94"/>
         <source>Untitled project</source>
         <translation>无标题项目</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="215"/>
+        <location filename="../qmlproject/Musec.qml" line="226"/>
         <source>Musec project file (*.mvr)</source>
         <translation>Musec 项目文件 (*.mvr)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="240"/>
+        <location filename="../qmlproject/Musec.qml" line="251"/>
         <source>&amp;About Musec...</source>
         <oldsource>关于 Musec(&amp;A)...</oldsource>
         <translation>关于 Musec(&amp;A)...</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="251"/>
+        <location filename="../qmlproject/Musec.qml" line="262"/>
         <source>About &amp;Qt...</source>
         <translation>关于 Qt(&amp;Q)...</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="263"/>
+        <location filename="../qmlproject/Musec.qml" line="274"/>
         <source>&amp;Keyboard Shortcuts...</source>
         <translation>键盘快捷键(&amp;K)...</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="264"/>
+        <location filename="../qmlproject/Musec.qml" line="275"/>
         <source>Check for &amp;Updates...</source>
         <translation>检查更新(&amp;U)...</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="267"/>
+        <location filename="../qmlproject/Musec.qml" line="278"/>
         <source>&amp;Preferences...</source>
         <translation>首选项(&amp;P)...</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="287"/>
+        <location filename="../qmlproject/Musec.qml" line="298"/>
         <source>&amp;File</source>
         <translation>文件(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="290"/>
+        <location filename="../qmlproject/Musec.qml" line="301"/>
         <source>&amp;New</source>
         <translation>新建(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="294"/>
+        <location filename="../qmlproject/Musec.qml" line="305"/>
         <source>&amp;Open</source>
         <translation>打开(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="298"/>
+        <location filename="../qmlproject/Musec.qml" line="309"/>
         <source>Recent files</source>
         <translation>最近文件</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="301"/>
+        <location filename="../qmlproject/Musec.qml" line="312"/>
         <source>Empty list</source>
         <translation>列表为空</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="306"/>
+        <location filename="../qmlproject/Musec.qml" line="317"/>
         <source>Clear list</source>
         <translation>清除列表</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="311"/>
+        <location filename="../qmlproject/Musec.qml" line="322"/>
         <source>&amp;Save</source>
         <translation>保存(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="327"/>
+        <location filename="../qmlproject/Musec.qml" line="338"/>
         <source>Save Project</source>
         <translation>保存项目</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="334"/>
+        <location filename="../qmlproject/Musec.qml" line="345"/>
         <source>&amp;Export</source>
         <translation>导出(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="337"/>
+        <location filename="../qmlproject/Musec.qml" line="348"/>
         <source>&amp;Bounce...</source>
         <translation>并轨(&amp;B)...</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="349"/>
+        <location filename="../qmlproject/Musec.qml" line="360"/>
         <source>Multiple &amp;Tracks...</source>
         <translation>多个分轨(&amp;T)...</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="353"/>
+        <location filename="../qmlproject/Musec.qml" line="364"/>
         <source>&amp;Packed Project...</source>
         <translation>打包项目(&amp;P)...</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="360"/>
+        <location filename="../qmlproject/Musec.qml" line="371"/>
         <source>&amp;Score...</source>
         <translation>乐谱(&amp;S)...</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="365"/>
+        <location filename="../qmlproject/Musec.qml" line="376"/>
         <source>&amp;Project Properties...</source>
         <translation>项目属性(&amp;P)...</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="381"/>
+        <location filename="../qmlproject/Musec.qml" line="392"/>
         <source>&amp;Revert to Last Save...</source>
         <translation>还原至上次保存(&amp;R)...</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="386"/>
+        <location filename="../qmlproject/Musec.qml" line="397"/>
         <source>&amp;Edit</source>
         <translation>编辑(&amp;E)</translation>
     </message>
@@ -1350,7 +1301,7 @@ If you add dithering devices on the master track, please uncheck this option.</s
         <translation type="obsolete">重做(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="399"/>
+        <location filename="../qmlproject/Musec.qml" line="410"/>
         <source>&amp;History...</source>
         <translation>历史记录(&amp;H)...</translation>
     </message>
@@ -1375,173 +1326,169 @@ If you add dithering devices on the master track, please uncheck this option.</s
         <translation type="obsolete">全选(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="431"/>
+        <location filename="../qmlproject/Musec.qml" line="442"/>
         <source>Jump to Start</source>
         <translation>跳转至开始</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="435"/>
+        <location filename="../qmlproject/Musec.qml" line="446"/>
         <source>Jump to End</source>
         <translation>跳转至结束</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="441"/>
+        <location filename="../qmlproject/Musec.qml" line="452"/>
         <source>Loop</source>
         <translation>循环</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="447"/>
+        <location filename="../qmlproject/Musec.qml" line="458"/>
         <source>Set Loop In Point</source>
         <translation>设置循环起点</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="451"/>
+        <location filename="../qmlproject/Musec.qml" line="462"/>
         <source>Set Loop Out Point</source>
         <translation>设置循环终点</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="456"/>
+        <location filename="../qmlproject/Musec.qml" line="467"/>
         <source>&amp;View</source>
         <translation>查看(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="460"/>
+        <location filename="../qmlproject/Musec.qml" line="471"/>
         <source>&amp;Fullscreen</source>
         <translation>全屏(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="473"/>
+        <location filename="../qmlproject/Musec.qml" line="484"/>
         <source>&amp;Assets</source>
         <translation>素材(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="480"/>
+        <location filename="../qmlproject/Musec.qml" line="491"/>
         <source>&amp;Clip Editor</source>
         <translation>片段编辑器(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="487"/>
+        <location filename="../qmlproject/Musec.qml" line="498"/>
         <source>&amp;Mixer</source>
         <translation>混音器(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="495"/>
+        <location filename="../qmlproject/Musec.qml" line="506"/>
         <source>&amp;Follow</source>
         <translation>跟随(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="502"/>
+        <location filename="../qmlproject/Musec.qml" line="513"/>
         <source>Show &amp;Key Scale</source>
         <translation>显示音阶(&amp;K)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="512"/>
+        <location filename="../qmlproject/Musec.qml" line="523"/>
         <source>&amp;Snap</source>
         <translation>对齐(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="519"/>
+        <location filename="../qmlproject/Musec.qml" line="530"/>
         <source>Master Track</source>
         <translation>主轨道</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="544"/>
+        <location filename="../qmlproject/Musec.qml" line="555"/>
         <source>Arrangement Snap Unit</source>
         <translation>编排视图对齐单位</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="568"/>
+        <location filename="../qmlproject/Musec.qml" line="579"/>
         <source>Editor Snap Unit</source>
         <translation>编辑器对齐单位</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="592"/>
+        <location filename="../qmlproject/Musec.qml" line="603"/>
         <source>Triplets</source>
         <translation>三连音</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="602"/>
+        <location filename="../qmlproject/Musec.qml" line="613"/>
         <source>&amp;Tools</source>
         <translation>工具(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="606"/>
+        <location filename="../qmlproject/Musec.qml" line="617"/>
         <source>Metronome</source>
         <translation>节拍器</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="613"/>
+        <location filename="../qmlproject/Musec.qml" line="624"/>
         <source>Map Keyboard</source>
         <translation>电脑键盘映射为钢琴琴键</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="619"/>
+        <location filename="../qmlproject/Musec.qml" line="630"/>
         <source>Tap Tempo...</source>
         <translation>测速...</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="632"/>
+        <location filename="../qmlproject/Musec.qml" line="643"/>
         <source>&amp;Help</source>
         <translation>帮助(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="635"/>
+        <location filename="../qmlproject/Musec.qml" line="646"/>
         <source>&amp;Manual</source>
         <translation>用户手册(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="639"/>
+        <location filename="../qmlproject/Musec.qml" line="650"/>
         <source>&amp;Quick Start</source>
         <translation>快速上手(&amp;Q)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="643"/>
+        <location filename="../qmlproject/Musec.qml" line="654"/>
         <source>&amp;Register Product</source>
         <translation>注册产品(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="646"/>
+        <location filename="../qmlproject/Musec.qml" line="657"/>
         <source>User Support</source>
         <translation>用户支持</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="676"/>
+        <location filename="../qmlproject/Musec.qml" line="687"/>
         <source>Assets</source>
         <translation>素材</translation>
     </message>
     <message>
-        <source>Arrangement</source>
-        <translation type="vanished">编排视图</translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/Musec.qml" line="740"/>
+        <location filename="../qmlproject/Musec.qml" line="745"/>
         <source>Editor</source>
         <translation>编辑器</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="756"/>
+        <location filename="../qmlproject/Musec.qml" line="761"/>
         <source>Mixer</source>
         <translation>混音器</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="791"/>
+        <location filename="../qmlproject/Musec.qml" line="796"/>
         <source>Ready</source>
         <translation>就绪</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="279"/>
+        <location filename="../qmlproject/Musec.qml" line="290"/>
         <source>E&amp;xit</source>
         <oldsource>退出(&amp;X)</oldsource>
         <translation>退出(&amp;X)</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="324"/>
+        <location filename="../qmlproject/Musec.qml" line="335"/>
         <source>Save &amp;As...</source>
         <oldsource>另存为(&amp;A)...</oldsource>
         <translation>另存为(&amp;A)...</translation>
     </message>
     <message>
-        <location filename="../qmlproject/Musec.qml" line="356"/>
+        <location filename="../qmlproject/Musec.qml" line="367"/>
         <source>&amp;MusicXML...</source>
         <oldsource>MusicXML(&amp;M)...</oldsource>
         <translation>MusicXML(&amp;M)...</translation>
@@ -1555,22 +1502,22 @@ If you add dithering devices on the master track, please uncheck this option.</s
         <translation>首选项</translation>
     </message>
     <message>
-        <location filename="../qmlproject/OptionsWindow.qml" line="61"/>
+        <location filename="../qmlproject/OptionsWindow.qml" line="59"/>
         <source>General</source>
         <translation>通用</translation>
     </message>
     <message>
-        <location filename="../qmlproject/OptionsWindow.qml" line="61"/>
+        <location filename="../qmlproject/OptionsWindow.qml" line="59"/>
         <source>Audio Hardware</source>
         <translation>音频硬件</translation>
     </message>
     <message>
-        <location filename="../qmlproject/OptionsWindow.qml" line="61"/>
+        <location filename="../qmlproject/OptionsWindow.qml" line="59"/>
         <source>Plugins</source>
         <translation>插件</translation>
     </message>
     <message>
-        <location filename="../qmlproject/OptionsWindow.qml" line="61"/>
+        <location filename="../qmlproject/OptionsWindow.qml" line="59"/>
         <source>Arrangement</source>
         <translation>编排视图</translation>
     </message>
@@ -1697,10 +1644,6 @@ If you add dithering devices on the master track, please uncheck this option.</s
         <translation>备注</translation>
     </message>
     <message>
-        <source>Pan law</source>
-        <translation type="vanished">声像法则</translation>
-    </message>
-    <message>
         <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="131"/>
         <source>Type Project Title</source>
         <translation>键入项目标题</translation>
@@ -1726,14 +1669,6 @@ If you add dithering devices on the master track, please uncheck this option.</s
         <translation>键入其他信息...</translation>
     </message>
     <message>
-        <source>Mixer</source>
-        <translation type="vanished">混音器</translation>
-    </message>
-    <message>
-        <source>Compensate</source>
-        <translation type="vanished">补偿</translation>
-    </message>
-    <message>
         <location filename="../qmlproject/ProjectPropertiesWindow.qml" line="302"/>
         <source>&amp;Reset</source>
         <translation>还原(&amp;R)</translation>
@@ -1742,7 +1677,7 @@ If you add dithering devices on the master track, please uncheck this option.</s
 <context>
     <name>SplashScreen</name>
     <message>
-        <location filename="../qmlproject/SplashScreen.qml" line="44"/>
+        <location filename="../qmlproject/SplashScreen.qml" line="48"/>
         <source>Starting...</source>
         <translation>正在启动...</translation>
     </message>
@@ -1841,42 +1776,6 @@ The error information of the driver is as follows:
         <translation>驱动程序错误</translation>
     </message>
     <message>
-        <source>The operation is done successfully.</source>
-        <translation type="vanished">操作成功完成。</translation>
-    </message>
-    <message>
-        <source>There is no hardware input or output devices, or the devices are not available.</source>
-        <translation type="vanished">没有硬件输入或输出设备，或者当前的设备不可用。</translation>
-    </message>
-    <message>
-        <source>The current hardware is malfunctioning.</source>
-        <translation type="vanished">当前硬件没有正常工作。</translation>
-    </message>
-    <message>
-        <source>The current parameter is invalid. You might need to check settings of the audio driver.</source>
-        <translation type="vanished">当前使用的参数无效，可能需要检查音频驱动的设置。</translation>
-    </message>
-    <message>
-        <source>The mode of the hardware is invalid.</source>
-        <translation type="vanished">当前的硬件状态无效。</translation>
-    </message>
-    <message>
-        <source>The hardware can&apos;t return the sample position.</source>
-        <translation type="vanished">硬件无法返回采样时刻。</translation>
-    </message>
-    <message>
-        <source>The sample rate selected is not supported by the hardware.</source>
-        <translation type="vanished">硬件不支持当前使用的音频采样率。</translation>
-    </message>
-    <message>
-        <source>The available memory space is not enough to complete current operation.</source>
-        <translation type="vanished">内存空间不足，无法完成当前操作。</translation>
-    </message>
-    <message>
-        <source>Unknown error. Unfortunately, that&apos;s all we know.</source>
-        <translation type="vanished">未知错误。可惜能了解的信息只有这么多了。</translation>
-    </message>
-    <message>
         <location filename="../qmlproject/Strings.qml" line="27"/>
         <source>The option changes is saved. A restart is required to apply.</source>
         <translation>对选项的更改已经保存。需要重新启动才能生效。</translation>
@@ -1916,7 +1815,7 @@ The error information of the driver is as follows:
 <context>
     <name>TrackHeader</name>
     <message>
-        <location filename="../qmlproject/imports/Musec/TrackHeader.qml" line="45"/>
+        <location filename="../qmlproject/imports/Musec/TrackHeader.qml" line="47"/>
         <source>Type Track Name</source>
         <translation>键入轨道名称</translation>
     </message>
