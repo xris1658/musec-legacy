@@ -206,6 +206,10 @@ bool updateCurrentASIODriverInfo()
             QVariant::fromValue<int>(outputLatency));
         optionsWindow->setProperty("sampleRate",
             QVariant::fromValue<double>(getSampleRate()));
+        optionsWindow->setProperty("inputList",
+            QVariant::fromValue<QObject*>(&inputChannelInfoList()));
+        optionsWindow->setProperty("outputList",
+            QVariant::fromValue<QObject*>(&outputChannelInfoList()));
     }
     return true;
 }

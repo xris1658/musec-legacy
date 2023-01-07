@@ -30,6 +30,8 @@ Window {
     property alias inputLatencyInSamples: audioHardwareSelector.inputLatencyInSamples
     property alias outputLatencyInSamples: audioHardwareSelector.outputLatencyInSamples
     property alias sampleRate: audioHardwareSelector.sampleRate
+    property alias inputList: audioHardwareSelector.inputList
+    property alias outputList: audioHardwareSelector.outputList
 
     MCtrl.SplitView {
         orientation: Qt.Horizontal

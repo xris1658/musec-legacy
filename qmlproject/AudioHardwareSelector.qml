@@ -18,6 +18,8 @@ Rectangle {
     property int inputLatencyInSamples: 512
     property int outputLatencyInSamples: 512
     property int sampleRate
+    property alias inputList: inputListView.model
+    property alias outputList: outputListView.model
     function driverLoadedAndWorking() {
         return comboBoxDriver.count != 0 && currentDriver != -1 && running;
     }
@@ -259,6 +261,268 @@ Rectangle {
             leftPadding: 5
             verticalAlignment: Text.AlignVCenter
             visible: root.driverLoadedAndWorking()
+        }
+        Text {
+            width: 100
+            height: 20
+            text: qsTr("Channels")
+            font.family: Constants.font
+            color: Constants.contentColor2
+            horizontalAlignment: Text.AlignLeft
+            leftPadding: 5
+            verticalAlignment: Text.AlignVCenter
+            visible: root.driverLoadedAndWorking()
+        }
+        Rectangle {
+            id: header
+            width: 320
+            height: 20
+            color: "transparent"
+            border.color: Constants.borderColor
+            readonly property alias indexWidth: indexHeader.width
+            readonly property alias activeWidth: activeHeader.width
+            readonly property alias nameWidth: nameHeader.width
+            visible: root.driverLoadedAndWorking()
+            Row {
+                Item {
+                    id: indexHeader
+                    width: indexText.contentWidth + 10
+                    height: 20
+                    Rectangle {
+                        width: 1
+                        height: parent.height
+                        anchors.right: parent.right
+                        color: Constants.borderColor
+                    }
+                    Text {
+                        id: indexText
+                        text: "#"
+                        anchors.centerIn: parent
+                        font.family: Constants.font
+                        color: Constants.contentColor2
+                    }
+                }
+                Item {
+                    id: activeHeader
+                    width: activeText.contentWidth + 10
+                    height: 20
+                    Rectangle {
+                        width: 1
+                        height: parent.height
+                        anchors.right: parent.right
+                        color: Constants.borderColor
+                    }
+                    Text {
+                        id: activeText
+                        text: qsTr("Active")
+                        anchors.centerIn: parent
+                        font.family: Constants.font
+                        color: Constants.contentColor2
+                    }
+                }
+                Item {
+                    id: nameHeader
+                    width: header.width - indexHeader.width - activeHeader.width
+                    height: 20
+                    Rectangle {
+                        width: 1
+                        height: parent.height
+                        anchors.right: parent.right
+                        color: Constants.borderColor
+                    }
+                    Text {
+                        id: nameText
+                        text: qsTr("Name")
+                        anchors.left: parent.left
+                        anchors.leftMargin: 5
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.family: Constants.font
+                        color: Constants.contentColor2
+                    }
+                }
+            }
+        }
+        Item {
+            width: 100
+            height: inputListViewArea.height
+            Text {
+                anchors.top: parent.top
+                width: 100
+                height: 20
+                text: qsTr("Inputs") + ": "
+                font.family: Constants.font
+                color: Constants.contentColor1
+                horizontalAlignment: Text.AlignRight
+                leftPadding: 5
+                verticalAlignment: Text.AlignVCenter
+                visible: root.driverLoadedAndWorking() && (inputListView.count != 0)
+            }
+        }
+        Rectangle {
+            id: inputListViewArea
+            width: 320
+            height: Math.max(inputListView.height, 20)
+            color: "transparent"
+            border.color: Constants.borderColor
+            visible: root.driverLoadedAndWorking() && (inputListView.count != 0)
+            ListView {
+                id: inputListView
+                width: 320
+                height: contentHeight
+                delegate: Item {
+                    width: inputListView.width
+                    height: 20
+                    Rectangle {
+                        anchors.bottom: parent.bottom
+                        width: parent.width
+                        height: 1
+                        color: Constants.borderColor
+                    }
+                    Row {
+                        Item {
+                            width: header.indexWidth
+                            height: 20
+                            Text {
+                                text: index + 1
+                                anchors.centerIn: parent
+                                font.family: Constants.font
+                                color: Constants.contentColor1
+                            }
+                            Rectangle {
+                                width: 1
+                                height: parent.height
+                                anchors.right: parent.right
+                                color: Constants.borderColor
+                            }
+                        }
+                        Item {
+                            width: header.activeWidth
+                            height: 20
+                            MCtrl.CheckBox {
+                                anchors.centerIn: parent
+                                width: 16
+                                height: width
+                                checked: isActive
+                            }
+                            Rectangle {
+                                width: 1
+                                height: parent.height
+                                anchors.right: parent.right
+                                color: Constants.borderColor
+                            }
+                        }
+                        Item {
+                            width: header.nameWidth
+                            height: 20
+                            Text {
+                                text: name
+                                anchors.left: parent.left
+                                anchors.leftMargin: 5
+                                anchors.verticalCenter: parent.verticalCenter
+                                font.family: Constants.font
+                                color: Constants.contentColor1
+                            }
+                            Rectangle {
+                                width: 1
+                                height: parent.height
+                                anchors.right: parent.right
+                                color: Constants.borderColor
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Item {
+            width: 100
+            height: outputListViewArea.height
+            Text {
+                anchors.top: parent.top
+                width: 100
+                height: 20
+                text: qsTr("Outputs") + ": "
+                font.family: Constants.font
+                color: Constants.contentColor1
+                horizontalAlignment: Text.AlignRight
+                leftPadding: 5
+                verticalAlignment: Text.AlignVCenter
+                visible: root.driverLoadedAndWorking() && (outputListView.count != 0)
+            }
+        }
+        Rectangle {
+            id: outputListViewArea
+            width: 320
+            height: Math.max(outputListView.height, 20)
+            color: "transparent"
+            border.color: Constants.borderColor
+            visible: root.driverLoadedAndWorking() && (outputListView.count != 0)
+            ListView {
+                id: outputListView
+                width: 320
+                height: contentHeight
+                delegate: Item {
+                    width: outputListView.width
+                    height: 20
+                    Rectangle {
+                        anchors.bottom: parent.bottom
+                        width: parent.width
+                        height: 1
+                        color: Constants.borderColor
+                    }
+                    Row {
+                        Item {
+                            width: header.indexWidth
+                            height: 20
+                            Text {
+                                text: index + 1
+                                anchors.centerIn: parent
+                                font.family: Constants.font
+                                color: Constants.contentColor1
+                            }
+                            Rectangle {
+                                width: 1
+                                height: parent.height
+                                anchors.right: parent.right
+                                color: Constants.borderColor
+                            }
+                        }
+                        Item {
+                            width: header.activeWidth
+                            height: 20
+                            MCtrl.CheckBox {
+                                anchors.centerIn: parent
+                                width: 16
+                                height: width
+                                checked: isActive
+                            }
+                            Rectangle {
+                                width: 1
+                                height: parent.height
+                                anchors.right: parent.right
+                                color: Constants.borderColor
+                            }
+                        }
+                        Item {
+                            width: header.nameWidth
+                            height: 20
+                            Text {
+                                text: name
+                                anchors.left: parent.left
+                                anchors.leftMargin: 5
+                                anchors.verticalCenter: parent.verticalCenter
+                                font.family: Constants.font
+                                color: Constants.contentColor1
+                            }
+                            Rectangle {
+                                width: 1
+                                height: parent.height
+                                anchors.right: parent.right
+                                color: Constants.borderColor
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

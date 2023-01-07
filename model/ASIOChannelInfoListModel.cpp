@@ -10,12 +10,12 @@ ASIOChannelInfoListModel::ASIOChannelInfoListModel(QObject* parent):
     channelCount_(0)
 {
     roleNames_.reserve(columnSize());
-    roleNames_[RoleNames::ChannelIndexRole] = "channel_index";
-    roleNames_[RoleNames::IsActiveRole] = "is_active";
+    roleNames_[RoleNames::ChannelIndexRole] = "channelIndex";
+    roleNames_[RoleNames::IsActiveRole] = "isActive";
     roleNames_[RoleNames::GroupRole] = "group";
-    roleNames_[RoleNames::SampleTypeRole] = "sample_type";
+    roleNames_[RoleNames::SampleTypeRole] = "sampleType";
     roleNames_[RoleNames::NameRole] = "name";
-    roleNames_[RoleNames::DisplayTextRole] = "display_text";
+    roleNames_[RoleNames::DisplayTextRole] = "displayText";
 }
 
 ASIOChannelInfoListModel::~ASIOChannelInfoListModel()
