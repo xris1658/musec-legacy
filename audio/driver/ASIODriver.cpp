@@ -3,10 +3,49 @@
 #include "audio/driver/ASIOCallback.hpp"
 #include "native/ASIODriverImpl.hpp"
 
+#include <cstring>
 #include <utility>
 
 namespace Musec::Audio::Driver
 {
+namespace Impl
+{
+unsigned int sampleSizeInBytes(ASIOSampleType sampleType)
+{
+    switch(sampleType)
+    {
+    case ASIOSampleTypeEnum::ASIOSTInt16LSB:
+    case ASIOSampleTypeEnum::ASIOSTInt16MSB:
+        return 2U;
+    case ASIOSampleTypeEnum::ASIOSTInt24LSB:
+    case ASIOSampleTypeEnum::ASIOSTInt24MSB:
+        return 3U;
+    case ASIOSampleTypeEnum::ASIOSTInt32LSB:
+    case ASIOSampleTypeEnum::ASIOSTInt32LSB16:
+    case ASIOSampleTypeEnum::ASIOSTInt32LSB18:
+    case ASIOSampleTypeEnum::ASIOSTInt32LSB20:
+    case ASIOSampleTypeEnum::ASIOSTInt32LSB24:
+    case ASIOSampleTypeEnum::ASIOSTInt32MSB:
+    case ASIOSampleTypeEnum::ASIOSTInt32MSB16:
+    case ASIOSampleTypeEnum::ASIOSTInt32MSB18:
+    case ASIOSampleTypeEnum::ASIOSTInt32MSB20:
+    case ASIOSampleTypeEnum::ASIOSTInt32MSB24:
+    case ASIOSampleTypeEnum::ASIOSTFloat32LSB:
+    case ASIOSampleTypeEnum::ASIOSTFloat32MSB:
+        return 4U;
+    case ASIOSampleTypeEnum::ASIOSTFloat64LSB:
+    case ASIOSampleTypeEnum::ASIOSTFloat64MSB:
+        return 8U;
+    // Might be incorrect
+    case ASIOSTDSDInt8LSB1:
+    case ASIOSTDSDInt8MSB1:
+    case ASIOSTDSDInt8NER8:
+        return 1U;
+    default:
+        return 0U;
+    }
+}
+}
 ASIOBufferInfoList& getASIOBufferInfoList()
 {
     static ASIOBufferInfoList ret;
@@ -166,6 +205,21 @@ void prepareChannelInfo(const ASIODriver& driver)
     else
     {
         channelInfoList.clear();
+    }
+}
+
+void fillOutput1WithZero(long bufferSize)
+{
+    auto& bufferInfoList = getASIOBufferInfoList();
+    auto& channelInfoList = getASIOChannelInfoList();
+    //
+    for(decltype(channelInfoList.size()) i = 0; i < channelInfoList.size(); ++i)
+    {
+        auto size = Impl::sampleSizeInBytes(channelInfoList[i].type);
+        if(size != 0)
+        {
+            std::memset(bufferInfoList[i].buffers[1], 0, size * bufferSize);
+        }
     }
 }
 }

@@ -118,6 +118,8 @@ void prepareBufferInfo(const ASIODriver& driver = AppASIODriver());
 // | channel | 0 | 1 | 0 | 1 | 2 | 3 |
 // | isInput | 1 | 1 | 0 | 0 | 0 | 0 |
 void prepareChannelInfo(const ASIODriver& driver = AppASIODriver());
+
+void fillOutput1WithZero(long bufferSize);
 }
 }
 }

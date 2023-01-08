@@ -194,6 +194,7 @@ bool updateCurrentASIODriverInfo()
     auto [inputCount, outputCount] = getChannelCount(driver);
     auto [minSize, maxSize, preferredSize, granularity] = getBufferSize();
     auto [inputLatency, outputLatency] = getLatency();
+    fillOutput1WithZero(preferredSize);
     inputChannelInfoList().setList(channelInfoList.data(), inputCount);
     outputChannelInfoList().setList(channelInfoList.data() + inputCount, outputCount);
     if(optionsWindow)
