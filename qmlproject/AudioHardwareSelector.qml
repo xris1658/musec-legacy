@@ -345,6 +345,7 @@ Rectangle {
         Item {
             width: 100
             height: inputListViewArea.height
+            visible: root.driverLoadedAndWorking() && (inputListView.count != 0)
             Text {
                 anchors.top: parent.top
                 width: 100
@@ -355,7 +356,6 @@ Rectangle {
                 horizontalAlignment: Text.AlignRight
                 leftPadding: 5
                 verticalAlignment: Text.AlignVCenter
-                visible: root.driverLoadedAndWorking() && (inputListView.count != 0)
             }
         }
         Rectangle {
@@ -436,6 +436,7 @@ Rectangle {
         Item {
             width: 100
             height: outputListViewArea.height
+            visible: root.driverLoadedAndWorking() && (outputListView.count != 0)
             Text {
                 anchors.top: parent.top
                 width: 100
@@ -446,7 +447,6 @@ Rectangle {
                 horizontalAlignment: Text.AlignRight
                 leftPadding: 5
                 verticalAlignment: Text.AlignVCenter
-                visible: root.driverLoadedAndWorking() && (outputListView.count != 0)
             }
         }
         Rectangle {
