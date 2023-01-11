@@ -1,0 +1,4 @@
+module Musec.Entities
+
+CompleteTrack 1.0 CompleteTrack.qml
+Plugin 1.0 Plugin.qml

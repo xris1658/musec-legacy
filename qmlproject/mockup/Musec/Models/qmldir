@@ -1,0 +1,18 @@
+module Musec.Models
+
+ASIOChannelInfoListModel 1.0 ASIOChannelInfoListModel.qml
+ASIODriverListModel 1.0 ASIODriverListModel.qml
+AssetDirectoryListModel 1.0 AssetDirectoryListModel.qml
+AutomationModel 1.0 AutomationModel.qml
+FileListModel 1.0 FileListModel.qml
+FolderListModel 1.0 FolderListModel.qml
+MIDIInputDeviceListModel 1.0 MIDIInputDeviceListModel.qml
+PluginListModel 1.0 PluginListModel.qml
+PluginParameterListModel 1.0 PluginParameterListModel.qml
+PluginParameterValueListModel 1.0 PluginParameterValueListModel.qml
+PluginSequenceModel 1.0 PluginSequenceModel.qml
+SpeakerGroupModel 1.0 SpeakerGroupModel.qml
+TempoAutomationModel 1.0 TempoAutomationModel.qml
+TrackListModel 1.0 TrackListModel.qml
+TranslationFileModel 1.0 TranslationFileModel.qml
+VolumeFaderScaleModel 1.0 VolumeFaderScaleModel.qml
