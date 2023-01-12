@@ -1,3 +1,4 @@
+import QtQml 2.15
 import QtQml.Models 2.15
 
 ListModel {
@@ -8,49 +9,52 @@ ListModel {
     property bool masterTrackInvertPhase: false
     property bool masterTrackArmRecording: false
     property bool masterTrackMonoDownMix: false
-    ListElement {
-        trackname: "Track 1"
-        type: 0
-        trackcolor: "#FF0000"
-        trackheight: 40
-        mute: false
-        solo: false
-        invertPhase: false
-        armRecording: false
-        monoDownMix: false
-        instrument: null
-        plugin_list: null
-        channel_gain: 1.0
-        channel_panning: 0.0
+
+    dynamicRoles: true
+
+    function insertTrack(index: int, track: jsobject) {
+        insert(index, track);
     }
-    ListElement {
-        trackname: "Track 2"
-        type: 1
-        trackcolor: "#00FF00"
-        trackheight: 40
-        mute: false
-        solo: false
-        invertPhase: false
-        armRecording: false
-        monoDownMix: false
-        instrument: null
-        plugin_list: null
-        channel_gain: 1.0
-        channel_panning: 0.0
+    function appendTrack(track: jsobject) {
+        append(track);
     }
-    ListElement {
-        trackname: "Track 3"
-        type: 2
-        trackcolor: "#0000FF"
-        trackheight: 40
-        mute: false
-        solo: false
-        invertPhase: false
-        armRecording: false
-        monoDownMix: false
-        instrument: null
-        plugin_list: null
-        channel_gain: 1.0
-        channel_panning: 0.0
+    function removeTrack(index: int) {
+        remove(index, 1);
+    }
+    function loadInstrument(trackIndex: int, pluginId: int) {
+        //
+    }
+    function insertEffect(trackIndex: int, pluginIndex: int, pluginId: int) {
+        //
+    }
+    function replaceEffect(trackIndex: int, pluginIndex: int, pluginId: int) {
+        //
+    }
+    function insertEffectMasterTrack(pluginIndex: int, pluginId: int) {
+        //
+    }
+    function replaceEffectMasterTrack(pluginIndex: int, pluginId: int) {
+        //
+    }
+    function removeInstrument(trackIndex: int) {
+        //
+    }
+    function removeEffect(trackIndex: int, pluginIndex: int) {
+        //
+    }
+    function removeEffectMasterTrack(pluginIndex: int) {
+        //
+    }
+    function copyInstrument(fromTrackIndex: int, toTrackIndex: int) {
+        //
+    }
+    function copyEffect(fromTrackIndex: int, fromPluginIndex: int, toTrackIndex: int, toPluginIndex: int) {
+        //
+    }
+    function moveInstrument(fromTrackIndex: int, toTrackIndex: int) {
+        //
+    }
+    function moveEffect(fromTrackIndex: int, fromPluginIndex: int, toTrackIndex: int, toPluginIndex: int) {
+        //
     }
 }
