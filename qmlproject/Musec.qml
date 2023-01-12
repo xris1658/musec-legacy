@@ -291,6 +291,7 @@ ApplicationWindow {
                 shortcut: "Ctrl+Q"
                 onTriggered: {
                     EventBridge.prepareToQuit();
+                    close();
                 }
             }
         }
