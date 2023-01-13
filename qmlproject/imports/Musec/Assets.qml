@@ -480,7 +480,7 @@ Rectangle {
                     }
                     Column {
                         Text {
-                            text: qsTr("Caterories")
+                            text: qsTr("Categories")
                             font.family: Constants.font
                             color: Constants.contentColor2
                             Component.onCompleted: {

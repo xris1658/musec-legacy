@@ -423,7 +423,7 @@
     </message>
     <message>
         <location filename="../qmlproject/imports/Musec/Assets.qml" line="483"/>
-        <source>Caterories</source>
+        <source>Categories</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
