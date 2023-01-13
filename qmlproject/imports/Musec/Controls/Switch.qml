@@ -32,7 +32,7 @@ QQC2.Switch {
         anchors.verticalCenter: indicator.verticalCenter
         text: control.text
         color: Constants.contentColor1
-        font: Constants.font
+        font.family: Constants.font
         verticalAlignment: Text.AlignVCenter
     }
 }

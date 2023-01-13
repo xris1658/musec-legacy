@@ -61,7 +61,7 @@ Window {
                     Text {
                         text: qsTr("This program uses Qt version %1.").arg(Strings.qtVersion)
                         color: Constants.contentColor1
-                        font: Constants.font
+                        font.family: Constants.font
                         anchors.left: parent.left
                         anchors.right: parent.right
                         wrapMode: Text.Wrap
@@ -80,7 +80,7 @@ Window {
                         .arg("2020").arg("qt.io/licensing").arg("qt.io")
                         color: Constants.contentColor1
                         linkColor: "#0080FF"
-                        font: Constants.font
+                        font.family: Constants.font
                         anchors.left: parent.left
                         anchors.right: parent.right
                         wrapMode: Text.Wrap

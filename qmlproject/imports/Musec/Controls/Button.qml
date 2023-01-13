@@ -21,7 +21,7 @@ QQC2.Button {
         text: control.text.indexOf('&')>=0?
                   control.text.split('&')[0] + control.text.split('&')[1].substring(0, 1) + control.text.split('&')[1].substring(1, control.text.split('&')[1].length)
                 : control.text
-        font: Constants.font
+        font.family: Constants.font
         opacity: enabled? 1.0 : 0.5
         color: Constants.contentColor1
         horizontalAlignment: Text.AlignHCenter

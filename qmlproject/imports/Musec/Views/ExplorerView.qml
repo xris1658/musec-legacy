@@ -124,7 +124,7 @@ Item {
                                 text: name
                                 anchors.verticalCenter: parent.verticalCenter
                                 color: "#FFFFFF"
-                                font: Constants.font
+                                font.family: Constants.font
                                 elide: Text.ElideRight
                             }
                         }
@@ -231,7 +231,7 @@ Item {
                             text: name
                             anchors.verticalCenter: parent.verticalCenter
                             color: "#FFFFFF"
-                            font: Constants.font
+                            font.family: Constants.font
                             elide: Text.ElideRight
                         }
                     }

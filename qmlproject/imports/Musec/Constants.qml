@@ -13,10 +13,7 @@ QtObject {
     property alias fontDirectory: directoryFontLoader.fontDirectory
     property alias relativeFontDirectory: directoryFontLoader.relativeFontDirectory
 
-    readonly property font font: Qt.font({
-                                             family: myFont.name,
-                                             pixelSize: Qt.application.font.pixelSize
-                                         })
+    readonly property string font: myFont.name
     // General
     readonly property color backgroundColor:       "#333333"
     readonly property color borderColor:           "#666666"

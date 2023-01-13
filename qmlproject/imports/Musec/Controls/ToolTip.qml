@@ -7,7 +7,7 @@ QQC2.ToolTip {
     text: "Tool tip text"
     contentItem: Text {
         text: control.text
-        font: Constants.font
+        font.family: Constants.font
         color: Constants.contentColor1
     }
     background: Rectangle {

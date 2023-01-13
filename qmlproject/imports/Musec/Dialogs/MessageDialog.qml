@@ -63,7 +63,7 @@ Window {
             anchors.verticalCenter: parent.verticalCenter
             text: message
             color: Constants.contentColor1
-            font: Constants.font
+            font.family: Constants.font
         }
     }
     DialogButtonBox {

@@ -71,7 +71,7 @@ Rectangle {
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.leftMargin: parent.height / 2
-                        font: Constants.font
+                        font.family: Constants.font
                         text: modelData
                         color: pluginPathListView.currentIndex == index? Constants.backgroundColor: Constants.contentColor1
                     }

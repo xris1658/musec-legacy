@@ -980,7 +980,7 @@ Item {
                                     Text {
                                         text: qsTr("Drag & Drop plugins or audio clips here")
                                         anchors.centerIn: parent
-                                        font: Constants.font
+                                        font.family: Constants.font
                                         color: Constants.contentColor2
                                     }
                                     DropArea {
