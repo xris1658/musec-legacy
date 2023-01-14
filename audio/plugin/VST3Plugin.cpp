@@ -496,8 +496,6 @@ bool VST3Plugin::initializeEditController()
                                         reinterpret_cast<void**>(&editControllerPoint_));
         if(componentPoint_ && editControllerPoint_)
         {
-            componentPoint_->addRef();
-            editControllerPoint_->addRef();
             // connect ------------------------------------------------------------------------------------------------- connect
             componentPoint_->connect(editControllerPoint_);
             editControllerPoint_->connect(componentPoint_);
