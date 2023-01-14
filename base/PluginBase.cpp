@@ -191,12 +191,81 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                         }
                         if(pluginType == PluginType::TypeUnknown)
                         {
-                            ret.append(std::make_tuple(
+                            plugin.createPlugin(classInfo2.cid);
+                            plugin.initialize(44100, 1024);
+                            auto* component = plugin.component();
+                            struct BusCount { int ai; int ao; int ei; int eo; };
+                            auto [audioInput, audioOutput, eventInput, eventOutput] = BusCount {};
+                            audioInput = component->getBusCount(Steinberg::Vst::MediaTypes::kAudio,
+                                Steinberg::Vst::BusDirections::kInput);
+                            audioOutput = component->getBusCount(Steinberg::Vst::MediaTypes::kAudio,
+                                Steinberg::Vst::BusDirections::kOutput);
+                            eventInput = component->getBusCount(Steinberg::Vst::MediaTypes::kEvent,
+                                Steinberg::Vst::BusDirections::kInput);
+                            eventOutput = component->getBusCount(Steinberg::Vst::MediaTypes::kEvent,
+                                Steinberg::Vst::BusDirections::kOutput);
+                            if(eventInput && audioOutput)
+                            {
+                                if(audioInput)
+                                {
+                                    // audio effect that has event inputs (e.g. FabFilter Pro-Q 3) or
+                                    // instrument that has audio inputs (e.g. Surge XT)
+                                    // TODO: Clarify plugin type by finding out which bus is the main input
+                                    Steinberg::Vst::BusInfo busInfo;
+                                    bool hasMainAudioInput = false;
+                                    bool hasMainEventInput = false;
+                                    for(int i = 0; i < audioInput; ++i)
+                                    {
+                                        component->getBusInfo(Steinberg::Vst::MediaTypes::kAudio,
+                                            Steinberg::Vst::BusDirections::kInput, i, busInfo);
+                                        if(busInfo.busType == Steinberg::Vst::BusTypes::kMain)
+                                        {
+                                            hasMainAudioInput = true;
+                                        }
+                                    }
+                                    for(int i = 0; i < eventInput; ++i)
+                                    {
+                                        component->getBusInfo(Steinberg::Vst::MediaTypes::kEvent,
+                                            Steinberg::Vst::BusDirections::kInput, i, busInfo);
+                                        if(busInfo.busType == Steinberg::Vst::BusTypes::kMain)
+                                        {
+                                            hasMainEventInput = true;
+                                        }
+                                    }
+                                    if(hasMainAudioInput && hasMainEventInput)
+                                    {
+                                        // TODO: Let user decide which type the plugin is
+                                    }
+                                    if(hasMainAudioInput && (!hasMainEventInput))
+                                    {
+                                        pluginType = PluginType::TypeInstrument;
+                                    }
+                                    if(hasMainEventInput && (!hasMainAudioInput))
+                                    {
+                                        pluginType = PluginType::TypeAudioFX;
+                                    }
+                                }
+                                else
+                                {
+                                    pluginType = PluginType::TypeInstrument;
+                                }
+                            }
+                            if(audioInput && audioOutput)
+                            {
+                                pluginType = PluginType::TypeAudioFX;
+                            }
+                            if(eventInput && eventOutput)
+                            {
+                                pluginType = PluginType::TypeMidiFX;
+                            }
+                            ret.append(
+                                std::make_tuple(
                                     uid,
                                     QString(classInfo2.name),
                                     PluginFormat::FormatVST3,
                                     pluginType
-                            ));
+                                )
+                            );
                         }
                     }
                 }
