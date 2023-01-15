@@ -5,7 +5,6 @@
 
 #include "native/MIDIMessageImpl.hpp"
 
-#include <pluginterfaces/vst2.x/aeffectx.h>
 #include <pluginterfaces/vst/ivstevents.h>
 #include <clap/events.h>
 
@@ -19,10 +18,6 @@ using namespace winrt::Windows::Devices::Midi;
 
 template<typename To>
 auto messageCast(const MIDIMessage& from);
-
-extern template auto messageCast<VstMidiEvent>(const MIDIMessage& from);
-
-extern template auto messageCast<VstMidiSysexEvent>(const MIDIMessage& from);
 
 extern template auto messageCast<Steinberg::Vst::NoteOnEvent>(const MIDIMessage& from);
 

@@ -1564,21 +1564,6 @@ If you add dithering devices on the master track, please uncheck this option.</s
         <source>Scan Shortcuts</source>
         <translation>扫描快捷方式</translation>
     </message>
-    <message>
-        <location filename="../qmlproject/PluginSettings.qml" line="210"/>
-        <source>Plugin Format Priority</source>
-        <translation>插件格式优先级</translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/PluginSettings.qml" line="218"/>
-        <source>VST2 Prior</source>
-        <translation>VST2 优先</translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/PluginSettings.qml" line="218"/>
-        <source>VST3 Prior</source>
-        <translation>VST3 优先</translation>
-    </message>
 </context>
 <context>
     <name>ProjectPropertiesWindow</name>

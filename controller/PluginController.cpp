@@ -1,13 +1,10 @@
 #include "PluginController.hpp"
 
-#include "audio/plugin/VST2Plugin.hpp"
 #include "audio/plugin/VST3Plugin.hpp"
 #include "audio/plugin/CLAPPlugin.hpp"
 #include "controller/AudioEngineController.hpp"
 #include "dao/PluginDAO.hpp"
 #include "ui/PluginWindow.hpp"
-
-#include <pluginterfaces/vst2.x/aeffect.h>
 
 namespace Musec::Controller::PluginController
 {
@@ -22,12 +19,7 @@ loadPlugin(const QString& path, int format, const char* id)
 {
     try
     {
-        if(format == Musec::Base::PluginFormat::FormatVST2)
-        {
-            return std::make_shared<Musec::Audio::Plugin::VST2Plugin>(
-                path, false, reinterpret_cast<const VstInt32&>(*id));
-        }
-        else if(format == Musec::Base::PluginFormat::FormatVST3)
+        if(format == Musec::Base::PluginFormat::FormatVST3)
         {
             return std::make_shared<Musec::Audio::Plugin::VST3Plugin>(
                 path, reinterpret_cast<const Steinberg::TUID&>(*id));

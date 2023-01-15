@@ -6,43 +6,6 @@
 
 namespace Musec::Audio::MIDI
 {
-// VST2
-// See
-// - vstsdk2.4/doc/html/struct_vst_midi_event.html
-// - vstsdk2.4/doc/html/struct_vst_midi_sysex_event.html
-template<> auto messageCast<VstMidiEvent>(const MIDIMessage& from)
-{
-    VstMidiEvent ret {};
-    ret.type = kVstMidiType;
-    ret.byteSize = sizeof(VstMidiEvent);
-    ret.deltaFrames = 0; // FIXME: time?
-    ret.flags = 0; // FIXME: recording?
-    ret.noteLength = 0;
-    ret.noteOffset = 0; // FIXME
-    ret.midiData[3] = 0;
-    std::memcpy(ret.midiData, from.rawData(), from.rawDataSize());
-    ret.detune = 0; // FIXME: how to retrieve this?
-    ret.noteOffVelocity = 0; // FIXME
-    ret.reserved1 = 0;
-    ret.reserved2 = 0;
-    return ret;
-}
-
-template<> auto messageCast<VstMidiSysexEvent>(const MIDIMessage& from)
-{
-    assert(from.type() == MIDIMessageType::SystemExclusiveMessage);
-    VstMidiSysexEvent ret {};
-    ret.type = kVstSysExType;
-    ret.byteSize = sizeof(VstMidiSysexEvent);
-    ret.deltaFrames = 0; // FIXME: time?
-    ret.flags = 0;
-    ret.dumpBytes = from.rawDataSize();
-    ret.resvd1 = 0;
-    // QUES: Will `sysexDump` (non-const char*) be modified?
-    ret.sysexDump = reinterpret_cast<char*>(const_cast<std::byte*>(from.rawData()));
-    ret.resvd2 = 0;
-}
-
 // VST3
 // See
 // - https://steinbergmedia.github.io/vst3_dev_portal/pages/Technical+Documentation/About+MIDI/Index.html

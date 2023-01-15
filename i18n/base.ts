@@ -1518,21 +1518,6 @@ If you add dithering devices on the master track, please uncheck this option.</s
         <source>Scan Shortcuts</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../qmlproject/PluginSettings.qml" line="210"/>
-        <source>Plugin Format Priority</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/PluginSettings.qml" line="218"/>
-        <source>VST2 Prior</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qmlproject/PluginSettings.qml" line="218"/>
-        <source>VST3 Prior</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>ProjectPropertiesWindow</name>

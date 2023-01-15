@@ -31,9 +31,8 @@ Rectangle {
     }
 
     function getPluginFormatName(pluginFormat: int) {
-        return pluginFormat == 1? "VST2":
-               pluginFormat == 2? "VST3":
-               pluginFormat == 3? "CLAP":
+        return pluginFormat == 1? "VST3":
+               pluginFormat == 2? "CLAP":
                                   qsTr("Unknown");
     }
 
@@ -52,9 +51,8 @@ Rectangle {
                         width: 16
                         height: width
                         anchors.verticalCenter: parent.verticalCenter
-                        source: format == 1?   "../../images/vst2-plugin.svg":
-                                format == 2?   "../../images/vst3-plugin.svg":
-                                format == 3?   "../../images/clap-plugin.svg":
+                        source: format == 1?   "../../images/vst3-plugin.svg":
+                                format == 2?   "../../images/clap-plugin.svg":
                              /* format == 0?*/ "../../images/plugin.svg"
                     }
                 }

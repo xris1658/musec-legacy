@@ -54,16 +54,6 @@ components.
   for Windows** under **Developer and Designer Tools** for debugging.
 - Download and extract the [Steinberg ASIO SDK](https://www.steinberg.net/asiosdk).
 - Clone the [Steinberg VST3 SDK repository](https://github.com/steinbergmedia/vst3sdk).
-- Download the [Steinberg VST2 SDK zip file](https://archive.org/download/VST2SDK/vst_sdk2_4_rev2.zip)
-and extract files in `vstsdk2.4` (except `index.html`) to the VST3 SDK repository that was cloned
-to your machine.  
-  If you see directories `vst` and `vst2.x` in `pluginterfaces`, you have made it correctly.
-  > For those who don't know why this link is **not** from the Steinberg website:  
-  Steinberg had decided 
-  to make the VST2 SDK proprietary and not in public for download in several years ago, and eventually stop supporting VST2 in their own products. There are lots of websites that offer this 
-  SDK. The reason I chose this link from The Internet Archive is that the documentation is 
-  present in this file, including some calling sequence diagrams. This might be useful when the 
-  developer encountered some issues. (**Please RTFM, again, RTFM, do it!**)
 - Clone the [CLAP SDK repository](https://github.com/free-audio/clap) and [CLAP Helpers repository](https://github.com/free-audio/clap-helpers).
 
 ## Build the project with <u>CMake</u>

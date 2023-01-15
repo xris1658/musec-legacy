@@ -35,7 +35,6 @@
         <file>qmlproject/images/qtlogo-64.png</file>
         <file>qmlproject/images/question.png</file>
         <file>qmlproject/images/show-fader.svg</file>
-        <file>qmlproject/images/vst2-plugin.svg</file>
         <file>qmlproject/images/vst3-plugin.svg</file>
         <file>qmlproject/images/warning.png</file>
         <file>qmlproject/imports/Musec/Arrangement.qml</file>

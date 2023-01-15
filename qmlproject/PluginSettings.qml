@@ -205,19 +205,5 @@ Rectangle {
                 EventBridge.scanShortcutChanged(checked);
             }
         }
-        Text {
-            width: root.firstColumnWidth
-            text: qsTr("Plugin Format Priority")
-            font.family: Constants.font
-            color: Constants.contentColor1
-            horizontalAlignment: Text.AlignRight
-            verticalAlignment: Text.AlignVCenter
-        }
-        MCtrl.ComboBox {
-            id: comboBoxPluginPriority
-            model: [qsTr("VST2 Prior"), qsTr("VST3 Prior")]
-            font.family: Constants.font
-            width: 100
-        }
     }
 }

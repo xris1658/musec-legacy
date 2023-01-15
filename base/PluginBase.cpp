@@ -1,6 +1,5 @@
 #include "PluginBase.hpp"
 
-#include "audio/plugin/VST2Plugin.hpp"
 #include "audio/plugin/VST3Plugin.hpp"
 #include "audio/plugin/CLAPPlugin.hpp"
 #include "native/Native.hpp"
@@ -20,7 +19,6 @@
 
 namespace Musec::Base
 {
-const char* vst2 = "dll";
 const char* vst3 = "vst3";
 const char* clap = "clap";
 
@@ -28,11 +26,7 @@ PluginFormat pluginFormat(const QString& path)
 {
     QFileInfo fileInfo(path);
     auto suffix = fileInfo.suffix();
-    if(suffix == vst2)
-    {
-        return PluginFormat::FormatVST2;
-    }
-    else if(suffix == vst3)
+    if(suffix == vst3)
     {
         return PluginFormat::FormatVST3;
     }
@@ -49,76 +43,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
     using namespace Musec::Native;
     QList<PluginBasicInfo> ret;
     auto format = pluginFormat(path);
-    if(format == PluginFormat::FormatVST2)
-    {
-        try
-        {
-            std::vector<char> shellPluginIdRaw(sizeof(VstInt32) + 1, 0);
-            Musec::Audio::Plugin::VST2Plugin plugin(path, true);
-            auto effect = plugin.effect();
-            std::array<char, kVstMaxProductStrLen> nameBuffer = {0};
-            auto category = effect->dispatcher(effect, effGetPlugCategory, 0, 0, nullptr, 0);
-            if(category == kPlugCategShell)
-            {
-                while (true)
-                {
-                    auto shellPluginId = effect->dispatcher(
-                        effect,
-                        effShellGetNextPlugin,
-                        0,
-                        0,
-                        nameBuffer.data(),
-                        nameBuffer.size());
-                    if(shellPluginId == 0 || nameBuffer[0] == 0)
-                    {
-                        break;
-                    }
-                    // AEffect* subPlugin = pluginEntryProc(pluginVST2Callback);
-                    auto plugin = Musec::Audio::Plugin::VST2Plugin(path, false, shellPluginId);
-                    auto subPlugin = plugin.effect();
-                    int pluginType = subPlugin->flags & effFlagsIsSynth?
-                        PluginType::TypeInstrument:
-                        PluginType::TypeAudioFX;
-                    auto shellPluginIdAsInt32 = static_cast<VstInt32>(shellPluginId);
-                    std::memcpy(shellPluginIdRaw.data(), &shellPluginIdAsInt32, sizeof(VstInt32));
-                    ret.append(std::make_tuple(
-                            shellPluginIdRaw,
-                            QString(nameBuffer.data()),
-                            PluginFormat::FormatVST2,
-                            pluginType
-                        )
-                    );
-                }
-            }
-            // `effGetPlugCategory` is needed only if we check if the plugin is a shell plugin.
-            // Some non-shell plugin just leave this at kPlugCategUnknown.
-            // To get the type, simply check `flags` using `effFlagsIsSynth`.
-            else/* if(category != kPlugCategUnknown)*/
-            {
-                effect->dispatcher(
-                    effect,
-                    effGetEffectName,
-                    0,
-                    0,
-                    nameBuffer.data(),
-                    nameBuffer.size());
-                int pluginType = effect->flags & effFlagsIsSynth?
-                    PluginType::TypeInstrument:
-                    PluginType::TypeAudioFX;
-                std::memcpy(shellPluginIdRaw.data(), &(effect->uniqueID), sizeof(VstInt32));
-                ret.append(
-                    std::make_tuple(
-                        shellPluginIdRaw,
-                        QString(nameBuffer.data()),
-                        PluginFormat::FormatVST2,
-                        pluginType
-                    )
-                );
-            }
-        }
-        catch (...) {}
-    }
-    else if(format == PluginFormat::FormatVST3)
+    if(format == PluginFormat::FormatVST3)
     {
         try
         {
@@ -345,15 +270,12 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
 QStringList& defaultPluginDirectoryList()
 {
     static QStringList ret;
-    ret.reserve(5);
+    ret.reserve(3);
     auto programFilesPath = Musec::Native::programFilesFolder();
     if(!programFilesPath.isEmpty())
     {
-        // VST2
-        ret << QString(programFilesPath).append("\\Steinberg\\VstPlugins")
-            << QString(programFilesPath).append("\\VstPlugins")
         // VST3
-            << QString(programFilesPath).append("\\Common Files\\VST3")
+        ret << QString(programFilesPath).append("\\Common Files\\VST3")
         // CLAP
             << QString(programFilesPath).append("\\Common Files\\CLAP");
     }

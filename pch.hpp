@@ -21,9 +21,6 @@
 #include <clap/ext/gui.h>
 #include <clap/helpers/param-queue.hh>
 
-// VST2
-#include <pluginterfaces/vst2.x/aeffect.h>
-#include <pluginterfaces/vst2.x/aeffectx.h>
 // VST3
 #include <pluginterfaces/base/funknown.h>
 #include <pluginterfaces/vst/ivstattributes.h>

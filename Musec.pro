@@ -92,13 +92,6 @@ HEADERS += \
     audio/plugin/CLAPUtils.hpp \
     audio/plugin/IParameter.hpp \
     audio/plugin/IPlugin.hpp \
-    audio/plugin/VST2Plugin.hpp \
-    audio/plugin/VST2PluginForward.hpp \
-    audio/plugin/VST2PluginParameter.hpp \
-    audio/plugin/VST2PluginPool.hpp \
-    audio/plugin/VST2PluginShellPluginId.hpp \
-    audio/plugin/VST2SpeakerGroup.hpp \
-    audio/plugin/VST2SpeakerGroupCollection.hpp \
     audio/plugin/VST3Plugin.hpp \
     audio/plugin/VST3ComponentHandler.hpp \
     audio/plugin/VST3PluginParameter.hpp \
@@ -212,13 +205,6 @@ SOURCES += \
     audio/plugin/CLAPPluginParameter.cpp \
     audio/plugin/CLAPSpeakerGroup.cpp \
     audio/plugin/CLAPSpeakerGroupCollection.cpp \
-    audio/plugin/VST2Callback.cpp \
-    audio/plugin/VST2Plugin.cpp \
-    audio/plugin/VST2PluginParameter.cpp \
-    audio/plugin/VST2PluginPool.cpp \
-    audio/plugin/VST2PluginShellPluginId.cpp \
-    audio/plugin/VST2SpeakerGroup.cpp \
-    audio/plugin/VST2SpeakerGroupCollection.cpp \
     audio/plugin/VST3Plugin.cpp \
     audio/plugin/VST3ComponentHandler.cpp \
     audio/plugin/VST3MemoryStream.cpp \

@@ -103,20 +103,6 @@ set(PROJECT_SOURCES
     audio/plugin/CLAPUtils.hpp
     audio/plugin/IParameter.hpp
     audio/plugin/IPlugin.hpp
-    audio/plugin/VST2Callback.cpp
-    audio/plugin/VST2Plugin.cpp
-    audio/plugin/VST2Plugin.hpp
-    audio/plugin/VST2PluginForward.hpp
-    audio/plugin/VST2PluginParameter.cpp
-    audio/plugin/VST2PluginParameter.hpp
-    audio/plugin/VST2PluginPool.cpp
-    audio/plugin/VST2PluginPool.hpp
-    audio/plugin/VST2PluginShellPluginId.cpp
-    audio/plugin/VST2PluginShellPluginId.hpp
-    audio/plugin/VST2SpeakerGroup.cpp
-    audio/plugin/VST2SpeakerGroup.hpp
-    audio/plugin/VST2SpeakerGroupCollection.cpp
-    audio/plugin/VST2SpeakerGroupCollection.hpp
     audio/plugin/VST3ComponentHandler.cpp
     audio/plugin/VST3ComponentHandler.hpp
     audio/plugin/VST3MemoryStream.cpp
@@ -306,9 +292,6 @@ set(MUSECCONTROLSTEST_SOURCES
     test/MusecControlsTest/main.cpp
     test/MusecControlsTest/MusecControlsTest.qrc)
 
-set(VST2PLUGINTEST_SOURCES
-    test/VST2PluginTestWithQt/main.cpp)
-
 set(VST3PLUGINTEST_SOURCES
     test/VST3PluginTestWithQt/main.cpp)
 
@@ -322,8 +305,6 @@ target_precompile_headers(Musec PRIVATE ${PROJECT_PCH})
 add_executable(AutomationTest ${QT_RESOURCES} ${AUTOMATIONTEST_SOURCES})
 
 add_executable(MusecControlsTest ${QT_RESOURCES} ${MUSECCONTROLSTEST_SOURCES})
-
-add_executable(VST2PluginTestWithQt ${PROJECT_SOURCES} ${TEST_COMMON_SOURCES} ${VST2PLUGINTEST_SOURCES})
 
 add_executable(VST3PluginTestWithQt ${PROJECT_SOURCES} ${TEST_COMMON_SOURCES} ${VST3PLUGINTEST_SOURCES})
 
@@ -357,18 +338,6 @@ target_link_libraries(AutomationTest
 
 target_link_libraries(MusecControlsTest
                       Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets)
-
-target_link_libraries(VST2PluginTestWithQt
-                      Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets
-                      version
-                      windowsapp
-                      base pluginterfaces sdk_common sdk_hosting
-                      unofficial::sqlite3::sqlite3
-                      yaml-cpp
-                      fmt::fmt
-                      spdlog::spdlog
-                      avcpp::FFmpeg
-                      avcpp::avcpp-static)
 
 target_link_libraries(VST3PluginTestWithQt
                       Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets

@@ -2,7 +2,6 @@
 #define MUSEC_AUDIO_ENGINE_PROJECT
 
 #include "audio/plugin/IPlugin.hpp"
-#include "audio/plugin/VST2PluginPool.hpp"
 #include "audio/track/AudioTrack.hpp"
 #include "audio/track/ITrack.hpp"
 #include "audio/util/Util.hpp"
@@ -70,9 +69,6 @@ public:
     void removePluginWindowMapping(void* plugin);
     void setPluginWindowSize(void* plugin, int width, int height);
 public:
-    void addVST2Plugin(AEffect* plugin);
-    void removeVST2Plugin(AEffect* plugin);
-public:
     void process();
     const Musec::Base::FixedSizeMemoryBlock& masterTrackAudioBuffer() const;
 public:
@@ -84,9 +80,6 @@ private:
     MasterTrackControlType::reference masterTrackArmRecording();
     MasterTrackControlType::reference masterTrackMonoDownMix();
 private:
-    void vst2PluginIdleFunc();
-private:
-    bool vst2PluginIdleFuncRunning_ = true;
     std::mutex mutex_;
     Musec::Base::FixedSizeMemoryPool audioBufferPool_;
     std::vector<std::shared_ptr<float>> audioBuffer_;
@@ -105,7 +98,6 @@ private:
     std::vector<bool> trackArmRecording_;
     std::vector<bool> trackMonoDownMix_;
     std::map<void*, QWindow*> pluginAndWindow_;
-    Musec::Audio::Plugin::VST2PluginPool vst2PluginPool_;
 };
 }
 }

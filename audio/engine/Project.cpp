@@ -2,7 +2,6 @@
 
 #include "audio/host/CLAPEvents.hpp"
 #include "audio/host/VST3Host.hpp"
-#include "audio/plugin/VST2Plugin.hpp"
 #include "audio/track/AudioTrack.hpp"
 #include "audio/track/InstrumentTrack.hpp"
 #include "audio/track/MIDITrack.hpp"
@@ -30,14 +29,8 @@ Project::Project(std::size_t audioBufferSizeInFrame, int reserveTrackCount):
     masterTrackControls_(),
     gain_(), panning_(),
     trackMute_(), trackSolo_(), trackInvertPhase_(), trackArmRecording_(), trackMonoDownMix_(),
-    pluginAndWindow_(),
-    vst2PluginPool_()
+    pluginAndWindow_()
 {
-    static std::thread thread([this]() { vst2PluginIdleFunc(); });
-    if(thread.joinable())
-    {
-        thread.detach();
-    }
     audioBuffer_.reserve(reserveTrackCount);
     tracks_.reserve(reserveTrackCount);
     trackTypes_.reserve(reserveTrackCount);
@@ -208,16 +201,6 @@ void Project::setPluginWindowSize(void* plugin, int width, int height)
     }
 }
 
-void Project::addVST2Plugin(AEffect* plugin)
-{
-    vst2PluginPool_.addPlugin(plugin);
-}
-
-void Project::removeVST2Plugin(AEffect* plugin)
-{
-    vst2PluginPool_.removePlugin(plugin);
-}
-
 const Musec::Base::FixedSizeMemoryBlock& Project::masterTrackAudioBuffer() const
 {
     return masterTrackAudioBuffer_;
@@ -355,7 +338,6 @@ void Project::process()
 void Project::clear()
 {
     std::lock_guard<std::mutex> lg(mutex_);
-    vst2PluginIdleFuncRunning_ = false;
     audioBuffer_.clear();
     tracks_.clear();
     trackTypes_.clear();
@@ -412,13 +394,4 @@ Project::MasterTrackControlType::reference Project::masterTrackMonoDownMix()
     return masterTrackControls_[4];
 }
 
-void Project::vst2PluginIdleFunc()
-{
-    while(vst2PluginIdleFuncRunning_)
-    {
-        vst2PluginPool_.doIdle();
-        // This time is determined by watching the dB meter display of Serum, a VST2 synthesizer.
-        std::this_thread::sleep_for(std::chrono::milliseconds(20));
-    }
-}
 }

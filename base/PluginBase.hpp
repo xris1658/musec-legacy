@@ -58,7 +58,6 @@ enum PluginReadInfoField
 enum PluginFormat
 {
     FormatNotAPlugin = 0,
-    FormatVST2,
     FormatVST3,
     FormatCLAP,
     PluginFormatCount

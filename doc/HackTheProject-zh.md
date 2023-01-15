@@ -46,10 +46,6 @@
   - 读者可能会一并勾选 **Qt Debug information Files** 以及 **Developer and Designer Tools** 下的 **Debugging Tools for Windows** ，用于调试程序。
 - 下载并解压 [Steinberg ASIO SDK](https://www.steinberg.net/asiosdk)。
 - 克隆 [Steinberg VST3 SDK 仓库](https://github.com/steinbergmedia/vst3sdk)。
-- 下载 [Steinberg VST2 SDK 压缩文件](https://archive.org/download/VST2SDK/vst_sdk2_4_rev2.zip)，并将文件中 `vstsdk2.4` 文件夹的内容（除了 `index.html`）解压到 VST3 SDK 目录下。  
-  能在 VST3 SDK 的 `pluginterfaces` 目录中找到 `vst` 和 `vst2.x`，就说明做对了。
-  > 为什么上面的链接**不是** Steinberg 官网的？  
-  Steinberg 在数年前决定将 VST2 SDK 变成专有代码，并且不再开放下载；自家产品也会逐步停止对 VST2 的支持。不少网站还提供这份 SDK，我选用这个链接，是因为这个文件包含了文档，其中有调用的时序图。当开发者遇到了问题时，文档或许会很有用。（ **请务必读文档，务必读文档，务必读文档！** 重要的事情说三遍！）
 - 克隆 [CLAP SDK 仓库](https://github.com/free-audio/clap) 和 [CLAP Helpers 仓库](https://github.com/free-audio/clap-helpers)。
 ## 用 <u>CMake</u> 构建项目
 如果用 CMake，构建项目的过程会相对简单。
