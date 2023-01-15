@@ -72,6 +72,7 @@
 #include <QScreen>
 
 // Windows API
+#if(WIN32)
 #include <Windows.h>
 #include <winreg.h>
 #include <winerror.h>
@@ -82,6 +83,7 @@
 #include <realtimeapiset.h>
 #include <timezoneapi.h>
 #include <combaseapi.h>
+#endif
 
 // C/C++ header without templates
 #include <cstring>

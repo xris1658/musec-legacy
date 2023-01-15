@@ -39,7 +39,13 @@ add_compile_options(/W4 /Zc:wchar_t /Zc:__cplusplus /Zc:strictStrings-)
 
 qt5_add_resources(QT_RESOURCES ./Musec.qrc)
 
+if(WIN32)
+    set(NATIVE_SOURCE
+        native/LibraryImplWin32.cpp)
+endif()
+
 set(PROJECT_SOURCES
+    ${NATIVE_SOURCE}
     audio/arrangement/ClipInTrack.hpp
     audio/arrangement/TrackSequence.hpp
     audio/base/AudioBufferView.cpp
@@ -250,6 +256,10 @@ set(PROJECT_SOURCES
     native/ASIODriverImpl.cpp
     native/ASIODriverImpl.hpp
     native/CompilerSpecific.hpp
+    native/Library.cpp
+    native/Library.hpp
+    native/LibraryImpl.hpp
+    native/LibraryImplWin32.cpp
     native/MIDIInputDeviceImpl.cpp
     native/MIDIInputDeviceImpl.hpp
     native/MIDIMessageImpl.cpp
@@ -257,8 +267,6 @@ set(PROJECT_SOURCES
     native/Native.cpp
     native/Native.hpp
     native/WinRTForward.hpp
-    native/WindowsLibrary.cpp
-    native/WindowsLibrary.hpp
     ui/FontUtility.cpp
     ui/FontUtility.hpp
     ui/MessageDialog.cpp
@@ -303,6 +311,9 @@ set(VST2PLUGINTEST_SOURCES
 
 set(VST3PLUGINTEST_SOURCES
     test/VST3PluginTestWithQt/main.cpp)
+
+set(SCANSINGLEPLUGINTEST_SOURCES
+    test/ScanSinglePluginTest/main.cpp)
 
 add_executable(Musec main.cpp ${PROJECT_SOURCES} ${RESOURCE_FILE} ${QT_RESOURCES})
 
@@ -360,6 +371,18 @@ target_link_libraries(VST2PluginTestWithQt
                       avcpp::avcpp-static)
 
 target_link_libraries(VST3PluginTestWithQt
+                      Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets
+                      version
+                      windowsapp
+                      base pluginterfaces sdk_common sdk_hosting
+                      unofficial::sqlite3::sqlite3
+                      yaml-cpp
+                      fmt::fmt
+                      spdlog::spdlog
+                      avcpp::FFmpeg
+                      avcpp::avcpp-static)
+
+target_link_libraries(ScanSinglePluginTest
                       Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets
                       version
                       windowsapp

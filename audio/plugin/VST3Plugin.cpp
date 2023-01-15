@@ -28,11 +28,15 @@ VST3Plugin::VST3Plugin():
 VST3Plugin::VST3Plugin(const QString& path):
     VST3Plugin::Base(path), componentHandler_(this), plugFrame_(this)
 {
-    auto pluginInitProc = Musec::Native::getExport<Musec::Base::VST3PluginInitProc>(*this, VST3PluginInitName);
-    auto pluginFactoryProc = Musec::Native::getExport<Musec::Base::VST3PluginFactoryProc>(*this, "GetPluginFactory");
+    if(errorCode())
+    {
+        throw std::runtime_error("");
+    }
+    auto pluginInitProc = Musec::Native::Library::getExport<Musec::Base::VST3PluginInitProc>(VST3PluginInitName);
+    auto pluginFactoryProc = Musec::Native::Library::getExport<Musec::Base::VST3PluginFactoryProc>("GetPluginFactory");
     if (!pluginFactoryProc)
     {
-        throw GetLastError();
+        throw std::runtime_error("Error: VST3 Plugin entry not found! This might be not a VST3 plugin.");
     }
     if (pluginInitProc)
     {
@@ -110,7 +114,7 @@ VST3Plugin::~VST3Plugin()
         factory_ = nullptr;
         audioProcessorStatus_ = VST3AudioProcessorStatus::NoAudioProcessor;
         editControllerStatus_ = VST3EditControllerStatus::NoEditController;
-        auto pluginExitProc = Musec::Native::getExport<Musec::Base::VST3PluginExitProc>(*this, VST3PluginExitName);
+        auto pluginExitProc = Musec::Native::Library::getExport<Musec::Base::VST3PluginExitProc>(VST3PluginExitName);
         if (pluginExitProc)
         {
             pluginExitProc();

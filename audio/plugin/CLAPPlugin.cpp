@@ -9,15 +9,15 @@
 namespace Musec::Audio::Plugin
 {
 CLAPPlugin::CLAPPlugin():
-    Musec::Native::WindowsLibrary()
+    Musec::Native::Library()
 {
     //
 }
 
 CLAPPlugin::CLAPPlugin(const QString& path):
-    Musec::Native::WindowsLibrary(path)
+    Musec::Native::Library(path)
 {
-    entry_ = Musec::Native::getExport<const clap_plugin_entry*>(*this, "clap_entry");
+    entry_ = Musec::Native::Library::getExport<const clap_plugin_entry*>("clap_entry");
     if(!entry_)
     {
         throw std::runtime_error("Error: CLAP plugin entry not found! This might be not a CLAP plugin.");

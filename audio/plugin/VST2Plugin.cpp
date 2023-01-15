@@ -17,13 +17,17 @@ namespace Musec::Audio::Plugin
 VST2Plugin::VST2Plugin(const QString& path, bool scanPlugin, VstInt32 shellPluginId):
     VST2Plugin::Base(path)
 {
-    auto pluginEntryProc = Musec::Native::getExport<VST2PluginEntryProc>(*this, "VSTPluginMain");
+    if(errorCode())
+    {
+        throw std::runtime_error("");
+    }
+    auto pluginEntryProc = Musec::Native::Library::getExport<VST2PluginEntryProc>("VSTPluginMain");
     if(!pluginEntryProc)
     {
-        pluginEntryProc = Musec::Native::getExport<VST2PluginEntryProc>(*this, "main");
+        pluginEntryProc = Musec::Native::Library::getExport<VST2PluginEntryProc>("main");
         if(!pluginEntryProc)
         {
-            throw GetLastError();
+            throw std::runtime_error("Error: VST2 Plugin entry not found! This might be not a VST3 plugin.");
         }
     }
     if(scanPlugin)

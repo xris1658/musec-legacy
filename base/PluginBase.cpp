@@ -116,10 +116,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                 );
             }
         }
-        catch (WindowsLibrary::ExceptionType)
-        {
-            //
-        }
+        catch (...) {}
     }
     else if(format == PluginFormat::FormatVST3)
     {
@@ -294,10 +291,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                 }
             }
         }
-        catch(WindowsLibrary::ExceptionType)
-        {
-            //
-        }
+        catch (...) {}
     }
     else if(format == PluginFormat::FormatCLAP)
     {
@@ -343,7 +337,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                 }
             }
         }
-        catch(WindowsLibrary::ExceptionType) {}
+        catch (...) {}
     }
     return ret;
 }

@@ -26,7 +26,10 @@ using SystemTimeStringType = std::array<char, 18>;
 
 using WindowType = HWND;
 
+#if(WIN32)
 using ErrorCodeType = decltype(GetLastError());
+#endif
+
 // Usually <User folder>\AppData\Roaming
 const QString& roamingAppDataFolder();
 
@@ -70,7 +73,7 @@ inline constexpr Musec::Util::Endian endian()
 }
 
 // Check if the application is being debugged. Currently only used to decide whether system
-// rendering is enabled.
+// rendering should be enabled.
 bool isDebuggerPresent();
 
 QString errorMessageFromErrorCode(ErrorCodeType errorCode);

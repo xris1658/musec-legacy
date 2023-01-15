@@ -175,11 +175,12 @@ HEADERS += \
     model/VolumeFaderScaleModel.hpp \
     native/ASIODriverImpl.hpp \
     native/CompilerSpecific.hpp \
+    native/Library.hpp \
+    native/LibraryImpl.hpp \
     native/MIDIInputDeviceImpl.hpp \
     native/MIDIMessageImpl.hpp \
     native/Native.hpp \
     native/WinRTForward.hpp \
-    native/WindowsLibrary.hpp \
     ui/FontUtility.hpp \
     ui/MessageDialog.hpp \
     ui/PluginWindow.hpp \
@@ -281,10 +282,10 @@ SOURCES += \
     model/TranslationFileModel.cpp \
     model/VolumeFaderScaleModel.cpp \
     native/ASIODriverImpl.cpp \
+    native/Library.cpp \
     native/MIDIInputDeviceImpl.cpp \
     native/MIDIMessageImpl.cpp \
     native/Native.cpp \
-    native/WindowsLibrary.cpp \
     ui/FontUtility.cpp \
     ui/MessageDialog.cpp \
     ui/PluginWindow.cpp \
@@ -292,6 +293,9 @@ SOURCES += \
     ui/UI.cpp \
     util/Endian.cpp \
     util/Literal.cpp
+
+win32: SOURCES += \
+    native/LibraryImplWin32.cpp
 
 RESOURCES += \
     Musec.qrc

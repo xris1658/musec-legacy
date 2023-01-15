@@ -8,8 +8,8 @@
 #include "audio/plugin/VST3SpeakerGroupCollection.hpp"
 #include "base/FixedSizeMemoryBlock.hpp"
 #include "base/PluginBase.hpp"
+#include "native/Library.hpp"
 #include "native/Native.hpp"
-#include "native/WindowsLibrary.hpp"
 
 #include <pluginterfaces/gui/iplugview.h>
 #include <pluginterfaces/vst/ivstaudioprocessor.h>
@@ -85,11 +85,11 @@ constexpr Steinberg::uint32 BasicProcessContextRequirement =
     | Steinberg::Vst::IProcessContextRequirements::Flags::kNeedTimeSignature;
 
 class VST3Plugin:
-    public Musec::Native::WindowsLibrary,
+    public Musec::Native::Library,
     public Musec::Audio::Plugin::IPlugin
 {
     using SampleType = float;
-    using Base = Musec::Native::WindowsLibrary;
+    using Base = Musec::Native::Library;
     using SampleTypePointers = std::vector<SampleType*>;
 public: // ctor & dtor
     VST3Plugin();
