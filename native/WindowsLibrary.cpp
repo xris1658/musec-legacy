@@ -1,4 +1,4 @@
-#include "WindowsLibraryRAII.hpp"
+#include "WindowsLibrary.hpp"
 
 #include <Windows.h>
 #include <libloaderapi.h>
@@ -8,12 +8,19 @@
 
 namespace Musec::Native
 {
-WindowsLibraryRAII::WindowsLibraryRAII(): module_(NULL)
+namespace Impl
+{
+ExportType getExport(const WindowsLibrary& library, const char* name)
+{
+    return reinterpret_cast<void(*)()>(GetProcAddress(library.module(), name));
+}
+}
+WindowsLibrary::WindowsLibrary(): module_(NULL)
 {
     //
 }
 
-WindowsLibraryRAII::WindowsLibraryRAII(const QString& path)
+WindowsLibrary::WindowsLibrary(const QString& path)
 {
 #ifndef NDEBUG
     path_ = path;
@@ -26,7 +33,7 @@ WindowsLibraryRAII::WindowsLibraryRAII(const QString& path)
     }
 }
 
-WindowsLibraryRAII::WindowsLibraryRAII(WindowsLibraryRAII&& rhs) noexcept : module_(NULL)
+WindowsLibrary::WindowsLibrary(WindowsLibrary&& rhs) noexcept : module_(NULL)
 {
     std::swap(module_, rhs.module_);
 #ifndef NDEBUG
@@ -34,8 +41,8 @@ WindowsLibraryRAII::WindowsLibraryRAII(WindowsLibraryRAII&& rhs) noexcept : modu
 #endif
 }
 
-WindowsLibraryRAII& WindowsLibraryRAII::operator=(WindowsLibraryRAII&& rhs)
- noexcept {
+WindowsLibrary& WindowsLibrary::operator=(WindowsLibrary&& rhs) noexcept
+{
     if(module_ != rhs.module_)
     {
         std::swap(module_, rhs.module_);
@@ -46,7 +53,7 @@ WindowsLibraryRAII& WindowsLibraryRAII::operator=(WindowsLibraryRAII&& rhs)
     return *this;
 }
 
-WindowsLibraryRAII::~WindowsLibraryRAII() noexcept
+WindowsLibrary::~WindowsLibrary() noexcept
 {
     if(module_)
     {
@@ -54,7 +61,7 @@ WindowsLibraryRAII::~WindowsLibraryRAII() noexcept
     }
 }
 
-HMODULE WindowsLibraryRAII::module() const
+HMODULE WindowsLibrary::module() const
 {
     return module_;
 }

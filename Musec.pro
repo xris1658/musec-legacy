@@ -179,7 +179,7 @@ HEADERS += \
     native/MIDIMessageImpl.hpp \
     native/Native.hpp \
     native/WinRTForward.hpp \
-    native/WindowsLibraryRAII.hpp \
+    native/WindowsLibrary.hpp \
     ui/FontUtility.hpp \
     ui/MessageDialog.hpp \
     ui/PluginWindow.hpp \
@@ -284,7 +284,7 @@ SOURCES += \
     native/MIDIInputDeviceImpl.cpp \
     native/MIDIMessageImpl.cpp \
     native/Native.cpp \
-    native/WindowsLibraryRAII.cpp \
+    native/WindowsLibrary.cpp \
     ui/FontUtility.cpp \
     ui/MessageDialog.cpp \
     ui/PluginWindow.cpp \

@@ -6,7 +6,7 @@
 #include "audio/plugin/VST2SpeakerGroupCollection.hpp"
 #include "base/FixedSizeMemoryBlock.hpp"
 #include "base/PluginBase.hpp"
-#include "native/WindowsLibraryRAII.hpp"
+#include "native/WindowsLibrary.hpp"
 
 #pragma warning(push)
 #pragma warning(disable: 4996) // C-style string manipulation might be unsafe
@@ -28,11 +28,11 @@ namespace Plugin
 VstIntPtr pluginVST2Callback(AEffect* effect, VstInt32 opcode, VstInt32 index, VstIntPtr value, void* ptr, float opt);
 
 class VST2Plugin:
-    public Musec::Native::WindowsLibraryRAII,
+    public Musec::Native::WindowsLibrary,
     public Musec::Audio::Plugin::IPlugin
 {
     using SampleType = float;
-    using Base = Musec::Native::WindowsLibraryRAII;
+    using Base = Musec::Native::WindowsLibrary;
 public:
     VST2Plugin(const QString& path, bool scanPlugin = false, VstInt32 shellPluginId = 0);
     ~VST2Plugin() override;

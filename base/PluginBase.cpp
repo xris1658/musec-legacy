@@ -116,7 +116,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                 );
             }
         }
-        catch (WindowsLibraryRAII::ExceptionType)
+        catch (WindowsLibrary::ExceptionType)
         {
             //
         }
@@ -294,7 +294,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                 }
             }
         }
-        catch(WindowsLibraryRAII::ExceptionType)
+        catch(WindowsLibrary::ExceptionType)
         {
             //
         }
@@ -343,7 +343,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                 }
             }
         }
-        catch(WindowsLibraryRAII::ExceptionType) {}
+        catch(WindowsLibrary::ExceptionType) {}
     }
     return ret;
 }

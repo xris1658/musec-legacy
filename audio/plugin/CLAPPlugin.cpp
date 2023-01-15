@@ -9,13 +9,13 @@
 namespace Musec::Audio::Plugin
 {
 CLAPPlugin::CLAPPlugin():
-    Musec::Native::WindowsLibraryRAII()
+    Musec::Native::WindowsLibrary()
 {
     //
 }
 
 CLAPPlugin::CLAPPlugin(const QString& path):
-    Musec::Native::WindowsLibraryRAII(path)
+    Musec::Native::WindowsLibrary(path)
 {
     entry_ = Musec::Native::getExport<const clap_plugin_entry*>(*this, "clap_entry");
     if(!entry_)

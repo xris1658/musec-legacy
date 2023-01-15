@@ -257,8 +257,8 @@ set(PROJECT_SOURCES
     native/Native.cpp
     native/Native.hpp
     native/WinRTForward.hpp
-    native/WindowsLibraryRAII.cpp
-    native/WindowsLibraryRAII.hpp
+    native/WindowsLibrary.cpp
+    native/WindowsLibrary.hpp
     ui/FontUtility.cpp
     ui/FontUtility.hpp
     ui/MessageDialog.cpp
@@ -315,6 +315,8 @@ add_executable(MusecControlsTest ${QT_RESOURCES} ${MUSECCONTROLSTEST_SOURCES})
 add_executable(VST2PluginTestWithQt ${PROJECT_SOURCES} ${TEST_COMMON_SOURCES} ${VST2PLUGINTEST_SOURCES})
 
 add_executable(VST3PluginTestWithQt ${PROJECT_SOURCES} ${TEST_COMMON_SOURCES} ${VST3PLUGINTEST_SOURCES})
+
+add_executable(ScanSinglePluginTest ${PROJECT_SOURCES} ${SCANSINGLEPLUGINTEST_SOURCES})
 
 target_compile_definitions(Musec
                            PRIVATE

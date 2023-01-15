@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
-    <Type Name="Musec::Native::WindowsLibraryRAII">
+    <Type Name="Musec::Native::WindowsLibrary">
         <DisplayString>{{ Library path = {path} }}</DisplayString>
         <Expand>
             <Item Name="[path]">path_</Item>

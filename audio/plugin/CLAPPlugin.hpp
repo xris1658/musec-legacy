@@ -6,7 +6,7 @@
 #include "audio/plugin/CLAPSpeakerGroupCollection.hpp"
 #include "audio/plugin/IPlugin.hpp"
 #include "base/FixedSizeMemoryBlock.hpp"
-#include "native/WindowsLibraryRAII.hpp"
+#include "native/WindowsLibrary.hpp"
 
 #include <clap/ext/audio-ports.h>
 #include <clap/ext/gui.h>
@@ -41,7 +41,7 @@ enum class CLAPPluginStatus: std::int8_t
 };
 
 class CLAPPlugin:
-    public Musec::Native::WindowsLibraryRAII,
+    public Musec::Native::WindowsLibrary,
     public Musec::Audio::Plugin::IPlugin
 {
     using SampleType = float;
