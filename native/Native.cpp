@@ -342,5 +342,28 @@ void sleepFor(std::chrono::steady_clock::duration duration)
     WaitForSingleObject(handle, INFINITE);
 }
 
-
+std::vector<QString>& defaultPluginDirectoryList()
+{
+    static std::vector<QString> ret;
+    if(ret.empty())
+    {
+        ret.reserve(4);
+        auto programFilesPath = Musec::Native::programFilesFolder();
+        if(!programFilesPath.isEmpty())
+        {
+            // VST3
+            ret.emplace_back(QString(programFilesPath).append("\\Common Files\\VST3"));
+            // CLAP
+            ret.emplace_back(QString(programFilesPath).append("\\Common Files\\CLAP"));
+        }
+        auto localAppDataPath = Musec::Native::localAppDataFolder();
+        if(!localAppDataPath.isEmpty())
+        {
+            ret.emplace_back(QString(localAppDataPath).append("\\Programs\\Common\\VST3"));
+            // CLAP
+            ret.emplace_back(QString(localAppDataPath).append("\\Programs\\Common\\CLAP"));
+        }
+    }
+    return ret;
+}
 }

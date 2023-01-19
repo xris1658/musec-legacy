@@ -1,6 +1,5 @@
 #include "AppController.hpp"
 
-#include "base/Base.hpp"
 #include "base/Constants.hpp"
 #include "controller/AssetDirectoryController.hpp"
 #include "controller/ConfigController.hpp"
@@ -12,7 +11,6 @@
 #include "event/EventBase.hpp"
 #include "native/Native.hpp"
 #include "ui/MessageDialog.hpp"
-#include "ui/Render.hpp"
 #include "ui/UI.hpp"
 
 #include <QDir>
@@ -113,7 +111,7 @@ void initAppData()
     Musec::DAO::initDatabase();
     Musec::Controller::ConfigController::createAppConfig();
     Musec::Controller::ConfigController::saveAppConfig();
-    auto& list = Musec::Base::defaultPluginDirectoryList();
+    auto& list = Musec::Native::defaultPluginDirectoryList();
     for(auto& item: list)
     {
         Musec::DAO::addPluginDirectory(item);
@@ -217,6 +215,7 @@ void refreshPluginList(bool rescan)
             Musec::Controller::PluginSettingsController::scanPlugins();
             // auto list = Musec::Controller::getAllPlugins();
             setPluginLists();
+            // FIXME: Run this on main thread
             eventHandler->scanPluginComplete();
         };
         // scan plugins on a new thread

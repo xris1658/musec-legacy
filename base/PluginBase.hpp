@@ -6,6 +6,8 @@
 
 #include <pluginterfaces/base/ipluginbase.h>
 
+#include <vector>
+
 namespace Musec
 {
 namespace Base
@@ -73,9 +75,7 @@ enum PluginType
 
 PluginFormat pluginFormat(const QString& path);
 
-QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path);
-
-QStringList& defaultPluginDirectoryList();
+std::vector<PluginBasicInfo> scanSingleLibraryFile(const QString& path);
 }
 }
 

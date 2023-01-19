@@ -81,6 +81,8 @@ QString errorMessageFromErrorCode(ErrorCodeType errorCode);
 QString getProductVersion(const QString& path);
 
 void sleepFor(std::chrono::steady_clock::duration duration);
+
+std::vector<QString>& defaultPluginDirectoryList();
 }
 }
 

@@ -37,12 +37,14 @@ PluginFormat pluginFormat(const QString& path)
     return PluginFormat::FormatNotAPlugin;
 }
 
-QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
+std::vector<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
 {
     using namespace Musec::Base;
     using namespace Musec::Native;
-    QList<PluginBasicInfo> ret;
+    std::vector<PluginBasicInfo> ret;
     auto format = pluginFormat(path);
+    // Some plugins might leak
+    // TODO: Scan plugins with a separate program to prevent memory leak in the main application
     if(format == PluginFormat::FormatVST3)
     {
         try
@@ -58,6 +60,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
             )
             {
                 auto classCount = factory2->countClasses();
+                ret.reserve(classCount);
                 Steinberg::PClassInfo2 classInfo2;
                 for(decltype(classCount) i = 0; i < classCount; ++i)
                 {
@@ -89,7 +92,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                             if(std::strcmp(strings[j], Steinberg::Vst::PlugType::kFx) == 0)
                             {
                                 pluginType = PluginType::TypeAudioFX;
-                                ret.append(
+                                ret.emplace_back(
                                     std::make_tuple(
                                         uid,
                                         QString(classInfo2.name),
@@ -101,7 +104,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                             else if(std::strcmp(strings[j], Steinberg::Vst::PlugType::kInstrument) == 0)
                             {
                                 pluginType = PluginType::TypeInstrument;
-                                ret.append(
+                                ret.emplace_back(
                                     std::make_tuple(
                                         uid,
                                         QString(classInfo2.name),
@@ -180,7 +183,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                             {
                                 pluginType = PluginType::TypeMidiFX;
                             }
-                            ret.append(
+                            ret.emplace_back(
                                 std::make_tuple(
                                     uid,
                                     QString(classInfo2.name),
@@ -188,6 +191,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                                     pluginType
                                 )
                             );
+                            plugin.uninitialize();
                         }
                     }
                 }
@@ -197,6 +201,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
             else
             {
                 auto classCount = factory->countClasses();
+                ret.reserve(classCount);
                 Steinberg::PClassInfo classInfo;
                 for(decltype(classCount) i = 0; i < classCount; ++i)
                 {
@@ -204,7 +209,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                     if(std::strcmp(classInfo.category, kVstAudioEffectClass) == 0)
                     {
                         std::memcpy(uid.data(), classInfo.cid, 16);
-                        ret.append(
+                        ret.emplace_back(
                             std::make_tuple(
                                 uid,
                                 QString(classInfo.name),
@@ -238,7 +243,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                     auto feature = features[j];
                     if(std::strcmp(feature, CLAP_PLUGIN_FEATURE_INSTRUMENT) == 0)
                     {
-                        ret.append(
+                        ret.emplace_back(
                             std::make_tuple(
                                 uid,
                                 QString(desc->name),
@@ -250,7 +255,7 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                     else if(std::strcmp(feature, CLAP_PLUGIN_FEATURE_AUDIO_EFFECT) == 0
                          || std::strcmp(feature, CLAP_PLUGIN_FEATURE_NOTE_EFFECT) == 0)
                     {
-                        ret.append(
+                        ret.emplace_back(
                             std::make_tuple(
                                 uid,
                                 QString(desc->name),
@@ -263,27 +268,6 @@ QList<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
             }
         }
         catch (...) {}
-    }
-    return ret;
-}
-
-QStringList& defaultPluginDirectoryList()
-{
-    static QStringList ret;
-    ret.reserve(3);
-    auto programFilesPath = Musec::Native::programFilesFolder();
-    if(!programFilesPath.isEmpty())
-    {
-        // VST3
-        ret << QString(programFilesPath).append("\\Common Files\\VST3")
-        // CLAP
-            << QString(programFilesPath).append("\\Common Files\\CLAP");
-    }
-    auto localAppDataPath = Musec::Native::localAppDataFolder();
-    if(!localAppDataPath.isEmpty())
-    {
-        // CLAP
-        ret << QString(localAppDataPath).append("\\Programs\\Common\\CLAP");
     }
     return ret;
 }
