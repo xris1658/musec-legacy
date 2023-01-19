@@ -140,8 +140,6 @@ set(PROJECT_SOURCES
     base/PluginBase.cpp
     base/PluginBase.hpp
     base/QmlBase.hpp
-    concurrent/ButlerThread.cpp
-    concurrent/ButlerThread.hpp
     concurrent/ThreadPool.cpp
     concurrent/ThreadPool.hpp
     controller/ASIODriverController.cpp
@@ -174,6 +172,8 @@ set(PROJECT_SOURCES
     dao/DatabaseDAO.hpp
     dao/LoggingDAO.cpp
     dao/LoggingDAO.hpp
+    dao/PluginCacheDAO.cpp
+    dao/PluginCacheDAO.hpp
     dao/PluginDAO.cpp
     dao/PluginDAO.hpp
     dao/PluginDirectoryDAO.cpp

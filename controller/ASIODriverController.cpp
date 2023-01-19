@@ -2,7 +2,6 @@
 
 #include "audio/driver/ASIODriver.hpp"
 #include "audio/driver/ASIOErrorText.hpp"
-#include "concurrent/ButlerThread.hpp"
 #include "controller/AppController.hpp"
 #include "controller/AudioEngineController.hpp"
 #include "controller/ConfigController.hpp"
@@ -52,7 +51,6 @@ bool loadASIODriver()
     using namespace Musec::Audio::Driver;
     using namespace Musec::UI;
     auto& driver = AppASIODriver();
-    Musec::Concurrent::ButlerThread::instance();
     inputChannelInfoList().setList(nullptr, 0);
     outputChannelInfoList().setList(nullptr, 0);
     if(!driver)

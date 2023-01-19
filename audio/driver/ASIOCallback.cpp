@@ -2,8 +2,8 @@
 
 #include "audio/base/Constants.hpp"
 #include "audio/driver/ASIODriver.hpp"
-#include "concurrent/ButlerThread.hpp"
 #include "controller/AudioEngineController.hpp"
+#include "event/EventBase.hpp"
 #include "native/Native.hpp"
 #include "util/Endian.hpp"
 #include "util/Stopwatch.hpp"
@@ -449,7 +449,6 @@ long onASIOMessage(long selector,
                    void* message,
                    double* opt)
 {
-    using namespace Musec::Concurrent;
     long ret = 0;
     switch(selector)
     {
@@ -458,7 +457,7 @@ long onASIOMessage(long selector,
     case kAsioSupportsTimeInfo:
         return 1L;
     case kAsioResetRequest:
-        ButlerThread::instance().addTask(ButlerTaskType::ResetASIODriver);
+        Musec::Event::eventHandler->resetASIODriver();
         return 1L;
     default:
         return 1L;
