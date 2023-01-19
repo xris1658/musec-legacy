@@ -40,7 +40,6 @@ Rectangle {
         comboBoxSampleRate.model = comboBoxModel;
         comboBoxSampleRate.currentIndex = comboBoxModel.length - 1;
     }
-
     Grid {
         id: mainGrid
         columns: 2

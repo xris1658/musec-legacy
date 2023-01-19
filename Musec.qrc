@@ -3,7 +3,7 @@
         <file>qmlproject/AboutQtWindow.qml</file>
         <file>qmlproject/AboutWindow.qml</file>
         <file>qmlproject/ArrangementSettings.qml</file>
-        <file>qmlproject/AudioHardwareSelector.qml</file>
+        <file>qmlproject/ASIODriverSettings.qml</file>
         <file>qmlproject/EventBridge.qml</file>
         <file>qmlproject/GeneralSettings.qml</file>
         <file>qmlproject/MixdownWindow.qml</file>

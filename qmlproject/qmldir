@@ -6,7 +6,7 @@ singleton Strings 1.0 Strings.qml
 AboutQtWindow 1.0 AboutQtWindow.qml
 AboutWindow 1.0 AboutWindow.qml
 ArrangementSettings 1.0 ArrangementSettings.qml
-AudioHardwareSelector 1.0 AudioHardwareSelector.qml
+ASIODriverSettings 1.0 ASIODriverSettings.qml
 GeneralSettings 1.0 GeneralSettings.qml
 MixdownWindow 1.0 MixdownWindow.qml
 OptionsWindow 1.0 OptionsWindow.qml

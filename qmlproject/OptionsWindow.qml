@@ -22,16 +22,16 @@ Window {
     property alias currentLanguage: generalSettings.currentLanguage
     property alias systemRender: generalSettings.systemRender
 
-    property alias driverList: audioHardwareSelector.driverListModel
+    property alias driverList: asioDriverSettings.driverListModel
     property alias pluginDirectoryList: pluginSettings.pluginPathListModel
-    property alias currentDriver: audioHardwareSelector.currentDriver
+    property alias currentDriver: asioDriverSettings.currentDriver
     property bool running: Objects.mainWindow.engineRunning
-    property alias bufferSize: audioHardwareSelector.bufferSize
-    property alias inputLatencyInSamples: audioHardwareSelector.inputLatencyInSamples
-    property alias outputLatencyInSamples: audioHardwareSelector.outputLatencyInSamples
-    property alias sampleRate: audioHardwareSelector.sampleRate
-    property alias inputList: audioHardwareSelector.inputList
-    property alias outputList: audioHardwareSelector.outputList
+    property alias bufferSize: asioDriverSettings.bufferSize
+    property alias inputLatencyInSamples: asioDriverSettings.inputLatencyInSamples
+    property alias outputLatencyInSamples: asioDriverSettings.outputLatencyInSamples
+    property alias sampleRate: asioDriverSettings.sampleRate
+    property alias inputList: asioDriverSettings.inputList
+    property alias outputList: asioDriverSettings.outputList
 
     MCtrl.SplitView {
         orientation: Qt.Horizontal
@@ -107,8 +107,8 @@ Window {
                             EventBridge.systemTextRenderingChanged(systemRender);
                         }
                     }
-                    AudioHardwareSelector {
-                        id: audioHardwareSelector
+                    ASIODriverSettings {
+                        id: asioDriverSettings
                         running: root.running
                         onDriverASIOSelectionChanged: (currentSelectionValue) => {
                             EventBridge.driverASIOSelectionChanged(currentSelectionValue);
