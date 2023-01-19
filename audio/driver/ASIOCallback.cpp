@@ -437,6 +437,7 @@ ASIOTime* onASIOBufferSwitchTimeInfo(ASIOTime* params,
         onASIOBufferSwitchAndUpdateTime(doubleBufferIndex, directProcess);
         return params;
     }
+    return nullptr;
 }
 
 void onASIOSampleRateDidChange(ASIOSampleRate sRate)
