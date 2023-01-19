@@ -14,8 +14,8 @@ Rectangle {
     height: 500
     clip: true
     color: Constants.backgroundColor
-    property int firstColumnWidth: 125
-    property int secondColumnWidth: 100
+    property int firstColumnWidth: 100
+    property int secondColumnWidth: 320
 
     signal languageSelectionChanged(currentLanguage: string)
 
@@ -41,7 +41,7 @@ Rectangle {
         }
         Text {
             width: firstColumnWidth
-            text: qsTr("Language")
+            text: qsTr("Language") + ": "
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -60,7 +60,7 @@ Rectangle {
         Text {
             width: firstColumnWidth
             height: 20
-            text: qsTr("Appearance")
+            text: qsTr("Appearance & Interactions")
             font.family: Constants.font
             color: Constants.contentColor2
             horizontalAlignment: Text.AlignLeft
@@ -73,7 +73,7 @@ Rectangle {
         }
         Text {
             width: firstColumnWidth
-            text: qsTr("Color")
+            text: qsTr("Color") + ": "
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight
@@ -87,7 +87,7 @@ Rectangle {
         }
         Text {
             width: firstColumnWidth
-            text: qsTr("Zoom")
+            text: qsTr("Zoom") + ": "
             font.family: Constants.font
             color: Constants.contentColor1
             horizontalAlignment: Text.AlignRight

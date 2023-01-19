@@ -15,8 +15,8 @@ Rectangle {
     height: 500
     clip: true
     color: Constants.backgroundColor
-    property int firstColumnWidth: 125
-    property int secondColumnWidth: 275
+    property int firstColumnWidth: 100
+    property int secondColumnWidth: 320
     property bool scanning: false
 
     Grid {
@@ -26,7 +26,7 @@ Rectangle {
         verticalItemAlignment: Grid.AlignVCenter
         horizontalItemAlignment: Grid.AlignLeft
         Text {
-            width: 100
+            width: firstColumnWidth
             height: 20
             text: qsTr("Plugin List")
             font.family: Constants.font
@@ -36,7 +36,7 @@ Rectangle {
             verticalAlignment: Text.AlignVCenter
         }
         Item {
-            width: 320
+            width: secondColumnWidth
             height: 20
         }
         Text {
@@ -93,17 +93,14 @@ Rectangle {
         Item {
             width: root.secondColumnWidth
             height: 20
-            Grid {
+            Row {
                 id: buttonPathOperationGrid
-                rows: 1
                 spacing: 5
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                horizontalItemAlignment: Grid.AlignRight
-                verticalItemAlignment: Grid.AlignVCenter
+                anchors.left: parent.left
                 MCtrl.Button {
                     id: buttonAddPath
                     text: qsTr("&Add...")
+                    enabled: !scanning
                     width: 80
                     height: 20
                     font.family: Constants.font
@@ -128,13 +125,8 @@ Rectangle {
                     width: 80
                     height: 20
                     font.family: Constants.font
-                    enabled: pluginPathListModel.length
+                    enabled: pluginPathListModel.length && (!scanning)
                     onClicked: {
-//                        EventBridge.pluginDirectoryRemoved(
-//                            pluginPathListModel.itemAtIndex(
-//                                pluginPathListView.currentIndex
-//                            )
-//                        );
                         EventBridge.pluginDirectoryRemoved(
                             pluginPathListModel[pluginPathListView.currentIndex]
                         );
@@ -144,33 +136,16 @@ Rectangle {
                     }
                 }
             }
-        }
-        Item {
-            width: root.firstColumnWidth
-            height: 20
-        }
-        Item {
-            width: root.secondColumnWidth
-            height: 20
-            Grid {
-                id: scanPluginGrid
-                rows: 1
-                spacing: 5
+            MCtrl.Button {
+                id: buttonRescan
                 anchors.right: parent.right
-                anchors.top: parent.top
-                horizontalItemAlignment: Grid.AlignRight
-                verticalItemAlignment: Grid.AlignTop
-                MCtrl.Button {
-                    id: buttonRescan
-                    text: scanning? qsTr("Scanning..."): qsTr("&Scan Plugins")
-                    width: buttonPathOperationGrid.width
-                    height: 20
-                    font.family: Constants.font
-                    enabled: !scanning
-                    onClicked: {
-                        scanning = true;
-                        EventBridge.scanPluginButtonClicked();
-                    }
+                text: scanning? qsTr("Scanning..."): qsTr("&Scan Plugins")
+                height: 20
+                font.family: Constants.font
+                enabled: !scanning
+                onClicked: {
+                    scanning = true;
+                    EventBridge.scanPluginButtonClicked();
                 }
             }
         }

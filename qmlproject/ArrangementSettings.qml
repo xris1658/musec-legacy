@@ -10,8 +10,8 @@ Rectangle {
     height: 500
     clip: true
     color: Constants.backgroundColor
-    property int firstColumnWidth: 125
-    property int secondColumnWidth: 100
+    property int firstColumnWidth: 100
+    property int secondColumnWidth: 320
     Grid {
         columns: 2
         columnSpacing: 10
