@@ -458,6 +458,7 @@ long onASIOMessage(long selector,
     case kAsioSupportsTimeInfo:
         return 1L;
     case kAsioResetRequest:
+    case kAsioBufferSizeChange:
         Musec::Event::eventHandler->resetASIODriver();
         return 1L;
     default:
