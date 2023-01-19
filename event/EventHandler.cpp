@@ -72,10 +72,13 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
     QObject::connect(this, &EventHandler::resetASIODriver,
                      this, &EventHandler::onResetASIODriver,
                      Qt::ConnectionType::QueuedConnection);
+    QObject::connect(this, &EventHandler::backendScanPluginComplete,
+                     this, &EventHandler::scanPluginComplete,
+                     Qt::ConnectionType::QueuedConnection);
     // (this) C++ -> C++ (other)
     QObject::connect(this,             &EventHandler::updatePluginList,
                      mainWindowEvents, &MainWindowEvent::updatePluginList);
-    QObject::connect(this,             &EventHandler::signalScanPluginComplete,
+    QObject::connect(this,             &EventHandler::notifyScanPluginComplete,
                      mainWindowEvents, &MainWindowEvent::updatePluginList);
     QObject::connect(this,             &EventHandler::updateASIODriverList,
                      mainWindowEvents, &MainWindowEvent::updateASIODriverList);
@@ -148,7 +151,7 @@ void EventHandler::scanPluginComplete()
         QVariant::fromValue<QObject*>(&Musec::Controller::AppAudioEffectList())
     );
     updatePluginList();
-    signalScanPluginComplete();
+    notifyScanPluginComplete();
 }
 
 void EventHandler::onMainWindowOpened()
@@ -451,7 +454,7 @@ void EventHandler::connectToMainWindow()
 void EventHandler::connectToOptionsWindow()
 {
     using namespace Musec::UI;
-    QObject::connect(this,          SIGNAL(signalScanPluginComplete()),
+    QObject::connect(this,          SIGNAL(notifyScanPluginComplete()),
                      optionsWindow, SIGNAL(scanPluginComplete()));
 }
 }

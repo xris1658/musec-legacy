@@ -24,7 +24,8 @@ public:
     void scanPluginComplete();
 signals:
     void setStatusText(const QString& newText);
-    void signalScanPluginComplete();
+    void backendScanPluginComplete();
+    void notifyScanPluginComplete();
     void setSystemTextRenderingComplete();
     void updatePluginList();
     void updateASIODriverList();

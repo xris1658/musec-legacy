@@ -215,8 +215,7 @@ void refreshPluginList(bool rescan)
             Musec::Controller::PluginSettingsController::scanPlugins();
             // auto list = Musec::Controller::getAllPlugins();
             setPluginLists();
-            // FIXME: Run this on main thread
-            eventHandler->scanPluginComplete();
+            eventHandler->backendScanPluginComplete();
         };
         // scan plugins on a new thread
         // scanPluginLambda will be copied.
