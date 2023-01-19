@@ -10,9 +10,6 @@ QtObject {
     property QtObject myFontBold: QtObject { property string name: "Noto Sans CJK SC Bold" }
     property QtObject myMonoFont: QtObject { property string name: "Noto Sans Mono Condensed" }
 
-    property alias fontDirectory: directoryFontLoader.fontDirectory
-    property alias relativeFontDirectory: directoryFontLoader.relativeFontDirectory
-
     readonly property string font: myFont.name
     // General
     readonly property color backgroundColor:       "#333333"
@@ -296,9 +293,5 @@ QtObject {
 
     function contentColorOnBackground(color: color) {
         return color.r * 0.299 + color.g * 0.587 + color.b * 0.514 > 0.6? "#000000": "#FFFFFF"
-    }
-
-    property DirectoryFontLoader directoryFontLoader: DirectoryFontLoader {
-        id: directoryFontLoader
     }
 }
