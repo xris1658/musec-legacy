@@ -296,9 +296,6 @@ set(MUSECCONTROLSTEST_SOURCES
 set(VST3PLUGINTEST_SOURCES
     test/VST3PluginTestWithQt/main.cpp)
 
-set(SCANSINGLEPLUGINTEST_SOURCES
-    test/ScanSinglePluginTest/main.cpp)
-
 add_executable(Musec main.cpp ${PROJECT_SOURCES} ${RESOURCE_FILE} ${QT_RESOURCES})
 
 target_precompile_headers(Musec PRIVATE ${PROJECT_PCH})
@@ -308,8 +305,6 @@ add_executable(AutomationTest ${QT_RESOURCES} ${AUTOMATIONTEST_SOURCES})
 add_executable(MusecControlsTest ${QT_RESOURCES} ${MUSECCONTROLSTEST_SOURCES})
 
 add_executable(VST3PluginTestWithQt ${PROJECT_SOURCES} ${TEST_COMMON_SOURCES} ${VST3PLUGINTEST_SOURCES})
-
-add_executable(ScanSinglePluginTest ${PROJECT_SOURCES} ${SCANSINGLEPLUGINTEST_SOURCES})
 
 target_compile_definitions(Musec
                            PRIVATE
@@ -341,18 +336,6 @@ target_link_libraries(MusecControlsTest
                       Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets)
 
 target_link_libraries(VST3PluginTestWithQt
-                      Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets
-                      version
-                      windowsapp
-                      base pluginterfaces sdk_common sdk_hosting
-                      unofficial::sqlite3::sqlite3
-                      yaml-cpp
-                      fmt::fmt
-                      spdlog::spdlog
-                      avcpp::FFmpeg
-                      avcpp::avcpp-static)
-
-target_link_libraries(ScanSinglePluginTest
                       Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Qml Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Widgets
                       version
                       windowsapp
