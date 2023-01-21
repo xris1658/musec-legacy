@@ -91,6 +91,13 @@ class VST3Plugin:
     using SampleType = float;
     using Base = Musec::Native::Library;
     using SampleTypePointers = std::vector<SampleType*>;
+public:
+// VST3 plugin initialization entry
+    using PluginInitProc = bool(*)();
+// VST3 plugin factory entry (GetPluginFactory)
+    using PluginFactoryProc = Steinberg::IPluginFactory*(*)();
+// VST3 plugin uninitialization entry
+    using PluginExitProc = bool(*)();
 public: // ctor & dtor
     VST3Plugin();
     VST3Plugin(const QString& path);

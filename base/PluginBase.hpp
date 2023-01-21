@@ -21,15 +21,6 @@ using PluginWriteInfo = std::tuple<QString, std::vector<char>, QString, int, int
 // ID, path, UID, name, format, type
 using PluginReadInfo = std::tuple<int, QString, std::vector<char>, QString, int, int>;
 
-// VST3 plugin initialization entry
-using VST3PluginInitProc = bool(*)();
-
-// VST3 plugin factory entry (GetPluginFactory)
-using VST3PluginFactoryProc = Steinberg::IPluginFactory*(*)();
-
-// VST3 plugin uninitialization entry
-using VST3PluginExitProc = bool(*)();
-
 enum PluginBasicInfoField
 {
     BasicFieldUid = 0,
