@@ -116,7 +116,6 @@ HEADERS += \
     base/PluginBase.hpp \
     base/PluginCacheBase.hpp \
     base/QmlBase.hpp \
-    concurrent/ButlerThread.hpp \
     concurrent/ThreadPool.hpp \
     controller/AppController.hpp \
     controller/ASIODriverController.hpp \
@@ -221,7 +220,6 @@ SOURCES += \
     base/Color.cpp \
     base/FixedSizeMemoryPool.cpp \
     base/PluginBase.cpp \
-    concurrent/ButlerThread.cpp \
     concurrent/ThreadPool.cpp \
     controller/AppController.cpp \
     controller/ASIODriverController.cpp \
