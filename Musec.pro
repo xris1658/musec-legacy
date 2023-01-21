@@ -114,6 +114,7 @@ HEADERS += \
     base/FixedSizeMemoryPool.hpp \
     base/FolderBase.hpp \
     base/PluginBase.hpp \
+    base/PluginCacheBase.hpp \
     base/QmlBase.hpp \
     concurrent/ButlerThread.hpp \
     concurrent/ThreadPool.hpp \
@@ -132,6 +133,7 @@ HEADERS += \
     dao/ConfigDAO.hpp \
     dao/DatabaseDAO.hpp \
     dao/LoggingDAO.hpp \
+    dao/PluginCacheDAO.hpp \
     dao/PluginDAO.hpp \
     dao/PluginDirectoryDAO.hpp \
     entities/CompleteTrack.hpp \
@@ -236,6 +238,7 @@ SOURCES += \
     dao/ConfigDAO.cpp \
     dao/DatabaseDAO.cpp \
     dao/LoggingDAO.cpp \
+    dao/PluginCacheDAO.cpp \
     dao/PluginDAO.cpp \
     dao/PluginDirectoryDAO.cpp \
     entities/CompleteTrack.cpp \

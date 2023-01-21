@@ -1,6 +1,7 @@
 #include "DatabaseDAO.hpp"
 
 #include "dao/AssetDirectoryDAO.hpp"
+#include "dao/PluginCacheDAO.hpp"
 #include "dao/PluginDAO.hpp"
 #include "dao/PluginDirectoryDAO.hpp"
 #include "native/Native.hpp"
@@ -35,5 +36,6 @@ void initDatabase()
     createPluginDirectoryTable();
     createPluginTable();
     createAssetDirectoryTable();
+    createPluginCacheTable();
 }
 }
