@@ -229,6 +229,16 @@ std::vector<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
         {
             Musec::Audio::Plugin::CLAPPlugin plugin(path);
             const auto factory = plugin.factory();
+            const auto invalidationFactory = plugin.invalidationFactory();
+            if(invalidationFactory)
+            {
+                auto invalidationCount = invalidationFactory->count(invalidationFactory);
+                for(decltype(invalidationCount) i = 0; i < invalidationCount; ++i)
+                {
+                    auto invalidationSource = invalidationFactory->get(invalidationFactory, i);
+                    // TODO: Do something with invalidationSource
+                }
+            }
             auto count = factory->get_plugin_count(factory);
             for(decltype(count) i = 0; i < count; ++i)
             {
@@ -246,21 +256,32 @@ std::vector<PluginBasicInfo> scanSingleLibraryFile(const QString& path)
                         ret.emplace_back(
                             std::make_tuple(
                                 uid,
-                                QString(desc->name),
+                                QString(name),
                                 PluginFormat::FormatCLAP,
                                 PluginType::TypeInstrument
                             )
                         );
                     }
-                    else if(std::strcmp(feature, CLAP_PLUGIN_FEATURE_AUDIO_EFFECT) == 0
-                         || std::strcmp(feature, CLAP_PLUGIN_FEATURE_NOTE_EFFECT) == 0)
+                    if(std::strcmp(feature, CLAP_PLUGIN_FEATURE_AUDIO_EFFECT) == 0
+                    || std::strcmp(feature, CLAP_PLUGIN_FEATURE_ANALYZER) == 0)
                     {
                         ret.emplace_back(
                             std::make_tuple(
                                 uid,
-                                QString(desc->name),
+                                QString(name),
                                 PluginFormat::FormatCLAP,
                                 PluginType::TypeAudioFX
+                            )
+                        );
+                    }
+                    if(std::strcmp(feature, CLAP_PLUGIN_FEATURE_NOTE_EFFECT) == 0)
+                    {
+                        ret.emplace_back(
+                            std::make_tuple(
+                                uid,
+                                QString(name),
+                                PluginFormat::FormatCLAP,
+                                PluginType::TypeMidiFX
                             )
                         );
                     }
