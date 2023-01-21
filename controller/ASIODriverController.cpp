@@ -2,6 +2,7 @@
 
 #include "audio/driver/ASIODriver.hpp"
 #include "audio/driver/ASIOErrorText.hpp"
+#include "concurrent/ThreadId.hpp"
 #include "controller/AppController.hpp"
 #include "controller/AudioEngineController.hpp"
 #include "controller/ConfigController.hpp"
@@ -165,6 +166,7 @@ void unloadASIODriver()
 {
     using namespace Musec::UI;
     using namespace Audio::Driver;
+    assert(std::this_thread::get_id() == Musec::Concurrent::mainThreadId());
     mainWindow->setProperty("engineRunning", QVariant::fromValue<bool>(false));
     AppASIODriver() = ASIODriver();
     inputChannelInfoList().setList(nullptr, 0);
@@ -197,6 +199,7 @@ bool updateCurrentASIODriverInfo()
     outputChannelInfoList().setList(channelInfoList.data() + inputCount, outputCount);
     if(optionsWindow)
     {
+        assert(std::this_thread::get_id() == Musec::Concurrent::mainThreadId());
         optionsWindow->setProperty("bufferSize",
             QVariant::fromValue<int>(preferredSize));
         optionsWindow->setProperty("inputLatencyInSamples",
@@ -238,6 +241,7 @@ bool startASIODriver()
 {
     using namespace Musec::Audio::Driver;
     using namespace Musec::UI;
+    assert(std::this_thread::get_id() == Musec::Concurrent::mainThreadId());
     auto& driver = AppASIODriver();
     Musec::Audio::Driver::driverSupportsOutputReady = (driver->outputReady() == ASE_OK);
     auto startResult = driver->start();

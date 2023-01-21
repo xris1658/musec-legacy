@@ -1,6 +1,7 @@
 #include "MainWindowEvent.hpp"
 
 #include "audio/driver/ASIODriver.hpp"
+#include "concurrent/ThreadId.hpp"
 #include "controller/ASIODriverController.hpp"
 #include "controller/AppController.hpp"
 #include "controller/AudioEngineController.hpp"
@@ -25,6 +26,7 @@ void MainWindowEvent::openMainWindow()
 {
     using namespace Musec::UI;
     using namespace Musec::Event;
+    assert(std::this_thread::get_id() == Musec::Concurrent::mainThreadId());
     Musec::Controller::AudioEngineController::initializeFacility();
     engine->load(QUrl("qrc:///qmlproject/Musec.qml"));
     mainWindow = qobject_cast<QQuickWindow*>(engine->rootObjects()[1]);
@@ -61,6 +63,7 @@ void MainWindowEvent::openMainWindow()
 void MainWindowEvent::updateAssetDirectoryList()
 {
     using namespace Musec::UI;
+    assert(std::this_thread::get_id() == Musec::Concurrent::mainThreadId());
     std::remove_reference_t<decltype(Musec::Controller::AppAssetDirectoryList())> list;
     mainWindow->setProperty("assetDirectoryList", QVariant::fromValue<QObject*>(&list));
     mainWindow->setProperty(
@@ -71,6 +74,7 @@ void MainWindowEvent::updateAssetDirectoryList()
 void MainWindowEvent::updateASIODriverList()
 {
     using namespace Musec::UI;
+    assert(std::this_thread::get_id() == Musec::Concurrent::mainThreadId());
     std::remove_reference_t<decltype(Musec::Controller::AppASIODriverList())> list;
     mainWindow->setProperty("driverList", QVariant::fromValue<QObject*>(&list));
     auto& driverList = Musec::Controller::AppASIODriverList();
@@ -97,6 +101,7 @@ void MainWindowEvent::updateASIODriverList()
 void MainWindowEvent::updatePluginList()
 {
     using namespace Musec::UI;
+    assert(std::this_thread::get_id() == Musec::Concurrent::mainThreadId());
     mainWindow->setProperty(
         "pluginList",
         QVariant::fromValue<QObject*>(&Musec::Controller::AppPluginList())

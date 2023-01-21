@@ -2,6 +2,8 @@
 #define MUSEC_EVENT_EVENTHANDLER
 
 #include "entities/CompleteTrack.hpp"
+#include "model/FileListModel.hpp"
+#include "model/FolderListModel.hpp"
 
 #include <QObject>
 #include <QQuickItem>
@@ -41,6 +43,7 @@ signals:
     void setLanguageComplete();
     void setRealtimeTimerInterval(int intervalInMilliseconds);
     void resetASIODriver();
+    void backendRequestExplorerViewComplete();
 public slots:
     void onMainWindowOpened();
     void onOptionsWindowOpened();
@@ -70,11 +73,15 @@ public slots:
     void onLanguageSelectionChanged(const QString& language);
     void onUpdateCPUMeter();
     void onResetASIODriver();
+    void onBackendRequestExplorerViewComplete();
 public:
     void connectToMainWindow();
     void connectToOptionsWindow();
 private:
-    std::vector<QMetaObject::Connection> optionsWindowConnection;
+    std::vector<QMetaObject::Connection> optionsWindowConnection_;
+    QObject* explorerView_;
+    Musec::Model::FolderListModel* folderListModel_;
+    Musec::Model::FileListModel* fileListModel_;
 };
 }
 }

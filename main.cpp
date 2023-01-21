@@ -1,3 +1,4 @@
+#include "concurrent/ThreadId.hpp"
 #include "controller/AppController.hpp"
 #include "controller/ConfigController.hpp"
 #include "entities/EntitiesInitializer.hpp"
@@ -44,6 +45,9 @@ int main(int argc, char* argv[]) try
     QTextCodec* codec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForLocale(codec);
     QFontDatabase fontDB;
+#endif
+#ifndef NDEBUG
+    Musec::Concurrent::setMainThreadId(std::this_thread::get_id());
 #endif
     FontUtility::loadFonts();
     Musec::Entities::EntitiesInitializer::initialize();

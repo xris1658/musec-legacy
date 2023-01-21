@@ -2,6 +2,7 @@
 
 #include "audio/driver/ASIOCallback.hpp"
 #include "audio/driver/ASIODriver.hpp"
+#include "concurrent/ThreadId.hpp"
 #include "controller/ASIODriverController.hpp"
 #include "controller/AppController.hpp"
 #include "controller/AssetController.hpp"
@@ -75,6 +76,9 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
     QObject::connect(this, &EventHandler::backendScanPluginComplete,
                      this, &EventHandler::scanPluginComplete,
                      Qt::ConnectionType::QueuedConnection);
+    QObject::connect(this, &EventHandler::backendRequestExplorerViewComplete,
+                     this, &EventHandler::onBackendRequestExplorerViewComplete,
+                     Qt::ConnectionType::QueuedConnection);
     // (this) C++ -> C++ (other)
     QObject::connect(this,             &EventHandler::updatePluginList,
                      mainWindowEvents, &MainWindowEvent::updatePluginList);
@@ -116,7 +120,7 @@ EventHandler::EventHandler(QObject* eventBridge, QObject* parent): QObject(paren
     QObject::connect(this,          SIGNAL(setRealtimeTimerInterval(int)),
                      eventBridge,   SIGNAL(setRealtimeTimerInterval(int)));
 
-    optionsWindowConnection.reserve(5); // number of connections added in onOptionsWindowOpened()
+    optionsWindowConnection_.reserve(5); // number of connections added in onOptionsWindowOpened()
 }
 
 EventHandler::~EventHandler()
@@ -134,6 +138,7 @@ void EventHandler::scanPluginComplete()
 {
     using namespace Musec::UI;
     using namespace Musec::Event;
+    assert(std::this_thread::get_id() == Musec::Concurrent::mainThreadId());
     mainWindow->setProperty("pluginList",
         QVariant::fromValue<QObject*>(&Musec::Controller::AppPluginList())
     );
@@ -165,6 +170,7 @@ void EventHandler::onOptionsWindowOpened()
     using namespace Musec::Audio::Driver;
     using namespace Musec::UI;
     using namespace Musec::Event;
+    assert(std::this_thread::get_id() == Musec::Concurrent::mainThreadId());
     auto& translationList = Musec::Controller::AppTranslationFileList();
     auto currentLanguage = QString::fromStdString(
         Musec::Controller::ConfigController::appConfig()
@@ -221,33 +227,33 @@ void EventHandler::onOptionsWindowOpened()
     mainWindow->setProperty("currentDriver",
         QVariant::fromValue<int>(driverCurrentIndex)
     );
-    if(optionsWindowConnection.empty())
+    if(optionsWindowConnection_.empty())
     {
-        optionsWindowConnection.emplace_back(
+        optionsWindowConnection_.emplace_back(
             QObject::connect(
                 eventBridge, SIGNAL(driverASIOSelectionChanged(QString)),
                 this,        SLOT(onDriverASIOSelectionChanged(QString))
             )
         );
-        optionsWindowConnection.emplace_back(
+        optionsWindowConnection_.emplace_back(
             QObject::connect(
                 eventBridge, SIGNAL(sampleRateChanged(int)),
                 this,        SLOT(onSampleRateChanged(int))
             )
         );
-        optionsWindowConnection.emplace_back(
+        optionsWindowConnection_.emplace_back(
             QObject::connect(
                 eventBridge, SIGNAL(systemTextRenderingChanged(bool)),
                 this,        SLOT(onSystemTextRenderingChanged(bool))
             )
         );
-        optionsWindowConnection.emplace_back(
+        optionsWindowConnection_.emplace_back(
             QObject::connect(
                 eventBridge, SIGNAL(scanShortcutChanged(bool)),
                 this,        SLOT(onScanShortcutChanged(bool))
             )
         );
-        optionsWindowConnection.emplace_back(
+        optionsWindowConnection_.emplace_back(
             QObject::connect(
                 eventBridge, SIGNAL(languageSelectionChanged(QString)),
                 this,        SLOT(onLanguageSelectionChanged(QString))
@@ -258,11 +264,11 @@ void EventHandler::onOptionsWindowOpened()
 
 void EventHandler::onOptionsWindowClosed()
 {
-    for(auto& connection: optionsWindowConnection)
+    for(auto& connection: optionsWindowConnection_)
     {
         QObject::disconnect(connection);
     }
-    optionsWindowConnection.clear();
+    optionsWindowConnection_.clear();
 }
 
 void EventHandler::onPluginDirectoryAdded(const QString& directory)
@@ -274,6 +280,7 @@ void EventHandler::onScanPluginButtonClicked()
 {
     using namespace Musec::UI;
     using namespace Musec::Event;
+    assert(std::this_thread::get_id() == Musec::Concurrent::mainThreadId());
     constexpr char typeListNames[][16] = {"midiEffectList", "instrumentList", "audioEffectList"};
     auto empty = Musec::Model::PluginListModel();
     mainWindow->setProperty(
@@ -371,24 +378,22 @@ void EventHandler::onPlayStop()
 void EventHandler::onRequestExplorerView()
 {
     using namespace Musec::UI;
-    auto explorerView = mainWindow->property("explorerViewOnRequest").value<QObject*>();
-    if(!explorerView)
+    explorerView_ = mainWindow->property("explorerViewOnRequest").value<QObject*>();
+    if(!explorerView_)
     {
         return;
     }
-    auto newFolderListModel = new Musec::Model::FolderListModel(explorerView);
-    auto newFileListModel = new Musec::Model::FileListModel(explorerView);
-    auto setList = [this, &explorerView, &newFileListModel, &newFolderListModel]()
+    folderListModel_ = new Musec::Model::FolderListModel(explorerView_);
+    fileListModel_ = new Musec::Model::FileListModel(explorerView_);
+    auto setList = [this]()
     {
         using namespace Musec::UI;
-        auto path = explorerView->property("path").value<QString>();
+        auto path = explorerView_->property("path").value<QString>();
         auto folderList = Musec::Controller::AssetController::getFolderInDirectory(path);
         auto fileList = Musec::Controller::AssetController::getFileInDirectory(path);
-        newFolderListModel->setList(folderList);
-        newFileListModel->setList(fileList);
-        explorerView->setProperty("expandableItemList", QVariant::fromValue(newFolderListModel));
-        explorerView->setProperty("nonExpandableItemList", QVariant::fromValue(newFileListModel));
-        requestExplorerViewComplete();
+        folderListModel_->setList(folderList);
+        fileListModel_->setList(fileList);
+        eventHandler->backendRequestExplorerViewComplete();
     };
     std::async(std::launch::async, setList);
 }
@@ -440,6 +445,14 @@ void EventHandler::onUpdateCPUMeter()
 void EventHandler::onResetASIODriver()
 {
     Musec::Controller::ASIODriverController::resetASIODriver();
+}
+
+void EventHandler::onBackendRequestExplorerViewComplete()
+{
+    assert(std::this_thread::get_id() == Musec::Concurrent::mainThreadId());
+    explorerView_->setProperty("expandableItemList", QVariant::fromValue(folderListModel_));
+    explorerView_->setProperty("nonExpandableItemList", QVariant::fromValue(fileListModel_));
+    requestExplorerViewComplete();
 }
 
 void EventHandler::connectToMainWindow()

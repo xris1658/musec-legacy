@@ -1,7 +1,10 @@
 #include "PluginWindow.hpp"
 
+#include "concurrent/ThreadId.hpp"
 #include "event/EventBase.hpp"
 #include "model/PluginParameterListModel.hpp"
+
+#include <cassert>
 
 namespace Musec::UI
 {
@@ -29,6 +32,7 @@ void destroyPluginWindow(QWindow* window)
 {
     if(window)
     {
+        assert(std::this_thread::get_id() == Musec::Concurrent::mainThreadId());
         window->setProperty("destroyingPlugin", QVariant::fromValue(true));
         delete window;
     }
@@ -44,6 +48,7 @@ void createBasicPluginEditorComplete(QWindow* window)
 {
     if(auto plugin = pluginNeedsBasicPluginEditor)
     {
+        assert(std::this_thread::get_id() == Musec::Concurrent::mainThreadId());
         window->setProperty("pluginName", plugin->property("name"));
         window->setTitle(plugin->getName());
         window->setProperty("parameterListModel", QVariant::fromValue(new Musec::Model::PluginParameterListModel(plugin->plugin().get(), window)));
@@ -56,6 +61,7 @@ void destroyBasicPluginEditor(QWindow* window)
 {
     if(window)
     {
+        assert(std::this_thread::get_id() == Musec::Concurrent::mainThreadId());
         window->setProperty("destroyingPlugin", QVariant::fromValue(true));
         delete window;
     }

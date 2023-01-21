@@ -141,6 +141,8 @@ set(PROJECT_SOURCES
     base/PluginBase.hpp
     base/PluginCacheBase.hpp
     base/QmlBase.hpp
+    concurrent/ThreadId.cpp
+    concurrent/ThreadId.hpp
     concurrent/ThreadPool.cpp
     concurrent/ThreadPool.hpp
     controller/ASIODriverController.cpp
