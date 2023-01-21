@@ -34,6 +34,8 @@ CLAPPlugin::CLAPPlugin(const QString& path):
     {
         pluginStatus_ = CLAPPluginStatus::Factory;
     }
+    invalidationFactory_ = reinterpret_cast<const clap_plugin_invalidation_factory*>(
+        entry_->get_factory(CLAP_PLUGIN_INVALIDATION_FACTORY_ID));
 }
 
 bool CLAPPlugin::createPlugin(const char* id)
@@ -138,6 +140,11 @@ const clap_plugin* CLAPPlugin::plugin() const
 const clap_plugin_factory* CLAPPlugin::factory() const
 {
     return factory_;
+}
+
+const clap_plugin_invalidation_factory* CLAPPlugin::invalidationFactory() const
+{
+    return invalidationFactory_;
 }
 
 const clap_plugin_gui* CLAPPlugin::pluginGUI() const

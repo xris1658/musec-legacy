@@ -16,6 +16,7 @@
 #include <clap/entry.h>
 #include <clap/plugin.h>
 #include <clap/plugin-factory.h>
+#include <clap/plugin-invalidation.h>
 #include <clap/process.h>
 
 #include <clap/helpers/event-list.hh>
@@ -63,6 +64,7 @@ public:
 public:
     const clap_plugin* plugin() const;
     const clap_plugin_factory* factory() const;
+    const clap_plugin_invalidation_factory* invalidationFactory() const;
     const clap_plugin_gui* pluginGUI() const;
     const clap_plugin_params* pluginParams() const;
 public:
@@ -96,6 +98,7 @@ private:
     const clap_plugin_audio_ports* audioPorts_ = nullptr;
     const clap_plugin_entry* entry_ = nullptr;
     const clap_plugin_factory* factory_ = nullptr;
+    const clap_plugin_invalidation_factory* invalidationFactory_ = nullptr;
     const clap_plugin_gui* gui_ = nullptr;
     const clap_plugin_note_ports* notePorts_ = nullptr;
     const clap_plugin_params* params_ = nullptr;
