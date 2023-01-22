@@ -5,13 +5,15 @@
 #include "audio/driver/ASIODriverForward.hpp"
 #include "audio/driver/ASIODriverStreamInfo.hpp"
 
+#include <vector>
+
 namespace Musec
 {
 namespace Native
 {
 using namespace Musec::Audio::Driver;
 
-QList<Musec::Audio::Driver::ASIODriverBasicInfo> enumerateASIODriverInfo();
+std::vector<Musec::Audio::Driver::ASIODriverBasicInfo> enumerateASIODriverInfo();
 
 // ASIO driver pImpl class
 class ASIODriverImpl

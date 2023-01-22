@@ -54,7 +54,7 @@ ASIODriverListModel::List ASIODriverListModel::getList() const
 
 int ASIODriverListModel::itemCount() const
 {
-    return list_.count();
+    return list_.size();
 }
 
 constexpr int ASIODriverListModel::columnSize() noexcept

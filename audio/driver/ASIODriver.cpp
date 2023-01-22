@@ -58,7 +58,7 @@ ASIOChannelInfoList& getASIOChannelInfoList()
     return ret;
 }
 
-QList<ASIODriverBasicInfo> enumerateASIODriverInfo()
+std::vector<ASIODriverBasicInfo> enumerateASIODriverInfo()
 {
     return Musec::Native::enumerateASIODriverInfo();
 }

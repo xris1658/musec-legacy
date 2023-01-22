@@ -15,9 +15,9 @@ namespace Musec::Native
 {
 using namespace Musec::Audio::Driver;
 
-QList<Musec::Audio::Driver::ASIODriverBasicInfo> enumerateASIODriverInfo()
+std::vector<Musec::Audio::Driver::ASIODriverBasicInfo> enumerateASIODriverInfo()
 {
-    QList<Musec::Audio::Driver::ASIODriverBasicInfo> ret;
+    std::vector<Musec::Audio::Driver::ASIODriverBasicInfo> ret;
     constexpr auto driverNameSize = 256;
     std::array<wchar_t, driverNameSize> buffer = {0};
     HKEY hKey;
@@ -65,7 +65,7 @@ QList<Musec::Audio::Driver::ASIODriverBasicInfo> enumerateASIODriverInfo()
                         RRF_RT_REG_SZ, NULL, clsidBuffer.data(), &clsidBufferLength);
                     if(getValueResult == ERROR_SUCCESS && clsidBufferLength == clsidBuffer.size() * sizeof(wchar_t))
                     {
-                        ret.append(
+                        ret.emplace_back(
                             std::make_tuple(
                                 QString::fromWCharArray(buffer.data()),
                                 QString::fromWCharArray(clsidBuffer.data())

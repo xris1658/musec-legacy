@@ -5,7 +5,8 @@
 #include "model/ModelBase.hpp"
 
 #include <QAbstractListModel>
-#include <QList>
+
+#include <vector>
 
 namespace Musec
 {
@@ -17,7 +18,7 @@ class ASIODriverListModel: public QAbstractListModel
     Q_OBJECT
 public:
     using Item = ASIODriverBasicInfo;
-    using List = QList<ASIODriverBasicInfo>;
+    using List = std::vector<ASIODriverBasicInfo>;
 public:
     enum RoleNames
     {

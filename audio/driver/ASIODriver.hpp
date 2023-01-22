@@ -44,7 +44,7 @@ enum ASIODriverField
     CLSIDField
 };
 
-QList<ASIODriverBasicInfo> enumerateASIODriverInfo();
+std::vector<ASIODriverBasicInfo> enumerateASIODriverInfo();
 
 struct ASIOChannelCount
 {
