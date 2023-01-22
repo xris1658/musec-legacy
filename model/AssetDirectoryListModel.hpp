@@ -44,7 +44,6 @@ protected:
     virtual RoleNamesType roleNames() const override;
 private:
     QList<Item> list_;
-    RoleNamesType roleNames_;
 };
 }
 }

@@ -9,13 +9,6 @@ ASIOChannelInfoListModel::ASIOChannelInfoListModel(QObject* parent):
     channelInfoList_(nullptr),
     channelCount_(0)
 {
-    roleNames_.reserve(columnSize());
-    roleNames_[RoleNames::ChannelIndexRole] = "channelIndex";
-    roleNames_[RoleNames::IsActiveRole] = "isActive";
-    roleNames_[RoleNames::GroupRole] = "group";
-    roleNames_[RoleNames::SampleTypeRole] = "sampleType";
-    roleNames_[RoleNames::NameRole] = "name";
-    roleNames_[RoleNames::DisplayTextRole] = "displayText";
 }
 
 ASIOChannelInfoListModel::~ASIOChannelInfoListModel()
@@ -94,6 +87,15 @@ QVariant ASIOChannelInfoListModel::data(const QModelIndex& index, int role) cons
 
 RoleNamesType ASIOChannelInfoListModel::roleNames() const
 {
-    return roleNames_;
+    static const RoleNamesType ret =
+    {
+        std::make_pair(RoleNames::ChannelIndexRole, "channelIndex"),
+        std::make_pair(RoleNames::IsActiveRole, "isActive"),
+        std::make_pair(RoleNames::GroupRole, "group"),
+        std::make_pair(RoleNames::SampleTypeRole, "sampleType"),
+        std::make_pair(RoleNames::NameRole, "name"),
+        std::make_pair(RoleNames::DisplayTextRole, "displayText")
+    };
+    return ret;
 }
 }

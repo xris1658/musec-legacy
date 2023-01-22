@@ -34,20 +34,6 @@ TrackListModel::TrackListModel(QObject* parent):
     projectMasterTrackRef_(project_.masterTrackRef()),
     masterPluginSequences_()
 {
-    roleNames_.reserve(columnSize());
-    roleNames_[RoleNames::NameRole] = "trackname";
-    roleNames_[RoleNames::TypeRole] = "type";
-    roleNames_[RoleNames::ColorRole] = "trackcolor";
-    roleNames_[RoleNames::HeightRole] = "trackheight";
-    roleNames_[RoleNames::MuteRole] = "mute";
-    roleNames_[RoleNames::SoloRole] = "solo";
-    roleNames_[RoleNames::InvertPhaseRole] = "invertPhase";
-    roleNames_[RoleNames::ArmRecordingRole] = "armRecording";
-    roleNames_[RoleNames::MonoDownMixRole] = "monoDownMix";
-    roleNames_[RoleNames::InstrumentRole] = "instrument";
-    roleNames_[RoleNames::PluginListRole] = "plugin_list";
-    roleNames_[RoleNames::ChannelGainRole] = "channel_gain";
-    roleNames_[RoleNames::ChannelPanningRole] = "channel_panning";
 }
 
 TrackListModel::~TrackListModel()
@@ -480,7 +466,23 @@ void TrackListModel::clear()
 
 RoleNamesType TrackListModel::roleNames() const
 {
-    return roleNames_;
+    static const RoleNamesType ret =
+    {
+        std::make_pair(RoleNames::NameRole, "trackname"),
+        std::make_pair(RoleNames::TypeRole, "type"),
+        std::make_pair(RoleNames::ColorRole, "trackcolor"),
+        std::make_pair(RoleNames::HeightRole, "trackheight"),
+        std::make_pair(RoleNames::MuteRole, "mute"),
+        std::make_pair(RoleNames::SoloRole, "solo"),
+        std::make_pair(RoleNames::InvertPhaseRole, "invertPhase"),
+        std::make_pair(RoleNames::ArmRecordingRole, "armRecording"),
+        std::make_pair(RoleNames::MonoDownMixRole, "monoDownMix"),
+        std::make_pair(RoleNames::InstrumentRole, "instrument"),
+        std::make_pair(RoleNames::PluginListRole, "plugin_list"),
+        std::make_pair(RoleNames::ChannelGainRole, "channel_gain"),
+        std::make_pair(RoleNames::ChannelPanningRole, "channel_panning")
+    };
+    return ret;
 }
 
 Qt::ItemFlags TrackListModel::flags(const QModelIndex& index) const

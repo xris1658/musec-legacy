@@ -6,15 +6,11 @@ PluginParameterValueListModel::PluginParameterValueListModel(Musec::Audio::Plugi
     QAbstractListModel(parent),
     parameter_(parameter)
 {
-    roleNames_.reserve(columnSize());
-    roleNames_[RoleNames::ValueRole] = "value";
-    roleNames_[RoleNames::TextRole] = "text";
 }
 
 PluginParameterValueListModel::PluginParameterValueListModel(const PluginParameterValueListModel& rhs):
     QAbstractListModel(rhs.parent()),
-    parameter_(rhs.parameter_),
-    roleNames_(rhs.roleNames_)
+    parameter_(rhs.parameter_)
 {
     //
 }
@@ -64,6 +60,11 @@ QVariant PluginParameterValueListModel::data(const QModelIndex& index, int role)
 
 RoleNamesType PluginParameterValueListModel::roleNames() const
 {
-    return roleNames_;
+    static const RoleNamesType ret =
+    {
+        std::make_pair(RoleNames::ValueRole, "value"),
+        std::make_pair(RoleNames::TextRole, "text")
+    };
+    return ret;
 }
 }

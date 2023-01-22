@@ -51,7 +51,6 @@ private:
     double maxDecibel_;
     double minDecibel_;
     std::vector<std::pair<double, double>> container_;
-    RoleNamesType roleNames_;
 
 };
 }

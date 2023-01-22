@@ -56,7 +56,6 @@ private:
     Musec::Audio::Plugin::IPlugin* plugin_;
     // data() might modify this by inserting elements, so use `mutable`
     mutable std::map<int, Musec::Model::PluginParameterValueListModel> valueList_;
-    RoleNamesType roleNames_;
 };
 
 }

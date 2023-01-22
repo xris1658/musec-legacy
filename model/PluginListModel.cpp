@@ -12,11 +12,6 @@ namespace Model
 
 PluginListModel::PluginListModel(QObject* parent): QAbstractListModel(parent)
 {
-    roleNames_.reserve(columnSize());
-    roleNames_[RoleNames::IdRole] = "pluginId";
-    roleNames_[RoleNames::NameRole] = "name";
-    roleNames_[RoleNames::FormatRole] = "format";
-    roleNames_[RoleNames::TypeRole] = "type";
 }
 
 PluginListModel::~PluginListModel()
@@ -108,7 +103,14 @@ QVariant PluginListModel::data(const QModelIndex& index, int role) const
 
 RoleNamesType PluginListModel::roleNames() const
 {
-    return roleNames_;
+    static const RoleNamesType ret =
+    {
+        std::make_pair(RoleNames::IdRole, "pluginId"),
+        std::make_pair(RoleNames::NameRole, "name"),
+        std::make_pair(RoleNames::FormatRole, "format"),
+        std::make_pair(RoleNames::TypeRole, "type")
+    };
+    return ret;
 }
 }
 }

@@ -40,7 +40,6 @@ public:
     explicit PluginSequenceModel();
     ~PluginSequenceModel();
 public:
-    void initRoleNames();
     Q_INVOKABLE int itemCount() const;
     static constexpr int columnSize() noexcept;
 public:
@@ -60,7 +59,6 @@ private:
     std::vector<QString> names_;
     std::vector<std::unique_ptr<Musec::Entities::Plugin>> pluginWindowConnections_;
     std::vector<QMetaObject::Connection> connections_;
-    RoleNamesType roleNames_;
 };
 }
 }

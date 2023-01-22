@@ -7,9 +7,6 @@ namespace Musec::Model
 ASIODriverListModel::ASIODriverListModel(QObject* parent):
     QAbstractListModel(parent)
 {
-    roleNames_.reserve(columnSize());
-    roleNames_[RoleNames::NameRole] = "name";
-    roleNames_[RoleNames::CLSIDRole] = "clsid";
 }
 
 ASIODriverListModel::~ASIODriverListModel()
@@ -97,6 +94,11 @@ QVariant ASIODriverListModel::data(const QModelIndex& index, int role) const
 
 RoleNamesType ASIODriverListModel::roleNames() const
 {
-    return roleNames_;
+    static const RoleNamesType ret =
+    {
+        std::make_pair(RoleNames::NameRole, "name"),
+        std::make_pair(RoleNames::CLSIDRole, "clsid")
+    };
+    return ret;
 }
 }

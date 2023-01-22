@@ -7,9 +7,6 @@ VolumeFaderScaleModel::VolumeFaderScaleModel(QObject* parent):
     maxDecibel_(6),
     minDecibel_(-144)
 {
-    roleNames_.reserve(columnSize());
-    roleNames_[RoleNames::PositionRole] = "position";
-    roleNames_[RoleNames::DecibelRole] = "decibel";
 }
 
 double VolumeFaderScaleModel::maxDecibel() const
@@ -231,6 +228,11 @@ double VolumeFaderScaleModel::positionFromDecibel(double decibel)
 
 RoleNamesType VolumeFaderScaleModel::roleNames() const
 {
-    return roleNames_;
+    static const RoleNamesType ret =
+    {
+        std::make_pair(RoleNames::PositionRole, "position"),
+        std::make_pair(RoleNames::DecibelRole, "decibel")
+    };
+    return ret;
 }
 }

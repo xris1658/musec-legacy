@@ -1,6 +1,5 @@
 #include "AssetDirectoryListModel.hpp"
 
-#include <tuple>
 #include <utility>
 
 namespace Musec::Model
@@ -9,10 +8,6 @@ namespace Musec::Model
 AssetDirectoryListModel::AssetDirectoryListModel(QObject* parent):
     QAbstractListModel(parent)
 {
-    roleNames_.reserve(columnSize());
-    roleNames_[RoleNames::IdRole] = "directoryId";
-    roleNames_[RoleNames::DirectoryRole] = "directory";
-    roleNames_[RoleNames::NameRole] = "name";
 }
 
 AssetDirectoryListModel::~AssetDirectoryListModel()
@@ -133,6 +128,12 @@ QVariant AssetDirectoryListModel::data(const QModelIndex& index, int role) const
 
 RoleNamesType AssetDirectoryListModel::roleNames() const
 {
-    return roleNames_;
+    static const RoleNamesType ret =
+        {
+            std::make_pair(RoleNames::IdRole, "directoryId"),
+            std::make_pair(RoleNames::DirectoryRole, "directory"),
+            std::make_pair(RoleNames::NameRole, "name")
+        };
+    return ret;
 }
 }

@@ -5,11 +5,6 @@ namespace Musec::Model
 AudioTrackSequenceModel::AudioTrackSequenceModel(QObject* parent):
     QAbstractListModel(parent)
 {
-    roleNames_.reserve(columnSize());
-    roleNames_[RoleNames::StartTimeRole] = "startTime";
-    roleNames_[RoleNames::EndTimeRole] = "endTime";
-    roleNames_[RoleNames::ClipRole] = "clip";
-    roleNames_[RoleNames::ClipStartsAtRole] = "clipStartsAt";
 }
 
 AudioTrackSequenceModel::~AudioTrackSequenceModel()
@@ -81,6 +76,13 @@ QVariant AudioTrackSequenceModel::data(const QModelIndex& index, int role) const
 
 RoleNamesType AudioTrackSequenceModel::roleNames() const
 {
-    return roleNames_;
+    static const RoleNamesType ret =
+    {
+        std::make_pair(RoleNames::StartTimeRole, "startTime"),
+        std::make_pair(RoleNames::EndTimeRole, "endTime"),
+        std::make_pair(RoleNames::ClipRole, "clip"),
+        std::make_pair(RoleNames::ClipStartsAtRole, "clipStartsAt")
+    };
+    return ret;
 }
 }

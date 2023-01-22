@@ -8,29 +8,11 @@ PluginParameterListModel::PluginParameterListModel(Musec::Audio::Plugin::IPlugin
     QAbstractListModel(parent),
     plugin_(plugin)
 {
-    roleNames_.reserve(columnSize());
-    roleNames_[IdRole] = "parameterId";
-    roleNames_[NameRole] = "name";
-    roleNames_[ShortNameRole] = "shortName";
-    roleNames_[DiscreteRole] = "discrete";
-    roleNames_[PeriodicRole] = "periodic";
-    roleNames_[HiddenRole] = "hidden";
-    roleNames_[ReadonlyRole] = "readonly";
-    roleNames_[AutomatableRole] = "automatable";
-    roleNames_[MinValueRole] = "minValue";
-    roleNames_[MaxValueRole] = "maxValue";
-    roleNames_[DefaultValueRole] = "defaultValue";
-    roleNames_[ValueRole] = "value";
-    roleNames_[StepRole] = "step";
-    roleNames_[ShowAsListRole] = "showAsList";
-    roleNames_[ShowAsSwitchRole] = "showAsSwitch";
-    roleNames_[ListRole] = "list";
 }
 
 PluginParameterListModel::PluginParameterListModel(const PluginParameterListModel& rhs):
     QAbstractListModel(rhs.parent()),
-    plugin_(rhs.plugin_),
-    roleNames_(rhs.roleNames_)
+    plugin_(rhs.plugin_)
 {
     //
 }
@@ -151,6 +133,25 @@ bool PluginParameterListModel::setData(const QModelIndex& index, const QVariant&
 
 RoleNamesType PluginParameterListModel::roleNames() const
 {
-    return roleNames_;
+    static const RoleNamesType ret =
+    {
+        std::make_pair(RoleNames::IdRole, "parameterId"),
+        std::make_pair(RoleNames::NameRole, "name"),
+        std::make_pair(RoleNames::ShortNameRole, "shortName"),
+        std::make_pair(RoleNames::DiscreteRole, "discrete"),
+        std::make_pair(RoleNames::PeriodicRole, "periodic"),
+        std::make_pair(RoleNames::HiddenRole, "hidden"),
+        std::make_pair(RoleNames::ReadonlyRole, "readonly"),
+        std::make_pair(RoleNames::AutomatableRole, "automatable"),
+        std::make_pair(RoleNames::MinValueRole, "minValue"),
+        std::make_pair(RoleNames::MaxValueRole, "maxValue"),
+        std::make_pair(RoleNames::DefaultValueRole, "defaultValue"),
+        std::make_pair(RoleNames::ValueRole, "value"),
+        std::make_pair(RoleNames::StepRole, "step"),
+        std::make_pair(RoleNames::ShowAsListRole, "showAsList"),
+        std::make_pair(RoleNames::ShowAsSwitchRole, "showAsSwitch"),
+        std::make_pair(RoleNames::ListRole, "list")
+    };
+    return ret;
 }
 }

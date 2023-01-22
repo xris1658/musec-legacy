@@ -9,10 +9,6 @@ namespace Musec::Model
 {
 TranslationFileModel::TranslationFileModel(QObject* parent): QAbstractListModel(parent)
 {
-    roleNames_.reserve(columnSize());
-    roleNames_[RoleNames::PathRole] = "path";
-    roleNames_[RoleNames::LanguageNameRole] = "language_name";
-    roleNames_[RoleNames::ReadableLanguageNameRole] = "readable_language_name";
     QTranslator translator;
     static QStringList nameFilter {"Musec_*.qm"};
     static QDir appDir(QCoreApplication::applicationDirPath());
@@ -90,6 +86,12 @@ QVariant TranslationFileModel::data(const QModelIndex& index, int role) const
 
 RoleNamesType TranslationFileModel::roleNames() const
 {
-    return roleNames_;
+    static const RoleNamesType ret =
+    {
+        std::make_pair(RoleNames::PathRole, "path"),
+        std::make_pair(RoleNames::LanguageNameRole, "language_name"),
+        std::make_pair(RoleNames::ReadableLanguageNameRole, "readable_language_name")
+    };
+    return ret;
 }
 }

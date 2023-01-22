@@ -59,7 +59,6 @@ private:
     void automationSet(int oldRowCount, int newRowCount);
 private:
     TempoAutomation automation_;
-    RoleNamesType roleNames_;
 };
 }
 }

@@ -109,7 +109,6 @@ private:
     std::vector<std::unique_ptr<Musec::Entities::Plugin>> instruments_;
     std::vector<std::unique_ptr<Musec::Model::PluginSequenceModel>> pluginSequences_;
     Musec::Model::PluginSequenceModel masterPluginSequences_;
-    RoleNamesType roleNames_;
 };
 }
 }

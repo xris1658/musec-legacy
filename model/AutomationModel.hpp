@@ -58,7 +58,6 @@ private:
     void automationSet();
 private:
     Musec::Audio::Base::Automation automation_;
-    RoleNamesType roleNames_;
 };
 }
 }

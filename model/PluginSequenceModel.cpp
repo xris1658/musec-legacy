@@ -9,7 +9,6 @@ namespace Musec::Model
 PluginSequenceModel::PluginSequenceModel(int trackIndex, QObject* parent):
     QAbstractListModel(parent)
 {
-    initRoleNames();
     auto track = Musec::Controller::AudioEngineController::AppProject()[trackIndex].track;
     if (track->trackType() == Musec::Audio::Track::TrackType::kInstrumentTrack)
     {
@@ -24,24 +23,12 @@ PluginSequenceModel::PluginSequenceModel(int trackIndex, QObject* parent):
 PluginSequenceModel::PluginSequenceModel():
     QAbstractListModel(nullptr)
 {
-    initRoleNames();
     audioTrack_ = &Musec::Controller::AudioEngineController::AppProject().masterTrackRef().masterTrack;
 }
 
 PluginSequenceModel::~PluginSequenceModel()
 {
     clear();
-}
-
-void PluginSequenceModel::initRoleNames()
-{
-    roleNames_.reserve(columnSize());
-    roleNames_[RoleNames::ValidRole] = "valid";
-    roleNames_[RoleNames::ProcessingRole] = "processing";
-    roleNames_[RoleNames::NameRole] = "plugin_name";
-    roleNames_[RoleNames::SidechainExistRole] = "sidechain_exist";
-    roleNames_[RoleNames::SidechainEnabledRole] = "sidechain_enabled";
-    roleNames_[RoleNames::WindowVisibleRole] = "window_visible";
 }
 
 int PluginSequenceModel::itemCount() const
@@ -216,6 +203,15 @@ void PluginSequenceModel::clear()
 
 RoleNamesType PluginSequenceModel::roleNames() const
 {
-    return roleNames_;
+    static const RoleNamesType ret =
+    {
+        std::make_pair(PluginSequenceModel::RoleNames::ValidRole, "valid"),
+        std::make_pair(PluginSequenceModel::RoleNames::ProcessingRole, "processing"),
+        std::make_pair(PluginSequenceModel::RoleNames::NameRole, "plugin_name"),
+        std::make_pair(PluginSequenceModel::RoleNames::SidechainExistRole, "sidechain_exist"),
+        std::make_pair(PluginSequenceModel::RoleNames::SidechainEnabledRole, "sidechain_enabled"),
+        std::make_pair(PluginSequenceModel::RoleNames::WindowVisibleRole, "window_visible")
+    };
+    return ret;
 }
 }

@@ -40,7 +40,6 @@ protected:
     virtual RoleNamesType roleNames() const override;
 private:
     Musec::Audio::Arrangement::AudioTrackSequence trackSequence_;
-    RoleNamesType roleNames_;
 };
 }
 }

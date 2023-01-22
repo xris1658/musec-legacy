@@ -6,9 +6,6 @@ namespace Musec::Model
 {
 MIDIInputDeviceListModel::MIDIInputDeviceListModel(QObject* parent): QAbstractListModel(parent)
 {
-    roleNames_.reserve(columnSize());
-    roleNames_[RoleNames::NameRole] = "name";
-    roleNames_[RoleNames::IdRole] = "id";
 }
 
 MIDIInputDeviceListModel::~MIDIInputDeviceListModel()
@@ -96,6 +93,11 @@ QVariant MIDIInputDeviceListModel::data(const QModelIndex& index, int role) cons
 
 RoleNamesType MIDIInputDeviceListModel::roleNames() const
 {
-    return roleNames_;
+    static const RoleNamesType ret =
+    {
+        std::make_pair(RoleNames::NameRole, "name"),
+        std::make_pair(RoleNames::IdRole, "id")
+    };
+    return ret;
 }
 }

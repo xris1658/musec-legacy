@@ -8,9 +8,6 @@ namespace Musec::Model
 FileListModel::FileListModel(QObject* parent):
     QAbstractListModel(parent)
 {
-    roleNames_.reserve(columnSize());
-    roleNames_[RoleNames::NameRole] = "name";
-    roleNames_[RoleNames::PathRole] = "path";
 }
 
 FileListModel::~FileListModel()
@@ -98,6 +95,11 @@ QString FileListModel::getPathOfIndex(int index) const
 
 RoleNamesType FileListModel::roleNames() const
 {
-    return roleNames_;
+    static const RoleNamesType ret =
+    {
+        std::make_pair(RoleNames::NameRole, "name"),
+        std::make_pair(RoleNames::PathRole, "path")
+    };
+    return ret;
 }
 }

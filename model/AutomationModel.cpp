@@ -4,10 +4,6 @@ namespace Musec::Model
 {
 AutomationModel::AutomationModel(QObject* parent) : QAbstractListModel(parent)
 {
-    roleNames_.reserve(columnSize());
-    roleNames_[RoleNames::TimeRole] = "time";
-    roleNames_[RoleNames::ValueRole] = "value";
-    roleNames_[RoleNames::CurveRole] = "curve";
 }
 
 AutomationModel::~AutomationModel()
@@ -209,7 +205,13 @@ bool AutomationModel::setData(const QModelIndex& index, const QVariant& value, i
 
 RoleNamesType AutomationModel::roleNames() const
 {
-    return roleNames_;
+    static const RoleNamesType ret =
+    {
+        std::make_pair(RoleNames::TimeRole, "time"),
+        std::make_pair(RoleNames::ValueRole, "value"),
+        std::make_pair(RoleNames::CurveRole, "curve")
+    };
+    return ret;
 }
 
 void AutomationModel::automationAboutToSet()

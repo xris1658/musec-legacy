@@ -35,8 +35,6 @@ protected:
     RoleNamesType roleNames() const override;
 public:
     Musec::Audio::Plugin::IParameter* parameter_;
-private:
-    RoleNamesType roleNames_;
 };
 }
 }

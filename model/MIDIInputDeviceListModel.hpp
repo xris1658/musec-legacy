@@ -42,7 +42,6 @@ protected:
     virtual RoleNamesType roleNames() const override;
 private:
     List list_;
-    RoleNamesType roleNames_;
 };
 }
 }

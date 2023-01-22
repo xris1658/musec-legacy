@@ -6,7 +6,6 @@
 #include <common/asio.h>
 
 #include <QAbstractListModel>
-#include <QList>
 
 namespace Musec
 {
@@ -44,7 +43,6 @@ protected:
 private:
     ASIOChannelInfo* channelInfoList_;
     int channelCount_;
-    RoleNamesType roleNames_;
 };
 }
 }
