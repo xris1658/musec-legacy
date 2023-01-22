@@ -197,7 +197,7 @@ void refreshPluginList(bool rescan)
                 std::get<PluginReadInfoField::ReadFieldType>(item);
             if(pluginType != PluginType::TypeUnknown)
             {
-                typePluginList[pluginType - 1].append(item);
+                typePluginList[pluginType - 1].emplace_back(item);
             }
         }
         for(int i = 1; i <= 3; ++i)

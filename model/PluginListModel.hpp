@@ -7,6 +7,8 @@
 #include <QAbstractListModel>
 #include <QList>
 
+#include <vector>
+
 namespace Musec
 {
 namespace Model
@@ -16,7 +18,7 @@ class PluginListModel: public QAbstractListModel
     Q_OBJECT
 public:
     using Item = Musec::Base::PluginReadInfo;
-    using List = QList<Item>;
+    using List = std::vector<Item>;
 public:
     enum PluginType
     {

@@ -91,15 +91,12 @@ void removeAllPlugins()
     AppDatabase() << Impl::resetPluginIdFromSequenceCommand();
 }
 
-QList<Musec::Base::PluginReadInfo> selectAllPlugin(bool reserve)
+std::vector<Musec::Base::PluginReadInfo> selectAllPlugin()
 {
     using namespace Musec::Base;
     using Item = Musec::Base::PluginReadInfo;
-    QList<Item> ret;
-    if(reserve)
-    {
-        ret.reserve(getAllPluginCount());
-    }
+    std::vector<Item> ret;
+    ret.reserve(getAllPluginCount());
     AppDatabase() << Impl::selectAllPluginCommand()
                   >> [&ret](int id,
                             const std::u16string& path,
@@ -108,7 +105,7 @@ QList<Musec::Base::PluginReadInfo> selectAllPlugin(bool reserve)
                             int format,
                             int type)
     {
-        ret.append(Item(id,
+        ret.emplace_back(Item(id,
                         QString::fromStdU16String(path),
                         uid,
                         QString::fromStdU16String(name),

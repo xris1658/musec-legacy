@@ -8,10 +8,9 @@
 
 namespace Musec::Controller::PluginController
 {
-QList<Base::PluginReadInfo> getAllPlugins()
+std::vector<Base::PluginReadInfo> getAllPlugins()
 {
-    QList<Base::PluginReadInfo> ret = DAO::selectAllPlugin(true);
-    return ret;
+    return Musec::DAO::selectAllPlugin();
 }
 
 std::shared_ptr<Musec::Audio::Plugin::IPlugin>

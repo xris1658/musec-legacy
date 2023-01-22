@@ -7,6 +7,7 @@
 #include <QList>
 
 #include <memory>
+#include <vector>
 
 namespace Musec
 {
@@ -14,7 +15,7 @@ namespace Controller
 {
 namespace PluginController
 {
-QList<Musec::Base::PluginReadInfo> getAllPlugins();
+std::vector<Musec::Base::PluginReadInfo> getAllPlugins();
 
 std::shared_ptr<Musec::Audio::Plugin::IPlugin>
 loadPlugin(const QString& path, int format, const char* id);

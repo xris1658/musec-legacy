@@ -60,7 +60,7 @@ PluginListModel::List PluginListModel::getList() const
 
 int PluginListModel::itemCount() const
 {
-    return list_.count();
+    return list_.size();
 }
 
 constexpr int PluginListModel::columnSize() noexcept

@@ -3,7 +3,7 @@
 
 #include "base/PluginBase.hpp"
 
-#include <QList>
+#include <vector>
 
 namespace Musec
 {
@@ -15,7 +15,7 @@ void insertPlugin(const Musec::Base::PluginWriteInfo& pluginWriteInfo);
 
 void removeAllPlugins();
 
-QList<Musec::Base::PluginReadInfo> selectAllPlugin(bool reserve);
+std::vector<Musec::Base::PluginReadInfo> selectAllPlugin();
 
 int getAllPluginCount();
 
