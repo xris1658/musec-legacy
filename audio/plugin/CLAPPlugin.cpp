@@ -132,6 +132,19 @@ void CLAPPlugin::process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs
     plugin_->process(plugin_, &processData_);
 }
 
+void CLAPPlugin::process(const Musec::Audio::Device::AudioProcessData<SampleType>& audioProcessData)
+{
+    processData_.frames_count = audioProcessData.singleBufferSize;
+    for(int i = 0; i < processData_.audio_inputs_count; ++i)
+    {
+        audioInputBuffers_[i].data32 = audioProcessData.inputs[i];
+    }
+    for(int i = 0; i < processData_.audio_outputs_count; ++i)
+    {
+        audioOutputBuffers_[i].data32 = audioProcessData.outputs[i];
+    }
+}
+
 const clap_plugin* CLAPPlugin::plugin() const
 {
     return plugin_;
@@ -250,6 +263,8 @@ bool CLAPPlugin::activate()
             processData_.transport = &Musec::Audio::Host::AppCLAPEventTransport();
             processData_.in_events = eventInputList_.clapInputEvents();
             processData_.out_events = eventOutputList_.clapOutputEvents();
+            audioInputBuffers_.resize(audioInputSpeakerGroupCollection().speakerGroupCount());
+            audioOutputBuffers_.resize(audioOutputSpeakerGroupCollection().speakerGroupCount());
             return true;
         }
     }
@@ -271,6 +286,20 @@ bool CLAPPlugin::startProcessing()
     if(plugin_ && plugin_->start_processing(plugin_))
     {
         pluginStatus_ = CLAPPluginStatus::Processing;
+        for(int i = 0; i < audioInputBuffers_.size(); ++i)
+        {
+            audioInputBuffers_[i].channel_count = audioOutputSpeakerGroupCollection().speakerGroupAt(i).speakerCount();
+            audioInputBuffers_[i].latency = 0; // FIXME
+        }
+        for(int i = 0; i < audioOutputBuffers_.size(); ++i)
+        {
+            audioOutputBuffers_[i].channel_count = audioOutputSpeakerGroupCollection().speakerGroupAt(i).speakerCount();
+            audioOutputBuffers_[i].latency = 0; // FIXME
+        }
+        processData_.audio_inputs_count = audioInputSpeakerGroupCollection().speakerGroupCount();
+        processData_.audio_outputs_count = audioOutputSpeakerGroupCollection().speakerGroupCount();
+        processData_.audio_inputs = audioInputBuffers_.data();
+        processData_.audio_outputs = audioOutputBuffers_.data();
     }
     return pluginStatus_ == CLAPPluginStatus::Processing;
 }

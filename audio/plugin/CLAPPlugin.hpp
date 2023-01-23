@@ -61,6 +61,7 @@ public:
     const ISpeakerGroupCollection& audioOutputSpeakerGroupCollection() const override;
     void process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs, int inputCount,
         Musec::Audio::Base::AudioBufferView<SampleType>* outputs, int outputCount) override;
+    void process(const Musec::Audio::Device::AudioProcessData<SampleType>& audioProcessData) override;
 public:
     const clap_plugin* plugin() const;
     const clap_plugin_factory* factory() const;
@@ -124,6 +125,8 @@ private:
         /*.latency = */0,
         /*.constant_mask*/0
     };
+    std::vector<clap_audio_buffer> audioInputBuffers_;
+    std::vector<clap_audio_buffer> audioOutputBuffers_;
     CLAPSpeakerGroupCollection inputSpeakerGroupCollection_;
     CLAPSpeakerGroupCollection outputSpeakerGroupCollection_;
     clap::helpers::EventList eventInputList_;

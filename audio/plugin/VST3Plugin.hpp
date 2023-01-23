@@ -119,6 +119,7 @@ public: // IDevice interfaces
     const ISpeakerGroupCollection& audioOutputSpeakerGroupCollection() const override;
     void process(Audio::Base::AudioBufferView<SampleType>* inputs, int inputCount,
         Audio::Base::AudioBufferView<SampleType>* outputs, int outputCount) override;
+    void process(const Musec::Audio::Device::AudioProcessData<SampleType>& audioProcessData) override;
 public: // IPlugin interfaces
     bool activate() override;
     bool deactivate() override;

@@ -244,6 +244,20 @@ void VST3Plugin::process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs
     // }
 }
 
+void VST3Plugin::process(const Musec::Audio::Device::AudioProcessData<SampleType>& audioProcessData)
+{
+    processData_.numSamples = audioProcessData.singleBufferSize;
+    for(int i = 0; i < processData_.numInputs; ++i)
+    {
+        processData_.inputs[i].channelBuffers32 = audioProcessData.inputs[i];
+    }
+    for(int i = 0; i < processData_.numOutputs; ++i)
+    {
+        processData_.outputs[i].channelBuffers32 = audioProcessData.outputs[i];
+    }
+    audioProcessor_->process(processData_);
+}
+
 // ------------------------------------------------------------------------------------------
 
 // VST3Plugin IPlugin interfaces
@@ -635,6 +649,18 @@ bool VST3Plugin::startProcessing()
         || ret == Steinberg::kNotImplemented)
         {
             audioProcessorStatus_ = VST3AudioProcessorStatus::Processing;
+            for(int i = 0; i < inputs_.size(); ++i)
+            {
+                inputs_[i].numChannels = inputSpeakerGroupCollection_.speakerGroupAt(i).speakerCount();
+            }
+            for(int i = 0; i < outputs_.size(); ++i)
+            {
+                outputs_[i].numChannels = outputSpeakerGroupCollection_.speakerGroupAt(i).speakerCount();
+            }
+            processData_.numInputs = inputs_.size();
+            processData_.numOutputs = outputs_.size();
+            processData_.inputs = inputs_.data();
+            processData_.outputs = outputs_.data();
             return true;
         }
     }
