@@ -182,6 +182,7 @@ HEADERS += \
     ui/Render.hpp \
     ui/UI.hpp \
     util/Endian.hpp \
+    util/FileHash.hpp \
     util/Literal.hpp \
     util/Stopwatch.hpp
 
@@ -221,6 +222,7 @@ SOURCES += \
     base/Color.cpp \
     base/FixedSizeMemoryPool.cpp \
     base/PluginBase.cpp \
+    base/PluginCacheBsae.cpp \
     concurrent/ThreadId.cpp \
     concurrent/ThreadPool.cpp \
     controller/AppController.cpp \
@@ -281,6 +283,7 @@ SOURCES += \
     ui/Render.cpp \
     ui/UI.cpp \
     util/Endian.cpp \
+    util/FileHash.cpp \
     util/Literal.cpp
 
 win32: SOURCES += \
