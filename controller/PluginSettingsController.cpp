@@ -60,29 +60,22 @@ void scanPlugins()
         {
             auto& dir = pluginDirectories.front();
             auto fileList = dir.entryInfoList(nameFilters, scanFileFlags);
-            auto fileListSize = fileList.size();
-            if(fileListSize)
+            for(auto& fileInfo: fileList)
             {
-                for(decltype(fileListSize) i = 0; i < fileListSize; ++i)
+                auto path = fileInfo.absoluteFilePath();
+                if(fileInfo.suffix() == lnk)
                 {
-                    auto path = fileList[i].absoluteFilePath();
-                    if(fileList[i].suffix() == lnk)
+                    auto resolvedPath = fileInfo.symLinkTarget();
+                    if(!resolvedPath.isEmpty())
                     {
-                        auto resolvedPath = fileList[i].symLinkTarget();
-                        if(!resolvedPath.isEmpty())
-                        {
-                            resolvedPath.replace(QChar('/'), QChar('\\'));
-                            if(!resolvedPath.isEmpty())
-                            {
-                                plugins.emplace_back(resolvedPath);
-                            }
-                        }
+                        resolvedPath.replace(QChar('/'), QChar('\\'));
+                        plugins.emplace_back(resolvedPath);
                     }
-                    else
-                    {
-                        path.replace(QChar('/'), QChar('\\'));
-                        plugins.emplace_back(path);
-                    }
+                }
+                else
+                {
+                    path.replace(QChar('/'), QChar('\\'));
+                    plugins.emplace_back(path);
                 }
             }
             auto dirList = dir.entryInfoList(
@@ -90,10 +83,9 @@ void scanPlugins()
                     | QDir::Filter::Hidden
                     | QDir::Filter::NoDotAndDotDot);
             auto dirListSize = dirList.size();
-            for(decltype(dirListSize) i = 0; i < dirListSize; ++i)
+            for(auto& dirInfo: dirList)
             {
-                auto directory = dirList[i].absoluteFilePath();
-                pluginDirectories.emplace(directory);
+                pluginDirectories.emplace(dirInfo.absoluteFilePath());
             }
             pluginDirectories.pop();
         }
