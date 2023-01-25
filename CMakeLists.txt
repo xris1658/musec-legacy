@@ -139,6 +139,7 @@ set(PROJECT_SOURCES
     base/FolderBase.hpp
     base/PluginBase.cpp
     base/PluginBase.hpp
+    base/PluginCacheBase.cpp
     base/PluginCacheBase.hpp
     base/QmlBase.hpp
     concurrent/ThreadId.cpp
@@ -268,6 +269,8 @@ set(PROJECT_SOURCES
     ui/UI.hpp
     util/Endian.cpp
     util/Endian.hpp
+    util/FileHash.cpp
+    util/FileHash.hpp
     util/Literal.cpp
     util/Literal.hpp
     util/Stopwatch.hpp

@@ -12,7 +12,8 @@ namespace Base
 {
 enum LibraryProperties
 {
-    Discardable = 1 << 0
+    IsPlugin = 1 << 0,
+    Discardable = 1 << 1
 };
 
 using PluginCache = std::tuple<QString, std::vector<char>, int>;
@@ -33,6 +34,8 @@ enum PluginCacheInDatabaseField
     FingerprintInDB,
     PropertyInDB
 };
+
+PluginCache scanLibraryCacheProperties(const QString& path);
 }
 }
 
