@@ -21,9 +21,6 @@ namespace Musec::Audio::Plugin
 {
 // VST3Plugin ctor & dtor
 // ------------------------------------------------------------------------------------------
-VST3Plugin::VST3Plugin():
-    VST3Plugin::Base(), componentHandler_(this), plugFrame_(this)
-{}
 
 VST3Plugin::VST3Plugin(const QString& path):
     VST3Plugin::Base(path), componentHandler_(this), plugFrame_(this)

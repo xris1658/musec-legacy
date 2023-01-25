@@ -8,11 +8,6 @@
 
 namespace Musec::Audio::Plugin
 {
-CLAPPlugin::CLAPPlugin():
-    Musec::Native::Library()
-{
-    //
-}
 
 CLAPPlugin::CLAPPlugin(const QString& path):
     Musec::Native::Library(path)

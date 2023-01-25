@@ -47,7 +47,6 @@ class CLAPPlugin:
 {
     using SampleType = float;
 public:
-    CLAPPlugin();
     CLAPPlugin(const QString& path);
     CLAPPlugin(CLAPPlugin&& rhs) = delete;
     CLAPPlugin& operator=(CLAPPlugin&& rhs) = delete;

@@ -99,7 +99,6 @@ public:
 // VST3 plugin uninitialization entry
     using PluginExitProc = bool(*)();
 public: // ctor & dtor
-    VST3Plugin();
     VST3Plugin(const QString& path);
     bool createPlugin(const Steinberg::TUID& uid);
     VST3Plugin(const QString& path, const Steinberg::TUID& uid);
