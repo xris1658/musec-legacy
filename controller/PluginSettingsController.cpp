@@ -7,6 +7,7 @@
 #include <QDir>
 #include <QList>
 
+#include <deque>
 #include <queue>
 #include <utility>
 #include <vector>
@@ -41,7 +42,7 @@ void scanPlugins()
         nameFilters << "*.lnk";
         lnk = nameFilters.back(); lnk.remove(0, 2);
     }
-    std::vector<QString> plugins;
+    std::deque<QString> plugins;
     std::queue<QDir> pluginDirectories;
     Musec::DAO::removeAllPlugins();
     auto pluginDirectoryList = Musec::DAO::selectPluginDirectory();
