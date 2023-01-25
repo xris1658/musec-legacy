@@ -19,7 +19,7 @@ std::vector<Musec::Base::PluginReadInfo> selectAllPlugin();
 
 int getAllPluginCount();
 
-Musec::Base::PluginReadInfo selectPluginFromId(int id);
+Musec::Base::PluginReadInfo selectPluginById(int id);
 }
 }
 

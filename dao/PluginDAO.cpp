@@ -122,7 +122,7 @@ int getAllPluginCount()
     return ret;
 }
 
-Musec::Base::PluginReadInfo selectPluginFromId(int id)
+Musec::Base::PluginReadInfo selectPluginById(int id)
 {
     Musec::Base::PluginReadInfo ret;
     AppDatabase() << Impl::selectPluginByIdCommand() << id

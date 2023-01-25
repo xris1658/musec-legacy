@@ -64,6 +64,6 @@ bool startPlugin(std::shared_ptr<Musec::Audio::Plugin::IPlugin> plugin)
 
 Musec::Base::PluginReadInfo pluginFromId(int id)
 {
-    return Musec::DAO::selectPluginFromId(id);
+    return Musec::DAO::selectPluginById(id);
 }
 }
