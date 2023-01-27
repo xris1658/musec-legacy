@@ -20,6 +20,9 @@ include_directories(${ASIOSDK_PATH}
                     ${CLAP_HELPERS_DIR}/include
                     ${SQLITE_MODERN_CPP_INCLUDE_DIRS})
 
+set(SMTG_ADD_VSTGUI OFF)
+set(SMTG_ADD_VST3_PLUGINS_SAMPLES OFF)
+
 add_subdirectory(${VST3SDK_SOURCE_DIR} ${PROJECT_BINARY_DIR}/vst3sdk)
 
 add_custom_target(GenerateLocaleBase COMMAND ${Qt5_DIR}/../../../bin/lupdate.exe ${CMAKE_SOURCE_DIR}/Musec.pro -ts ${CMAKE_SOURCE_DIR}/i18n/base.ts)
