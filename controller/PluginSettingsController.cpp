@@ -1,4 +1,5 @@
 #include "PluginSettingsController.hpp"
+
 #include "base/PluginBase.hpp"
 #include "controller/ConfigController.hpp"
 #include "dao/PluginDAO.hpp"
@@ -40,9 +41,9 @@ void scanPlugins()
     {
         scanFileFlags |= QDir::Filter::System;
         nameFilters << "*.lnk";
-        lnk = nameFilters.back(); lnk.remove(0, 2);
+        lnk = "lnk";
     }
-    std::deque<QString> plugins;
+    std::deque<QString> libraryPaths;
     std::queue<QDir> pluginDirectories;
     Musec::DAO::removeAllPlugins();
     auto pluginDirectoryList = Musec::DAO::selectPluginDirectory();
@@ -70,13 +71,13 @@ void scanPlugins()
                     if(!resolvedPath.isEmpty())
                     {
                         resolvedPath.replace(QChar('/'), QChar('\\'));
-                        plugins.emplace_back(resolvedPath);
+                        libraryPaths.emplace_back(resolvedPath);
                     }
                 }
                 else
                 {
                     path.replace(QChar('/'), QChar('\\'));
-                    plugins.emplace_back(path);
+                    libraryPaths.emplace_back(path);
                 }
             }
             auto dirList = dir.entryInfoList(
@@ -91,7 +92,7 @@ void scanPlugins()
             pluginDirectories.pop();
         }
     }
-    for(auto& path: plugins)
+    for(auto& path: libraryPaths)
     {
         auto pluginList = Musec::Base::scanSingleLibraryFile(path);
         for(auto& [uid, name, format, type]: pluginList)
