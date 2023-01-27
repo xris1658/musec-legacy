@@ -20,6 +20,8 @@ std::vector<Musec::Base::PluginCacheInDatabase> selectAllPluginCache();
 Musec::Base::PluginCacheInDatabase selectPluginCacheByPath(const QString& path);
 
 std::vector<Musec::Base::PluginCacheInDatabase> selectPluginCacheByFingerprint(const std::vector<char>& fingerprint);
+
+void updatePluginCacheById(int id, const std::vector<char>& fingerprint, int properties);
 }
 }
 

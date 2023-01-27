@@ -20,6 +20,12 @@ std::vector<Musec::Base::PluginReadInfo> selectAllPlugin();
 int getAllPluginCount();
 
 Musec::Base::PluginReadInfo selectPluginById(int id);
+
+std::vector<Musec::Base::PluginReadInfo> selectPluginByPath(const QString& path);
+
+std::vector<QString> selectDistinctPluginPath();
+
+void removePluginByPath(const QString& path);
 }
 }
 

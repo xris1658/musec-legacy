@@ -84,6 +84,13 @@ const char16_t* selectPluginCacheByFingerprintCommand()
         u"SELECT * FROM plugin_cache WHERE fingerprint = ?";
     return ret;
 }
+
+const char16_t* updatePluginCacheByIdCommand()
+{
+    static char16_t ret[] =
+        u"UPDATE plugin_cache SET fingerprint = ?, property = ? WHERE id = ?";
+    return ret;
+}
 }
 
 void createPluginCacheTable()
@@ -161,6 +168,11 @@ std::vector<Musec::Base::PluginCacheInDatabase> selectPluginCacheByFingerprint(c
         ret.emplace_back(std::make_tuple(id, QString::fromStdU16String(path), fingerprint, property));
     };
     return ret;
+}
+
+void updatePluginCacheById(int id, const std::vector<char>& fingerprint, int properties)
+{
+    AppDatabase() << Impl::updatePluginCacheByIdCommand() << fingerprint << properties << id;
 }
 
 }
