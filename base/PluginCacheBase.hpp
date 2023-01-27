@@ -16,21 +16,19 @@ enum LibraryProperties
     Discardable = 1 << 1
 };
 
-using PluginCache = std::tuple<QString, std::vector<char>, int>;
+using PluginCache = std::tuple<std::vector<char>, int>;
 
-using PluginCacheInDatabase = std::tuple<int, QString, std::vector<char>, int>;
+using PluginCacheInDatabase = std::tuple<int, std::vector<char>, int>;
 
 enum PluginCacheField
 {
-    Path = 0,
-    Fingerprint,
+    Fingerprint = 0,
     Property
 };
 
 enum PluginCacheInDatabaseField
 {
     IdInDB = 0,
-    PathInDB,
     FingerprintInDB,
     PropertyInDB
 };

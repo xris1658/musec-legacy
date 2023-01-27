@@ -71,13 +71,6 @@ const char16_t* selectAllPluginCacheCommand()
     return ret;
 }
 
-const char16_t* selectPluginCacheByPathCommand()
-{
-    static char16_t ret[] =
-        u"SELECT * FROM plugin_cache WHERE path = ?";
-    return ret;
-}
-
 const char16_t* selectPluginCacheByFingerprintCommand()
 {
     static char16_t ret[] =
@@ -102,7 +95,6 @@ int addPluginCache(const Base::PluginCache& pluginCache)
 {
     using namespace Musec::Base;
     AppDatabase() << Impl::addPluginCacheCommand()
-                  << std::get<PluginCacheField::Path>(pluginCache).toStdU16String()
                   << std::get<PluginCacheField::Fingerprint>(pluginCache)
                   << std::get<PluginCacheField::Property>(pluginCache);
     return AppDatabase().last_insert_rowid();
@@ -128,44 +120,23 @@ std::vector<Musec::Base::PluginCacheInDatabase> selectAllPluginCache()
     ret.reserve(size);
     AppDatabase() << Impl::selectAllPluginCacheCommand()
                   >> [&ret](int id,
-                            const std::u16string& path,
                             const std::vector<char>& fingerprint,
                             int property)
     {
-        ret.emplace_back(std::make_tuple(id, QString::fromStdU16String(path), fingerprint, property));
+        ret.emplace_back(std::make_tuple(id, fingerprint, property));
     };
     return ret;
 }
 
-Musec::Base::PluginCacheInDatabase selectPluginCacheByPath(const QString& path)
+Musec::Base::PluginCacheInDatabase selectPluginCacheByFingerprint(const std::vector<char>& fingerprint)
 {
     Musec::Base::PluginCacheInDatabase ret;
-    AppDatabase() << Impl::selectPluginCacheByPathCommand() << path.toStdU16String()
-                  >> [&ret](int id,
-                            const std::u16string& path,
-                            const std::vector<char>& fingerprint,
-                            int property)
-    {
-        ret = std::make_tuple(
-            id,
-            QString::fromStdU16String(path),
-            fingerprint,
-            property
-        );
-    };
-    return ret;
-}
-
-std::vector<Musec::Base::PluginCacheInDatabase> selectPluginCacheByFingerprint(const std::vector<char>& fingerprint)
-{
-    std::vector<Musec::Base::PluginCacheInDatabase> ret;
     AppDatabase() << Impl::selectPluginCacheByFingerprintCommand() << fingerprint
                   >> [&ret](int id,
-                            const std::u16string& path,
                             const std::vector<char>& fingerprint,
                             int property)
     {
-        ret.emplace_back(std::make_tuple(id, QString::fromStdU16String(path), fingerprint, property));
+        ret = std::make_tuple(id, fingerprint, property);
     };
     return ret;
 }

@@ -22,20 +22,20 @@ PluginCache scanLibraryCacheProperties(const QString& path)
             if(factoryInfo.flags & Steinberg::PFactoryInfo::FactoryFlags::kClassesDiscardable)
             {
                 return std::make_tuple(
-                    path, fingerprint,
+                    fingerprint,
                     Musec::Base::LibraryProperties::IsPlugin
                     | Musec::Base::LibraryProperties::Discardable);
             }
             else
             {
                 return std::make_tuple(
-                    path, fingerprint,
+                    fingerprint,
                     Musec::Base::LibraryProperties::IsPlugin);
             }
         }
         catch(...)
         {
-            return std::make_tuple(path, fingerprint, 0);
+            return std::make_tuple(fingerprint, 0);
         }
     }
     else if(format == PluginFormat::FormatCLAP)
@@ -46,13 +46,13 @@ PluginCache scanLibraryCacheProperties(const QString& path)
             // auto invalidationFactory = plugin.invalidationFactory();
             // FIXME: I don't quite know how to use invalidationFactory,
             //  so I have to rescan the plugin every time.
-            return std::make_tuple(path, fingerprint,
+            return std::make_tuple(fingerprint,
                 Musec::Base::LibraryProperties::IsPlugin
                 | Musec::Base::LibraryProperties::Discardable);
         }
         catch(...)
         {
-            return std::make_tuple(path, fingerprint, 0);
+            return std::make_tuple(fingerprint, 0);
         }
     }
 }
