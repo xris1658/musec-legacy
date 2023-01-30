@@ -19,6 +19,14 @@
 
 namespace Musec::Audio::Plugin
 {
+namespace Impl
+{
+template<typename To>
+Steinberg::tresult queryInterface(Steinberg::FUnknown* from, To** to)
+{
+    return from->queryInterface(To::iid, reinterpret_cast<void**>(to));
+}
+}
 // VST3Plugin ctor & dtor
 // ------------------------------------------------------------------------------------------
 
@@ -35,15 +43,19 @@ VST3Plugin::VST3Plugin(const QString& path):
     {
         throw std::runtime_error("Error: VST3 Plugin entry not found! This might be not a VST3 plugin.");
     }
+    // Init and exit call could be omitted on Windows, but not macOS and Linux
+    // https://steinbergmedia.github.io/vst3_dev_portal/pages/Technical+Documentation/VST+Module+Architecture/Loading.html
+#if(WIN32)
     if (pluginInitProc)
     {
-        // Init and exit call could be omitted on Windows, but not macOS and Linux
-        // https://steinbergmedia.github.io/vst3_dev_portal/pages/Technical+Documentation/VST+Module+Architecture/Loading.html
+#endif
         if (!pluginInitProc())
         {
-            throw std::runtime_error("");
+            throw std::runtime_error("Error: VST3 plugin initialization failed!");
         }
+#if(WIN32)
     }
+#endif
     factory_ = pluginFactoryProc();
     audioProcessorStatus_ = VST3AudioProcessorStatus::Factory;
     editControllerStatus_ = VST3EditControllerStatus::Factory;
@@ -266,9 +278,7 @@ bool VST3Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
     {
         return false;
     }
-    auto queryAudioProcessorResult = component_->queryInterface(
-        Steinberg::Vst::IAudioProcessor::iid,
-        reinterpret_cast<void**>(&audioProcessor_));
+    auto queryAudioProcessorResult = Impl::queryInterface(component_, &audioProcessor_);
     if(queryAudioProcessorResult != Steinberg::kResultOk)
     {
         return false;
@@ -280,10 +290,8 @@ bool VST3Plugin::initialize(double sampleRate, std::int32_t maxSampleCount)
         return false;
     }
     initializeEditController();
-    audioProcessor_->queryInterface(Steinberg::Vst::IProcessContextRequirements::iid,
-        reinterpret_cast<void**>(&processContextRequirements_));
-    audioProcessor_->queryInterface(Steinberg::Vst::IAudioPresentationLatency::iid,
-        reinterpret_cast<void**>(&audioPresentationLatency_));
+    Impl::queryInterface(audioProcessor_, &processContextRequirements_);
+    Impl::queryInterface(audioProcessor_, &audioPresentationLatency_);
     // ProcessSetup -------------------------------------------------------------------------
     processSetup_.processMode = Steinberg::Vst::ProcessModes::kRealtime;
     processSetup_.symbolicSampleSize = Steinberg::Vst::SymbolicSampleSizes::kSample32;
@@ -466,8 +474,7 @@ bool VST3Plugin::initializeEditController()
     }
     if(!editController_)
     {
-        auto queryEditorFromComponentResult = component_->queryInterface(Steinberg::Vst::IEditController::iid,
-            reinterpret_cast<void**>(&editController_));
+        auto queryEditorFromComponentResult = Impl::queryInterface(component_, &editController_);
         if (queryEditorFromComponentResult == Steinberg::kResultOk)
         {
             editControllerStatus_ = VST3EditControllerStatus::Created;
@@ -480,18 +487,12 @@ bool VST3Plugin::initializeEditController()
     }
     if (editController_)
     {
-        editController_->queryInterface(Steinberg::Vst::IEditController2::iid,
-            reinterpret_cast<void**>(&editController2_));
-        editController_->queryInterface(Steinberg::Vst::IMidiMapping::iid,
-            reinterpret_cast<void**>(&midiMapping_));
-        editController_->queryInterface(Steinberg::Vst::IEditControllerHostEditing::iid,
-            reinterpret_cast<void**>(&editControllerHostEditing_));
-        editController_->queryInterface(Steinberg::Vst::INoteExpressionController::iid,
-            reinterpret_cast<void**>(&noteExpressionController_));
-        editController_->queryInterface(Steinberg::Vst::IKeyswitchController::iid,
-            reinterpret_cast<void**>(&keyswitchController_));
-        editController_->queryInterface(Steinberg::Vst::IXmlRepresentationController::iid,
-            reinterpret_cast<void**>(&xmlRepresentationController_));
+        Impl::queryInterface(editController_, &editController2_);
+        Impl::queryInterface(editController_, &midiMapping_);
+        Impl::queryInterface(editController_, &editControllerHostEditing_);
+        Impl::queryInterface(editController_, &noteExpressionController_);
+        Impl::queryInterface(editController_, &keyswitchController_);
+        Impl::queryInterface(editController_, &xmlRepresentationController_);
         if(effectAndEditorUnified_ != EffectAndEditorUnified::Unified)
         {
             auto initEditControllerResult = editController_->initialize(&Musec::Audio::Host::VST3Host::instance());
@@ -505,10 +506,8 @@ bool VST3Plugin::initializeEditController()
         }
         editControllerStatus_ = VST3EditControllerStatus::Initialized;
         editController_->setComponentHandler(&componentHandler_);
-        component_->queryInterface(Steinberg::Vst::IConnectionPoint::iid,
-                                   reinterpret_cast<void**>(&componentPoint_));
-        editController_->queryInterface(Steinberg::Vst::IConnectionPoint::iid,
-                                        reinterpret_cast<void**>(&editControllerPoint_));
+        Impl::queryInterface(component_, &componentPoint_);
+        Impl::queryInterface(editController_, &editControllerPoint_);
         if(componentPoint_ && editControllerPoint_)
         {
             // connect ------------------------------------------------------------------------------------------------- connect

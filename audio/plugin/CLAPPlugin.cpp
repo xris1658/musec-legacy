@@ -8,6 +8,14 @@
 
 namespace Musec::Audio::Plugin
 {
+namespace Impl
+{
+template<typename T>
+const T* getExtension(const clap_plugin* plugin, const char* id)
+{
+    return reinterpret_cast<const T*>(plugin->get_extension(plugin, id));
+}
+}
 
 CLAPPlugin::CLAPPlugin(const QString& path):
     Musec::Native::Library(path)
@@ -176,13 +184,13 @@ bool CLAPPlugin::initialize(double sampleRate, std::int32_t maxSampleCount)
         if(plugin_->init(plugin_))
         {
             pluginStatus_ = CLAPPluginStatus::Initialized;
-            notePorts_ = reinterpret_cast<decltype(notePorts_)>(plugin_->get_extension(plugin_, CLAP_EXT_NOTE_PORTS));
-            audioPorts_ = reinterpret_cast<decltype(audioPorts_)>(plugin_->get_extension(plugin_, CLAP_EXT_AUDIO_PORTS));
+            audioPorts_ = Impl::getExtension<clap_plugin_audio_ports>(plugin_, CLAP_EXT_AUDIO_PORTS);
             if(!audioPorts_)
             {
                 return false;
             }
-            latency_ = reinterpret_cast<decltype(latency_)>(plugin_->get_extension(plugin_, CLAP_EXT_LATENCY));
+            notePorts_ = Impl::getExtension<clap_plugin_note_ports>(plugin_, CLAP_EXT_NOTE_PORTS);
+            latency_ = Impl::getExtension<clap_plugin_latency>(plugin_, CLAP_EXT_LATENCY);
             inputSpeakerGroupCollection_ = {plugin_, audioPorts_, true};
             outputSpeakerGroupCollection_ = {plugin_, audioPorts_, false};
             if(initializeParameters())
@@ -217,7 +225,7 @@ bool CLAPPlugin::uninitialize()
 
 bool CLAPPlugin::initializeParameters()
 {
-    params_ = reinterpret_cast<decltype(params_)>(plugin_->get_extension(plugin_, CLAP_EXT_PARAMS));
+    params_ = Impl::getExtension<clap_plugin_params>(plugin_, CLAP_EXT_PARAMS);
     if(params_)
     {
         auto paramCount = parameterCount();
@@ -240,7 +248,7 @@ bool CLAPPlugin::uninitializeParameters()
 
 bool CLAPPlugin::initializeUI()
 {
-    gui_ = reinterpret_cast<decltype(gui_)>(plugin_->get_extension(plugin_, CLAP_EXT_GUI));
+    gui_ = Impl::getExtension<clap_plugin_gui>(plugin_, CLAP_EXT_GUI);
     return gui_;
 }
 
@@ -288,7 +296,7 @@ bool CLAPPlugin::startProcessing()
         for(int i = 0; i < audioInputBuffers_.size(); ++i)
         {
             audioInputBuffers_[i].channel_count = audioOutputSpeakerGroupCollection().speakerGroupAt(i).speakerCount();
-            audioInputBuffers_[i].latency = 0; // FIXME
+            audioInputBuffers_[i].latency = 0;
         }
         for(int i = 0; i < audioOutputBuffers_.size(); ++i)
         {
