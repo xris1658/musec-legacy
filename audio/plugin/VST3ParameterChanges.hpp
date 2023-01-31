@@ -6,7 +6,7 @@
 #include <pluginterfaces/vst/ivsteditcontroller.h>
 #include <pluginterfaces/vst/ivstparameterchanges.h>
 
-#include <vector>
+#include <deque>
 
 namespace Musec
 {
@@ -20,7 +20,7 @@ using namespace Steinberg;
 class VST3ParameterChanges: public Steinberg::Vst::IParameterChanges
 {
 public:
-    VST3ParameterChanges(int maxParameterCount);
+    VST3ParameterChanges();
     VST3ParameterChanges(const VST3ParameterChanges&) = delete;
     VST3ParameterChanges(VST3ParameterChanges&&) noexcept = default;
     ~VST3ParameterChanges() noexcept = default;
@@ -34,7 +34,7 @@ public: // IParameterChanges interfaces
     Vst::IParamValueQueue* addParameterData(const Vst::ParamID& id, int32& index) override;
 public: // New functions
 private:
-    std::vector<Musec::Audio::Plugin::VST3ParameterValueQueue> container_;
+    std::deque<Musec::Audio::Plugin::VST3ParameterValueQueue> container_;
 };
 }
 }

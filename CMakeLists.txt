@@ -109,6 +109,10 @@ set(PROJECT_SOURCES
     audio/plugin/VST3ComponentHandler.cpp
     audio/plugin/VST3ComponentHandler.hpp
     audio/plugin/VST3MemoryStream.cpp
+    audio/plugin/VST3ParameterChanges.cpp
+    audio/plugin/VST3ParameterChanges.hpp
+    audio/plugin/VST3ParameterValueQueue.cpp
+    audio/plugin/VST3ParameterValueQueue.hpp
     audio/plugin/VST3Plugin.cpp
     audio/plugin/VST3Plugin.hpp
     audio/plugin/VST3PluginParameter.cpp
@@ -119,6 +123,8 @@ set(PROJECT_SOURCES
     audio/plugin/VST3SpeakerGroup.hpp
     audio/plugin/VST3SpeakerGroupCollection.cpp
     audio/plugin/VST3SpeakerGroupCollection.hpp
+    audio/plugin/VST3Stream.cpp
+    audio/plugin/VST3Stream.hpp
     audio/track/AudioTrack.cpp
     audio/track/AudioTrack.hpp
     audio/track/ITrack.hpp

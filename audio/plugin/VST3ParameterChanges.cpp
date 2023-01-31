@@ -4,9 +4,8 @@ namespace Musec::Audio::Plugin
 {
 using namespace Steinberg;
 
-VST3ParameterChanges::VST3ParameterChanges(int maxParameterCount)
+VST3ParameterChanges::VST3ParameterChanges()
 {
-    container_.reserve(maxParameterCount);
 }
 
 tresult VST3ParameterChanges::queryInterface(const int8* _iid, void** obj)

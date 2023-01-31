@@ -1,6 +1,7 @@
 #include "VST3Plugin.hpp"
 
 #include "audio/host/VST3Host.hpp"
+#include "audio/plugin/VST3Stream.hpp"
 #include "controller/AudioEngineController.hpp"
 #include "native/Native.hpp"
 
@@ -516,10 +517,11 @@ bool VST3Plugin::initializeEditController()
             audioProcessorStatus_ = VST3AudioProcessorStatus::Connected;
             editControllerStatus_ = VST3EditControllerStatus::Connected;
         }
-        Steinberg::MemoryStream memoryStream;
-        if(component_->getState(&memoryStream) == Steinberg::kResultOk)
+        Musec::Audio::Plugin::VST3Stream stream;
+        if(component_->getState(&stream) == Steinberg::kResultOk)
         {
-            editController_->setComponentState(&memoryStream);
+            component_->setState(&stream);
+            editController_->setComponentState(&stream);
         }
         paramCount_ = editController_->getParameterCount();
         paramBlock_ = Musec::Base::FixedSizeMemoryBlock(sizeof(VST3PluginParameter) * paramCount_);

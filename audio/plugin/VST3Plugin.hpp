@@ -5,6 +5,7 @@
 #include "audio/plugin/VST3PluginParameter.hpp"
 #include "audio/plugin/VST3ComponentHandler.hpp"
 #include "audio/plugin/VST3PluginPlugFrame.hpp"
+#include "audio/plugin/VST3ParameterChanges.hpp"
 #include "audio/plugin/VST3SpeakerGroupCollection.hpp"
 #include "base/FixedSizeMemoryBlock.hpp"
 #include "base/PluginBase.hpp"
@@ -17,9 +18,6 @@
 #include <pluginterfaces/vst/ivstmessage.h>
 #include <pluginterfaces/vst/ivstnoteexpression.h>
 #include <pluginterfaces/vst/ivstrepresentation.h>
-
-#include <public.sdk/source/vst/hosting/connectionproxy.h>
-#include <public.sdk/source/vst/hosting/parameterchanges.h>
 
 #include <QMetaObject>
 #include <QString>
@@ -170,8 +168,8 @@ private:
     Steinberg::IPlugView* view_ = nullptr;
     int audioInputBusIndex_ = -1;
     int audioOutputBusIndex_ = -1;
-    Steinberg::Vst::ParameterChanges inputParameterChanges_;
-    Steinberg::Vst::ParameterChanges outputParameterChanges_;
+    Musec::Audio::Plugin::VST3ParameterChanges inputParameterChanges_;
+    Musec::Audio::Plugin::VST3ParameterChanges outputParameterChanges_;
     // Used for calling `IAudioProcessor::process`
     Steinberg::Vst::ProcessData processData_;
     // assign this->data() to processData_ while calling `process`
