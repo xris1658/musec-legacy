@@ -67,6 +67,8 @@ set(PROJECT_SOURCES
     audio/device/ISpeakerGroupCollection.hpp
     audio/driver/ASIOCallback.cpp
     audio/driver/ASIOCallback.hpp
+    audio/driver/ASIOChannelGroup.cpp
+    audio/driver/ASIOChannelGroup.hpp
     audio/driver/ASIODriver.cpp
     audio/driver/ASIODriver.hpp
     audio/driver/ASIODriverBasicInfo.hpp

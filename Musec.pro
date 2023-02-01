@@ -69,6 +69,7 @@ HEADERS += \
     audio/device/ISpeakerGroup.hpp \
     audio/device/ISpeakerGroupCollection.hpp \
     audio/driver/ASIOCallback.hpp \
+    audio/driver/ASIOChannelGroup.hpp \
     audio/driver/ASIODriver.hpp \
     audio/driver/ASIODriverBasicInfo.hpp \
     audio/driver/ASIOErrorText.hpp \
@@ -193,6 +194,7 @@ SOURCES += \
     audio/base/Automation.cpp \
     audio/base/TimeSignature.cpp \
     audio/driver/ASIOCallback.cpp \
+    audio/driver/ASIOChannelGroup.cpp \
     audio/driver/ASIODriver.cpp \
     audio/driver/ASIOErrorText.cpp \
     audio/driver/ASIOSampleTypeName.cpp \
