@@ -29,12 +29,12 @@ CLAPSpeakerGroupCollection& CLAPSpeakerGroupCollection::operator=(CLAPSpeakerGro
     return *this;
 }
 
-uint8_t CLAPSpeakerGroupCollection::speakerGroupCount() const
+uint8_t CLAPSpeakerGroupCollection::channelGroupCount() const
 {
     return audioPorts_->count(plugin_, isInput_);
 }
 
-const ISpeakerGroup& CLAPSpeakerGroupCollection::speakerGroupAt(std::uint8_t index) const
+const IChannelGroup& CLAPSpeakerGroupCollection::channelGroupAt(std::uint8_t index) const
 {
     CLAPSpeakerGroup speakerGroup;
     audioPorts_->get(plugin_, index, isInput_, &(speakerGroup.audioPortInfo_));

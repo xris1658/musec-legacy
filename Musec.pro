@@ -59,6 +59,7 @@ HEADERS += \
     audio/arrangement/TrackSequence.hpp \
     audio/base/AudioBufferView.hpp \
     audio/base/Automation.hpp \
+    audio/base/Channel.hpp \
     audio/base/Chrono.hpp \
     audio/base/Constants.hpp \
     audio/base/TempoAutomation.hpp \
@@ -66,8 +67,8 @@ HEADERS += \
     audio/base/TimeSignatureSequence.hpp \
     audio/device/IDevice.hpp \
     audio/device/IDevice.hpp \
-    audio/device/ISpeakerGroup.hpp \
-    audio/device/ISpeakerGroupCollection.hpp \
+    audio/device/IChannelGroup.hpp \
+    audio/device/IChannelGroupCollection.hpp \
     audio/driver/ASIOCallback.hpp \
     audio/driver/ASIOChannelGroup.hpp \
     audio/driver/ASIODriver.hpp \
@@ -193,6 +194,7 @@ SOURCES += \
     audio/base/AudioBufferView.cpp \
     audio/base/Automation.cpp \
     audio/base/TimeSignature.cpp \
+    audio/device/IChannelGroup.cpp \
     audio/driver/ASIOCallback.cpp \
     audio/driver/ASIOChannelGroup.cpp \
     audio/driver/ASIODriver.cpp \

@@ -29,12 +29,12 @@ VST3SpeakerGroupCollection& VST3SpeakerGroupCollection::operator=(VST3SpeakerGro
     return *this;
 }
 
-std::uint8_t VST3SpeakerGroupCollection::speakerGroupCount() const
+std::uint8_t VST3SpeakerGroupCollection::channelGroupCount() const
 {
     return component_->getBusCount(MediaTypes::kAudio, busDirection_);
 }
 
-const ISpeakerGroup& VST3SpeakerGroupCollection::speakerGroupAt(std::uint8_t index) const
+const IChannelGroup& VST3SpeakerGroupCollection::channelGroupAt(std::uint8_t index) const
 {
     SpeakerArrangement speakerArrangement;
     BusInfo busInfo;

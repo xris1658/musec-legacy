@@ -1,7 +1,7 @@
 #ifndef MUSEC_AUDIO_PLUGIN_VST3SPEAKERGROUP
 #define MUSEC_AUDIO_PLUGIN_VST3SPEAKERGROUP
 
-#include "audio/device/ISpeakerGroup.hpp"
+#include "audio/device/IChannelGroup.hpp"
 
 #include <pluginterfaces/vst/vstspeaker.h>
 #include <pluginterfaces/vst/vsttypes.h>
@@ -19,7 +19,7 @@ namespace Plugin
 using namespace Musec::Audio::Device;
 using namespace Steinberg::Vst;
 
-class VST3SpeakerGroup: public ISpeakerGroup
+class VST3SpeakerGroup: public IChannelGroup
 {
 public:
     VST3SpeakerGroup();
@@ -30,9 +30,9 @@ public:
     ~VST3SpeakerGroup() noexcept = default;
 public:
     QString name() const override;
-    std::uint8_t speakerCount() const override;
-    SpeakerGroupType type() const override;
-    SpeakerType speakerAt(std::uint8_t index) const override;
+    std::uint8_t channelCount() const override;
+    Musec::Audio::Base::ChannelGroupType type() const override;
+    Musec::Audio::Base::ChannelType speakerAt(std::uint8_t index) const override;
     QString speakerNameAt(std::uint8_t index) const override;
     bool isMain() const override;
 private:

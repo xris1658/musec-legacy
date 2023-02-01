@@ -55,16 +55,18 @@ set(PROJECT_SOURCES
     audio/base/AudioBufferView.hpp
     audio/base/Automation.cpp
     audio/base/Automation.hpp
+    audio/base/Channel.hpp
     audio/base/Chrono.hpp
     audio/base/Constants.hpp
     audio/base/TempoAutomation.hpp
     audio/base/TimeSignature.cpp
     audio/base/TimeSignature.hpp
     audio/base/TimeSignatureSequence.hpp
+    audio/device/IChannelGroup.cpp
+    audio/device/IChannelGroup.hpp
+    audio/device/IChannelGroupCollection.hpp
     audio/device/IDevice.hpp
     audio/device/IDevice.hpp
-    audio/device/ISpeakerGroup.hpp
-    audio/device/ISpeakerGroupCollection.hpp
     audio/driver/ASIOCallback.cpp
     audio/driver/ASIOCallback.hpp
     audio/driver/ASIOChannelGroup.cpp

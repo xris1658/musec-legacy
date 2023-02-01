@@ -2,7 +2,7 @@
 #define MUSEC_AUDIO_DEVICE_IDEVICE
 
 #include "audio/base/AudioBufferView.hpp"
-#include "audio/device/ISpeakerGroupCollection.hpp"
+#include "audio/device/IChannelGroupCollection.hpp"
 #include "native/CompilerSpecific.hpp"
 
 #include <vector>
@@ -38,8 +38,8 @@ public:
     virtual std::uint8_t audioInputCount() const = 0;
     // Audio output channel count
     virtual std::uint8_t audioOutputCount() const = 0;
-    virtual const ISpeakerGroupCollection& audioInputSpeakerGroupCollection() const = 0;
-    virtual const ISpeakerGroupCollection& audioOutputSpeakerGroupCollection() const = 0;
+    virtual const IChannelGroupCollection& audioInputSpeakerGroupCollection() const = 0;
+    virtual const IChannelGroupCollection& audioOutputSpeakerGroupCollection() const = 0;
 public:
     virtual void process(Musec::Audio::Base::AudioBufferView<float>* input, int inputCount,
         Musec::Audio::Base::AudioBufferView<float>* output, int outputCount) = 0;

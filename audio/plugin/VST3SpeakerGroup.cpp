@@ -27,36 +27,36 @@ QString VST3SpeakerGroup::name() const
     return QString::fromUtf16(busInfo_.name);
 }
 
-std::uint8_t VST3SpeakerGroup::speakerCount() const
+std::uint8_t VST3SpeakerGroup::channelCount() const
 {
     // Alternative solution
     // return SpeakerArr::getChannelCount(speakerArrangement_);
     return busInfo_.channelCount;
 }
 
-SpeakerGroupType VST3SpeakerGroup::type() const
+Musec::Audio::Base::ChannelGroupType VST3SpeakerGroup::type() const
 {
-    return speakerArrangement_ == SpeakerArr::kStereo? SpeakerGroupType::SpeakerGroupStereo:
-        speakerArrangement_ == SpeakerArr::kMono? SpeakerGroupType::SpeakerGroupMono:
-        SpeakerGroupType::SpeakerGroupCustom;
+    return speakerArrangement_ == SpeakerArr::kStereo? Musec::Audio::Base::ChannelGroupType::Stereo:
+        speakerArrangement_ == SpeakerArr::kMono? Musec::Audio::Base::ChannelGroupType::Mono:
+        Musec::Audio::Base::ChannelGroupType::Custom;
 }
 
-SpeakerType VST3SpeakerGroup::speakerAt(std::uint8_t index) const
+Musec::Audio::Base::ChannelType VST3SpeakerGroup::speakerAt(std::uint8_t index) const
 {
     auto speaker = SpeakerArr::getSpeaker(speakerArrangement_, index);
     if(speaker == Steinberg::Vst::kSpeakerL)
     {
-        return SpeakerType::SpeakerLeft;
+        return Musec::Audio::Base::ChannelType::Left;
     }
     else if(speaker == Steinberg::Vst::kSpeakerR)
     {
-        return SpeakerType::SpeakerRight;
+        return Musec::Audio::Base::ChannelType::Right;
     }
     else if(speaker == 0)
     {
-        return SpeakerType::SpeakerInvalid;
+        return Musec::Audio::Base::ChannelType::Invalid;
     }
-    return index < speakerCount()? SpeakerType::SpeakerCustom: SpeakerType::SpeakerInvalid;
+    return index < channelCount()? Musec::Audio::Base::ChannelType::Custom: Musec::Audio::Base::ChannelType::Invalid;
 }
 
 QString VST3SpeakerGroup::speakerNameAt(std::uint8_t index) const

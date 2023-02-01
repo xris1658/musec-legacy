@@ -28,31 +28,31 @@ QString CLAPSpeakerGroup::name() const
     return QString::fromUtf8(audioPortInfo_.name);
 }
 
-uint8_t CLAPSpeakerGroup::speakerCount() const
+uint8_t CLAPSpeakerGroup::channelCount() const
 {
     return audioPortInfo_.channel_count;
 }
 
-SpeakerGroupType CLAPSpeakerGroup::type() const
+Musec::Audio::Base::ChannelGroupType CLAPSpeakerGroup::type() const
 {
-    return std::strcmp(audioPortInfo_.port_type, CLAP_PORT_STEREO) == 0? SpeakerGroupType::SpeakerGroupStereo:
-        std::strcmp(audioPortInfo_.port_type, CLAP_PORT_MONO) == 0? SpeakerGroupType::SpeakerGroupMono:
-        SpeakerGroupType::SpeakerGroupCustom;
+    return std::strcmp(audioPortInfo_.port_type, CLAP_PORT_STEREO) == 0? Musec::Audio::Base::ChannelGroupType::Stereo:
+        std::strcmp(audioPortInfo_.port_type, CLAP_PORT_MONO) == 0? Musec::Audio::Base::ChannelGroupType::Mono:
+        Musec::Audio::Base::ChannelGroupType::Custom;
 }
 
-SpeakerType CLAPSpeakerGroup::speakerAt(std::uint8_t index) const
+Musec::Audio::Base::ChannelType CLAPSpeakerGroup::speakerAt(std::uint8_t index) const
 {
     if(std::strcmp(audioPortInfo_.port_type, CLAP_PORT_STEREO) == 0)
     {
-        return index == 0? SpeakerType::SpeakerLeft:
-               index == 1? SpeakerType::SpeakerRight:
-               SpeakerType::SpeakerInvalid;
+        return index == 0? Musec::Audio::Base::ChannelType::Left:
+               index == 1? Musec::Audio::Base::ChannelType::Right:
+               Musec::Audio::Base::ChannelType::Invalid;
     }
     else if(std::strcmp(audioPortInfo_.port_type, CLAP_PORT_MONO) == 0)
     {
-        return index == 0? SpeakerType::SpeakerMono: SpeakerType::SpeakerInvalid;
+        return index == 0? Musec::Audio::Base::ChannelType::Center: Musec::Audio::Base::ChannelType::Invalid;
     }
-    return index < speakerCount()? SpeakerType::SpeakerCustom: SpeakerType::SpeakerInvalid;
+    return index < channelCount()? Musec::Audio::Base::ChannelType::Custom: Musec::Audio::Base::ChannelType::Invalid;
 }
 
 QString CLAPSpeakerGroup::speakerNameAt(std::uint8_t index) const

@@ -1,7 +1,7 @@
 #ifndef MUSEC_AUDIO_PLUGIN_CLAPSPEAKERGROUPCOLLECTION
 #define MUSEC_AUDIO_PLUGIN_CLAPSPEAKERGROUPCOLLECTION
 
-#include "audio/device/ISpeakerGroupCollection.hpp"
+#include "audio/device/IChannelGroupCollection.hpp"
 
 #include <clap/plugin.h>
 #include <clap/ext/audio-ports.h>
@@ -13,7 +13,7 @@ namespace Audio
 namespace Plugin
 {
 using namespace Musec::Audio::Device;
-class CLAPSpeakerGroupCollection: public ISpeakerGroupCollection
+class CLAPSpeakerGroupCollection: public IChannelGroupCollection
 {
 public:
     CLAPSpeakerGroupCollection();
@@ -25,8 +25,8 @@ public:
     CLAPSpeakerGroupCollection& operator=(CLAPSpeakerGroupCollection rhs);
     ~CLAPSpeakerGroupCollection() noexcept = default;
 public:
-    std::uint8_t speakerGroupCount() const override;
-    const ISpeakerGroup& speakerGroupAt(std::uint8_t index) const override;
+    std::uint8_t channelGroupCount() const override;
+    const IChannelGroup& channelGroupAt(std::uint8_t index) const override;
 private:
     const clap_plugin* plugin_;
     const clap_plugin_audio_ports* audioPorts_;

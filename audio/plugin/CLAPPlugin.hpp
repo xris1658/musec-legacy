@@ -56,8 +56,8 @@ public:
 public:
     std::uint8_t audioInputCount() const override;
     std::uint8_t audioOutputCount() const override;
-    const ISpeakerGroupCollection& audioInputSpeakerGroupCollection() const override;
-    const ISpeakerGroupCollection& audioOutputSpeakerGroupCollection() const override;
+    const IChannelGroupCollection& audioInputSpeakerGroupCollection() const override;
+    const IChannelGroupCollection& audioOutputSpeakerGroupCollection() const override;
     void process(Musec::Audio::Base::AudioBufferView<SampleType>* inputs, int inputCount,
         Musec::Audio::Base::AudioBufferView<SampleType>* outputs, int outputCount) override;
     void process(const Musec::Audio::Device::AudioProcessData<SampleType>& audioProcessData) override;

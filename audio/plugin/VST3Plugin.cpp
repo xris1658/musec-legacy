@@ -649,11 +649,11 @@ bool VST3Plugin::startProcessing()
             audioProcessorStatus_ = VST3AudioProcessorStatus::Processing;
             for(int i = 0; i < inputs_.size(); ++i)
             {
-                inputs_[i].numChannels = inputSpeakerGroupCollection_.speakerGroupAt(i).speakerCount();
+                inputs_[i].numChannels = inputSpeakerGroupCollection_.channelGroupAt(i).channelCount();
             }
             for(int i = 0; i < outputs_.size(); ++i)
             {
-                outputs_[i].numChannels = outputSpeakerGroupCollection_.speakerGroupAt(i).speakerCount();
+                outputs_[i].numChannels = outputSpeakerGroupCollection_.channelGroupAt(i).channelCount();
             }
             processData_.numInputs = inputs_.size();
             processData_.numOutputs = outputs_.size();
@@ -832,12 +832,12 @@ bool VST3Plugin::processing()
     return audioProcessorStatus_ >= VST3AudioProcessorStatus::Processing;
 }
 
-const ISpeakerGroupCollection& VST3Plugin::audioInputSpeakerGroupCollection() const
+const IChannelGroupCollection& VST3Plugin::audioInputSpeakerGroupCollection() const
 {
     return inputSpeakerGroupCollection_;
 }
 
-const ISpeakerGroupCollection& VST3Plugin::audioOutputSpeakerGroupCollection() const
+const IChannelGroupCollection& VST3Plugin::audioOutputSpeakerGroupCollection() const
 {
     return outputSpeakerGroupCollection_;
 }

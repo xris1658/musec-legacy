@@ -1,7 +1,7 @@
 #ifndef MUSEC_AUDIO_PLUGIN_VST3SPEAKERGROUPCOLLECTION
 #define MUSEC_AUDIO_PLUGIN_VST3SPEAKERGROUPCOLLECTION
 
-#include "audio/device/ISpeakerGroupCollection.hpp"
+#include "audio/device/IChannelGroupCollection.hpp"
 
 #include <pluginterfaces/vst/vstspeaker.h>
 #include <pluginterfaces/vst/vsttypes.h>
@@ -20,7 +20,7 @@ using namespace Musec::Audio::Device;
 
 using namespace Steinberg::Vst;
 
-class VST3SpeakerGroupCollection: public ISpeakerGroupCollection
+class VST3SpeakerGroupCollection: public IChannelGroupCollection
 {
 public:
     VST3SpeakerGroupCollection();
@@ -31,8 +31,8 @@ public:
     VST3SpeakerGroupCollection& operator=(VST3SpeakerGroupCollection rhs);
     ~VST3SpeakerGroupCollection() noexcept = default;
 public:
-    std::uint8_t speakerGroupCount() const override;
-    const ISpeakerGroup& speakerGroupAt(std::uint8_t index) const override;
+    std::uint8_t channelGroupCount() const override;
+    const IChannelGroup& channelGroupAt(std::uint8_t index) const override;
 private:
     IComponent* component_;
     IAudioProcessor* audioProcessor_;
