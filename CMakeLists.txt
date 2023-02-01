@@ -71,7 +71,6 @@ set(PROJECT_SOURCES
     audio/driver/ASIODriver.hpp
     audio/driver/ASIODriverBasicInfo.hpp
     audio/driver/ASIODriverForward.hpp
-    audio/driver/ASIODriverStreamInfo.hpp
     audio/driver/ASIOErrorText.cpp
     audio/driver/ASIOErrorText.hpp
     audio/driver/ASIOSampleTypeName.cpp

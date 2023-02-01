@@ -3,7 +3,6 @@
 
 #include "audio/driver/ASIODriverForward.hpp"
 #include "audio/driver/ASIODriverBasicInfo.hpp"
-#include "audio/driver/ASIODriverStreamInfo.hpp"
 
 #include <QString>
 #include <QList>

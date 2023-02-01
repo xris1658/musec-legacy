@@ -73,7 +73,6 @@ HEADERS += \
     audio/driver/ASIODriverBasicInfo.hpp \
     audio/driver/ASIOErrorText.hpp \
     audio/driver/ASIODriverForward.hpp \
-    audio/driver/ASIODriverStreamInfo.hpp \
     audio/driver/ASIOSampleTypeName.hpp \
     audio/engine/MIDIClock.hpp \
     audio/engine/Project.hpp \
