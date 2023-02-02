@@ -1,7 +1,13 @@
 | English | [简体中文](./README-zh.md) |
 | ------- | -------------------------- |
 
-**Due to being not sure which license Musec should use, pull requests will NOT be accepted for now. Check out [Issue #7](https://github.com/xris1658/musec/issues/7#issuecomment-1367020643) for details.**
+# HIATUS
+
+This repo will be archived for several reasons:
+- This project uses Qt 5.15.2 LTS, which will not be maintained in a few months
+- Changing project structure and refactoring are much more difficult than rewrite the project using some legacy code
+
+The renovated project is going underway, which I'll release it later.
 
 # Musec
 
