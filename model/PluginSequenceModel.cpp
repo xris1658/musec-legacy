@@ -193,6 +193,10 @@ void PluginSequenceModel::remove(int index)
     names_.erase(names_.begin() + index);
 }
 
+#pragma warning(push)
+// the usage of 'QObject::disconnect' requires the compiler to capture 'this' but the current
+// default capture mode does not allow it
+#pragma warning(disable: 4573)
 void PluginSequenceModel::clear()
 {
     std::for_each(connections_.begin(), connections_.end(), [](const QMetaObject::Connection& connection) { QObject::disconnect(connection); });
@@ -200,6 +204,7 @@ void PluginSequenceModel::clear()
     pluginWindowConnections_.clear();
     names_.clear();
 }
+#pragma warning(pop)
 
 RoleNamesType PluginSequenceModel::roleNames() const
 {
